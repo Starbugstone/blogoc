@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="5b9818ba-ee33-4d3d-8e2d-521affc59bc9" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
+    <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="blogoc@localhost" type="feb32156:DbDataSourceImpl" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="blogoc@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="blogoc@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="blogoc: schema" type="c314c289:MysqlImplModel$Schema" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="index.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Core/index.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="34">
+              <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PHP/C:/xampp/htdocs/blogoc/App/Controlers" pinned="false" current-in-tab="true">
+        <entry file="uml://PHP/C:/xampp/htdocs/blogoc/App/Controlers">
+          <provider selected="true" editor-type-id="UmlEditorProvider">
+            <state>
+              <ID>PHP</ID>
+              <OriginalElement>$PROJECT_DIR$/App/Controlers</OriginalElement>
+              <nodes />
+              <notes />
+              <edges />
+              <settings layout="Hierarchic Group" zoom="1.0" x="368.5" y="440.0" />
+              <SelectedNodes />
+              <Categories />
+              <VISIBILITY>private</VISIBILITY>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="NodePackageJsonFileManager">
+    <packageJsonPaths />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration">
+    <include_path>
+      <path value="$PROJECT_DIR$/vendor/composer" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-ctype" />
+      <path value="$PROJECT_DIR$/vendor/twig/twig" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-mbstring" />
+    </include_path>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="1">
+    <option name="x" value="895" />
+    <option name="y" value="36" />
+    <option name="width" value="1394" />
+    <option name="height" value="1047" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="blogoc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="blogoc" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="blogoc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="blogoc" type="462c0819:PsiDirectoryNode" />
+              <item name="App" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="blogoc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="blogoc" type="462c0819:PsiDirectoryNode" />
+              <item name="Core" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="com.intellij.database.dataSource.DataSourceTemplate" value="MySQL" />
+    <property name="last_opened_file_path" value="C:/Program Files/Git/bin/git.exe" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5b9818ba-ee33-4d3d-8e2d-521affc59bc9" name="Default" comment="" />
+      <created>1532466890820</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1532466890820</updated>
+      <workItem from="1532466892420" duration="1582000" />
+      <workItem from="1532524749149" duration="1593000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="3175000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="895" y="36" width="1394" height="1047" extended-state="1" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24963716" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" weight="0.32939914" />
+      <window_info anchor="right" id="Database" order="3" visible="true" weight="0.21552975" />
+      <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Terminal" order="7" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/7d2297d7-9f83-4c8d-87f4-7171cc43241e/console.sql">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="uml://PHP/C:/xampp/htdocs/blogoc">
+      <provider selected="true" editor-type-id="UmlEditorProvider">
+        <state>
+          <ID>PHP</ID>
+          <OriginalElement>$PROJECT_DIR$</OriginalElement>
+          <nodes>
+            <node x="0.0" y="0.0">$PROJECT_DIR$/App</node>
+            <node x="102.0" y="0.0">$PROJECT_DIR$/Core</node>
+          </nodes>
+          <notes />
+          <edges />
+          <settings layout="Hierarchic Group" zoom="1.0" x="-193.0" y="-111.0" />
+          <SelectedNodes>
+            <node>$PROJECT_DIR$/App</node>
+          </SelectedNodes>
+          <Categories />
+          <SCOPE>All</SCOPE>
+          <VISIBILITY>private</VISIBILITY>
+        </state>
+      </provider>
+    </entry>
+    <entry file="uml://DATABASE/7d2297d7-9f83-4c8d-87f4-7171cc43241e.SCHEMA:blogoc">
+      <provider selected="true" editor-type-id="UmlEditorProvider">
+        <state>
+          <ID>DATABASE</ID>
+          <OriginalElement>7d2297d7-9f83-4c8d-87f4-7171cc43241e.SCHEMA:blogoc</OriginalElement>
+          <nodes>
+            <node x="334.3510854816825" y="176.76119402985074">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.category</node>
+            <node x="365.0561397557666" y="726.7388059701493">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.post_has_tag</node>
+            <node x="29.58175033921303" y="117.38941655359565">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.user</node>
+            <node x="552.1716417910447" y="467.9823609226595">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.tag</node>
+            <node x="50.375" y="680.0">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.comment</node>
+            <node x="485.71302578019004" y="-17.62822252374491">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.config</node>
+            <node x="45.00644504748982" y="-35.25644504748983">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.role</node>
+            <node x="223.4023066485753" y="395.38941655359565">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.post</node>
+          </nodes>
+          <notes />
+          <edges>
+            <edge source="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.post" target="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.user">
+              <point x="-50.75" y="-114.0" />
+              <point x="210.25" y="377.0" />
+              <point x="185.86702849389417" y="363.7788331071913" />
+              <point x="44.75" y="114.0" />
+            </edge>
+            <edge source="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.post_has_tag" target="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.tag">
+              <point x="38.25" y="-36.5" />
+              <point x="563.540196743555" y="696.8670284938942" />
+              <point x="597.8046132971506" y="657.2035278154682" />
+              <point x="0.0" y="37.0" />
+            </edge>
+            <edge source="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.post_has_tag" target="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.post">
+              <point x="-38.25" y="-36.5" />
+              <point x="352.625" y="655.0" />
+              <point x="362.4311397557666" y="646.1858887381275" />
+              <point x="50.75" y="114.0" />
+            </edge>
+            <edge source="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.post" target="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.category">
+              <point x="50.75" y="-114.0" />
+              <point x="0.0" y="37.0" />
+            </edge>
+            <edge source="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.comment" target="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.post">
+              <point x="41.0" y="-59.0" />
+              <point x="173.375" y="655.0" />
+              <point x="210.25" y="655.0" />
+              <point x="-50.75" y="114.0" />
+            </edge>
+            <edge source="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.user" target="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.role">
+              <point x="0.0" y="-114.0" />
+              <point x="0.0" y="37.0" />
+            </edge>
+            <edge source="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.comment" target="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.user">
+              <point x="-41.0" y="-59.0" />
+              <point x="91.375" y="655.0" />
+              <point x="54.5" y="655.0" />
+              <point x="-44.75" y="114.0" />
+            </edge>
+          </edges>
+          <settings layout="Hierarchic Group" zoom="0.9076354679802956" x="386.0" y="400.0" />
+          <SelectedNodes>
+            <node>7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.config</node>
+          </SelectedNodes>
+          <Categories>
+            <Category>Key columns</Category>
+            <Category>Columns</Category>
+          </Categories>
+          <SCOPE>All</SCOPE>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/7d2297d7-9f83-4c8d-87f4-7171cc43241e/console.sql">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Core/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="uml://PHP/C:/xampp/htdocs/blogoc/App/Controlers">
+      <provider selected="true" editor-type-id="UmlEditorProvider">
+        <state>
+          <ID>PHP</ID>
+          <OriginalElement>$PROJECT_DIR$/App/Controlers</OriginalElement>
+          <nodes />
+          <notes />
+          <edges />
+          <settings layout="Hierarchic Group" zoom="1.0" x="368.5" y="440.0" />
+          <SelectedNodes />
+          <Categories />
+          <VISIBILITY>private</VISIBILITY>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
