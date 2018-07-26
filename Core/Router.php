@@ -12,6 +12,12 @@ namespace Core;
 class Router{
 
     /**
+     * the default namespace
+     * @var string
+     */
+    private $currentNamespace = 'App\Controllers\\';
+
+    /**
      * the default controller
      * @var string
      */
@@ -24,6 +30,12 @@ class Router{
     private $currentMethod = 'index';
 
     /**
+     * the current paramters
+     * @var string
+     */
+    private $currentParams = [];
+
+    /**
      * The special sections that have there own namespace.
      * All in lower, will be converted to camelCase later
      * @var array
@@ -32,30 +44,33 @@ class Router{
         'admin'
     ];
 
-    /**
-     * The default namespace
-     * @var string
-     */
-    private $defaultNamespace = 'App\Controllers\\';
-
-
 
     /**
-     * Router constructor, will get the current url
+     * Router constructor, will set the controler, method and params
+     *
+     * will then call the dispatcher to instantiate the controller and method
+     *
      */
     public function __construct(){
         //get the current url
         $url = $this->getUrl();
 
-        //checking if a special namespace is present at the start of the url. if so, then strip and pass
-        $special = '';
-        if(in_array($url[0],$this->sections) ){
-            $special = array_shift($url);
+        //checking if a special namespace is present at the start of the url.
+        //if so, then strip and set the new namespace
+        if(isset($url[0]) && in_array($url[0],$this->sections) ){
+            $specialNamespace = array_shift($url);
+
+            //making sure we have a single backslash
+            $specialNamespace = rtrim($specialNamespace,'\\').'\\';
+
+            //capitalize the special namespace
+            $specialNamespace = $this->convertToStudlyCaps($specialNamespace);
+
+            $this->currentNamespace .= $specialNamespace;
         }
-        $namespace = $this->getNamespace($special);
 
         //applying the controlers and methods
-        if ($url[0] != null){
+        if (isset($url[0]) && $url[0] != null){
             $this->currentController = $this->convertToStudlyCaps($url[0]);
             unset($url[0]);
         }
@@ -64,11 +79,19 @@ class Router{
             $this->currentMethod = $this->convertToCamelCase($url[1]);
             unset($url[1]);
         }
-        echo 'in namespace '.$namespace.'<br>';
+
+        //grabbing the remaining parameters
+        $this->currentParams = $url? array_values($url) : [];
+
+        echo 'in namespace '.$this->currentNamespace.'<br>';
         echo 'Controller to call '.$this->currentController.'<br>';
         echo 'method to call '.$this->currentMethod.'()<br>';
-        //TODO take care of the paramters
+        var_dump($url);
+        echo '<br><hr>';
+        var_dump($this->currentParams);
 
+        //TODO Check if method exists and call
+        $this->dispatch();
     }
 
 
@@ -77,9 +100,8 @@ class Router{
      *
      * @return array decomposed url
      */
-    //TODO : see if there isn't a better way that a brutal $_GET
-   public function getUrl(){
-        if(isset($_GET['url'])){
+    protected function getUrl(): array{
+        if(isset($_GET['url'])){ //$url = $_GET['url'] ?? ''  en php 7.1
             //remove right slash
             $url = rtrim($_GET['url'], '/');
 
@@ -93,29 +115,17 @@ class Router{
 
             return $url;
         }
+        return [];
    }
 
-   /**
-    * returns the namespace
-    *
-    * @param string $special special namespace
-    * e.g. admin => $namespace\Admin\
-    *
-    * @return string the required namespace
-    */
-   public function getNamespace($special = ''){
-       if($special !== ''){
-           //making sure we have a single backslash
-           $special = rtrim($special,'\\').'\\';
 
-           //capitalize the special namespace
-           $special = $this->convertToStudlyCaps($special);
-       }
+    /**
+     * Run the router call and instantiate the controoler + method
+     *
+     * @return void
+     */
+    protected function dispatch(){
 
-
-       $namespace = $this->defaultNamespace.$special;
-
-       return $namespace;
    }
 
     /**
@@ -126,7 +136,7 @@ class Router{
      *
      * @return string
      */
-    protected function convertToStudlyCaps($string){
+    protected function convertToStudlyCaps($string): string{
         return str_replace(' ', '', ucwords(str_replace('-', ' ', $string)));
     }
 
@@ -138,7 +148,7 @@ class Router{
      *
      * @return string
      */
-    protected function convertToCamelCase($string){
+    protected function convertToCamelCase($string): string{
         return lcfirst($this->convertToStudlyCaps($string));
     }
 }
