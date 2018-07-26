@@ -30,7 +30,7 @@ class Router{
     private $currentMethod = 'index';
 
     /**
-     * the current paramters
+     * the current parameters
      * @var string
      */
     private $currentParams = [];
@@ -46,7 +46,7 @@ class Router{
 
 
     /**
-     * Router constructor, will set the controler, method and params
+     * Router constructor, will set the controller, method and params
      *
      * will then call the dispatcher to instantiate the controller and method
      *
@@ -69,7 +69,7 @@ class Router{
             $this->currentNamespace .= $specialNamespace;
         }
 
-        //applying the controlers and methods
+        //applying the controllers and methods
         if (isset($url[0]) && $url[0] != null){
             $this->currentController = $this->convertToStudlyCaps($url[0]);
             unset($url[0]);
@@ -83,14 +83,15 @@ class Router{
         //grabbing the remaining parameters
         $this->currentParams = $url? array_values($url) : [];
 
-        echo 'in namespace '.$this->currentNamespace.'<br>';
+        //Debug - leaving in for now just in case we need to test some advanced calls
+
+        /*echo 'in namespace '.$this->currentNamespace.'<br>';
         echo 'Controller to call '.$this->currentController.'<br>';
         echo 'method to call '.$this->currentMethod.'()<br>';
         var_dump($url);
         echo '<br><hr>';
-        var_dump($this->currentParams);
+        var_dump($this->currentParams);*/
 
-        //TODO Check if method exists and call
         $this->dispatch();
     }
 
@@ -105,12 +106,14 @@ class Router{
             //remove right slash
             $url = rtrim($_GET['url'], '/');
 
-            //convert all to lower. Will convert to camelCase after
+            //convert all to lower for easier comparing. Will convert to camelCase after
+            //this will avoid cap probs with links and user input
             $url = strtolower($url);
 
             //sanitize the url for security
             $url = filter_var($url, FILTER_SANITIZE_URL);
 
+            //EXPLODE, BOOM, TRANSFORMERS, MICHAEL BAY
             $url = explode('/', $url);
 
             return $url;
@@ -120,12 +123,29 @@ class Router{
 
 
     /**
-     * Run the router call and instantiate the controoler + method
+     * Run the router call and instantiate the controller + method
+     * also takes care of throwing errors
      *
      * @return void
      */
-    protected function dispatch(){
+    protected function dispatch(): void{
 
+        //try to create the controller object
+        $controllerWithNamespace = $this->currentNamespace.$this->currentController;
+        if(class_exists($controllerWithNamespace)){
+            $controllerInstantiated = new $controllerWithNamespace();
+
+            //try to run the associated method and the pass parameters
+            $methodToRun = $this->currentMethod;
+            if(method_exists($controllerInstantiated, $methodToRun)){
+                call_user_func_array([$controllerInstantiated, $methodToRun], $this->currentParams);
+            }else{
+                echo '<h1>ERROR - Method <i>'.$methodToRun.'</i>() doesn\'t exist or is inacessable</h1>';
+            }
+
+        }else{
+            echo '<h1>404 ERROR - Class <i>'.$this->currentController.'</i> doesn\'t exist</h1>';
+        }
    }
 
     /**
