@@ -1,0 +1,11 @@
+#Redirect all to index.php and trasform the url to a query 'url='.
+#the router will then take the url query and decompose the slashes to call proper controller
+<IfModule mod_rewrite.c>
+  Options -Multiviews
+  RewriteEngine On
+  RewriteBase /public
+  #do not ridirect directories or files
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule  ^(.+)$ index.php?url=$1 [QSA,L]
+</IfModule>
