@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5b9818ba-ee33-4d3d-8e2d-521affc59bc9" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/App/Controllers/Admin/Debug.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/App/Controllers/Debug.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Core/Router.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Router.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -75,8 +72,8 @@
       <file leaf-file-name="Router.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Core/Router.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="145" column="14" lean-forward="true" selection-start-line="145" selection-start-column="14" selection-end-line="145" selection-end-column="14" />
+            <state relative-caret-position="1020">
+              <caret line="148" column="4" lean-forward="true" selection-start-line="148" selection-start-column="4" selection-end-line="148" selection-end-column="4" />
             </state>
           </provider>
         </entry>
@@ -258,7 +255,7 @@
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-mbstring" />
     </include_path>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="1">
     <option name="x" value="-7" />
     <option name="width" value="1586" />
     <option name="height" value="1047" />
@@ -355,15 +352,15 @@
       <updated>1532466890820</updated>
       <workItem from="1532466892420" duration="1582000" />
       <workItem from="1532524749149" duration="1597000" />
-      <workItem from="1532589291706" duration="23206000" />
+      <workItem from="1532589291706" duration="26303000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="26385000" />
+    <option name="totallyTimeSpent" value="29482000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="0" width="1586" height="1047" extended-state="0" />
+    <frame x="-7" y="0" width="1586" height="1047" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21910828" />
@@ -702,8 +699,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Core/Router.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="145" column="14" lean-forward="true" selection-start-line="145" selection-start-column="14" selection-end-line="145" selection-end-column="14" />
+        <state relative-caret-position="1020">
+          <caret line="148" column="4" lean-forward="true" selection-start-line="148" selection-start-column="4" selection-end-line="148" selection-end-column="4" />
         </state>
       </provider>
     </entry>

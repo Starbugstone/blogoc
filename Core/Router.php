@@ -144,7 +144,7 @@ class Router{
             }
 
         }else{
-            echo '<h1>404 ERROR - Class <i>'.$this->currentController.'</i> doesn\'t exist</h1>';
+            echo '<h1>404 ERROR - Class <i>'.$controllerWithNamespace.'</i> doesn\'t exist</h1>';
         }
    }
 
