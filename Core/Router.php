@@ -146,7 +146,7 @@ class Router{
 
         }else{
             //echo '<h1>404 ERROR - Class <i>'.$controllerWithNamespace.'</i> doesn\'t exist</h1>';
-            throw new \Exception("Class <i>$controllerWithNamespace</i> doesn't exist");
+            throw new \Exception("Class <i>$controllerWithNamespace</i> doesn't exist", 404);
         }
    }
 

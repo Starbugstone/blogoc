@@ -30,12 +30,14 @@ class Error{
      *
      * @return void
      */
+    //TODO add option to put the stack trace in a log file or just have prettier error pages
     public static function exceptionHandler($exception){
         //code is 404 (not found) or 500 (general error)
         $code = $exception->getCode();
         if ($code != 404){
             $code = 500;
-        }
+        }//TODO Use code here to create 404.twig and 500.twig
+
         http_response_code($code);
 
         //TODO need to integrate twig template
