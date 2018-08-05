@@ -17,7 +17,7 @@ class Error{
      * @return void
      *
      */
-    public static function errorhandler($level, $message, $file, $line){
+    public static function errorHandler($level, $message, $file, $line){
         if(error_reporting() !== 0){
             //to keep the @ operator working
             throw new \ErrorException($message, 0, $level, $file, $line);
@@ -36,17 +36,18 @@ class Error{
         $code = $exception->getCode();
         if ($code != 404){
             $code = 500;
-        }//TODO Use code here to create 404.twig and 500.twig
+        }
 
         http_response_code($code);
-
-        //TODO need to integrate twig template
-        echo "<h1>Fatal error</h1>";
-        echo "<p>Uncaught exception : '".get_class($exception)."'</p>";
-        echo "<p>Message : '".$exception->getMessage()."'</p>";
-        echo "<p>Stack trace : <pre>".$exception->getTraceAsString()."</pre></p>";
-        echo "<p>thrown in '".$exception->getFile()." On line ".$exception->getLine()."</p>";
-
+        if(\App\Config::SHOW_ERRORS){
+            echo "<h1>Fatal error</h1>";
+            echo "<p>Uncaught exception : '".get_class($exception)."'</p>";
+            echo "<p>Message : '".$exception->getMessage()."'</p>";
+            echo "<p>Stack trace : <pre>".$exception->getTraceAsString()."</pre></p>";
+            echo "<p>thrown in '".$exception->getFile()." On line ".$exception->getLine()."</p>";
+        }else{
+            View::renderTemplate($code.'.twig');
+        }
 
     }
 }
