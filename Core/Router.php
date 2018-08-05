@@ -41,7 +41,8 @@ class Router{
      * @var array
      */
     private $sections = [
-        'admin'
+        'admin',
+        'ajax'
     ];
 
 
