@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5b9818ba-ee33-4d3d-8e2d-521affc59bc9" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/App/Controllers/Admin/Home.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/App/Views/Admin/Home.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Views/404.twig" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/404.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App/Views/500.twig" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/500.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Core/Error.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Error.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -33,34 +32,95 @@
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
         <item name="blogoc@localhost" type="feb32156:DbDataSourceImpl" />
       </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="blogoc@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="blogoc@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="blogoc: schema" type="c314c289:MysqlImplModel$Schema" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="blogoc@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="blogoc: schema" type="c314c289:MysqlImplModel$Schema" />
+        <item name="role: table" type="98d5ac3d:MysqlImplModel$Table" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="blogoc@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="blogoc: schema" type="c314c289:MysqlImplModel$Schema" />
+        <item name="user: table" type="98d5ac3d:MysqlImplModel$Table" />
+      </path>
     </expand>
     <select />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="index.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/index.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="68">
+              <caret line="8" column="29" selection-start-line="8" selection-start-column="29" selection-end-line="8" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="Router.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Core/Router.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="462">
-              <caret line="148" column="40" selection-start-line="148" selection-start-column="40" selection-end-line="148" selection-end-column="40" />
+            <state relative-caret-position="255">
+              <caret line="15" column="18" selection-start-line="15" selection-start-column="18" selection-end-line="15" selection-end-column="18" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Core/index.php">
+      <file leaf-file-name="Debug.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/Controllers/Debug.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" selection-start-line="2" selection-end-line="2" />
+            <state relative-caret-position="170">
+              <caret line="10" column="39" selection-start-line="10" selection-start-column="39" selection-end-line="10" selection-end-column="39" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Error.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Core/Error.php">
+      <file leaf-file-name="Debug.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/Controllers/Admin/Debug.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="700">
-              <caret line="49" column="57" selection-start-line="49" selection-start-column="57" selection-end-line="49" selection-end-column="57" />
+            <state relative-caret-position="272">
+              <caret line="16" selection-start-line="16" selection-end-line="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Home.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/Controllers/Admin/Home.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="153">
+              <caret line="9" column="1" lean-forward="true" selection-start-line="9" selection-start-column="1" selection-end-line="9" selection-end-column="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Base.twig" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/App/Views/Base.twig">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="394">
+              <caret line="39" lean-forward="true" selection-start-line="39" selection-end-line="39" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Home.twig" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/Views/Admin/Home.twig">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="17" selection-start-column="17" selection-end-column="17" />
             </state>
           </provider>
         </entry>
@@ -69,43 +129,74 @@
         <entry file="file://$PROJECT_DIR$/App/Controllers/Home.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="51">
-              <caret line="3" selection-start-line="3" selection-end-line="3" selection-end-column="15" />
+              <caret line="3" selection-start-line="3" selection-end-line="9" selection-end-column="1" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="500.twig" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/Views/500.twig">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="14" lean-forward="true" selection-start-line="8" selection-start-column="14" selection-end-line="8" selection-end-column="14" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="404.twig" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/Views/404.twig">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="26" selection-start-line="2" selection-start-column="26" selection-end-line="2" selection-end-column="26" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="View.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Core/View.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="24" column="5" lean-forward="true" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Debug.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App/Controllers/Debug.php">
-          <provider selected="true" editor-type-id="text-editor">
+      <file leaf-file-name="DATABASE/7d2297d7-9f83-4c8d-87f4-7171cc43241e" pinned="false" current-in-tab="false">
+        <entry file="uml://DATABASE/7d2297d7-9f83-4c8d-87f4-7171cc43241e">
+          <provider selected="true" editor-type-id="UmlEditorProvider">
             <state>
-              <caret selection-end-line="1" selection-end-column="26" />
+              <ID>DATABASE</ID>
+              <OriginalElement>7d2297d7-9f83-4c8d-87f4-7171cc43241e</OriginalElement>
+              <nodes>
+                <node x="208.75" y="201.0">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.category</node>
+                <node x="314.375" y="702.5">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.post_has_tag</node>
+                <node x="9.75" y="124.0">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.user</node>
+                <node x="382.5" y="479.0">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.tag</node>
+                <node x="50.375" y="680.0">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.comment</node>
+                <node x="602.5" y="0.0">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.config</node>
+                <node x="9.75" y="0.0">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.role</node>
+                <node x="159.5" y="402.0">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.post</node>
+              </nodes>
+              <notes />
+              <edges>
+                <edge source="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.post" target="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.user">
+                  <point x="-50.75" y="-114.0" />
+                  <point x="210.25" y="377.0" />
+                  <point x="144.0" y="377.0" />
+                  <point x="44.75" y="114.0" />
+                </edge>
+                <edge source="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.post_has_tag" target="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.tag">
+                  <point x="38.25" y="-36.5" />
+                  <point x="429.125" y="655.0" />
+                  <point x="470.0" y="655.0" />
+                  <point x="0.0" y="37.0" />
+                </edge>
+                <edge source="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.post_has_tag" target="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.post">
+                  <point x="-38.25" y="-36.5" />
+                  <point x="352.625" y="655.0" />
+                  <point x="311.75" y="655.0" />
+                  <point x="50.75" y="114.0" />
+                </edge>
+                <edge source="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.post" target="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.category">
+                  <point x="50.75" y="-114.0" />
+                  <point x="0.0" y="37.0" />
+                </edge>
+                <edge source="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.user" target="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.role">
+                  <point x="0.0" y="-114.0" />
+                  <point x="0.0" y="37.0" />
+                </edge>
+                <edge source="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.comment" target="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.post">
+                  <point x="41.0" y="-59.0" />
+                  <point x="173.375" y="655.0" />
+                  <point x="210.25" y="655.0" />
+                  <point x="-50.75" y="114.0" />
+                </edge>
+                <edge source="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.comment" target="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.user">
+                  <point x="-41.0" y="-59.0" />
+                  <point x="91.375" y="655.0" />
+                  <point x="54.5" y="655.0" />
+                  <point x="-44.75" y="114.0" />
+                </edge>
+              </edges>
+              <settings layout="Hierarchic Group" zoom="1.0" x="240.0" y="240.0" />
+              <SelectedNodes />
+              <Categories>
+                <Category>Key columns</Category>
+                <Category>Columns</Category>
+              </Categories>
             </state>
           </provider>
         </entry>
@@ -130,7 +221,6 @@
         <option value="$PROJECT_DIR$/Core/View.php" />
         <option value="$PROJECT_DIR$/App/Views/Home.twig" />
         <option value="$PROJECT_DIR$/App/Controllers/Home.php" />
-        <option value="$PROJECT_DIR$/App/Views/Base.twig" />
         <option value="$PROJECT_DIR$/App/Config.php" />
         <option value="$PROJECT_DIR$/public/css/style.css" />
         <option value="$PROJECT_DIR$/Core/Router.php" />
@@ -138,6 +228,9 @@
         <option value="$PROJECT_DIR$/App/Views/404.twig" />
         <option value="$PROJECT_DIR$/App/Views/500.twig" />
         <option value="$PROJECT_DIR$/Core/Error.php" />
+        <option value="$PROJECT_DIR$/App/Views/Admin/Home.twig" />
+        <option value="$PROJECT_DIR$/App/Controllers/Admin/Home.php" />
+        <option value="$PROJECT_DIR$/App/Views/Base.twig" />
       </list>
     </option>
   </component>
@@ -159,8 +252,8 @@
     </include_path>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
+    <option name="x" value="-1984" />
+    <option name="y" value="-13" />
     <option name="width" value="1586" />
     <option name="height" value="1047" />
   </component>
@@ -172,7 +265,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -207,6 +299,13 @@
             <path>
               <item name="blogoc" type="b2602c69:ProjectViewProjectNode" />
               <item name="blogoc" type="462c0819:PsiDirectoryNode" />
+              <item name="App" type="462c0819:PsiDirectoryNode" />
+              <item name="Views" type="462c0819:PsiDirectoryNode" />
+              <item name="Admin" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="blogoc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="blogoc" type="462c0819:PsiDirectoryNode" />
               <item name="Core" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -223,6 +322,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -235,6 +335,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\Xampp\htdocs\blogoc\App\Controllers\Admin" />
       <recent name="C:\xampp\htdocs\blogoc\App\Controllers\Admin" />
     </key>
   </component>
@@ -271,32 +372,44 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="39605000" />
+    <option name="totallyTimeSpent" value="41040000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-1928" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14925373" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17916666" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" weight="0.32939914" />
-      <window_info anchor="right" id="Database" order="3" visible="true" weight="0.13006397" />
-      <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="10" />
+      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" weight="0.32939914" />
+      <window_info anchor="right" id="Database" order="3" visible="true" weight="0.16041666" />
+      <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Terminal" order="9" />
+      <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14925373" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Version Control" order="10" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
+      <window_info anchor="right" id="Database" order="3" visible="true" weight="0.13006397" />
       <window_info anchor="bottom" id="Messages" order="11" />
       <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" weight="0.32939914" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Terminal" order="9" />
+      <window_info id="Favorites" order="2" side_tool="true" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -306,36 +419,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="uml://PHP/C:/xampp/htdocs/blogoc/Core">
-      <provider selected="true" editor-type-id="UmlEditorProvider">
-        <state>
-          <ID>PHP</ID>
-          <OriginalElement>$PROJECT_DIR$/Core</OriginalElement>
-          <nodes>
-            <node x="0.0" y="0.0">\Core\Router</node>
-          </nodes>
-          <notes />
-          <edges />
-          <settings layout="Hierarchic Group" zoom="1.0" x="34.0" y="15.0" />
-          <SelectedNodes />
-          <Categories>
-            <Category>Fields</Category>
-            <Category>Constants</Category>
-            <Category>Constructors</Category>
-            <Category>Methods</Category>
-          </Categories>
-          <SCOPE>All</SCOPE>
-          <VISIBILITY>private</VISIBILITY>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/standard/standard_8.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="217">
-          <caret line="835" column="53" lean-forward="true" selection-start-line="835" selection-start-column="53" selection-end-line="835" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/App/Controllers/Admin/index.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
@@ -596,9 +679,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/7d2297d7-9f83-4c8d-87f4-7171cc43241e/console.sql">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/7d2297d7-9f83-4c8d-87f4-7171cc43241e/console.sql" />
     <entry file="uml://DATABASE/7d2297d7-9f83-4c8d-87f4-7171cc43241e.SCHEMA:blogoc">
       <provider selected="true" editor-type-id="UmlEditorProvider">
         <state>
@@ -667,9 +748,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/7d2297d7-9f83-4c8d-87f4-7171cc43241e/console.sql">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/7d2297d7-9f83-4c8d-87f4-7171cc43241e/console.sql" />
     <entry file="uml://PHP/C:/xampp/htdocs/blogoc/App/Controlers">
       <provider selected="true" editor-type-id="UmlEditorProvider">
         <state>
@@ -727,59 +806,54 @@
           <ID>DATABASE</ID>
           <OriginalElement>7d2297d7-9f83-4c8d-87f4-7171cc43241e</OriginalElement>
           <nodes>
-            <node x="359.0" y="256.0">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.category</node>
-            <node x="787.75" y="0.0">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.config_class</node>
-            <node x="464.625" y="834.5">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.post_has_tag</node>
-            <node x="0.0" y="124.0">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.user</node>
-            <node x="532.75" y="600.0">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.tag</node>
-            <node x="140.625" y="812.0">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.comment</node>
-            <node x="752.75" y="124.0">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.config</node>
-            <node x="80.0" y="0.0">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.role</node>
-            <node x="309.75" y="512.0">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.post</node>
+            <node x="208.75" y="201.0">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.category</node>
+            <node x="314.375" y="702.5">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.post_has_tag</node>
+            <node x="9.75" y="124.0">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.user</node>
+            <node x="382.5" y="479.0">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.tag</node>
+            <node x="50.375" y="680.0">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.comment</node>
+            <node x="602.5" y="0.0">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.config</node>
+            <node x="9.75" y="0.0">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.role</node>
+            <node x="159.5" y="402.0">7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.post</node>
           </nodes>
           <notes />
           <edges>
             <edge source="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.post" target="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.user">
-              <point x="-50.75" y="-125.0" />
-              <point x="360.5" y="487.0" />
-              <point x="254.25" y="487.0" />
-              <point x="84.75" y="169.0" />
-            </edge>
-            <edge source="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.config" target="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.config_class">
-              <point x="0.0" y="-47.5" />
-              <point x="0.0" y="37.0" />
+              <point x="-50.75" y="-114.0" />
+              <point x="210.25" y="377.0" />
+              <point x="144.0" y="377.0" />
+              <point x="44.75" y="114.0" />
             </edge>
             <edge source="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.post_has_tag" target="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.tag">
               <point x="38.25" y="-36.5" />
-              <point x="579.375" y="787.0" />
-              <point x="620.25" y="787.0" />
+              <point x="429.125" y="655.0" />
+              <point x="470.0" y="655.0" />
               <point x="0.0" y="37.0" />
             </edge>
             <edge source="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.post_has_tag" target="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.post">
               <point x="-38.25" y="-36.5" />
-              <point x="502.875" y="787.0" />
-              <point x="462.0" y="787.0" />
-              <point x="50.75" y="125.0" />
+              <point x="352.625" y="655.0" />
+              <point x="311.75" y="655.0" />
+              <point x="50.75" y="114.0" />
             </edge>
             <edge source="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.post" target="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.category">
-              <point x="50.75" y="-125.0" />
+              <point x="50.75" y="-114.0" />
               <point x="0.0" y="37.0" />
             </edge>
             <edge source="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.user" target="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.role">
-              <point x="0.0" y="-169.0" />
+              <point x="0.0" y="-114.0" />
               <point x="0.0" y="37.0" />
             </edge>
             <edge source="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.comment" target="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.post">
               <point x="41.0" y="-59.0" />
-              <point x="263.625" y="787.0" />
-              <point x="360.5" y="787.0" />
-              <point x="-50.75" y="125.0" />
+              <point x="173.375" y="655.0" />
+              <point x="210.25" y="655.0" />
+              <point x="-50.75" y="114.0" />
             </edge>
             <edge source="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.comment" target="7d2297d7-9f83-4c8d-87f4-7171cc43241e.TABLE:blogoc.user">
               <point x="-41.0" y="-59.0" />
-              <point x="181.625" y="787.0" />
-              <point x="84.75" y="787.0" />
-              <point x="-84.75" y="169.0" />
+              <point x="91.375" y="655.0" />
+              <point x="54.5" y="655.0" />
+              <point x="-44.75" y="114.0" />
             </edge>
           </edges>
           <settings layout="Hierarchic Group" zoom="1.0" x="240.0" y="240.0" />
@@ -788,7 +862,6 @@
             <Category>Key columns</Category>
             <Category>Columns</Category>
           </Categories>
-          <SCOPE>All</SCOPE>
         </state>
       </provider>
     </entry>
@@ -861,24 +934,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/Controllers/Admin/Debug.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="1" selection-start-line="17" selection-start-column="1" selection-end-line="17" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
+        <state relative-caret-position="68">
           <caret line="8" column="29" selection-start-line="8" selection-start-column="29" selection-end-line="8" selection-end-column="29" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/App/Controllers/Debug.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="1" selection-end-column="26" />
+        <state relative-caret-position="170">
+          <caret line="10" column="39" selection-start-line="10" selection-start-column="39" selection-end-line="10" selection-end-column="39" />
         </state>
       </provider>
     </entry>
@@ -886,13 +952,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="510">
           <caret line="30" column="10" selection-start-line="30" selection-start-column="10" selection-end-line="30" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/App/Views/Base.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="326">
-          <caret line="35" column="46" lean-forward="true" selection-start-line="35" selection-start-column="46" selection-end-line="35" selection-end-column="46" />
         </state>
       </provider>
     </entry>
@@ -919,8 +978,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Core/Router.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="462">
-          <caret line="148" column="40" selection-start-line="148" selection-start-column="40" selection-end-line="148" selection-end-column="40" />
+        <state relative-caret-position="255">
+          <caret line="15" column="18" selection-start-line="15" selection-start-column="18" selection-end-line="15" selection-end-column="18" />
         </state>
       </provider>
     </entry>
@@ -931,20 +990,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/Controllers/Home.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" selection-start-line="3" selection-end-line="3" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Core/Controller.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="1" lean-forward="true" selection-start-line="5" selection-start-column="1" selection-end-line="5" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Core/Controller.php" />
     <entry file="file://$PROJECT_DIR$/App/Views/404.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
@@ -963,6 +1009,41 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="700">
           <caret line="49" column="57" selection-start-line="49" selection-start-column="57" selection-end-line="49" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Controllers/Admin/Debug.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Views/Admin/Home.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="17" selection-start-column="17" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Controllers/Home.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" selection-start-line="3" selection-end-line="9" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Controllers/Admin/Home.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="1" lean-forward="true" selection-start-line="9" selection-start-column="1" selection-end-line="9" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App/Views/Base.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="394">
+          <caret line="39" lean-forward="true" selection-start-line="39" selection-end-line="39" />
         </state>
       </provider>
     </entry>
