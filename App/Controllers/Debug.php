@@ -18,6 +18,6 @@ class Debug{
     public function testNav(){
 
         $data = Navigation::getMenu();
-        echo View::returnTemplate('Template/Navigation.twig', $data);
+        echo View::returnTemplate('Traits/Navigation.twig', $data);
     }
 }
