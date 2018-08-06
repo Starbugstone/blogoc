@@ -5,6 +5,7 @@ use \Core\View;
 
 class Home{
     public function index(){
-        View::renderTemplate('Home.twig');
+        $data = \App\Traits\Navigation::getMenu();
+        View::renderTemplate('Home.twig', $data);
     }
 }

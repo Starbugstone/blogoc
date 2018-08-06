@@ -1,10 +1,10 @@
 <?php
 namespace App\Controllers;
 use \Core\View;
-
+use \App\Traits\Navigation;
 
 class Debug{
-    use \App\Traits\Navigation;
+
     public function index($test = ''){
         echo 'Ok '.$test.'<br>';
         echo 'the router is working \\o/';
@@ -14,14 +14,10 @@ class Debug{
         echo 'the router is working \\o/';
     }
 
+
     public function testNav(){
-        $nav = new \App\Controllers\Template\Navigation();
-        echo $nav->index();
-    }
 
-    public function testNav2(){
-
-        $data = \App\Traits\Navigation::getMenu();
+        $data = Navigation::getMenu();
         echo View::returnTemplate('Template/Navigation.twig', $data);
     }
 }

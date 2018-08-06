@@ -26,18 +26,7 @@
 
     </div>
 
-
-    <nav class="top_menu">
-        <ul>
-            {{ render(controller('App\\Controllers\\Template:Navigation:index')) }}
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Category</a></li>
-            <li><a href="#">Category</a></li>
-            <li><a href="#">Category</a></li>
-            <li><a href="#">All Pages</a></li>
-        </ul>
-
-    </nav>
+    {% include "Traits/Navigation.twig" %}
 
 </header>
 {% block jumbotron %}
