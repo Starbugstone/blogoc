@@ -46,8 +46,8 @@ class Error{
             echo "<p>Stack trace : <pre>".$exception->getTraceAsString()."</pre></p>";
             echo "<p>thrown in '".$exception->getFile()." On line ".$exception->getLine()."</p>";
         }else{
-            $data['exceptionMessage'] = $exception->getMessage();
-            View::renderTemplate($code.'.twig', $data);
+            $viewData['exceptionMessage'] = $exception->getMessage();
+            View::renderTemplate($code.'.twig', $viewData);
         }
 
     }

@@ -6,7 +6,6 @@
       <change beforePath="$PROJECT_DIR$/App/Views/404.twig" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/404.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App/Views/500.twig" beforeDir="false" afterPath="$PROJECT_DIR$/App/Views/500.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Core/Error.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Error.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Core/Router.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Router.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -57,20 +56,29 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Error.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Error.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Core/Error.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="700">
-              <caret line="49" column="53" selection-start-line="49" selection-start-column="53" selection-end-line="49" selection-end-column="53" />
+              <caret line="49" column="57" selection-start-line="49" selection-start-column="57" selection-end-line="49" selection-end-column="57" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="500.twig" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Home.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/App/Controllers/Home.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="51">
+              <caret line="3" selection-start-line="3" selection-end-line="3" selection-end-column="15" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="500.twig" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App/Views/500.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="33" selection-start-line="6" selection-start-column="33" selection-end-line="6" selection-end-column="33" />
+            <state relative-caret-position="136">
+              <caret line="8" column="14" lean-forward="true" selection-start-line="8" selection-start-column="14" selection-end-line="8" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -78,8 +86,8 @@
       <file leaf-file-name="404.twig" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/App/Views/404.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="4" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="33" />
+            <state relative-caret-position="34">
+              <caret line="2" column="26" selection-start-line="2" selection-start-column="26" selection-end-line="2" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -125,10 +133,11 @@
         <option value="$PROJECT_DIR$/App/Views/Base.twig" />
         <option value="$PROJECT_DIR$/App/Config.php" />
         <option value="$PROJECT_DIR$/public/css/style.css" />
-        <option value="$PROJECT_DIR$/Core/Error.php" />
-        <option value="$PROJECT_DIR$/App/Views/404.twig" />
         <option value="$PROJECT_DIR$/Core/Router.php" />
+        <option value="$PROJECT_DIR$/Core/Controller.php" />
+        <option value="$PROJECT_DIR$/App/Views/404.twig" />
         <option value="$PROJECT_DIR$/App/Views/500.twig" />
+        <option value="$PROJECT_DIR$/Core/Error.php" />
       </list>
     </option>
   </component>
@@ -257,12 +266,12 @@
       <workItem from="1532986306653" duration="704000" />
       <workItem from="1533014767374" duration="1331000" />
       <workItem from="1533502518276" duration="3337000" />
-      <workItem from="1533534595885" duration="396000" />
+      <workItem from="1533534595885" duration="1486000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="38515000" />
+    <option name="totallyTimeSpent" value="39605000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -297,35 +306,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="uml://PHP/C:/xampp/htdocs/blogoc">
-      <provider selected="true" editor-type-id="UmlEditorProvider">
-        <state>
-          <ID>PHP</ID>
-          <OriginalElement>$PROJECT_DIR$</OriginalElement>
-          <nodes>
-            <node x="258.0" y="-230.0">\Core\Router</node>
-            <node x="223.0" y="274.0">$PROJECT_DIR$/App/Views</node>
-            <node x="0.0" y="274.0">$PROJECT_DIR$/App/Controllers/Admin</node>
-            <node x="113.0" y="274.0">$PROJECT_DIR$/public</node>
-            <node x="-128.0" y="66.0">$PROJECT_DIR$/vendor</node>
-          </nodes>
-          <notes />
-          <edges />
-          <settings layout="Hierarchic Group" zoom="1.0" x="-135.0" y="-111.0" />
-          <SelectedNodes>
-            <node>\Core\Router</node>
-          </SelectedNodes>
-          <Categories>
-            <Category>Fields</Category>
-            <Category>Constants</Category>
-            <Category>Constructors</Category>
-            <Category>Methods</Category>
-          </Categories>
-          <SCOPE>All</SCOPE>
-          <VISIBILITY>private</VISIBILITY>
-        </state>
-      </provider>
-    </entry>
     <entry file="uml://PHP/C:/xampp/htdocs/blogoc/Core">
       <provider selected="true" editor-type-id="UmlEditorProvider">
         <state>
@@ -909,13 +889,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App/Controllers/Home.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="15" selection-start-line="3" selection-start-column="15" selection-end-line="3" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/App/Views/Base.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="326">
@@ -958,24 +931,38 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Core/Error.php">
+    <entry file="file://$PROJECT_DIR$/App/Controllers/Home.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="700">
-          <caret line="49" column="53" selection-start-line="49" selection-start-column="53" selection-end-line="49" selection-end-column="53" />
+        <state relative-caret-position="51">
+          <caret line="3" selection-start-line="3" selection-end-line="3" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Core/Controller.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="1" lean-forward="true" selection-start-line="5" selection-start-column="1" selection-end-line="5" selection-end-column="1" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/App/Views/404.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="4" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="33" />
+        <state relative-caret-position="34">
+          <caret line="2" column="26" selection-start-line="2" selection-start-column="26" selection-end-line="2" selection-end-column="26" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/App/Views/500.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="33" selection-start-line="6" selection-start-column="33" selection-end-line="6" selection-end-column="33" />
+        <state relative-caret-position="136">
+          <caret line="8" column="14" lean-forward="true" selection-start-line="8" selection-start-column="14" selection-end-line="8" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Core/Error.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="700">
+          <caret line="49" column="57" selection-start-line="49" selection-start-column="57" selection-end-line="49" selection-end-column="57" />
         </state>
       </provider>
     </entry>
