@@ -10,4 +10,9 @@ class Debug{
         echo 'Ok '.$test.' - '.$test2.'<br>';
         echo 'the router is working \\o/';
     }
+
+    public function testNav(){
+        $nav = new \App\Controllers\Template\Navigation();
+        echo $nav->index();
+    }
 }
