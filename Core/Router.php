@@ -141,12 +141,12 @@ class Router{
                 call_user_func_array([$controllerInstantiated, $methodToRun], $this->currentParams);
             }else{
                 //echo '<h1>ERROR - Method <i>'.$methodToRun.'</i>() doesn\'t exist or is inacessable</h1>';
-                throw new \Exception("ERROR - Method <i>$methodToRun</i>() doesn't exist or is inacessable");
+                throw new \Exception("ERROR - Method $methodToRun() doesn't exist or is inacessable");
             }
 
         }else{
             //echo '<h1>404 ERROR - Class <i>'.$controllerWithNamespace.'</i> doesn\'t exist</h1>';
-            throw new \Exception("Class <i>$controllerWithNamespace</i> doesn't exist", 404);
+            throw new \Exception("Class $controllerWithNamespace doesn't exist", 404);
         }
    }
 
