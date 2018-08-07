@@ -5,6 +5,6 @@ use \Core\View;
 
 class Home{
     public function index(){
-        View::renderTemplate('admin/Home.twig');
+        View::renderTemplate('Admin/Home.twig');
     }
 }

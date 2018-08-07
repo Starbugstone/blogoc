@@ -1,8 +1,17 @@
 <?php
 namespace App\Traits;
 
+/**
+ * Trait Navigation
+ * @package App\Traits
+ */
+
 trait Navigation{
-    public static function getMenu(){
+
+    /**
+     * @return array
+     */
+    public function getMenu(){
         //this shall be replaced by a model call
         $data['navigation'] = [
             'category1' => '/cat/1',
