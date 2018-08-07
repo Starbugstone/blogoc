@@ -16,8 +16,10 @@ class Error{
      *
      * @return void
      *
+     * @throws ErrorException to transform all errors into exceptions if the error reporting php configuration is set
+     *
      */
-    public static function errorHandler($level, $message, $file, $line){
+    public static function errorhandler($level, $message, $file, $line):void{
         if(error_reporting() !== 0){
             //to keep the @ operator working
             throw new \ErrorException($message, 0, $level, $file, $line);
@@ -31,7 +33,7 @@ class Error{
      * @return void
      */
     //TODO add option to put the stack trace in a log file or just have prettier error pages
-    public static function exceptionHandler($exception){
+    public static function exceptionHandler($exception):void{
         //code is 404 (not found) or 500 (general error)
         $code = $exception->getCode();
         if ($code != 404){
