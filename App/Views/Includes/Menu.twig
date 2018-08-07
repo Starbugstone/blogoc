@@ -1,0 +1,9 @@
+<nav class="top_menu">
+    <ul>
+        <li><a href="/">Home</a></li>
+        {% for cat, url in navigation %}
+            <li><a href="{{ url }}">{{ cat }}</a></li>
+        {% endfor %}
+        <li><a href="/all-pages">All Pages</a></li>
+    </ul>
+</nav>

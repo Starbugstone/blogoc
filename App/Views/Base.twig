@@ -15,6 +15,7 @@
 <body>
 <!-- Header -->
 <header>
+
     <div class="navbar navbar-expand-md navbar-dark bg-dark">
         <ul class="socialicon">
             <li><a href="#"><i class="fa fa-facebook"></i></a></li>
@@ -26,21 +27,16 @@
 
     </div>
 
-
-    <nav class="top_menu">
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Category</a></li>
-            <li><a href="#">Category</a></li>
-            <li><a href="#">Category</a></li>
-            <li><a href="#">All Pages</a></li>
-        </ul>
-
-    </nav>
+    {% if navigation is defined %}
+        {% include "Includes/menu.twig" %}
+    {% endif %}
 
 </header>
-{% block jumbotron %}
-{% endblock %}
+
+{% if jumbotron is defined %}
+    {% include "Includes/jumbotron.twig" %}
+{% endif %}
+
 <main role="main" class="container">
     {% block main %}
     {% endblock %}

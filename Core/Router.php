@@ -41,7 +41,8 @@ class Router{
      * @var array
      */
     private $sections = [
-        'admin'
+        'admin',
+        'ajax'
     ];
 
 
@@ -82,16 +83,6 @@ class Router{
 
         //grabbing the remaining parameters
         $this->currentParams = $url? array_values($url) : [];
-
-        //Debug - leaving in for now just in case we need to test some advanced calls
-
-        /*echo 'in namespace '.$this->currentNamespace.'<br>';
-        echo 'Controller to call '.$this->currentController.'<br>';
-        echo 'method to call '.$this->currentMethod.'()<br>';
-        var_dump($url);
-        echo '<br><hr>';
-        var_dump($this->currentParams);*/
-
         $this->dispatch();
     }
 
@@ -102,7 +93,7 @@ class Router{
      * @return array decomposed url
      */
     protected function getUrl(): array{
-        if(isset($_GET['url'])){ //$url = $_GET['url'] ?? ''  en php 7.1
+        if(isset($_GET['url'])){
             //remove right slash
             $url = rtrim($_GET['url'], '/');
 
@@ -127,6 +118,8 @@ class Router{
      * also takes care of throwing errors
      *
      * @return void
+     *
+     * @throws  \exception if the controller or method doesn't exist
      */
     protected function dispatch(): void{
 
@@ -140,13 +133,13 @@ class Router{
             if(method_exists($controllerInstantiated, $methodToRun)){
                 call_user_func_array([$controllerInstantiated, $methodToRun], $this->currentParams);
             }else{
-                //echo '<h1>ERROR - Method <i>'.$methodToRun.'</i>() doesn\'t exist or is inacessable</h1>';
-                throw new \Exception("ERROR - Method $methodToRun() doesn't exist or is inacessable");
+
+                throw new \Exception("ERROR - Method $methodToRun() doesn't exist or is inaccessible");
             }
 
         }else{
-            //echo '<h1>404 ERROR - Class <i>'.$controllerWithNamespace.'</i> doesn\'t exist</h1>';
             throw new \Exception("Class $controllerWithNamespace doesn't exist", 404);
+
         }
    }
 
