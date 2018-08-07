@@ -8,9 +8,11 @@ class Home extends \Core\Controller{
 
     //can I set this in the core extendable controller class ??
     //-----------------------------------------------
-    use \App\Traits\Navigation;
+    //use \App\Traits\Navigation;
     public function __construct(){
-        $this->data = $this->getMenu();
+        $menu = new \App\Models\Menu();
+
+        $this->data = $menu->getMenu();
     }
     //-----------------------------------------------
 
