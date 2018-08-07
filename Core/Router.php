@@ -41,7 +41,8 @@ class Router{
      * @var array
      */
     private $sections = [
-        'admin'
+        'admin',
+        'ajax'
     ];
 
 
@@ -82,16 +83,6 @@ class Router{
 
         //grabbing the remaining parameters
         $this->currentParams = $url? array_values($url) : [];
-
-        //Debug - leaving in for now just in case we need to test some advanced calls
-
-        /*echo 'in namespace '.$this->currentNamespace.'<br>';
-        echo 'Controller to call '.$this->currentController.'<br>';
-        echo 'method to call '.$this->currentMethod.'()<br>';
-        var_dump($url);
-        echo '<br><hr>';
-        var_dump($this->currentParams);*/
-
         $this->dispatch();
     }
 
@@ -102,7 +93,7 @@ class Router{
      * @return array decomposed url
      */
     protected function getUrl(): array{
-        if(isset($_GET['url'])){ //$url = $_GET['url'] ?? ''  en php 7.1
+        if(isset($_GET['url'])){
             //remove right slash
             $url = rtrim($_GET['url'], '/');
 
