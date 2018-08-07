@@ -3,7 +3,13 @@ namespace App\Controllers;
 use \Core\View;
 use \App\Traits\Navigation;
 
-class Debug{
+class Debug extends \Core\Controller{
+
+    public function __construct(){
+        $Includes = new \App\Models\Includes();
+
+        $this->data = $Includes->getMenu();
+    }
 
     public function index($test = ''){
         echo 'Ok '.$test.'<br>';
@@ -17,7 +23,6 @@ class Debug{
 
     public function testNav(){
 
-        $data = Navigation::getMenu();
-        echo View::returnTemplate('Traits/Navigation.twig', $data);
+        echo View::returnTemplate('Includes.php/Menu.twig', $this->data);
     }
 }

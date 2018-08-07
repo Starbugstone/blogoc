@@ -6,15 +6,11 @@ use \Core\View;
 
 class Home extends \Core\Controller{
 
-    //can I set this in the core extendable controller class ??
-    //-----------------------------------------------
-    //use \App\Traits\Navigation;
     public function __construct(){
-        $menu = new \App\Models\Menu();
-
-        $this->data = $menu->getMenu();
+        $Includes = new \App\Models\Includes();
+        $this->data['navigation'] = $Includes->getMenu();
+        $this->data['jumbotron'] = $Includes->getJumbotron();
     }
-    //-----------------------------------------------
 
     public function index(){
 
