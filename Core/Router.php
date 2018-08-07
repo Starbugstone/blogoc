@@ -93,7 +93,7 @@ class Router{
      * @return array decomposed url
      */
     protected function getUrl(): array{
-        if(isset($_GET['url'])){ //$url = $_GET['url'] ?? ''  en php 7.1
+        if(isset($_GET['url'])){
             //remove right slash
             $url = rtrim($_GET['url'], '/');
 
