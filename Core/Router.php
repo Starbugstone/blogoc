@@ -118,6 +118,8 @@ class Router{
      * also takes care of throwing errors
      *
      * @return void
+     *
+     * @throws  \exception if the controller or method doesn't exist
      */
     protected function dispatch(): void{
 
@@ -131,11 +133,11 @@ class Router{
             if(method_exists($controllerInstantiated, $methodToRun)){
                 call_user_func_array([$controllerInstantiated, $methodToRun], $this->currentParams);
             }else{
-                echo '<h1>ERROR - Method <i>'.$methodToRun.'</i>() doesn\'t exist or is inacessable</h1>';
+                throw new \Exception("ERROR - Method <i>$methodToRun</i>() doesn't exist or is inaccessible");
             }
 
         }else{
-            echo '<h1>404 ERROR - Class <i>'.$controllerWithNamespace.'</i> doesn\'t exist</h1>';
+            throw new \Exception("Class <i>$controllerWithNamespace</i> doesn't exist", 404);
         }
    }
 
