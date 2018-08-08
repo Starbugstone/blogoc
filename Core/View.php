@@ -10,12 +10,14 @@ class View{
     /**
      * render view using twig
      *
-     * @params string $template  the template file
-     * @params array $args  Associative array of data to display in the view (optional)
+     * @param string $template the template file
+     * @param array $args Associative array of data to display in the view (optional)
      *
      * return @void
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
-
     public static function renderTemplate($template, $args = []):void{
         static $twig = null;
         if ($twig === null){

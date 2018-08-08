@@ -2,11 +2,12 @@
 
 namespace Core;
 
-/*
+/**
  * error and exception handler
+ * PHP version 7
  */
 class Error{
-    /*
+    /**
      * Error handler. Convert all errors to exceptions by throwing an errorException
      *
      * @param int $level  Error level
@@ -16,19 +17,19 @@ class Error{
      *
      * @return void
      *
-     * @throws ErrorException to transform all errors into exceptions if the error reporting php configuration is set
+     * @throws \ErrorException to transform all errors into exceptions if the error reporting php configuration is set
      *
      */
-    public static function errorhandler($level, $message, $file, $line):void{
+    public static function errorHandler($level, $message, $file, $line):void{
         if(error_reporting() !== 0){
             //to keep the @ operator working
             throw new \ErrorException($message, 0, $level, $file, $line);
         }
     }
 
-    /*
+    /**
      * Exception handler
-     * @param Exception $exception  The exception
+     * @param \Exception $exception The exception
      *
      * @return void
      */
