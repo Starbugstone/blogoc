@@ -1,6 +1,8 @@
 <?php
 namespace App\Models;
 
+use Core\Model;
+
 /**
  * Class Includes
  * All the included views data (menu, jumbotron, ...)
@@ -8,7 +10,7 @@ namespace App\Models;
  * @package App\Models
  */
 
-class Includes{
+class Includes extends Model {
     /**
      * get all the menu elements
      * @return array

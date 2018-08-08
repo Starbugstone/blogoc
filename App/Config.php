@@ -16,7 +16,7 @@ class Config{
      * Database name
      * @var string
      */
-    const DB_NAME = 'stonemvc2';
+    const DB_NAME = 'blogoc';
 
     /*
      * Database user
