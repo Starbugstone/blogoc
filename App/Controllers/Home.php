@@ -3,9 +3,19 @@ namespace App\Controllers;
 
 use \Core\View;
 
+/**
+ * Class Home
+ *
+ * The home page
+ *
+ * @package App\Controllers
+ */
 
 class Home extends \Core\Controller{
 
+    /**
+     * Home constructor. This will grab all the includes and store in appropriate arrays
+     */
     public function __construct(){
         $Includes = new \App\Models\Includes();
         $this->data['navigation'] = $Includes->getMenu();

@@ -1,7 +1,7 @@
 <?php
 
 namespace Core;
-/*
+/**
  * Router, will take in url parameters in the form
  * index.php?url=Controller/Method/param1/param2
  *

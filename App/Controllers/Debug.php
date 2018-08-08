@@ -20,9 +20,4 @@ class Debug extends \Core\Controller{
         echo 'the router is working \\o/';
     }
 
-
-    public function testNav(){
-
-        echo View::returnTemplate('Includes.php/Menu.twig', $this->data);
-    }
 }
