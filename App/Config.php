@@ -1,11 +1,14 @@
 <?php
+
 namespace App;
 
 /*
  * Applicaiton configuration
  *
  */
-class Config{
+
+class Config
+{
     /*
      * Database host
      * @var string

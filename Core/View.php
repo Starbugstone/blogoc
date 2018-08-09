@@ -1,12 +1,13 @@
 <?php
+
 namespace Core;
 
 /**
  * Class View
  * @package Core
  */
-
-class View{
+class View
+{
     /**
      * render view using twig
      *
@@ -18,10 +19,11 @@ class View{
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function renderTemplate($template, $args = []):void{
+    public static function renderTemplate($template, $args = []): void
+    {
         static $twig = null;
-        if ($twig === null){
-            $loader = new \Twig_Loader_Filesystem(dirname(__DIR__).'/App/Views');
+        if ($twig === null) {
+            $loader = new \Twig_Loader_Filesystem(dirname(__DIR__) . '/App/Views');
             $twig = new \Twig_Environment($loader);
         }
 

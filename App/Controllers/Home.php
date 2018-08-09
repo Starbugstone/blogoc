@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controllers;
 
 use \Core\View;
@@ -10,19 +11,21 @@ use \Core\View;
  *
  * @package App\Controllers
  */
-
-class Home extends \Core\Controller{
+class Home extends \Core\Controller
+{
 
     /**
      * Home constructor. This will grab all the includes and store in appropriate arrays
      */
-    public function __construct(){
+    public function __construct()
+    {
         $Includes = new \App\Models\Includes();
         $this->data['navigation'] = $Includes->getMenu();
         $this->data['jumbotron'] = $Includes->getJumbotron();
     }
 
-    public function index(){
+    public function index()
+    {
 
         View::renderTemplate('Home.twig', $this->data);
     }

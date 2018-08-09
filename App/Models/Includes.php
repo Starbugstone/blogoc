@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Core\Model;
@@ -9,13 +10,14 @@ use Core\Model;
  * the returned data should then be stored in a $data['var'] and the view will check if var is set
  * @package App\Models
  */
-
-class Includes extends Model {
+class Includes extends Model
+{
     /**
      * get all the menu elements
      * @return array
      */
-    public function getMenu():array{
+    public function getMenu(): array
+    {
         //this shall be replaced by a model call
         $data = [
             'category1' => '/cat/1',
@@ -30,7 +32,8 @@ class Includes extends Model {
      * Gets the Jumbotron elements
      * @return array
      */
-    public function getJumbotron():array{
+    public function getJumbotron(): array
+    {
         $data = [];
         return $data;
     }

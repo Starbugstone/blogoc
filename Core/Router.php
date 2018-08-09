@@ -9,7 +9,8 @@ namespace Core;
  *
  * PHP version 7
  */
-class Router{
+class Router
+{
 
     /**
      * the default namespace
@@ -52,17 +53,18 @@ class Router{
      * will then call the dispatcher to instantiate the controller and method
      *
      */
-    public function __construct(){
+    public function __construct()
+    {
         //get the current url
         $url = $this->getUrl();
 
         //checking if a special namespace is present at the start of the url.
         //if so, then strip and set the new namespace
-        if(isset($url[0]) && in_array($url[0],$this->sections) ){
+        if (isset($url[0]) && in_array($url[0], $this->sections)) {
             $specialNamespace = array_shift($url);
 
             //making sure we have a single backslash
-            $specialNamespace = rtrim($specialNamespace,'\\').'\\';
+            $specialNamespace = rtrim($specialNamespace, '\\') . '\\';
 
             //capitalize the special namespace
             $specialNamespace = $this->convertToStudlyCaps($specialNamespace);
@@ -71,18 +73,18 @@ class Router{
         }
 
         //applying the controllers and methods
-        if (isset($url[0]) && $url[0] != null){
+        if (isset($url[0]) && $url[0] != null) {
             $this->currentController = $this->convertToStudlyCaps($url[0]);
             unset($url[0]);
         }
 
-        if(isset($url[1]) && $url[1] != null){
+        if (isset($url[1]) && $url[1] != null) {
             $this->currentMethod = $this->convertToCamelCase($url[1]);
             unset($url[1]);
         }
 
         //grabbing the remaining parameters
-        $this->currentParams = $url? array_values($url) : [];
+        $this->currentParams = $url ? array_values($url) : [];
         $this->dispatch();
     }
 
@@ -92,8 +94,9 @@ class Router{
      *
      * @return array decomposed url
      */
-    protected function getUrl(): array{
-        if(isset($_GET['url'])){
+    protected function getUrl(): array
+    {
+        if (isset($_GET['url'])) {
             //remove right slash
             $url = rtrim($_GET['url'], '/');
 
@@ -110,7 +113,7 @@ class Router{
             return $url;
         }
         return [];
-   }
+    }
 
 
     /**
@@ -121,27 +124,28 @@ class Router{
      *
      * @throws  \exception if the controller or method doesn't exist
      */
-    protected function dispatch(): void{
+    protected function dispatch(): void
+    {
 
         //try to create the controller object
-        $controllerWithNamespace = $this->currentNamespace.$this->currentController;
-        if(class_exists($controllerWithNamespace)){
+        $controllerWithNamespace = $this->currentNamespace . $this->currentController;
+        if (class_exists($controllerWithNamespace)) {
             $controllerInstantiated = new $controllerWithNamespace();
 
             //try to run the associated method and the pass parameters
             $methodToRun = $this->currentMethod;
-            if(method_exists($controllerInstantiated, $methodToRun)){
+            if (method_exists($controllerInstantiated, $methodToRun)) {
                 call_user_func_array([$controllerInstantiated, $methodToRun], $this->currentParams);
-            }else{
+            } else {
 
                 throw new \Exception("ERROR - Method $methodToRun() doesn't exist or is inaccessible");
             }
 
-        }else{
+        } else {
             throw new \Exception("Class $controllerWithNamespace doesn't exist", 404);
 
         }
-   }
+    }
 
     /**
      * Convert the string with hyphens to StudlyCaps,
@@ -151,7 +155,8 @@ class Router{
      *
      * @return string
      */
-    protected function convertToStudlyCaps($string): string{
+    protected function convertToStudlyCaps($string): string
+    {
         return str_replace(' ', '', ucwords(str_replace('-', ' ', $string)));
     }
 
@@ -163,7 +168,8 @@ class Router{
      *
      * @return string
      */
-    protected function convertToCamelCase($string): string{
+    protected function convertToCamelCase($string): string
+    {
         return lcfirst($this->convertToStudlyCaps($string));
     }
 }
