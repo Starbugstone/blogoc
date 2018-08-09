@@ -59,13 +59,27 @@
     </expand>
     <select />
   </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="1482862603">
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="gitignore" value="3" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="PLAIN_TEXT" value="3" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
+            <state relative-caret-position="119">
+              <caret line="7" column="5" selection-start-line="7" selection-start-column="5" selection-end-line="7" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -193,6 +207,7 @@
         <option value="$PROJECT_DIR$/App/Models/Includes.php" />
         <option value="$PROJECT_DIR$/Core/Model.php" />
         <option value="$PROJECT_DIR$/App/Config.php" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -341,7 +356,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="63423000" />
+    <option name="totallyTimeSpent" value="64173000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -353,7 +368,8 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1624" y="28" width="1586" height="943" extended-state="1" />
+    <frame x="-1624" y="28" width="1586" height="943" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49938196" visible="true" weight="0.15334207" />
       <window_info id="Structure" order="1" sideWeight="0.50061804" side_tool="true" weight="0.15334207" />
@@ -806,8 +822,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
+        <state relative-caret-position="119">
+          <caret line="7" column="5" selection-start-line="7" selection-start-column="5" selection-end-line="7" selection-end-column="5" />
         </state>
       </provider>
     </entry>
