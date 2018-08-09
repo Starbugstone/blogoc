@@ -1,11 +1,12 @@
 {
-    "require": {
-        "twig/twig": "^2.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "Core\\": "Core/",
-            "App\\": "App/"
-        }
+  "require": {
+    "php": "^7.1",
+    "twig/twig": "^2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Core\\": "Core/",
+      "App\\": "App/"
     }
+  }
 }
