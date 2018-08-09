@@ -1,12 +1,15 @@
 {
   "require": {
     "php": "^7.1",
-    "twig/twig": "^2.0"
+    "twig/twig": "^2.0",
+    "ext-pdo": "*"
   },
   "autoload": {
     "psr-4": {
       "Core\\": "Core/",
       "App\\": "App/"
     }
-  }
+  },
+  "name": "starbugStone/blogoc",
+  "description": "Blog for OpenClassrooms project"
 }
