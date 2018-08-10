@@ -48,4 +48,8 @@ abstract class Model
         ];
         $this->dbh = new PDO($dsn, $this->user, $this->pass, $opt);
     }
+
+    protected function test(){
+        echo '<p>'.get_class($this).' <- Our Class</p>';
+    }
 }

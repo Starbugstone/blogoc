@@ -18,6 +18,9 @@ class Debug extends \Core\Controller{
     public function test($test = '', $test2 = ''){
         echo 'Ok '.$test.' - '.$test2.'<br>';
         echo 'the router is working \\o/';
+
+        $debug = new \App\Models\Debugs();
+        $debug->getClass();
     }
 
 }
