@@ -3,7 +3,7 @@ namespace App\Models;
 
 use Core\Model;
 
-class Debugs extends Model{
+class Debug extends Model{
     public function getClass(){
         $this->test();
     }

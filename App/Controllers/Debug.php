@@ -1,7 +1,6 @@
 <?php
 namespace App\Controllers;
 use \Core\View;
-use \App\Traits\Navigation;
 
 class Debug extends \Core\Controller{
 
@@ -19,7 +18,7 @@ class Debug extends \Core\Controller{
         echo 'Ok '.$test.' - '.$test2.'<br>';
         echo 'the router is working \\o/';
 
-        $debug = new \App\Models\Debugs();
+        $debug = new \App\Models\Debug();
         $debug->getClass();
     }
 
