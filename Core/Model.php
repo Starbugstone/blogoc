@@ -164,37 +164,80 @@ abstract class Model
     }
 
     /**
-     * gets the entire table or view and returns as an object
+     * checks if the result from a PDO query has any data.
+     * If yes then we return the array
+     * If debugging is enabled we throw an exception on no results
+     * or we just return an empty array
+     * @param $result the PDO result of a query
+     * @return array the result or empty
+     * @throws \Exception if debugging is on and no result
+     */
+    private function returnArray($result):array{
+        if($result){
+            return $result;
+        }
+        if (\App\Config::SHOW_ERRORS){
+            throw new \Exception("No results in database");
+        }else{
+            return [];
+        }
+
+    }
+
+    /**
+     * gets the entire table or view and returns the array
      * @param string $table
-     * @return mixed
+     * @return array the results from database
      * @throws \ReflectionException
      */
-    protected function getResultSet($table = ''){
+    protected function getResultSet($table = ''):array{
         $tableName = $this->getTable($table);
         $sql = "SELECT * FROM $tableName"; //can not pass table name as :parameter. since we already have tested if the table exists, this var should be safe.
         $this->query($sql);
         $this->execute();
-        return $this->stmt->fetchAll(PDO::FETCH_OBJ);
+        $result = $this->stmt->fetchAll(); //returns an array or false if no results
+        return $this->returnArray($result);
     }
 
-    protected function getRowById($id, $table=''){
+    /**
+     * get's the result of SELECT * FROM table where idtable=$id
+     * @param $id searched id
+     * @param string $table the table to search, if blank then we get the table or view based on the model name
+     * @return array result or empty array
+     * @throws \ReflectionException (probably not, but will throw an exception if debugging is on and no results)
+     */
+    protected function getRowById($id, $table=''):array{
         $tableName = $this->getTable($table);
         $idName = 'id'.$tableName;
         $sql = "SELECT * FROM $tableName WHERE $idName = :id";
         $this->query($sql);
         $this->bind(':id',$id);
         $this->execute();
-        return $this->stmt->fetch(PDO::FETCH_OBJ);
+        $result = $this->stmt->fetch();
+        return $this->returnArray($result);
     }
 
-    protected function getRowByColumn($columnName,$value,$table=''){
+    /**
+     * gets the row from the query SELECT * FROM table WHERE $columnName = $Value
+     * @param $columnName the column to search in. Does a regex check for security
+     * @param $value the value to search for
+     * @param string $table the table to search, if blank then we get the table or view based on the model name
+     * @return array the results or empty
+     * @throws \ReflectionException (probably not, but will throw an exception if debugging is on and no results)
+     */
+    protected function getRowByColumn($columnName,$value,$table=''):array{
         $tableName = $this->getTable($table);
-        //TODO sanitize $columnName
-        $sql = "SELECT * FROM $tableName WHERE $columnName = :value";
-        $this->query($sql);
-        $this->bind(':value', $value);
-        $this->execute();
-        return $this->stmt->fetch(PDO::FETCH_OBJ);
+        $columnNameOk = preg_match("/^[a-z0-9_]+$/i", $columnName); //testing if column name only has lower case, numbers and underscore
+        if($columnNameOk){
+            $sql = "SELECT * FROM $tableName WHERE $columnName = :value";
+            $this->query($sql);
+            $this->bind(':value', $value);
+            $this->execute();
+            $result = $this->stmt->fetch();
+            return $this->returnArray($result);
+        }else{
+            throw new \Exception("Syntax error : Column name \"$columnName\" is not legal");
+        }
     }
 
 
@@ -203,7 +246,7 @@ abstract class Model
         //echo '<p>' . get_class($this) . ' <- Our Class</p>';
 
         echo '<p>' . $this->getTable() . ' <- the table or view</p>';
-        $resu = $this->getRowById('1','v_debug');
+        $resu = $this->getRowByColumn('text','TEST2','v_debug');
         var_dump($resu);
     }
 }
