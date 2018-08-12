@@ -13,18 +13,20 @@ use Core\Model;
 class Includes extends Model
 {
     /**
-     * get all the menu elements
-     * @return array
+     * get all the menu elements from the database
+     * @return array the categories and access URL
+     * @throws \ReflectionException
      */
     public function getMenu(): array
     {
-        //this shall be replaced by a model call
-        $data = [
-            'category1' => '/cat/1',
-            'category2' => '/cat/2',
-            'category3' => '/cat/3'
-        ];
-
+        $data = [];
+        //get the categories from database
+        $categories = $this->getResultSet('categories');
+        foreach ( $categories as $category) {
+            $data +=[
+                $category['category_name'] => '/category/'.$category['idcategories']
+            ];
+        }
         return $data;
     }
 

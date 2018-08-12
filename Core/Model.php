@@ -46,6 +46,7 @@ abstract class Model
      */
     public function __construct()
     {
+        //prehaps check if already defined / or make Singleton ? We don't need multiple connections.
         $dsn = "mysql:host=$this->host;dbname=$this->db;charset=$this->charset"; //Creating the Data Source name
         $opt = [
             PDO::ATTR_PERSISTENT => true,
@@ -70,6 +71,7 @@ abstract class Model
     }
 
     /**
+     * binding the parameters to the query. Need the stmt to be declared before via query()
      * @param $param
      * @param $value
      * @param null $type
@@ -186,7 +188,7 @@ abstract class Model
 
     /**
      * gets the entire table or view and returns the array
-     * @param string $table
+     * @param string $table the table to search in, if empty then get the table based on model name
      * @return array the results from database
      * @throws \ReflectionException
      */
@@ -199,6 +201,22 @@ abstract class Model
         return $this->returnArray($result);
     }
 
+    /**
+     * gets the entire table or view and returns the array with a limit to the number of rows
+     * @param string $table the table to search in, if empty then get the table based on model name
+     * @param string $limit the limit of rows to return
+     * @return array the results from database
+     * @throws \ReflectionException
+     */
+    protected function getResultSetLimited($limit,$table = ''):array{
+        $tableName = $this->getTable($table);
+        $sql = "SELECT * FROM $tableName LIMIT :limit";
+        $this->query($sql);
+        $this->bind(':limit',$limit);
+        $this->execute();
+        $result = $this->stmt->fetchAll(); //returns an array or false if no results
+        return $this->returnArray($result);
+    }
     /**
      * get's the result of SELECT * FROM table where idtable=$id
      * @param $id searched id
