@@ -3,7 +3,7 @@
 //---------------------------------------------
 
 // Show the navbar when the page is scrolled up
-var MQL = 992; //Minimum screen width, don't want the effect on mobile
+var MQL = 992; //Minimum screen width, don't want the effect on mobile. Avoids IOS bug
 
 //primary navigation slide-in effect
 if ($(window).width() > MQL) {
@@ -16,18 +16,21 @@ if ($(window).width() > MQL) {
             //check if user is scrolling up
             if (currentTop < this.previousTop) {
                 //if scrolling up...
-                if (currentTop > 0 && $("#mainNav").hasClass('is-fixed')) {
-                    $("#mainNav").addClass('is-visible');
+                if (currentTop > 0 && $("#mainNav").hasClass("is-fixed")) {
+                    $("#mainNav").addClass("is-visible");
                 } else {
-                    $("#mainNav").removeClass('is-visible is-fixed');
+                    $("#mainNav").removeClass("is-visible is-fixed");
                 }
             } else if (currentTop > this.previousTop) {
                 //if scrolling down...
-                $("#mainNav").removeClass('is-visible');
-                if (currentTop > headerHeight && !$("#mainNav").hasClass('is-fixed')) $("#mainNav").addClass('is-fixed');
+                $("#mainNav").removeClass("is-visible");
+                if (currentTop > headerHeight && !$("#mainNav").hasClass("is-fixed")){
+                    $("#mainNav").addClass("is-fixed");
+                }
             }
             this.previousTop = currentTop;
-        });
+        }
+        );
 }
 
 //---------------------------------------------
