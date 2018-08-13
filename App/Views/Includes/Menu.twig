@@ -1,9 +1,14 @@
-<nav class="top_menu">
-    <ul>
-        <li><a href="/">Home</a></li>
-        {% for cat, url in navigation %}
-            <li><a href="{{ url }}">{{ cat }}</a></li>
-        {% endfor %}
-        <li><a href="/all-pages">All Pages</a></li>
-    </ul>
-</nav>
+<ul class="navbar-nav mr-auto">
+    <li class="nav-item">
+        <a class="nav-link" href="/">Home</a>
+    </li>
+    {% for cat, url in navigation %}
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url }}">{{ cat }}</a>
+        </li>
+    {% endfor %}
+    <li class="nav-item">
+        <a class="nav-link" href="/all-pages">All Pages</a>
+    </li>
+</ul>
+<a class="btn btn-primary" href="#">Sign In</a>
