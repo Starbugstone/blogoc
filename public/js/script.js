@@ -1,5 +1,9 @@
+//---------------------------------------------
+// The navbar on top if scroll up
+//---------------------------------------------
+
 // Show the navbar when the page is scrolled up
-var MQL = 992;
+var MQL = 992; //Minimum screen width, don't want the effect on mobile
 
 //primary navigation slide-in effect
 if ($(window).width() > MQL) {
@@ -25,3 +29,12 @@ if ($(window).width() > MQL) {
             this.previousTop = currentTop;
         });
 }
+//---------------------------------------------
+//end navbar
+//---------------------------------------------
+
+
+//---------------------------------------------
+// Init wow for animation on scroll
+//---------------------------------------------
+new WOW().init();
