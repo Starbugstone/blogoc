@@ -170,7 +170,7 @@ abstract class Model
      * If yes then we return the array
      * If debugging is enabled we throw an exception on no results
      * or we just return an empty array
-     * @param $result the PDO result of a query
+     * @param mixed $result the PDO result of a query
      * @return array the result or empty
      * @throws \Exception if debugging is on and no result
      */
@@ -219,7 +219,7 @@ abstract class Model
     }
     /**
      * get's the result of SELECT * FROM table where idtable=$id
-     * @param $id searched id
+     * @param int $id searched id
      * @param string $table the table to search, if blank then we get the table or view based on the model name
      * @return array result or empty array
      * @throws \ReflectionException (probably not, but will throw an exception if debugging is on and no results)
@@ -237,8 +237,8 @@ abstract class Model
 
     /**
      * gets the row from the query SELECT * FROM table WHERE $columnName = $Value
-     * @param $columnName the column to search in. Does a regex check for security
-     * @param $value the value to search for
+     * @param string $columnName the column to search in. Does a regex check for security
+     * @param string $value the value to search for
      * @param string $table the table to search, if blank then we get the table or view based on the model name
      * @return array the results or empty
      * @throws \ReflectionException (probably not, but will throw an exception if debugging is on and no results)
@@ -263,8 +263,8 @@ abstract class Model
     {
         //echo '<p>' . get_class($this) . ' <- Our Class</p>';
 
-        echo '<p>' . $this->getTable() . ' <- the table or view</p>';
-        $resu = $this->getRowByColumn('text','TEST2','v_debug');
+        echo '<p>' . $this->getTable('categories') . ' <- the table or view</p>';
+        $resu = $this->getRowByColumn('category_name','Dev','categories');
         var_dump($resu);
     }
 }
