@@ -104,3 +104,35 @@ div.masthead {
 /*Top margin if no jumbotron*/
 .menuPadder {
   margin-top: 4rem; }
+
+.features-icons {
+  padding-top: 7rem;
+  padding-bottom: 7rem; }
+  .features-icons .features-icons-item {
+    max-width: 20rem;
+    /*&:hover {
+      .features-icons-icon {
+        i {
+          font-size: 5rem;
+        }
+      }
+    }*/ }
+    .features-icons .features-icons-item .features-icons-icon {
+      height: 7rem; }
+      .features-icons .features-icons-item .features-icons-icon i {
+        font-size: 2rem; }
+    .features-icons .features-icons-item .social-icon i {
+      padding-right: 1rem; }
+    .features-icons .features-icons-item .about-me img {
+      height: 7rem; }
+
+.showcase .showcase-text {
+  padding: 3rem; }
+
+.showcase .showcase-img {
+  min-height: 30rem;
+  background-size: cover; }
+
+@media (min-width: 768px) {
+  .showcase .showcase-text {
+    padding: 7rem; } }
