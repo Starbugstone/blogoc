@@ -86,8 +86,10 @@ div.masthead {
     left: 0;
     opacity: 0.3; }
   div.masthead h1 {
+    font-family: "Merienda", cursive;
     font-size: 2rem; }
   div.masthead h2 {
+    font-family: "Forum", cursive;
     font-size: 1rem; }
   div.masthead #jumboCarousel {
     width: 100%;
@@ -108,15 +110,12 @@ div.masthead {
 .features-icons {
   padding-top: 7rem;
   padding-bottom: 7rem; }
+  .features-icons h3 {
+    font-family: "Merienda", cursive; }
+  .features-icons p {
+    font-family: "Forum", cursive; }
   .features-icons .features-icons-item {
-    max-width: 20rem;
-    /*&:hover {
-      .features-icons-icon {
-        i {
-          font-size: 5rem;
-        }
-      }
-    }*/ }
+    max-width: 20rem; }
     .features-icons .features-icons-item .features-icons-icon {
       height: 7rem; }
       .features-icons .features-icons-item .features-icons-icon i {
