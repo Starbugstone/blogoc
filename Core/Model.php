@@ -229,14 +229,4 @@ abstract class Model
         $result = $this->stmt->fetch();
         return $this->returnArray($result);
     }
-
-
-    protected function test()
-    {
-        //echo '<p>' . get_class($this) . ' <- Our Class</p>';
-
-        echo '<p>' . $this->getTable('categories') . ' <- the table or view</p>';
-        $resu = $this->getRowByColumn('category_name','Dev','categories');
-        var_dump($resu);
-    }
 }
