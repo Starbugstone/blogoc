@@ -154,10 +154,8 @@ abstract class Model
         }
         if (\App\Config::SHOW_ERRORS){
             throw new \Exception("No results in database");
-        }else{
-            return [];
         }
-
+        return [];
     }
 
     /**
@@ -193,7 +191,7 @@ abstract class Model
     }
     /**
      * get's the result of SELECT * FROM table where idtable=$id
-     * @param int $id searched id
+     * @param int $rowId searched id
      * @param string $table the table to search, if blank then we get the table or view based on the model name
      * @return array result or empty array
      * @throws \ReflectionException (probably not, but will throw an exception if debugging is on and no results)
@@ -216,20 +214,20 @@ abstract class Model
      * @param string $table the table to search, if blank then we get the table or view based on the model name
      * @return array the results or empty
      * @throws \ReflectionException (probably not, but will throw an exception if debugging is on and no results)
+     * @throws \Exception if the column name consists of other characters than lower case, numbers and underscore for security
      */
     protected function getRowByColumn($columnName,$value,$table=''):array{
         $tableName = $this->getTable($table);
         $columnNameOk = preg_match("/^[a-z0-9_]+$/i", $columnName); //testing if column name only has lower case, numbers and underscore
-        if($columnNameOk){
-            $sql = "SELECT * FROM $tableName WHERE $columnName = :value";
-            $this->query($sql);
-            $this->bind(':value', $value);
-            $this->execute();
-            $result = $this->stmt->fetch();
-            return $this->returnArray($result);
-        }else{
+        if(!$columnNameOk){
             throw new \Exception("Syntax error : Column name \"$columnName\" is not legal");
         }
+        $sql = "SELECT * FROM $tableName WHERE $columnName = :value";
+        $this->query($sql);
+        $this->bind(':value', $value);
+        $this->execute();
+        $result = $this->stmt->fetch();
+        return $this->returnArray($result);
     }
 
 
