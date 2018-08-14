@@ -22,7 +22,7 @@ abstract class Controller
 
     public function __construct()
     {
-        $this->view = new \Core\View();
+        $this->view = new View();
     }
 
 }
