@@ -3,55 +3,69 @@
 {% block title %}Home Page{% endblock %}
 
 {% block main %}
-    <div class="row">
-        <div class="col-md-9">
-            <h1>Bootstrap starter template</h1>
-            <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text
-                and a mostly barebones HTML document.</p>
-            <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum
-                tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas
-                semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien
-                ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi.
-                Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac
-                dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus,
-                tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi,
-                tincidunt quis, accumsan porttitor, facilisis luctus, metus</p>
-            <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum
-                tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas
-                semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien
-                ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi.
-                Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac
-                dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus,
-                tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi,
-                tincidunt quis, accumsan porttitor, facilisis luctus, metus</p>
-            <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum
-                tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas
-                semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien
-                ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi.
-                Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac
-                dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus,
-                tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi,
-                tincidunt quis, accumsan porttitor, facilisis luctus, metus</p>
-            <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum
-                tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas
-                semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien
-                ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi.
-                Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac
-                dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus,
-                tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi,
-                tincidunt quis, accumsan porttitor, facilisis luctus, metus</p>
-            <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum
-                tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas
-                semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien
-                ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi.
-                Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac
-                dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus,
-                tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi,
-                tincidunt quis, accumsan porttitor, facilisis luctus, metus</p>
+    {% include "Includes/contactform-modal.twig" %}
+    <!-- Icons Grid -->
+    <section class="features-icons bg-light text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 wow slideInLeft">
+                    <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+                        <div class="features-icons-icon social-icon d-flex justify-content-center align-items-center">
+                            <a class="hvr-bounce-in" href="#"><i class="fa fa-facebook"></i></a>
+                            <a class="hvr-bounce-in" href="#"><i class="fa fa-twitter"></i></a>
+                            <a class="hvr-bounce-in" href="#"><i class="fa fa-google-plus"></i></a>
+                        </div>
+                        <h3>Being Social</h3>
+                        <p class="lead mb-0">All the social networking</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 wow bounceIn">
+                    <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+                        <div class="features-icons-icon d-flex justify-content-center align-items-center about-me">
+                            <a class="hvr-bounce-in" href="#"><img class="img-fluid rounded-circle" src="https://pbs.twimg.com/profile_images/3676317209/243cf055afcb2baa9fd894e5305985fa_400x400.jpeg"></a>
+                        </div>
+                        <h3>About Me</h3>
+                        <p class="lead mb-0">Check out my stuff</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 wow slideInRight">
+                    <div class="features-icons-item mx-auto mb-0 mb-lg-3">
+                        <div class="features-icons-icon d-flex justify-content-center align-items-center">
+                            <a class="hvr-bounce-in" data-toggle="modal" href="#contactformModal"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+                        </div>
+                        <h3>Contact Me</h3>
+                        <p class="lead mb-0">Use the contact form to get in touch</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <!-- Image Showcases -->
+    <section class="showcase">
+        <div class="container-fluid p-0">
+            <div class="row no-gutters wow lightSpeedIn">
+
+                <div class="col-lg-6 order-lg-2 text-white showcase-img " style="background-image: url('http://via.placeholder.com/350x150');"></div>
+                <div class="col-lg-6 order-lg-1 my-auto showcase-text">
+                    <h2>Fully Responsive Design</h2>
+                    <p class="lead mb-0">When you use a theme created by Start Bootstrap, you know that the theme will look great on any device, whether it's a phone, tablet, or desktop the page will behave responsively!</p>
+                </div>
+            </div>
+            <div class="row no-gutters wow lightSpeedIn">
+                <div class="col-lg-6 text-white showcase-img" style="background-image: url('http://via.placeholder.com/350x150');"></div>
+                <div class="col-lg-6 my-auto showcase-text">
+                    <h2>Updated For Bootstrap 4</h2>
+                    <p class="lead mb-0">Newly improved, and full of great utility classes, Bootstrap 4 is leading the way in mobile responsive web development! All of the themes on Start Bootstrap are now using Bootstrap 4!</p>
+                </div>
+            </div>
+            <div class="row no-gutters wow lightSpeedIn">
+                <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('http://via.placeholder.com/350x150');"></div>
+                <div class="col-lg-6 order-lg-1 my-auto showcase-text">
+                    <h2>Easy to Use &amp; Customize</h2>
+                    <p class="lead mb-0">Landing Page is just HTML and CSS with a splash of SCSS for users who demand some deeper customization options. Out of the box, just add your content and images, and your new landing page will be ready to go!</p>
+                </div>
+            </div>
         </div>
-        <div class="col-md-3">
-            <p>sidebar</p>
-        </div>
-    </div>
+    </section>
 {% endblock %}

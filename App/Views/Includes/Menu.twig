@@ -1,9 +1,13 @@
-<nav class="top_menu">
-    <ul>
-        <li><a href="/">Home</a></li>
-        {% for cat, url in navigation %}
-            <li><a href="{{ url }}">{{ cat }}</a></li>
-        {% endfor %}
-        <li><a href="/all-pages">All Pages</a></li>
-    </ul>
-</nav>
+
+<ul class="navbar-nav mr-auto">
+    {% for cat, url in navigation %}
+        <li class="nav-item">
+            <a class="nav-link hvr-underline-from-center" href="{{ url }}">{{ cat }}</a>
+        </li>
+    {% endfor %}
+    <li class="nav-item">
+        <a class="nav-link hvr-underline-from-center" href="/all-pages">All Pages</a>
+    </li>
+</ul>
+<button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#registerModal">Register</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#connectModal">Connection</button>
