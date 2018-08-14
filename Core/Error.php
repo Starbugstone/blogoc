@@ -64,7 +64,7 @@ class Error
 
         //Making sure that the twig template renders correctly.
         try{
-            $view->renderTemplate($code . '.twig', $viewData);
+            $view->renderTemplate('ErrorPages/'.$code . '.twig', $viewData);
         }catch (\Exception $e){
             echo 'Twig Error : '.htmlspecialchars($e->getMessage());
         }
