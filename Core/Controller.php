@@ -14,5 +14,15 @@ abstract class Controller
      */
     protected $data = [];
 
+    /**
+     * this will hold the view object
+     * @var view object
+     */
+    protected $view;
+
+    public function __construct()
+    {
+        $this->view = new \Core\View();
+    }
 
 }

@@ -19,7 +19,7 @@ class View
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function renderTemplate($template, $args = []): void
+    public function renderTemplate($template, $args = []): void
     {
         static $twig = null;
         if ($twig === null) {

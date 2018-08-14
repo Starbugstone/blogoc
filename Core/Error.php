@@ -59,9 +59,12 @@ class Error
             $viewData['stackTrace'] = $exception->getTraceAsString();
             $viewData['thrownIn'] = $exception->getFile() . " On line " . $exception->getLine();
         }
+
+        $view = new View();
+
         //Making sure that the twig template renders correctly.
         try{
-            View::renderTemplate($code . '.twig', $viewData);
+            $view->renderTemplate($code . '.twig', $viewData);
         }catch (\Exception $e){
             echo 'Twig Error : '.htmlspecialchars($e->getMessage());
         }

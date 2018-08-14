@@ -2,8 +2,6 @@
 
 namespace App\Controllers;
 
-use \Core\View;
-
 /**
  * Class Home
  *
@@ -19,6 +17,7 @@ class Home extends \Core\Controller
      */
     public function __construct()
     {
+        parent::__construct();
         $Includes = new \App\Models\Includes();
         $this->data['navigation'] = $Includes->getMenu();
         $this->data['jumbotron'] = $Includes->getJumbotron();
@@ -27,6 +26,6 @@ class Home extends \Core\Controller
     public function index()
     {
 
-        View::renderTemplate('Home.twig', $this->data);
+        $this->view->renderTemplate('Home.twig', $this->data);
     }
 }
