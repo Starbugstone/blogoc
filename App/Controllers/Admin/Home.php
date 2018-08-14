@@ -1,10 +1,9 @@
 <?php
 namespace App\Controllers\Admin;
 
-use \Core\View;
 
-class Home{
+class Home extends \Core\Controller {
     public function index(){
-        View::renderTemplate('Admin/Home.twig');
+        $this->view->renderTemplate('Admin/Home.twig');
     }
 }

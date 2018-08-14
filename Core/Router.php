@@ -128,23 +128,24 @@ class Router
     {
 
         //try to create the controller object
-        $controllerWithNamespace = $this->currentNamespace . $this->currentController;
-        if (class_exists($controllerWithNamespace)) {
-            $controllerInstantiated = new $controllerWithNamespace();
+        $fullControllerName = $this->currentNamespace . $this->currentController;
 
-            //try to run the associated method and the pass parameters
-            $methodToRun = $this->currentMethod;
-            if (method_exists($controllerInstantiated, $methodToRun)) {
-                call_user_func_array([$controllerInstantiated, $methodToRun], $this->currentParams);
-            } else {
-
-                throw new \Exception("ERROR - Method $methodToRun() doesn't exist or is inaccessible");
-            }
-
-        } else {
-            throw new \Exception("Class $controllerWithNamespace doesn't exist", 404);
-
+        //make sure the class exists before continuing
+        if (!class_exists($fullControllerName)) {
+            throw new \Exception("Class $fullControllerName doesn't exist", 404);
         }
+
+        $controllerInstantiated = new $fullControllerName();
+
+        //try to run the associated method and the pass parameters
+        $methodToRun = $this->currentMethod;
+
+        //make sure our method exists before continuing
+        if (!method_exists($controllerInstantiated, $methodToRun)) {
+            throw new \Exception("ERROR - Method $methodToRun() doesn't exist or is inaccessible");
+        }
+
+        call_user_func_array([$controllerInstantiated, $methodToRun], $this->currentParams);
     }
 
     /**
