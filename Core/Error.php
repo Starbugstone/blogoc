@@ -32,10 +32,13 @@ class Error
     /**
      * Exception handler
      * @param \Exception $exception The exception
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      *
      * @return void
+
      */
-    //TODO add option to put the stack trace in a log file or just have prettier error pages
     public static function exceptionHandler($exception): void
     {
         //code is 404 (not found) or 500 (general error)
@@ -43,18 +46,26 @@ class Error
         if ($code != 404) {
             $code = 500;
         }
-
+        $viewdata = [];
         http_response_code($code);
+
+        //Constructing the error message to send to twig
         if (\App\Config::SHOW_ERRORS) {
-            echo "<h1>Fatal error</h1>";
-            echo "<p>Uncaught exception : '" . get_class($exception) . "'</p>";
-            echo "<p>Message : '" . $exception->getMessage() . "'</p>";
-            echo "<p>Stack trace : <pre>" . $exception->getTraceAsString() . "</pre></p>";
-            echo "<p>thrown in '" . $exception->getFile() . " On line " . $exception->getLine() . "</p>";
+            $viewData['showErrors'] = true;
+            $viewData['classException'] = get_class($exception);
+            $viewData['exceptionMessage'] = $exception->getMessage();
+            $viewData['stackTrace'] = $exception->getTraceAsString();
+            $viewData['thrownIn'] = $exception->getFile() . " On line " . $exception->getLine();
         } else {
             $viewData['exceptionMessage'] = $exception->getMessage();
-            View::renderTemplate($code . '.twig', $viewData);
         }
+        //Making sure that the twig template renders correctly.
+        try{
+            View::renderTemplate($code . '.twig', $viewData);
+        }catch (\Exception $e){
+            echo 'Twig Error : '.$e->getMessage();
+        }
+
 
     }
 }

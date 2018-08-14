@@ -4,6 +4,5 @@
 
 {% block main %}
     <h1>Oups something went wrong, Internal error</h1>
-    <p>{{ exceptionMessage }}</p>
-
+    {% include "Includes/error-message.twig" %}
 {% endblock %}
