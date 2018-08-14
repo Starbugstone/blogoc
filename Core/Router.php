@@ -135,17 +135,18 @@ class Router
             throw new \Exception("Class $fullControllerName doesn't exist", 404);
         }
 
-        $controllerInstantiated = new $fullControllerName();
+        //instantiate our controller
+        $controllerObj = new $fullControllerName();
 
         //try to run the associated method and the pass parameters
         $methodToRun = $this->currentMethod;
 
         //make sure our method exists before continuing
-        if (!method_exists($controllerInstantiated, $methodToRun)) {
+        if (!method_exists($controllerObj, $methodToRun)) {
             throw new \Exception("ERROR - Method $methodToRun() doesn't exist or is inaccessible");
         }
 
-        call_user_func_array([$controllerInstantiated, $methodToRun], $this->currentParams);
+        call_user_func_array([$controllerObj, $methodToRun], $this->currentParams);
     }
 
     /**
