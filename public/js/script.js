@@ -5,17 +5,19 @@
 //---------------------------------------------
 
 function isScrollingUp($currentTop) {
-    if ($currentTop > 1 && $("#mainNav").hasClass("is-fixed")) {
-        $("#mainNav").addClass("is-visible");
+    var $mainNav = $("#mainNav");
+    if ($currentTop > 1 && $mainNav.hasClass("is-fixed")) {
+        $mainNav.addClass("is-visible");
     } else {
-        $("#mainNav").removeClass("is-visible is-fixed");
+        $mainNav.removeClass("is-visible is-fixed");
     }
 }
 
 function isScrollingDown($currentTop) {
-    $("#mainNav").removeClass("is-visible");
-    if ($currentTop > $("#mainNav").height() && !$("#mainNav").hasClass("is-fixed")) {
-        $("#mainNav").addClass("is-fixed");
+    var $mainNav = $("#mainNav");
+    $mainNav.removeClass("is-visible");
+    if ($currentTop > $mainNav.height() && !$mainNav.hasClass("is-fixed")) {
+        $mainNav.addClass("is-fixed");
     }
 }
 
