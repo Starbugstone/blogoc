@@ -12,28 +12,6 @@ use PDO;
  */
 abstract class Model
 {
-    /**
-     * @var string $host stores the DataBase Host grabbed from the config
-     */
-    private $host = Config::DB_HOST;
-    /**
-     * @var string $db stores the DataBase Name grabbed from the config
-     */
-    private $db = Config::DB_NAME;
-    /**
-     * @var string $user stores the DataBase User Name grabbed from the config
-     */
-    private $user = Config::DB_USER;
-    /**
-     * @var string $pass stores the DataBase User password grabbed from the config
-     */
-    private $pass = Config::DB_PASSWORD;
-
-    /**
-     * @var string $charset forcing the charset to UTF8
-     */
-    private $charset = 'utf8';
-
     protected $dbh; //database handler
 
     protected $stmt; //statement
@@ -47,13 +25,13 @@ abstract class Model
     public function __construct()
     {
         //prehaps check if already defined / or make Singleton ? We don't need multiple connections.
-        $dsn = "mysql:host=$this->host;dbname=$this->db;charset=$this->charset"; //Creating the Data Source name
+        $dsn = "mysql:host=".Config::DB_HOST.";dbname=".Config::DB_NAME.";charset=utf8"; //Creating the Data Source name
         $opt = [
             PDO::ATTR_PERSISTENT => true,
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
         ];
-        $this->dbh = new PDO($dsn, $this->user, $this->pass, $opt);
+        $this->dbh = new PDO($dsn, Config::DB_USER, Config::DB_PASSWORD, $opt);
     }
 
     /*
