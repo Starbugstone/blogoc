@@ -4,6 +4,21 @@
 //navbar shown on scroll
 //---------------------------------------------
 
+function scrollingUp($currentTop){
+    if ($currentTop > 1 && $("#mainNav").hasClass("is-fixed")) {
+        $("#mainNav").addClass("is-visible");
+    } else {
+        $("#mainNav").removeClass("is-visible is-fixed");
+    }
+}
+
+function scrollingDown($currentTop){
+    $("#mainNav").removeClass("is-visible");
+    if ($currentTop > $("#mainNav").height() && !$("#mainNav").hasClass("is-fixed")){
+        $("#mainNav").addClass("is-fixed");
+    }
+}
+
 //setting the initial position to 0
 var $previousTop = 0;
 // Show the navbar when the page is scrolled up
@@ -11,7 +26,6 @@ var MQL = 992; //Minimum screen width, don't want the effect on mobile. Avoids I
 
 //primary navigation slide-in effect
 if ($(window).width() > MQL) {
-    var headerHeight = $("#mainNav").height();
     $(window).on("scroll",
         function() {
             var $currentTop = $(window).scrollTop(); //our position in the window, returns the number of pixels from the window top to the site top
@@ -26,21 +40,6 @@ if ($(window).width() > MQL) {
             $previousTop = $currentTop;
         }
         );
-}
-
-function scrollingUp($currentTop){
-    if ($currentTop > 0 && $("#mainNav").hasClass("is-fixed")) {
-        $("#mainNav").addClass("is-visible");
-    } else {
-        $("#mainNav").removeClass("is-visible is-fixed");
-    }
-}
-
-function scrollingDown($currentTop){
-    $("#mainNav").removeClass("is-visible");
-    if ($currentTop > headerHeight && !$("#mainNav").hasClass("is-fixed")){
-        $("#mainNav").addClass("is-fixed");
-    }
 }
 
 //---------------------------------------------
