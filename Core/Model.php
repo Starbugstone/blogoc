@@ -57,37 +57,33 @@ abstract class Model
      */
     protected function bind($param, $value, $type = null): void
     {
-        if ($this->stmt != null) {
-            if (is_null($type)) { //need a bind value, so just check it in code. that way we can just call bind(param,value)
-                switch (true) {
-                    case is_int($value):
-                        $type = PDO::PARAM_INT;
-                        break;
-                    case is_bool($value):
-                        $type = PDO::PARAM_BOOL;
-                        break;
-                    case is_null($value):
-                        $type = PDO::PARAM_NULL;
-                        break;
-                    default:
-                        $type = PDO::PARAM_STR;
-                }
-            }
-            $this->stmt->bindValue($param, $value, $type);
-        } else {
+        if($this->stmt == null){
             throw new \Exception("No query to bind to");
         }
-
+        if (is_null($type)) { //need a bind value, so just check it in code. that way we can just call bind(param,value)
+            switch (true) {
+                case is_int($value):
+                    $type = PDO::PARAM_INT;
+                    break;
+                case is_bool($value):
+                    $type = PDO::PARAM_BOOL;
+                    break;
+                case is_null($value):
+                    $type = PDO::PARAM_NULL;
+                    break;
+                default:
+                    $type = PDO::PARAM_STR;
+            }
+        }
+        $this->stmt->bindValue($param, $value, $type);
     }
 
     protected function execute()
     {
-        if ($this->stmt != null) {
-            return $this->stmt->execute();
-        } else {
+        if($this->stmt == null){
             throw new \Exception("No statement to execute");
         }
-
+        return $this->stmt->execute();
     }
 
     /*
@@ -202,12 +198,12 @@ abstract class Model
      * @return array result or empty array
      * @throws \ReflectionException (probably not, but will throw an exception if debugging is on and no results)
      */
-    protected function getRowById($id, $table=''):array{
+    protected function getRowById($rowId, $table=''):array{
         $tableName = $this->getTable($table);
         $idName = 'id'.$tableName;
-        $sql = "SELECT * FROM $tableName WHERE $idName = :id";
+        $sql = "SELECT * FROM $tableName WHERE $idName = :rowId";
         $this->query($sql);
-        $this->bind(':id',$id);
+        $this->bind(':rowId',$rowId);
         $this->execute();
         $result = $this->stmt->fetch();
         return $this->returnArray($result);
