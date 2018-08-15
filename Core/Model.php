@@ -18,11 +18,18 @@ abstract class Model
 
     protected $error; //for the errors if needed
 
+    private $container;
+
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+        $this->dbh = $this->container->setPdo();
+    }
     /**
      * Model constructor.
      * creating the database connection on construct
      */
-    public function __construct()
+    /*public function __construct()
     {
         //prehaps check if already defined / or make Singleton ? We don't need multiple connections.
         $dsn = "mysql:host=".Config::DB_HOST.";dbname=".Config::DB_NAME.";charset=utf8"; //Creating the Data Source name
@@ -32,7 +39,7 @@ abstract class Model
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
         ];
         $this->dbh = new PDO($dsn, Config::DB_USER, Config::DB_PASSWORD, $opt);
-    }
+    }*/
 
     /*
      * generic PDO query constructor

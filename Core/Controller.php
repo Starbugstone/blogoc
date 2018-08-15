@@ -20,7 +20,7 @@ abstract class Controller
      */
     //protected $view;
 
-    private $container;
+    protected $container;
 
     public function __construct(Container $container)
     {
