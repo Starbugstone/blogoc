@@ -20,7 +20,7 @@ abstract class Controller
      */
     //protected $view;
 
-    protected $container;
+    private $container;
 
     public function __construct(Container $container)
     {
@@ -36,6 +36,10 @@ abstract class Controller
     {
         $twig = $this->container->getTemplate();
         echo $twig->render($template, $args);
+    }
+
+    public function getContainer(){
+        return $this->container;
     }
 
 }
