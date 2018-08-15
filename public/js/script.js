@@ -51,3 +51,13 @@ if ($(window).width() > MQL) {
 //---------------------------------------------
 /*global WOW*/
 new WOW().init();
+
+
+$("#ajaxtest").click(function(){
+    $.ajax({
+        url: "/ajax/debug/test",
+        success: function(result){
+            $("#div1").html(result);
+        }
+    });
+});
