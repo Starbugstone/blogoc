@@ -18,11 +18,24 @@ abstract class Controller
      * this will hold the view object
      * @var view object
      */
-    protected $view;
+    //protected $view;
 
-    public function __construct()
+    private $container;
+
+    public function __construct(Container $container)
     {
-        $this->view = new View();
+        $this->container = $container;
+    }
+
+    public function getView($name, $args = []) {
+        $twig = $this->container->getTemplate();
+        return $twig->render($name.'.twig', $args);
+    }
+
+    public function renderView($template, $args = []): void
+    {
+        $twig = $this->container->getTemplate();
+        echo $twig->render($template, $args);
     }
 
 }

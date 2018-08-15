@@ -60,11 +60,13 @@ class Error
             $viewData['thrownIn'] = $exception->getFile() . " On line " . $exception->getLine();
         }
 
-        $view = new View();
+        $view = new Container();
 
         //Making sure that the twig template renders correctly.
         try{
-            $view->renderTemplate('ErrorPages/'.$code . '.twig', $viewData);
+            $twig = $view->getTemplate();
+            echo $twig->render('ErrorPages/'.$code . '.twig', $viewData);
+            //$view->renderView('ErrorPages/'.$code . '.twig', $viewData);
         }catch (\Exception $e){
             echo 'Twig Error : '.htmlspecialchars($e->getMessage());
         }
