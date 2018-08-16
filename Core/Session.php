@@ -9,6 +9,9 @@ namespace Core;
  * @package Core
  *
  * PHP version 7
+ *
+ * this is our session handler, of course we access the session superglobal.
+ * @SuppressWarnings(PHPMD.Superglobals)
  */
 class Session
 {
