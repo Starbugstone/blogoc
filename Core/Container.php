@@ -3,13 +3,24 @@ namespace Core;
 
 use PDO;
 
-
+/**
+ * Class Container for dependency injection
+ * @package Core
+ *
+ * PHP version 7
+ */
 class Container{
 
     //used for the model connection
+    /**
+     * @var null this is to store the pdo connection. We only need to set once
+     */
     private $dbh = null;
 
-
+    /**
+     * gets the twig template environment
+     * @return \Twig_Environment
+     */
     public function getTemplate()
     {
         $twigOptions = [];
@@ -19,12 +30,15 @@ class Container{
             ];
         }
         $loader = new \Twig_Loader_Filesystem(dirname(__DIR__) . '/App/Views');
-        $twig = new \Twig_Environment($loader, $twigOptions); //need to add cache
+        $twig = new \Twig_Environment($loader, $twigOptions);
 
         return $twig;
     }
 
-    //only set once
+    /**
+     * create the database connection via PDO
+     * @return null|PDO
+     */
     public function setPdo(){
         if ($this->dbh){
             return $this->dbh;

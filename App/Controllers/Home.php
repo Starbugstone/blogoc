@@ -17,6 +17,6 @@ class Home extends \Core\Controller
         $Includes = new \App\Models\Includes($this->getContainer());
         $this->data['navigation'] = $Includes->getMenu();
         $this->data['jumbotron'] = $Includes->getJumbotron();
-        $this->renderView('Home.twig', $this->data);
+        $this->renderView('Home', $this->data);
     }
 }

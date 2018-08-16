@@ -9,37 +9,35 @@ use PDO;
  * Class Model here we have all the generic calls to be inherited by the App\Models
  * using PDO connections
  * @package Core
+ *
+ * PHP version 7
  */
 abstract class Model
 {
-    protected $dbh; //database handler
+    /**
+     * @var null|PDO the database handeler
+     */
+    protected $dbh;
 
-    protected $stmt; //statement
+    /**
+     * @var \PDOStatement the prepared sql statement
+     */
+    protected $stmt;
 
-    protected $error; //for the errors if needed
-
+    /**
+     * @var Container the dependancy injector
+     */
     private $container;
 
+    /**
+     * Model constructor. prepares the database connection
+     * @param Container $container
+     */
     public function __construct(Container $container)
     {
         $this->container = $container;
         $this->dbh = $this->container->setPdo();
     }
-    /**
-     * Model constructor.
-     * creating the database connection on construct
-     */
-    /*public function __construct()
-    {
-        //prehaps check if already defined / or make Singleton ? We don't need multiple connections.
-        $dsn = "mysql:host=".Config::DB_HOST.";dbname=".Config::DB_NAME.";charset=utf8"; //Creating the Data Source name
-        $opt = [
-            PDO::ATTR_PERSISTENT => true,
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-        ];
-        $this->dbh = new PDO($dsn, Config::DB_USER, Config::DB_PASSWORD, $opt);
-    }*/
 
     /*
      * generic PDO query constructor

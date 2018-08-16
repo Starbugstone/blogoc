@@ -2,13 +2,18 @@
 
 namespace Core;
 
+/**
+ * Class Session
+ * Session class to take care of all the session details
+ *
+ * @package Core
+ *
+ * PHP version 7
+ */
 class Session
 {
-
     /**
-     * Session class to take care of all the session details
-     *
-     * PHP version 7
+     * Session constructor.
      */
     public function __construct()
     {
@@ -40,6 +45,10 @@ class Session
         $_SESSION[$param] = $info;
     }
 
+    /**
+     * removes elements from the session
+     * @param $param string parameter to remove
+     */
     public function remove($param):void{
         unset($_SESSION[$param]);
     }
