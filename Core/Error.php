@@ -32,9 +32,6 @@ class Error
     /**
      * Exception handler
      * @param \Exception $exception The exception
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
      *
      * @return void
 
@@ -53,18 +50,19 @@ class Error
         http_response_code($code);
 
         //Constructing the error message to send to twig
-        if (\App\Config::SHOW_ERRORS) {
+        if (Config::DEV_ENVIRONMENT) {
             $viewData['showErrors'] = true; //sending the config option down to twig
             $viewData['classException'] = get_class($exception);
             $viewData['stackTrace'] = $exception->getTraceAsString();
             $viewData['thrownIn'] = $exception->getFile() . " On line " . $exception->getLine();
         }
 
-        $view = new View();
+        $container = new Container();
 
         //Making sure that the twig template renders correctly.
         try{
-            $view->renderTemplate('ErrorPages/'.$code . '.twig', $viewData);
+            $twig = $container->getTemplate();
+            $twig->display('ErrorPages/'.$code . '.twig', $viewData);
         }catch (\Exception $e){
             echo 'Twig Error : '.htmlspecialchars($e->getMessage());
         }
