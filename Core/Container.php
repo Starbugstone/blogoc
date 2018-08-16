@@ -18,6 +18,11 @@ class Container{
     private $dbh = null;
 
     /**
+     * @var Request object
+     */
+    private $request;
+
+    /**
      * gets the twig template environment
      * @return \Twig_Environment
      */
@@ -51,5 +56,13 @@ class Container{
         ];
         $this->dbh = new PDO($dsn, Config::DB_USER, Config::DB_PASSWORD, $opt);;
         return $this->dbh;
+    }
+
+    public function getRequest(){
+        if($this->request){
+            return $this->request;
+        }
+        $this->request = new Request();
+        return $this->request;
     }
 }
