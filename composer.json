@@ -2,7 +2,8 @@
   "require": {
     "php": "^7.1",
     "twig/twig": "^2.0",
-    "ext-pdo": "*"
+    "ext-pdo": "*",
+    "cocur/slugify": "^3.1"
   },
   "autoload": {
     "psr-4": {
