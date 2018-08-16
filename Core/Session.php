@@ -4,6 +4,7 @@ namespace Core;
 
 class Session
 {
+
     /**
      * Session class to take care of all the session details
      *
@@ -22,7 +23,7 @@ class Session
      * @param  $param string  the name of the parameter to get
      * @return mixed
      */
-    public function getSessionInfo($param)
+    public function get($param)
     {
 
         return $_SESSION[$param];
@@ -34,8 +35,12 @@ class Session
      * @param $param string  paramter to set
      * @param $info mixed  value to set the session param to
      */
-    public function setSessionInfo($param, $info): void
+    public function set($param, $info): void
     {
         $_SESSION[$param] = $info;
+    }
+
+    public function remove($param):void{
+        unset($_SESSION[$param]);
     }
 }
