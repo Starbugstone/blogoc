@@ -99,9 +99,11 @@ class Router
      */
     protected function getUrl(): array
     {
-        if (isset($_GET['url'])) {
+
+        $url = $this->container->getRequest()->getData('url');
+        if($url){
             //remove right slash
-            $url = rtrim($_GET['url'], '/');
+            $url = rtrim($url, '/');
 
             //convert all to lower for easier comparing. Will convert to camelCase after
             //this will avoid cap probs with links and user input
