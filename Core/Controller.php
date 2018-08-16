@@ -56,8 +56,8 @@ abstract class Controller
      */
     public function renderView($template, $args = []): void
     {
-        $renderedView = $this->getView($template, $args);
-        echo $renderedView;
+        $twig = $this->container->getTemplate();
+        $twig->display($template.'.twig', $args);
     }
 
     /**
