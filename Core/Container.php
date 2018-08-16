@@ -12,8 +12,14 @@ class Container{
 
     public function getTemplate()
     {
+        $twigOptions = [];
+        if(!Config::DEV_ENVIRONMENT){
+            $twigOptions = [
+              'cache' =>   dirname(__DIR__).'/Cache'
+            ];
+        }
         $loader = new \Twig_Loader_Filesystem(dirname(__DIR__) . '/App/Views');
-        $twig = new \Twig_Environment($loader); //need to add cache
+        $twig = new \Twig_Environment($loader, $twigOptions); //need to add cache
 
         return $twig;
     }

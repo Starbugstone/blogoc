@@ -159,7 +159,7 @@ abstract class Model
         if($result){
             return $result;
         }
-        if (\App\Config::SHOW_ERRORS){
+        if (Config::DEV_ENVIRONMENT){
             throw new \Exception("No results in database");
         }
         return [];

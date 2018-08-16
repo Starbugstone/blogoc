@@ -53,18 +53,18 @@ class Error
         http_response_code($code);
 
         //Constructing the error message to send to twig
-        if (Config::SHOW_ERRORS) {
+        if (Config::DEV_ENVIRONMENT) {
             $viewData['showErrors'] = true; //sending the config option down to twig
             $viewData['classException'] = get_class($exception);
             $viewData['stackTrace'] = $exception->getTraceAsString();
             $viewData['thrownIn'] = $exception->getFile() . " On line " . $exception->getLine();
         }
 
-        $view = new Container();
+        $container = new Container();
 
         //Making sure that the twig template renders correctly.
         try{
-            $twig = $view->getTemplate();
+            $twig = $container->getTemplate();
             echo $twig->render('ErrorPages/'.$code . '.twig', $viewData);
             //$view->renderView('ErrorPages/'.$code . '.twig', $viewData);
         }catch (\Exception $e){

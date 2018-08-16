@@ -37,5 +37,5 @@ class Config
      * Show or hide error messages on screen
      * @var bool
      */
-    const SHOW_ERRORS = true;
+    const DEV_ENVIRONMENT = true;
 }
