@@ -1,3 +1,31 @@
+html {
+  position: relative;
+  min-height: 100%; }
+
+body {
+  height: 100%; }
+
+#wrapper {
+  display: flex; }
+  #wrapper #content-wrapper {
+    overflow-x: hidden;
+    width: 100%;
+    padding-top: 1rem;
+    padding-bottom: 80px; }
+
+body.fixed-nav #content-wrapper {
+  margin-top: 56px;
+  padding-left: 90px; }
+
+body.fixed-nav.sidebar-toggled #content-wrapper {
+  padding-left: 0; }
+
+@media (min-width: 768px) {
+  body.fixed-nav #content-wrapper {
+    padding-left: 225px; }
+  body.fixed-nav.sidebar-toggled #content-wrapper {
+    padding-left: 90px; } }
+
 .navbar-nav .form-inline .input-group {
   width: 100%; }
 
@@ -12,7 +40,7 @@
   border: 0;
   font-weight: 900;
   content: '\f105';
-  font-family: 'Font Awesome 5 Free'; }
+  font-family: 'FontAwesome'; }
 
 .navbar-nav .nav-item.dropdown.show .dropdown-toggle::after {
   content: '\f107'; }
