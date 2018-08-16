@@ -46,6 +46,8 @@ class Router
         'ajax'
     ];
 
+    private $container;
+
 
     /**
      * Router constructor, will set the controller, method and params
@@ -53,8 +55,9 @@ class Router
      * will then call the dispatcher to instantiate the controller and method
      *
      */
-    public function __construct()
+    public function __construct(Container $container)
     {
+        $this->container = $container;
         //get the current url
         $url = $this->getUrl();
 
@@ -136,8 +139,7 @@ class Router
         }
 
         //instantiate our controller
-        $controllerObj = new $fullControllerName();
-
+        $controllerObj = new $fullControllerName($this->container);
         //try to run the associated method and the pass parameters
         $methodToRun = $this->currentMethod;
 
