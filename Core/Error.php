@@ -35,16 +35,15 @@ class Error
      * @param \Exception $exception The exception
      *
      * @return void
-
      */
     public static function exceptionHandler($exception): void
     {
         $code = $exception->getCode();
 
         //If we have a json exception thrown, we return a json error and stop
-        if(get_class($exception)==='Core\JsonException'){
-            $code = 400;
-            if(Config::DEV_ENVIRONMENT){ //If we are in dev and using ajax, we want to see the error for debugging
+        if (get_class($exception) === 'Core\JsonException') {
+            $code = 400; //sending back a bad request error
+            if (Config::DEV_ENVIRONMENT) { //If we are in dev and using ajax, we want to see the error for debugging
                 $code = 200;
             }
             http_response_code($code);
@@ -71,13 +70,13 @@ class Error
         }
 
         $container = new Container();
-        //var_dump($exception);
+
         //Making sure that the twig template renders correctly.
-        try{
+        try {
             $twig = $container->getTemplate();
-            $twig->display('ErrorPages/'.$code . '.twig', $viewData);
-        }catch (\Exception $e){
-            echo 'Twig Error : '.htmlspecialchars($e->getMessage());
+            $twig->display('ErrorPages/' . $code . '.twig', $viewData);
+        } catch (\Exception $e) {
+            echo 'Twig Error : ' . htmlspecialchars($e->getMessage());
         }
 
 
