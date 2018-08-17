@@ -55,4 +55,18 @@ class Session
     public function remove($param):void{
         unset($_SESSION[$param]);
     }
+
+    public function setCsfr(){
+        if(!isset($_SESSION['csrf_token'])){
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        }
+    }
+
+    public function getCsrf(){
+        return $_SESSION['csrf_token'] ?? null;
+    }
+
+    public function removeCsrf(){
+        unset($_SESSION['csrf_token']);
+    }
 }

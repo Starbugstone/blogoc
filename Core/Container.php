@@ -23,6 +23,11 @@ class Container{
     private $request;
 
     /**
+     * @var session object
+     */
+    private $session;
+
+    /**
      * gets the twig template environment
      * @return \Twig_Environment
      */
@@ -59,10 +64,16 @@ class Container{
     }
 
     public function getRequest(){
-        if($this->request){
-            return $this->request;
+        if(!$this->request){
+            $this->request = new Request();
         }
-        $this->request = new Request();
         return $this->request;
+    }
+
+    public function getSession(){
+        if(!$this->session){
+            $this->session = new Session();
+        }
+        return $this->session;
     }
 }

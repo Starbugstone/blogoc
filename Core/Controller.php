@@ -19,7 +19,12 @@ abstract class Controller
     /**
      * @var Container dependency injector
      */
-    private $container;
+    protected $container;
+
+    /**
+     * @var session the session handler
+     */
+    protected $session;
 
     /**
      * Controller constructor.
@@ -28,6 +33,9 @@ abstract class Controller
     public function __construct(Container $container)
     {
         $this->container = $container;
+        $this->session = $this->container->getSession();
+        $this->session->setCsfr(); //setting our unique security id, this will only update if it isn't already present in the $_Session
+        $this->data['csrf_token'] = $this->session->getCsrf(); //storing the security id into the data array to be sent to the view and added in the meta head
     }
 
     /**
