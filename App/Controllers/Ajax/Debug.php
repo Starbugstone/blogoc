@@ -7,11 +7,12 @@ use Core\AjaxController;
 class Debug extends AjaxController { //could probably extend a core ajax controller
     public function test()
     {
+        $referer = $this->request->getReferer();
+        $host = $this->request->getBaseUrl();
 
         $jsonData = [
-            "Referer" =>   $_SERVER['HTTP_REFERER'], //This can be altered and even some navigators won't send it. Not relying on it to secure the ajax call. Could stil do a check
-            "Host" => $_SERVER['HTTP_HOST'],
-            "https" => !empty($_SERVER['HTTPS']) ? 'https' : 'http', //concatenate https and host and match to the referer start should get a bit more security.
+            "Referer" =>   $referer,
+            "https" => $host,
             "Message" => 'Ok message sent'
         ];
         $result = $this->jsonResponse($jsonData);

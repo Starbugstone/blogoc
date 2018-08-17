@@ -42,4 +42,24 @@ class Request
         return false;
     }
 
+    /**
+     * gets the referer of the request
+     * @return string|null
+     */
+    public function getReferer()
+    {
+        return $_SERVER['HTTP_REFERER'] ?? null;
+    }
+
+    /**
+     * constructs the base url of the site
+     * @return string
+     */
+    public function getBaseUrl(): string
+    {
+        $host = $_SERVER['HTTP_HOST'];
+        $https = !empty($_SERVER['HTTPS']) ? 'https' : 'http';
+        return $https . '://' . $host . '/';
+    }
+
 }

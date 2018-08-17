@@ -34,12 +34,38 @@ abstract class AjaxController extends Controller
         parent::__construct($container);
         $this->request = $container->getRequest(); //adding our request object as it will be needed in the ajax calls
         //we only allow xmlHTTPRequests here for security
-        if (!$this->request->isXmlRequest()) {
-            throw new \Exception('Call not permitted');
-        }
+        $this->checkXlmRequest();
+        $this->checkReferer();
         $this->Csrf->checkCsrf();
     }
 
+    private function checkXlmRequest()
+    {
+        if (!$this->request->isXmlRequest()) {
+            throw new \Exception('Call not permitted');
+        }
+    }
+
+    /**
+     * Check if the request is coming from the same domain as the base url of the site
+     * @throws error json not from the same server
+     */
+    private function checkReferer()
+    {
+
+        $referer = $this->request->getReferer();
+        $baseUrl = $this->request->getBaseUrl();
+        $inUrl = strpos($referer, $baseUrl);
+        if ($inUrl === false || $inUrl > 0) { //not at start of referer
+            if ($referer !== null) {
+                //the referer can be null with certain navigators, so don't block on that
+                header('Content-Type: application/json');
+                //http_response_code('400');
+                exit(json_encode(['error' => 'Request originated from illegal source']));
+            }
+
+        }
+    }
 
     /**
      * Construct our json reply message
