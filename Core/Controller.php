@@ -22,20 +22,29 @@ abstract class Controller
     protected $container;
 
     /**
-     * @var session the session handler
+     * @var Dependency\Session the session handler
      */
     protected $session;
 
     /**
+     * Our Csrf security module for ajax calls
+     * @var Csrf
+     */
+    protected $Csrf;
+
+    /**
      * Controller constructor.
      * @param Container $container
+     *
      */
     public function __construct(Container $container)
     {
         $this->container = $container;
         $this->session = $this->container->getSession();
-        $this->session->setCsfr(); //setting our unique security id, this will only update if it isn't already present in the $_Session
-        $this->data['csrf_token'] = $this->session->getCsrf(); //storing the security id into the data array to be sent to the view and added in the meta head
+
+        //Setting up csrf token security for all calls
+        $this->Csrf = new Csrf($container);
+        $this->data['csrf_token'] = $this->Csrf->getCsrf(); //storing the security id into the data array to be sent to the view and added in the meta head
     }
 
     /**
@@ -48,9 +57,10 @@ abstract class Controller
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function getView($template, $args = []) {
+    public function getView($template, $args = [])
+    {
         $twig = $this->container->getTemplate();
-        return $twig->render($template.'.twig', $args);
+        return $twig->render($template . '.twig', $args);
     }
 
     /**
@@ -65,15 +75,25 @@ abstract class Controller
     public function renderView($template, $args = []): void
     {
         $twig = $this->container->getTemplate();
-        $twig->display($template.'.twig', $args);
+        $twig->display($template . '.twig', $args);
     }
 
     /**
      * gets our depandancy injection to be passed to models
      * @return Container
      */
-    public function getContainer(){
+    public function getContainer()
+    {
         return $this->container;
+    }
+
+    /**
+     * gets out csrf object
+     * @return Csrf
+     */
+    public function getCsrf()
+    {
+        return $this->Csrf;
     }
 
 }

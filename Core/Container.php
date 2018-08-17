@@ -1,15 +1,22 @@
 <?php
+
 namespace Core;
 
+use Core\Dependency\Request;
+use Core\Dependency\Session;
 use PDO;
+
 
 /**
  * Class Container for dependency injection
+ * we take care of setting our template and database connections
+ * We also call our Request and Session objects for the SuperGlobals access
  * @package Core
  *
  * PHP version 7
  */
-class Container{
+class Container
+{
 
     //used for the model connection
     /**
@@ -18,12 +25,12 @@ class Container{
     private $dbh = null;
 
     /**
-     * @var Request object
+     * @var Dependency\Request object
      */
     private $request;
 
     /**
-     * @var session object
+     * @var Dependency\Session object
      */
     private $session;
 
@@ -34,9 +41,9 @@ class Container{
     public function getTemplate()
     {
         $twigOptions = [];
-        if(!Config::DEV_ENVIRONMENT){
+        if (!Config::DEV_ENVIRONMENT) {
             $twigOptions = [
-              'cache' =>   dirname(__DIR__).'/Cache'
+                'cache' => dirname(__DIR__) . '/Cache'
             ];
         }
         $loader = new \Twig_Loader_Filesystem(dirname(__DIR__) . '/App/Views');
@@ -49,11 +56,12 @@ class Container{
      * create the database connection via PDO
      * @return null|PDO
      */
-    public function setPdo(){
-        if ($this->dbh){
+    public function setPdo()
+    {
+        if ($this->dbh) {
             return $this->dbh;
         }
-        $dsn = "mysql:host=".Config::DB_HOST.";dbname=".Config::DB_NAME.";charset=utf8"; //Creating the Data Source name
+        $dsn = "mysql:host=" . Config::DB_HOST . ";dbname=" . Config::DB_NAME . ";charset=utf8"; //Creating the Data Source name
         $opt = [
             PDO::ATTR_PERSISTENT => true,
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -63,17 +71,28 @@ class Container{
         return $this->dbh;
     }
 
-    public function getRequest(){
-        if(!$this->request){
+    /**
+     * Creates the request object if not already present and returns it
+     * @return Dependency\Request|Request
+     */
+    public function getRequest()
+    {
+        if (!$this->request) {
             $this->request = new Request();
         }
         return $this->request;
     }
 
-    public function getSession(){
-        if(!$this->session){
+    /**
+     * Creates the session object if not already present and returns it
+     * @return Dependency\Session|session
+     */
+    public function getSession()
+    {
+        if (!$this->session) {
             $this->session = new Session();
         }
         return $this->session;
     }
+
 }

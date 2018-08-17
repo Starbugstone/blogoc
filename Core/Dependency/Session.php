@@ -1,6 +1,6 @@
 <?php
 
-namespace Core;
+namespace Core\Dependency;
 
 /**
  * Class Session
@@ -16,7 +16,7 @@ namespace Core;
 class Session
 {
     /**
-     * Session constructor.
+     * Session constructor. it the session isn't started then we start it
      */
     public function __construct()
     {
@@ -38,6 +38,16 @@ class Session
     }
 
     /**
+     * Checks if a parameter is set in the session
+     * @param $param
+     * @return bool
+     */
+    public function isParamSet($param)
+    {
+        return isset($_SESSION[$param]);
+    }
+
+    /**
      * set the session parameter to somthing
      *
      * @param $param string  paramter to set
@@ -49,24 +59,25 @@ class Session
     }
 
     /**
-     * removes elements from the session
-     * @param $param string parameter to remove
+     * Set the session parameter only if nothing has been set yet
+     * @param $param string parameter to set
+     * @param $info mixed the info to store
      */
-    public function remove($param):void{
-        unset($_SESSION[$param]);
-    }
-
-    public function setCsfr(){
-        if(!isset($_SESSION['csrf_token'])){
-            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    public function setOnce($param, $info): void
+    {
+        if (!isset($_SESSION[$param])) {
+            $_SESSION[$param] = $info;
         }
     }
 
-    public function getCsrf(){
-        return $_SESSION['csrf_token'] ?? null;
+    /**
+     * removes elements from the session
+     * @param $param string parameter to remove
+     */
+    public function remove($param): void
+    {
+        unset($_SESSION[$param]);
     }
 
-    public function removeCsrf(){
-        unset($_SESSION['csrf_token']);
-    }
+
 }
