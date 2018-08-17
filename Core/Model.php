@@ -2,6 +2,8 @@
 
 namespace Core;
 
+use PDO;
+
 /**
  * Class Model here we have all the generic calls to be inherited by the App\Models
  * using PDO connections

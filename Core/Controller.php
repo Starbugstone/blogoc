@@ -51,31 +51,29 @@ abstract class Controller
      * Calls the templating engine and returns the rendered view
      *
      * @param $template string the template file name. .twig will be appended
-     * @param array $args the data to pass to the view
      * @return string the rendered template
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function getView($template, $args = [])
+    public function getView($template)
     {
         $twig = $this->container->getTemplate();
-        return $twig->render($template . '.twig', $args);
+        return $twig->render($template . '.twig', $this->data);
     }
 
     /**
      * rendering the view
      *
      * @param $template string the template file
-     * @param array $args the data to pass to the view
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function renderView($template, $args = []): void
+    public function renderView($template): void
     {
         $twig = $this->container->getTemplate();
-        $twig->display($template . '.twig', $args);
+        $twig->display($template . '.twig', $this->data);
     }
 
     /**
