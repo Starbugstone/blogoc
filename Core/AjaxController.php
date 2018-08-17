@@ -42,13 +42,13 @@ abstract class AjaxController extends Controller
     private function checkXlmRequest()
     {
         if (!$this->request->isXmlRequest()) {
-            throw new \Exception('Call not permitted');
+            throw new \Exception('Call not permitted', 404);
         }
     }
 
     /**
      * Check if the request is coming from the same domain as the base url of the site
-     * @throws error json not from the same server
+     * @throws JsonException
      */
     private function checkReferer()
     {
@@ -57,11 +57,9 @@ abstract class AjaxController extends Controller
         $baseUrl = $this->request->getBaseUrl();
         $inUrl = strpos($referer, $baseUrl);
         if ($inUrl === false || $inUrl > 0) { //not at start of referer
-            if ($referer !== null) {
-                //the referer can be null with certain navigators, so don't block on that
-                header('Content-Type: application/json');
-                //http_response_code('400');
-                exit(json_encode(['error' => 'Request originated from illegal source']));
+            if ($referer !== null) {//the referer can be null with certain navigators, so don't block on that
+                throw new JsonException('Illegal referer.');
+
             }
 
         }

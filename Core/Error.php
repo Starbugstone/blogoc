@@ -30,7 +30,8 @@ class Error
     }
 
     /**
-     * Exception handler
+     * Exception handler. Will show a custom error page when the exception is called.
+     * Also checks if json error and treats it as json response
      * @param \Exception $exception The exception
      *
      * @return void
@@ -38,12 +39,24 @@ class Error
      */
     public static function exceptionHandler($exception): void
     {
-        //code is 404 (not found) or 500 (general error)
         $code = $exception->getCode();
+
+        //If we have a json exception thrown, we return a json error and stop
+        if(get_class($exception)==='Core\JsonException'){
+            $code = 400;
+            if(Config::DEV_ENVIRONMENT){ //If we are in dev and using ajax, we want to see the error for debugging
+                $code = 200;
+            }
+            http_response_code($code);
+            header('Content-Type: application/json');
+            exit(json_encode(['error' => $exception->getMessage()]));
+        }
+
+        //code is 404 (not found) or 500 (general error)
         if ($code != 404) {
             $code = 500;
         }
-        $viewData[] = [];
+        $viewData = [];
         //always set the message to be sent
         $viewData['exceptionMessage'] = $exception->getMessage();
 
@@ -58,7 +71,7 @@ class Error
         }
 
         $container = new Container();
-
+        //var_dump($exception);
         //Making sure that the twig template renders correctly.
         try{
             $twig = $container->getTemplate();

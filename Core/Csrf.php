@@ -3,7 +3,6 @@
 namespace Core;
 
 
-
 class Csrf
 {
     /**
@@ -42,11 +41,11 @@ class Csrf
         if (!$this->session->isParamSet('csrf_token')) {
             try {
                 $rand = random_bytes(32);
+                $hash = bin2hex($rand);
+                $this->session->set('csrf_token', $hash);
             } catch (\Exception $e) {
                 echo 'Random generator not present on server: ' . htmlspecialchars($e->getMessage());
             }
-            $hash = bin2hex($rand);
-            $this->session->set('csrf_token', $hash);
         }
     }
 
@@ -62,7 +61,7 @@ class Csrf
     /**
      * Checks if the csrf_token passed in the header is the same as the token stored in the session
      *
-     * @throws error json if no csrf token is found or the token is wrong
+     * @throws JsonException
      */
     public function checkCsrf()
     {
@@ -71,11 +70,11 @@ class Csrf
         $headers = apache_request_headers();
 
         if (!isset($headers['csrf_token'])) {
-            exit(json_encode(['error' => 'No CSRF token.']));
+            throw new JsonException('No CSRF token.');
         }
 
         if ($headers['csrf_token'] !== $this->getCsrf()) {
-            exit(json_encode(['error' => 'Wrong CSRF token.']));
+            throw new JsonException('Wrong CSRF token.');
         }
     }
 }
