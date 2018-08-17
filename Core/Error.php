@@ -49,7 +49,7 @@ class Error
             }
             http_response_code($code);
             header('Content-Type: application/json');
-            exit(json_encode(['error' => $exception->getMessage()]));
+            die(json_encode(['error' => $exception->getMessage()]));
         }
 
         //code is 404 (not found) or 500 (general error)
