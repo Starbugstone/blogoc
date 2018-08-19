@@ -38,7 +38,7 @@ class Container
      * gets the twig template environment
      * @return \Twig_Environment
      */
-    public function getTemplate()
+    public function getTemplate():\Twig_Environment
     {
         $twigOptions = [];
         if (!Config::DEV_ENVIRONMENT) {
@@ -54,9 +54,9 @@ class Container
 
     /**
      * create the database connection via PDO
-     * @return null|PDO
+     * @return PDO
      */
-    public function setPdo()
+    public function setPdo():\PDO
     {
         if ($this->dbh) {
             return $this->dbh;
@@ -72,10 +72,18 @@ class Container
     }
 
     /**
+     * Gettint the headers
+     * @return array
+     */
+    public function getHeaders():array {
+        return apache_request_headers();
+    }
+
+    /**
      * Creates the request object if not already present and returns it
      * @return Dependency\Request|Request
      */
-    public function getRequest()
+    public function getRequest():Dependency\Request
     {
         if (!$this->request) {
             $this->request = new Request();
@@ -87,7 +95,7 @@ class Container
      * Creates the session object if not already present and returns it
      * @return Dependency\Session|session
      */
-    public function getSession()
+    public function getSession():Dependency\Session
     {
         if (!$this->session) {
             $this->session = new Session();

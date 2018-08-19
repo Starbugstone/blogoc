@@ -3,6 +3,10 @@
 namespace Core;
 
 
+/**
+ * Class Csrf
+ * @package Core
+ */
 class Csrf
 {
     /**
@@ -36,7 +40,7 @@ class Csrf
      * We set our CSRF token if none is already set
      *
      */
-    public function setCsrf()
+    public function setCsrf():void
     {
         if (!$this->session->isParamSet('csrf_token')) {
             try {
@@ -44,7 +48,7 @@ class Csrf
                 $hash = bin2hex($rand);
                 $this->session->set('csrf_token', $hash);
             } catch (\Exception $e) {
-                echo 'Random generator not present on server: ' . htmlspecialchars($e->getMessage());
+                echo 'Random generator not present on server: ' . $e->getMessage();
             }
         }
     }
@@ -53,7 +57,7 @@ class Csrf
      * Gets the Csrf stored in the session
      * @return mixed
      */
-    public function getCsrf()
+    public function getCsrfKey()
     {
         return $this->session->get('csrf_token');
     }
@@ -63,17 +67,17 @@ class Csrf
      *
      * @throws JsonException
      */
-    public function checkCsrf()
+    public function checkCsrf():void
     {
         header('Content-Type: application/json');
 
-        $headers = apache_request_headers();
+        $headers = $this->container->getHeaders();
 
         if (!isset($headers['csrf_token'])) {
             throw new JsonException('No CSRF token.');
         }
 
-        if ($headers['csrf_token'] !== $this->getCsrf()) {
+        if ($headers['csrf_token'] !== $this->getCsrfKey()) {
             throw new JsonException('Wrong CSRF token.');
         }
     }

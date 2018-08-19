@@ -2,6 +2,8 @@
 
 namespace Core;
 
+use Twig\Template;
+
 /**
  * Class Controller
  * @package Core
@@ -44,7 +46,7 @@ abstract class Controller
 
         //Setting up csrf token security for all calls
         $this->Csrf = new Csrf($container);
-        $this->data['csrf_token'] = $this->Csrf->getCsrf(); //storing the security id into the data array to be sent to the view and added in the meta head
+        $this->data['csrf_token'] = $this->Csrf->getCsrfKey(); //storing the security id into the data array to be sent to the view and added in the meta head
     }
 
     /**
@@ -89,7 +91,7 @@ abstract class Controller
      * gets out csrf object
      * @return Csrf
      */
-    public function getCsrf()
+    public function getCsrf():Csrf
     {
         return $this->Csrf;
     }

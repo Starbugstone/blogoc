@@ -76,7 +76,7 @@ class Error
             $twig = $container->getTemplate();
             $twig->display('ErrorPages/' . $code . '.twig', $viewData);
         } catch (\Exception $e) {
-            echo 'Twig Error : ' . htmlspecialchars($e->getMessage());
+            echo 'Twig Error : ' . $e->getMessage();
         }
 
 

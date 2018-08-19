@@ -39,10 +39,14 @@ abstract class AjaxController extends Controller
         $this->Csrf->checkCsrf();
     }
 
-    private function checkXlmRequest()
+    /**
+     * Checks if we have an Xml Http request and throws an error if not
+     * @throws \ErrorException
+     */
+    private function checkXlmRequest():void
     {
         if (!$this->request->isXmlRequest()) {
-            throw new \Exception('Call not permitted', 404);
+            throw new \ErrorException('Call not permitted', 404);
         }
     }
 
@@ -50,7 +54,7 @@ abstract class AjaxController extends Controller
      * Check if the request is coming from the same domain as the base url of the site
      * @throws JsonException
      */
-    private function checkReferer()
+    private function checkReferer():void
     {
 
         $referer = $this->request->getReferer();
@@ -69,9 +73,9 @@ abstract class AjaxController extends Controller
      * Construct our json reply message
      * @param null $message
      * @param int $code
-     * @return string
+     * @return string json encoded message
      */
-    public function jsonResponse($message = null, $code = 200)
+    public function jsonResponse($message = null, $code = 200):string
     {
         // clear the old headers
         //header_remove(); //->this removes our csrf error checking so no go for the moment.
