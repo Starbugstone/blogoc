@@ -62,6 +62,14 @@ abstract class Controller
         $this->data['csrf_token'] = $this->csrf->getCsrfKey(); //storing the security id into the data array to be sent to the view and added in the meta head
     }
 
+    public function index(){
+        //if no index, then redirect to the home page or throw an error if in dev; just for debugging purposes
+        if(Config::DEV_ENVIRONMENT){
+            throw new \ErrorException("no index() available in controller call");
+        }
+        $this->container->getResponse()->redirect();
+    }
+
     /**
      * Calls the templating engine and returns the rendered view
      *
