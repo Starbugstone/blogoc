@@ -2,6 +2,8 @@
 
 namespace Core;
 
+use Twig\Template;
+
 /**
  * Class Controller
  * @package Core
@@ -19,53 +21,79 @@ abstract class Controller
     /**
      * @var Container dependency injector
      */
-    private $container;
+    protected $container;
+
+    /**
+     * @var Dependency\Session the session handler
+     */
+    protected $session;
+
+    /**
+     * Our Csrf security module for ajax calls
+     * @var Csrf
+     */
+    protected $Csrf;
 
     /**
      * Controller constructor.
      * @param Container $container
+     *
      */
     public function __construct(Container $container)
     {
         $this->container = $container;
+        $this->session = $this->container->getSession();
+
+        //Setting up csrf token security for all calls
+        $this->Csrf = new Csrf($container);
+        $this->data['csrf_token'] = $this->Csrf->getCsrfKey(); //storing the security id into the data array to be sent to the view and added in the meta head
     }
 
     /**
      * Calls the templating engine and returns the rendered view
      *
      * @param $template string the template file name. .twig will be appended
-     * @param array $args the data to pass to the view
      * @return string the rendered template
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function getView($template, $args = []) {
+    public function getView($template)
+    {
         $twig = $this->container->getTemplate();
-        return $twig->render($template.'.twig', $args);
+        return $twig->render($template . '.twig', $this->data);
     }
 
     /**
      * rendering the view
      *
      * @param $template string the template file
-     * @param array $args the data to pass to the view
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function renderView($template, $args = []): void
+    public function renderView($template): void
     {
         $twig = $this->container->getTemplate();
-        $twig->display($template.'.twig', $args);
+        $twig->display($template . '.twig', $this->data);
     }
 
     /**
      * gets our depandancy injection to be passed to models
      * @return Container
      */
-    public function getContainer(){
+    public function getContainer()
+    {
         return $this->container;
+    }
+
+    /**
+     * gets out csrf object
+     * @return Csrf
+     */
+    public function getCsrf():Csrf
+    {
+        return $this->Csrf;
     }
 
 }
