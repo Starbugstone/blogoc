@@ -21,7 +21,7 @@ class Auth extends Module
     {
         $session = $this->container->getSession();
         //For testing, setting the user level
-        $session->set('session_level', 'bla');
+        $session->set('session_level', 'Admin');
 
         //get session level from the actual $_SESSION
         $sessionLevel = $session->get('session_level');

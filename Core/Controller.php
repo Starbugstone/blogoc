@@ -34,7 +34,8 @@ abstract class Controller
      * @var array List of modules to load
      */
     protected $loadModules = [
-        'Csrf'
+        'Csrf',
+        'AlertBox'
     ];
 
     /**
@@ -46,9 +47,12 @@ abstract class Controller
     {
         $this->container = $container;
 
+        //removing any duplicates that could have been passed in child classes
+        $this->loadModules = array_unique($this->loadModules);
+
         //We load all our module objects into our object
-        foreach ($this->loadModules as $loadModule){
-            $loadModuleObj = 'Core\\Modules\\'.$loadModule;
+        foreach ($this->loadModules as $loadModule) {
+            $loadModuleObj = 'Core\\Modules\\' . $loadModule;
             $loadModuleName = strtolower($loadModule);
             $this->$loadModuleName = new $loadModuleObj($this->container);
         }
@@ -83,6 +87,10 @@ abstract class Controller
      */
     public function renderView($template): void
     {
+        //checking if any alerts and pas the to the template
+        if ($this->alertbox->alertsPending()) {
+            $this->data['alert_messages'] = $this->alertbox->getAlerts();
+        }
         $twig = $this->container->getTemplate();
         $twig->display($template . '.twig', $this->data);
     }
