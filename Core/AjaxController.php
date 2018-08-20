@@ -20,6 +20,8 @@ abstract class AjaxController extends Controller
      */
     protected $request;
 
+    protected $admin;
+
     /**
      * On construction, we imediatly check for security and bail out on the first sign of fraude
      * Only allow XmlHTTPRequests or throw an exception
@@ -32,6 +34,7 @@ abstract class AjaxController extends Controller
     public function __construct(Container $container)
     {
         parent::__construct($container);
+        $this->admin = new Admin($this->container);
         $this->request = $container->getRequest(); //adding our request object as it will be needed in the ajax calls
         //we only allow xmlHTTPRequests here for security
         $this->checkXlmRequest();
