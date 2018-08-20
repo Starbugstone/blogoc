@@ -1,14 +1,20 @@
 <?php
+
 namespace Core;
 
-abstract class AdminController extends Controller{
-
+/**
+ * The parent controller for all admin section controllers
+ * Class AdminController
+ * @package Core
+ */
+abstract class AdminController extends Controller
+{
 
     public function __construct(Container $container)
     {
-        $this->loadModules[] = 'Admin';
+        $this->loadModules[] = 'Auth';
         parent::__construct($container);
-        //$this->admin = new Admin($this->container);
+
     }
 
 
