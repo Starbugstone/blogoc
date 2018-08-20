@@ -1,6 +1,30 @@
 <?php
+
 namespace Core\Dependency;
 
-class Response{
+/**
+ * Creating all the response messages
+ * Class Response
+ * @package Core\Dependency
+ */
+class Response
+{
 
+    /**
+     * Setting the header type. useful for Json returns
+     * @param string $type
+     */
+    public function setHeaderContentType(string $type)
+    {
+        switch ($type) {
+            case 'json':
+                $headerType = 'application/json';
+                break;
+            default:
+                $headerType = 'text/html';
+        }
+        $contentType = 'Content-Type: ' . $headerType;
+
+        header($contentType);
+    }
 }
