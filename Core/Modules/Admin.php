@@ -1,5 +1,7 @@
 <?php
-namespace Core;
+namespace Core\Modules;
+
+use Core\Container;
 
 class Admin{
 

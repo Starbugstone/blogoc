@@ -1,8 +1,9 @@
 <?php
 
-namespace Core;
+namespace Core\Modules;
 
-
+use Core\Container;
+use Core\JsonException;
 /**
  * Class Csrf
  * @package Core
@@ -16,7 +17,7 @@ class Csrf
 
     /**
      * our session object
-     * @var Dependency\Session|session
+     * @var Core\Dependency\Session|session
      */
     private $session;
 
