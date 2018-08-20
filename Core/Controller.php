@@ -29,10 +29,13 @@ abstract class Controller
     protected $session;
 
     /**
-     * Our Csrf security module for ajax calls
-     * @var Csrf
+     * this will automaticly load all the modules listed and store them as $moduleName in tle class
+     * Child classes can call aditional modules by calling $this->
+     * @var array List of modules to load
      */
-    protected $Csrf;
+    protected $loadModules = [
+        'Csrf'
+    ];
 
     /**
      * Controller constructor.
@@ -42,11 +45,17 @@ abstract class Controller
     public function __construct(Container $container)
     {
         $this->container = $container;
+
+        //We load all our module objects into our object
+        foreach ($this->loadModules as $loadModule){
+            $loadModuleObj = 'Core\\Modules\\'.$loadModule;
+            $loadModuleName = strtolower($loadModule);
+            $this->$loadModuleName = new $loadModuleObj($this->container);
+        }
         $this->session = $this->container->getSession();
 
         //Setting up csrf token security for all calls
-        $this->Csrf = new Csrf($container);
-        $this->data['csrf_token'] = $this->Csrf->getCsrfKey(); //storing the security id into the data array to be sent to the view and added in the meta head
+        $this->data['csrf_token'] = $this->csrf->getCsrfKey(); //storing the security id into the data array to be sent to the view and added in the meta head
     }
 
     /**
@@ -77,23 +86,4 @@ abstract class Controller
         $twig = $this->container->getTemplate();
         $twig->display($template . '.twig', $this->data);
     }
-
-    /**
-     * gets our depandancy injection to be passed to models
-     * @return Container
-     */
-    public function getContainer()
-    {
-        return $this->container;
-    }
-
-    /**
-     * gets out csrf object
-     * @return Csrf
-     */
-    public function getCsrf():Csrf
-    {
-        return $this->Csrf;
-    }
-
 }

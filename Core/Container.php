@@ -3,6 +3,7 @@
 namespace Core;
 
 use Core\Dependency\Request;
+use Core\Dependency\Response;
 use Core\Dependency\Session;
 use PDO;
 
@@ -33,6 +34,9 @@ class Container
      * @var Dependency\Session object
      */
     private $session;
+
+
+    private $response;
 
     /**
      * gets the twig template environment
@@ -89,6 +93,18 @@ class Container
             $this->request = new Request();
         }
         return $this->request;
+    }
+
+    /**
+     * Creates the response object if not already present and returns it
+     * @return Response
+     */
+    public function getResponse():Dependency\Response
+    {
+        if (!$this->response) {
+            $this->response = new Response();
+        }
+        return $this->response;
     }
 
     /**
