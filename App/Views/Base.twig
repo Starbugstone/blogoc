@@ -67,16 +67,7 @@
 {% endif %}
 
 {% if dev is defined %}
-    <div class="dev-info">
-        <p>Object Methods</p>
-        <pre>
-            {{ class_object_methods|json_encode(constant('JSON_PRETTY_PRINT')) }}
-        </pre>
-        <p>Object variables</p>
-        <pre>
-            {{ class_object_vars|json_encode(constant('JSON_PRETTY_PRINT')) }}
-        </pre>
-    </div>
+    {% include "Includes/dev-info.twig" %}
 {% endif %}
 <script
         src="https://code.jquery.com/jquery-3.3.1.min.js"

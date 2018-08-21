@@ -121,8 +121,10 @@ abstract class Controller
         }
         if(Config::DEV_ENVIRONMENT){
             $this->data['dev'] = true;
-            $this->data['class_object_methods'] = get_class_methods(get_class($this));
-            $this->data['class_object_vars'] = get_object_vars($this);
+            $classMethods =[];
+            $classMethods['class_object_methods']=get_class_methods(get_class($this));
+            $classMethods['class_object_vars']=get_object_vars($this);
+            $this->data['dev_info'] = $classMethods;
         }
         $twig = $this->container->getTemplate();
         $twig->display($template . '.twig', $this->data);

@@ -1,0 +1,13 @@
+<div id="toogleDev" style="position: absolute; top: 150px; right: 0; background-color: rgba(51, 170, 51, .7);" >
+    <p style="float: right" onclick="$('#dev-info').toggle();">Dev info</p>
+    <div id="dev-info" style="display: none">
+        {% for conf, val in dev_info %}
+
+        <p>{{ conf }}</p>
+        <pre>
+            {{ val|json_encode(constant('JSON_PRETTY_PRINT')) }}
+        </pre>
+
+        {% endfor %}
+    </div>
+</div>
