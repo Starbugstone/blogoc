@@ -32,7 +32,7 @@ class Router
 
     /**
      * the current parameters
-     * @var string
+     * @var array
      */
     private $currentParams = [];
 
@@ -67,7 +67,7 @@ class Router
             $specialNamespace = array_shift($url);
 
             //making sure we have a single backslash
-            $specialNamespace = rtrim($specialNamespace, '\\') . '\\';
+            $specialNamespace = rtrim($specialNamespace, '\\').'\\';
 
             //capitalize the special namespace
             $specialNamespace = $this->convertToStudlyCaps($specialNamespace);
@@ -96,12 +96,15 @@ class Router
      * Get the controller, action and params from the url= string
      *
      * @return array decomposed url
+     * @throws \Exception
      */
     protected function getUrl(): array
     {
-        if (isset($_GET['url'])) {
+
+        $url = $this->container->getRequest()->getData('url');
+        if ($url) {
             //remove right slash
-            $url = rtrim($_GET['url'], '/');
+            $url = rtrim($url, '/');
 
             //convert all to lower for easier comparing. Will convert to camelCase after
             //this will avoid cap probs with links and user input
@@ -131,7 +134,7 @@ class Router
     {
 
         //try to create the controller object
-        $fullControllerName = $this->currentNamespace . $this->currentController;
+        $fullControllerName = $this->currentNamespace.$this->currentController;
 
         //make sure the class exists before continuing
         if (!class_exists($fullControllerName)) {

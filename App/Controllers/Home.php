@@ -14,9 +14,9 @@ class Home extends \Core\Controller
 
     public function index()
     {
-        $Includes = new \App\Models\Includes($this->getContainer());
+        $Includes = new \App\Models\Includes($this->container);
         $this->data['navigation'] = $Includes->getMenu();
         $this->data['jumbotron'] = $Includes->getJumbotron();
-        $this->renderView('Home', $this->data);
+        $this->renderView('Home');
     }
 }

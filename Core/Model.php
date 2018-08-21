@@ -2,7 +2,6 @@
 
 namespace Core;
 
-use App\Config;
 use PDO;
 
 /**
@@ -57,12 +56,12 @@ abstract class Model
      * binding the parameters to the query. Need the stmt to be declared before via query()
      * @param $param
      * @param $value
-     * @param null $type
+     * @param  $type
      * @throws \Exception error if no sql query to bind to
      */
     protected function bind($param, $value, $type = null): void
     {
-        if($this->stmt == null){
+        if ($this->stmt == null) {
             throw new \Exception("No query to bind to");
         }
         if (is_null($type)) { //need a bind value, so just check it in code. that way we can just call bind(param,value)
@@ -83,9 +82,14 @@ abstract class Model
         $this->stmt->bindValue($param, $value, $type);
     }
 
+    /**
+     * Execute our constructed SQL statement
+     * @return bool
+     * @throws \Exception if the statement is empty
+     */
     protected function execute()
     {
-        if($this->stmt == null){
+        if ($this->stmt == null) {
             throw new \Exception("No statement to execute");
         }
         return $this->stmt->execute();
@@ -109,10 +113,10 @@ abstract class Model
     private function getTable(string $table = null): string
     {
         //If no table is passed, get the calling model name
-        if ($table == null) {
+        if ($table === null) {
             $reflect = new \ReflectionClass(get_class($this));
             $table = $reflect->getShortName(); //this is to only get the model name, otherwise we get the full namespace
-            $table = $table . 's'; //adding the s since the table should be plural. Might be some special case where the plural isn't just with an s
+            $table = $table.'s'; //adding the s since the table should be plural. Might be some special case where the plural isn't just with an s
             $table = strtolower($table); //the database names are in lowercase
         }
 
@@ -129,7 +133,7 @@ abstract class Model
         }
 
         //if we are here, then table doesn't exist, check for view
-        $view = 'v_' . $table;
+        $view = 'v_'.$table;
         $stmt->bindValue(':table', $view, PDO::PARAM_STR);
         $stmt->execute();
         $exists = $stmt->rowCount() > 0; //will return 1 if table exists or 0 if non existant
@@ -153,11 +157,12 @@ abstract class Model
      * @return array the result or empty
      * @throws \Exception if debugging is on and no result
      */
-    private function returnArray($result):array{
-        if($result){
+    private function returnArray($result): array
+    {
+        if ($result) {
             return $result;
         }
-        if (Config::DEV_ENVIRONMENT){
+        if (Config::DEV_ENVIRONMENT) {
             throw new \Exception("No results in database");
         }
         return [];
@@ -169,7 +174,8 @@ abstract class Model
      * @return array the results from database
      * @throws \ReflectionException
      */
-    protected function getResultSet($table = ''):array{
+    protected function getResultSet($table = ''): array
+    {
         $tableName = $this->getTable($table);
         $sql = "SELECT * FROM $tableName"; //can not pass table name as :parameter. since we already have tested if the table exists, this var should be safe.
         $this->query($sql);
@@ -185,15 +191,17 @@ abstract class Model
      * @return array the results from database
      * @throws \ReflectionException
      */
-    protected function getResultSetLimited($limit,$table = ''):array{
+    protected function getResultSetLimited($limit, $table = ''): array
+    {
         $tableName = $this->getTable($table);
         $sql = "SELECT * FROM $tableName LIMIT :limit";
         $this->query($sql);
-        $this->bind(':limit',$limit);
+        $this->bind(':limit', $limit);
         $this->execute();
         $result = $this->stmt->fetchAll(); //returns an array or false if no results
         return $this->returnArray($result);
     }
+
     /**
      * get's the result of SELECT * FROM table where idtable=$id
      * @param int $rowId searched id
@@ -201,12 +209,13 @@ abstract class Model
      * @return array result or empty array
      * @throws \ReflectionException (probably not, but will throw an exception if debugging is on and no results)
      */
-    protected function getRowById($rowId, $table=''):array{
+    protected function getRowById($rowId, $table = ''): array
+    {
         $tableName = $this->getTable($table);
         $idName = 'id'.$tableName;
         $sql = "SELECT * FROM $tableName WHERE $idName = :rowId";
         $this->query($sql);
-        $this->bind(':rowId',$rowId);
+        $this->bind(':rowId', $rowId);
         $this->execute();
         $result = $this->stmt->fetch();
         return $this->returnArray($result);
@@ -221,10 +230,11 @@ abstract class Model
      * @throws \ReflectionException (probably not, but will throw an exception if debugging is on and no results)
      * @throws \Exception if the column name consists of other characters than lower case, numbers and underscore for security
      */
-    protected function getRowByColumn($columnName,$value,$table=''):array{
+    protected function getRowByColumn($columnName, $value, $table = ''): array
+    {
         $tableName = $this->getTable($table);
         $columnNameOk = preg_match("/^[a-z0-9_]+$/i", $columnName); //testing if column name only has lower case, numbers and underscore
-        if(!$columnNameOk){
+        if (!$columnNameOk) {
             throw new \Exception("Syntax error : Column name \"$columnName\" is not legal");
         }
         $sql = "SELECT * FROM $tableName WHERE $columnName = :value";
