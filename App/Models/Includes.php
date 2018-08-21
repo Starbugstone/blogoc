@@ -22,8 +22,8 @@ class Includes extends Model
         $data = [];
         //get the categories from database
         $categories = $this->getResultSet('categories');
-        foreach ( $categories as $category) {
-            $data +=[
+        foreach ($categories as $category) {
+            $data += [
                 $category['category_name'] => '/category/'.$category['idcategories']
             ];
         }

@@ -23,14 +23,14 @@ class Response
             default:
                 $headerType = 'text/html';
         }
-        $contentType = 'Content-Type: ' . $headerType;
+        $contentType = 'Content-Type: '.$headerType;
 
         header($contentType);
     }
 
     public function redirect(string $url = ''): void
     {
-        header("location: /" . $url);
+        header("location: /".$url);
         die(); //after redirect do not execute anything else from the function
     }
 }

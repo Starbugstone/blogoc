@@ -12,7 +12,7 @@ class Home extends \Core\AdminController
             $this->data['userLevel'] = 'Admin';
         } elseif ($this->auth->isUser()) {
             $this->data['userLevel'] = 'User';
-        } else {
+        }else {
             $this->alertbox->setAlert("Not Admin", 'warning');
             $this->alertbox->setAlert("TESTING", 'error');
             $this->container->getResponse()->redirect();
