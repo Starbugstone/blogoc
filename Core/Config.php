@@ -40,4 +40,11 @@ class Config
      * @var bool
      */
     const DEV_ENVIRONMENT = true;
+
+    /**
+     * If we use a table prefix, put it here (without the underscore).
+     * the tables will then be accessed via prefix_table.
+     * @var string
+     */
+    const TABLE_PREFIX = '';
 }

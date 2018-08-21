@@ -120,6 +120,11 @@ abstract class Model
             $table = strtolower($table); //the database names are in lowercase
         }
 
+        if(Config::TABLE_PREFIX != '')
+        {
+            $table = Config::TABLE_PREFIX.'_'.$table;
+        }
+
         //see if table exists
         $sql = "SHOW TABLES LIKE :table";
         $stmt = $this->dbh->prepare($sql);
@@ -240,6 +245,25 @@ abstract class Model
         $sql = "SELECT * FROM $tableName WHERE $columnName = :value";
         $this->query($sql);
         $this->bind(':value', $value);
+        $this->execute();
+        $result = $this->stmt->fetch();
+        return $this->returnArray($result);
+    }
+
+    /**
+     * get's the result of SELECT * FROM table where table_slug=$slug
+     * @param string $slug the slug to look up
+     * @param string $table the table to search, if blank then we get the table or view based on the model name
+     * @return array result or empty array
+     * @throws \ReflectionException (probably not, but will throw an exception if debugging is on and no results)
+     */
+    protected function getRowBySlug(string $slug, $table = ''): array
+    {
+        $tableName = $this->getTable($table);
+        $slugName = $tableName.'_slug';
+        $sql = "SELECT * FROM $tableName WHERE $slugName = :slug";
+        $this->query($sql);
+        $this->bind(':slug', $slug);
         $this->execute();
         $result = $this->stmt->fetch();
         return $this->returnArray($result);
