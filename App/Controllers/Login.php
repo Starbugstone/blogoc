@@ -19,13 +19,13 @@ class Login extends Controller {
     public function connectAdmin() {
         $this->session->set('session_level', 'Admin');
         $this->alertBox->setAlert('Connected as admin');
-        $this->container->getResponse()->redirect();
+        $this->container->getResponse()->redirect('/admin/');
     }
 
     public function connectUser() {
         $this->session->set('session_level', 'User');
         $this->alertBox->setAlert('Connected as User');
-        $this->container->getResponse()->redirect();
+        $this->container->getResponse()->redirect('/admin/');
     }
 
     public function connectVisitor() {
