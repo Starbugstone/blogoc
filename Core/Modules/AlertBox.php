@@ -27,15 +27,10 @@ class AlertBox extends Module
     public function setAlert(string $message, $type = 'success')
     {
         //make sure we have the right type or throw an error
-        try {
-            if (!in_array($type, $this->allowedTypes)) {
-                throw new \Exception("Invalid toastr alert type");
-            }
-        } catch (\Exception $e) {
-            echo "<pre>alerter error :".$e.'</pre>'; //TODO See how to handle better, perhaps with a custom error
-            die();
-        }
 
+        if (!in_array($type, $this->allowedTypes)) {
+            throw new \Exception("Invalid toastr alert type " . $type);
+        }
         $message = [
             'type' => $type,
             'message' => $message
@@ -49,6 +44,7 @@ class AlertBox extends Module
         $alert[] = $message;
 
         $session->set('alert_messages', $alert);
+
 
     }
 

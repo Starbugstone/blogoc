@@ -21,7 +21,7 @@ class Container
 
     //used for the model connection
     /**
-     * @var null this is to store the pdo connection. We only need to set once
+     * @var PDO this is to store the pdo connection. We only need to set once
      */
     private $dbh = null;
 
