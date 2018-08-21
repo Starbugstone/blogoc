@@ -66,7 +66,7 @@ class Error
             $viewData['showErrors'] = true; //sending the config option down to twig
             $viewData['classException'] = get_class($exception);
             $viewData['stackTrace'] = $exception->getTraceAsString();
-            $viewData['thrownIn'] = $exception->getFile() . " On line " . $exception->getLine();
+            $viewData['thrownIn'] = $exception->getFile()." On line ".$exception->getLine();
         }
 
         $container = new Container();
@@ -74,9 +74,9 @@ class Error
         //Making sure that the twig template renders correctly.
         try {
             $twig = $container->getTemplate();
-            $twig->display('ErrorPages/' . $code . '.twig', $viewData);
+            $twig->display('ErrorPages/'.$code.'.twig', $viewData);
         } catch (\Exception $e) {
-            echo 'Twig Error : ' . $e->getMessage();
+            echo 'Twig Error : '.$e->getMessage();
         }
 
 

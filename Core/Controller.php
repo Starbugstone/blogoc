@@ -52,11 +52,11 @@ abstract class Controller
 
         //We load all our module objects into our object
         foreach ($this->loadModules as $loadModule) {
-            $loadModuleObj = 'Core\\Modules\\' . $loadModule;
+            $loadModuleObj = 'Core\\Modules\\'.$loadModule;
 
             $loadModuleName = strtolower($loadModule);
             $loadedModule = new $loadModuleObj($this->container);
-            if(!is_subclass_of($loadedModule,'Core\Modules\Module')){
+            if (!is_subclass_of($loadedModule, 'Core\Modules\Module')) {
                 throw new \ErrorException('Modules musit be a sub class of module');
             }
             $this->$loadModuleName = $loadedModule;
@@ -67,9 +67,9 @@ abstract class Controller
         $this->data['csrf_token'] = $this->csrf->getCsrfKey(); //storing the security id into the data array to be sent to the view and added in the meta head
     }
 
-    public function index(){
+    public function index() {
         //if no index, then redirect to the home page or throw an error if in dev; just for debugging purposes
-        if(Config::DEV_ENVIRONMENT){
+        if (Config::DEV_ENVIRONMENT) {
             throw new \ErrorException("no index() available in controller call");
         }
         $this->container->getResponse()->redirect();
@@ -87,7 +87,7 @@ abstract class Controller
     public function getView($template)
     {
         $twig = $this->container->getTemplate();
-        return $twig->render($template . '.twig', $this->data);
+        return $twig->render($template.'.twig', $this->data);
     }
 
     /**
@@ -105,6 +105,6 @@ abstract class Controller
             $this->data['alert_messages'] = $this->alertbox->getAlerts();
         }
         $twig = $this->container->getTemplate();
-        $twig->display($template . '.twig', $this->data);
+        $twig->display($template.'.twig', $this->data);
     }
 }
