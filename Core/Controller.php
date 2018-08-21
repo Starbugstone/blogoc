@@ -117,7 +117,7 @@ abstract class Controller
     {
         //checking if any alerts and pas the to the template
         if ($this->alertBox->alertsPending()) {
-            $this->data['alert_messages'] = $this->alertbox->getAlerts();
+            $this->data['alert_messages'] = $this->alertBox->getAlerts();
         }
         $twig = $this->container->getTemplate();
         $twig->display($template . '.twig', $this->data);
