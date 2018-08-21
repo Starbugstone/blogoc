@@ -53,8 +53,13 @@ abstract class Controller
         //We load all our module objects into our object
         foreach ($this->loadModules as $loadModule) {
             $loadModuleObj = 'Core\\Modules\\' . $loadModule;
+
             $loadModuleName = strtolower($loadModule);
-            $this->$loadModuleName = new $loadModuleObj($this->container);
+            $loadedModule = new $loadModuleObj($this->container);
+            if(!is_subclass_of($loadedModule,'Core\Modules\Module')){
+                throw new \ErrorException('Modules musit be a sub class of module');
+            }
+            $this->$loadModuleName = $loadedModule;
         }
         $this->session = $this->container->getSession();
 
