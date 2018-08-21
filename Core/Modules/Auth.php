@@ -12,6 +12,18 @@ use \Core\Container;
 class Auth extends Module
 {
 
+    //TODO session_level isn't explicit enough. Have to change things up a bit. Probably use user_role_name and user_role_level
+
+    /**
+     * get the user type
+     * @return mixed
+     */
+    public function getUser()
+    {
+        $session = $this->container->getSession();
+        return $session->get('session_level');
+    }
+
     /**
      * Gets the user level defined in the session (this is set on login and also stored in the DB).
      * Returns an int for easier user control.

@@ -10,14 +10,14 @@ class Home extends \Core\AdminController
     {
         //testing auth
         if ($this->auth->isAdmin()) {
-            $this->data['userLevel'] = 'Admin';
+            $this->data['userRole'] = 'Admin';
+            $this->data['userLevel'] = $this->auth->getUserLevel();
         } elseif ($this->auth->isUser()) {
-            $this->data['userLevel'] = 'User';
+            $this->data['userRole'] = 'User';
+            $this->data['userLevel'] = $this->auth->getUserLevel();
         }else {
-            $this->alertBox->setAlert("Not Admin", 'warning');
-            $this->alertBox->setAlert("TESTING", 'error');
+            $this->alertBox->setAlert("You must be connected to acces the admin interface", 'warning');
             $this->container->getResponse()->redirect();
-            $this->data['userLevel'] = 'Visitor';
         }
 
         $this->renderView('Admin/Home');
