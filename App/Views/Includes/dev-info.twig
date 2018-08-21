@@ -4,7 +4,7 @@
         {% for conf, val in dev_info %}
 
         <p>{{ conf }}</p>
-        <pre>
+        <pre style="background-color: #adb5bd; margin-left: 2em;">
             {{ val|json_encode(constant('JSON_PRETTY_PRINT')) }}
         </pre>
 
