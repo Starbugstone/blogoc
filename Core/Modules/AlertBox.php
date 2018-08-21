@@ -32,7 +32,7 @@ class AlertBox extends Module
                 throw new \Exception("Invalid toastr alert type");
             }
         } catch (\Exception $e) {
-            echo "<pre>alerter error :" . $e.'</pre>'; //See how to handle better, perhaps with a custom error
+            echo "<pre>alerter error :" . $e.'</pre>'; //TODO See how to handle better, perhaps with a custom error
             die();
         }
 
@@ -75,6 +75,10 @@ class AlertBox extends Module
         }
         $session = $this->container->getSession();
         $alerts = $session->get('alert_messages');
+        //could return null and need to send back an array. this should never happen since we checked the alerts pending but scrutinizer complains !
+        if(is_null($alerts)){
+            $alerts = [];
+        }
         $session->remove('alert_messages');
         return $alerts;
 

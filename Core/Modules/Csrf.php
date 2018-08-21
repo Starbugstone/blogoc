@@ -13,7 +13,7 @@ class Csrf extends Module
 {
     /**
      * our session object
-     * @var Core\Dependency\Session|session
+     * @var \Core\Dependency\Session
      */
     private $session;
 

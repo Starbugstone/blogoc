@@ -15,7 +15,7 @@ abstract class AjaxController extends Controller
 
     /**
      * The request object to handle all gets and posts
-     * @var Dependency\Request|Request
+     * @var Dependency\Request
      *
      */
     protected $request;
@@ -80,7 +80,7 @@ abstract class AjaxController extends Controller
 
     /**
      * Construct our json reply message
-     * @param null $message
+     * @param $message
      * @param int $code
      * @return string json encoded message
      */

@@ -68,7 +68,10 @@ class Request
      */
     public function getHeaders(): array
     {
-        return apache_request_headers();
+        if(apache_request_headers() != false){
+            return apache_request_headers();
+        }
+        return [];
     }
 
 }
