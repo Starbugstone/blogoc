@@ -116,7 +116,7 @@ abstract class Controller
     public function renderView($template): void
     {
         //checking if any alerts and pas the to the template
-        if ($this->alertbox->alertsPending()) {
+        if ($this->alertBox->alertsPending()) {
             $this->data['alert_messages'] = $this->alertbox->getAlerts();
         }
         $twig = $this->container->getTemplate();
