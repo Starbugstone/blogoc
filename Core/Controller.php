@@ -53,13 +53,26 @@ abstract class Controller
         //We load all our module objects into our object
         foreach ($this->loadModules as $loadModule) {
             $loadModuleObj = 'Core\\Modules\\' . $loadModule;
+
             $loadModuleName = strtolower($loadModule);
-            $this->$loadModuleName = new $loadModuleObj($this->container);
+            $loadedModule = new $loadModuleObj($this->container);
+            if(!is_subclass_of($loadedModule,'Core\Modules\Module')){
+                throw new \ErrorException('Modules musit be a sub class of module');
+            }
+            $this->$loadModuleName = $loadedModule;
         }
         $this->session = $this->container->getSession();
 
         //Setting up csrf token security for all calls
         $this->data['csrf_token'] = $this->csrf->getCsrfKey(); //storing the security id into the data array to be sent to the view and added in the meta head
+    }
+
+    public function index(){
+        //if no index, then redirect to the home page or throw an error if in dev; just for debugging purposes
+        if(Config::DEV_ENVIRONMENT){
+            throw new \ErrorException("no index() available in controller call");
+        }
+        $this->container->getResponse()->redirect();
     }
 
     /**

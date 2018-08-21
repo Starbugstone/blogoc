@@ -27,4 +27,10 @@ class Response
 
         header($contentType);
     }
+
+    public function redirect(string $url = ''): void
+    {
+        header("location: /" . $url);
+        die(); //after redirect do not execute anything else from the function
+    }
 }
