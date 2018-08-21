@@ -59,7 +59,7 @@ class Request
     {
         $host = $_SERVER['HTTP_HOST'];
         $https = !empty($_SERVER['HTTPS']) ? 'https' : 'http';
-        return $https . '://' . $host . '/';
+        return $https.'://'.$host.'/';
     }
 
     /**
@@ -68,7 +68,7 @@ class Request
      */
     public function getHeaders(): array
     {
-        if(apache_request_headers() != false){
+        if (apache_request_headers() != false) {
             return apache_request_headers();
         }
         return [];
