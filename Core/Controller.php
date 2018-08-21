@@ -119,6 +119,11 @@ abstract class Controller
         if ($this->alertBox->alertsPending()) {
             $this->data['alert_messages'] = $this->alertBox->getAlerts();
         }
+        if(Config::DEV_ENVIRONMENT){
+            $this->data['dev'] = true;
+            $this->data['class_object_methods'] = get_class_methods(get_class($this));
+            $this->data['class_object_vars'] = get_object_vars($this);
+        }
         $twig = $this->container->getTemplate();
         $twig->display($template . '.twig', $this->data);
     }

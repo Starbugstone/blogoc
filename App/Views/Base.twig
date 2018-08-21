@@ -65,6 +65,19 @@
 {% if navigation is defined %}
     {% include "Includes/logon-modal.twig" %}
 {% endif %}
+
+{% if dev is defined %}
+    <div class="dev-info">
+        <p>Object Methods</p>
+        <pre>
+            {{ class_object_methods|json_encode(constant('JSON_PRETTY_PRINT')) }}
+        </pre>
+        <p>Object variables</p>
+        <pre>
+            {{ class_object_vars|json_encode(constant('JSON_PRETTY_PRINT')) }}
+        </pre>
+    </div>
+{% endif %}
 <script
         src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
