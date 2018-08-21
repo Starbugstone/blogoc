@@ -39,9 +39,17 @@ abstract class Controller
     ];
 
     /**
+     * We need to declare out modules here, else they will be public
+     * @var object
+     */
+    protected $csrf;
+    protected $alertBox;
+
+    /**
      * Controller constructor.
      * @param Container $container
      *
+     * @throws \ErrorException
      */
     public function __construct(Container $container)
     {
@@ -52,12 +60,18 @@ abstract class Controller
 
         //We load all our module objects into our object
         foreach ($this->loadModules as $loadModule) {
-            $loadModuleObj = 'Core\\Modules\\'.$loadModule;
+            $loadModuleObj = 'Core\\Modules\\' . $loadModule;
 
-            $loadModuleName = strtolower($loadModule);
+            $loadModuleName = lcfirst($loadModule);
             $loadedModule = new $loadModuleObj($this->container);
+            //Modules must be children of the Module template
             if (!is_subclass_of($loadedModule, 'Core\Modules\Module')) {
                 throw new \ErrorException('Modules musit be a sub class of module');
+            }
+
+            //we are not allowed to create public modules, they must be a placeholder ready
+            if (!property_exists($this, $loadModuleName)) {
+                throw new \ErrorException('class var ' . $loadModuleName . ' not present');
             }
             $this->$loadModuleName = $loadedModule;
         }
@@ -67,7 +81,8 @@ abstract class Controller
         $this->data['csrf_token'] = $this->csrf->getCsrfKey(); //storing the security id into the data array to be sent to the view and added in the meta head
     }
 
-    public function index() {
+    public function index()
+    {
         //if no index, then redirect to the home page or throw an error if in dev; just for debugging purposes
         if (Config::DEV_ENVIRONMENT) {
             throw new \ErrorException("no index() available in controller call");
@@ -87,7 +102,7 @@ abstract class Controller
     public function getView($template)
     {
         $twig = $this->container->getTemplate();
-        return $twig->render($template.'.twig', $this->data);
+        return $twig->render($template . '.twig', $this->data);
     }
 
     /**
@@ -101,10 +116,10 @@ abstract class Controller
     public function renderView($template): void
     {
         //checking if any alerts and pas the to the template
-        if ($this->alertbox->alertsPending()) {
-            $this->data['alert_messages'] = $this->alertbox->getAlerts();
+        if ($this->alertBox->alertsPending()) {
+            $this->data['alert_messages'] = $this->alertBox->getAlerts();
         }
         $twig = $this->container->getTemplate();
-        $twig->display($template.'.twig', $this->data);
+        $twig->display($template . '.twig', $this->data);
     }
 }

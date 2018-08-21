@@ -9,6 +9,12 @@ namespace Core;
  */
 abstract class AdminController extends Controller
 {
+    /**
+     * Out placeholders for modules
+     * @var object
+     */
+    protected $auth;
+    protected $alertBox;
 
     public function __construct(Container $container)
     {
