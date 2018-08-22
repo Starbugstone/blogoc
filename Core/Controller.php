@@ -120,13 +120,18 @@ abstract class Controller
             $this->data['alert_messages'] = $this->alertBox->getAlerts();
         }
         if(Config::DEV_ENVIRONMENT){
-            $this->data['dev'] = true;
-            $classMethods =[];
-            $classMethods['class_object_methods']=get_class_methods(get_class($this));
-            $classMethods['class_object_vars']=get_object_vars($this);
-            $this->data['dev_info'] = $classMethods;
+            $this->devHelper();
         }
         $twig = $this->container->getTemplate();
         $twig->display($template . '.twig', $this->data);
+    }
+
+    protected function devHelper(){
+        $this->data['dev'] = true;
+        $classMethods =[];
+        $classMethods['class_object_methods']=get_class_methods(get_class($this));
+        $classMethods['class_object_vars']=get_object_vars($this);
+        $classMethods['session_vars'] = $_SESSION;
+        $this->data['dev_info'] = $classMethods;
     }
 }
