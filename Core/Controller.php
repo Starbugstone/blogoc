@@ -119,27 +119,9 @@ abstract class Controller
         if ($this->alertBox->alertsPending()) {
             $this->data['alert_messages'] = $this->alertBox->getAlerts();
         }
-        if (Config::DEV_ENVIRONMENT) {
-            $this->devHelper();
-        }
+
         $twig = $this->container->getTemplate();
         $twig->display($template . '.twig', $this->data);
     }
 
-    protected function devHelper($var = '')
-    {
-        if (!isset($this->data['dev_info'])) {
-            $this->data['dev'] = true;
-            $classMethods = [];
-            if ($var != '') {
-                $classMethods['passed_var'] = $var;
-            }
-            $classMethods['class_object_methods'] = get_class_methods(get_class($this));
-            $classMethods['class_object_vars'] = get_object_vars($this);
-            $classMethods['session_vars'] = $_SESSION;
-
-            $this->data['dev_info'] = $classMethods;
-        }
-
-    }
 }

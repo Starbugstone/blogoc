@@ -36,14 +36,6 @@ class Login extends Controller
         $this->container->getResponse()->redirect('/admin/');
     }
 
-    public function connectVisitor()
-    {
-        $this->session->set('user_role_name', 'Shit'); //just to override any other setting, and fun !!!
-        $this->session->set('user_role_level', 0);
-        $this->alertBox->setAlert('not a valid session. Visitor status by default');
-        $this->container->getResponse()->redirect();
-    }
-
     public function disconnect()
     {
         $this->container->getSession()->unsetAll();
