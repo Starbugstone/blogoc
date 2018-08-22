@@ -82,15 +82,37 @@ abstract class Controller
     {
         $loadModuleName = lcfirst($loadModule);
         //checking for module in namespace, app and core.
+        $found = false;
         $childClassNamespace = new \ReflectionClass(get_class($this));
         $childClassNamespace = $childClassNamespace->getNamespaceName();
+        //check in classNameSpace, make sure we are not already in App or core
         if (class_exists($childClassNamespace . '\\Modules\\' . $loadModule)) {
-            $loadModuleObj = $childClassNamespace . '\\' . $loadModule;
-        } elseif (class_exists('App\\Modules\\' . $loadModule)) {
-            $loadModuleObj = 'App\\Modules\\' . $loadModule;
-        } elseif (class_exists('Core\\Modules\\' . $loadModule)) {
-            $loadModuleObj = 'Core\\Modules\\' . $loadModule;
-        } else {
+            if($childClassNamespace !== 'App\\Modules\\' || $childClassNamespace !== 'Core\\Modules\\'){
+                $loadModuleObj = $childClassNamespace . '\\' . $loadModule;
+                $found = true;
+            }
+        }
+        //check in app
+        if (class_exists('App\\Modules\\' . $loadModule)) {
+            if($found && Config::DEV_ENVIRONMENT){
+                $this->alertBox->setAlert($loadModule.' already defined in namespace', 'error');
+            }
+            if(!$found){
+                $loadModuleObj = 'App\\Modules\\' . $loadModule;
+                $found = true;
+            }
+        }
+        //check in core, send error popup if overcharged
+        if (class_exists('Core\\Modules\\' . $loadModule)) {
+            if($found && Config::DEV_ENVIRONMENT){
+                $this->alertBox->setAlert($loadModule.' already defined in app', 'error');
+            }
+            if(!$found){
+                $loadModuleObj = 'Core\\Modules\\' . $loadModule;
+                $found = true;
+            }
+        }
+        if(!$found) {
             throw new \ErrorException('module ' . $loadModule . ' does not exist');
         }
 
