@@ -23,7 +23,7 @@ class Response
             default:
                 $headerType = 'text/html';
         }
-        $contentType = 'Content-Type: '.$headerType;
+        $contentType = 'Content-Type: ' . $headerType;
 
         header($contentType);
     }
@@ -35,13 +35,13 @@ class Response
     public function redirect(string $url = ''): void
     {
         //if the url was passed with a forward slash, remove it as it will be added later.
-        if($url !== ''){
-            if($url[0]==='/'){
-                $url=substr($url, 1);
+        if ($url !== '') {
+            if ($url[0] === '/') {
+                $url = substr($url, 1);
             }
         }
 
-        header("location: /".$url);
+        header("location: /" . $url);
         die(); //after redirect do not execute anything else from the function
     }
 }

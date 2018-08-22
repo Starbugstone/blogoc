@@ -47,10 +47,10 @@ class Container
         $twigOptions = [];
         if (!Config::DEV_ENVIRONMENT) {
             $twigOptions = [
-                'cache' => dirname(__DIR__).'/Cache'
+                'cache' => dirname(__DIR__) . '/Cache'
             ];
         }
-        $loader = new \Twig_Loader_Filesystem(dirname(__DIR__).'/App/Views');
+        $loader = new \Twig_Loader_Filesystem(dirname(__DIR__) . '/App/Views');
         $twig = new \Twig_Environment($loader, $twigOptions);
 
         return $twig;
@@ -65,13 +65,13 @@ class Container
         if ($this->dbh) {
             return $this->dbh;
         }
-        $dsn = "mysql:host=".Config::DB_HOST.";dbname=".Config::DB_NAME.";charset=utf8"; //Creating the Data Source name
+        $dsn = "mysql:host=" . Config::DB_HOST . ";dbname=" . Config::DB_NAME . ";charset=utf8"; //Creating the Data Source name
         $opt = [
             PDO::ATTR_PERSISTENT => true,
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
         ];
-        $this->dbh = new PDO($dsn, Config::DB_USER, Config::DB_PASSWORD, $opt); ;
+        $this->dbh = new PDO($dsn, Config::DB_USER, Config::DB_PASSWORD, $opt);;
         return $this->dbh;
     }
 

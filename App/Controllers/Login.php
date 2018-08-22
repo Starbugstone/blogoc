@@ -5,6 +5,8 @@ namespace App\Controllers;
 use Core\Container;
 use Core\Controller;
 
+//This is just for testing purposes. a real login system shall be set up later
+
 class Login extends Controller
 {
 

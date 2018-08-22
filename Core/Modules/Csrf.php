@@ -45,7 +45,7 @@ class Csrf extends Module
                 $hash = bin2hex($rand);
                 $this->session->set('csrf_token', $hash);
             } catch (\Exception $e) {
-                echo 'Random generator not present on server: '.$e->getMessage();
+                echo 'Random generator not present on server: ' . $e->getMessage();
             }
         }
     }

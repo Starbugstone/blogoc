@@ -59,7 +59,7 @@ class Request
     {
         $host = $_SERVER['HTTP_HOST'];
         $https = !empty($_SERVER['HTTPS']) ? 'https' : 'http';
-        return $https.'://'.$host.'/';
+        return $https . '://' . $host . '/';
     }
 
     /**

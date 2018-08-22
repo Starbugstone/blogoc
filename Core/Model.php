@@ -116,7 +116,7 @@ abstract class Model
         if ($table === null) {
             $reflect = new \ReflectionClass(get_class($this));
             $table = $reflect->getShortName(); //this is to only get the model name, otherwise we get the full namespace
-            $table = $table.'s'; //adding the s since the table should be plural. Might be some special case where the plural isn't just with an s
+            $table = $table . 's'; //adding the s since the table should be plural. Might be some special case where the plural isn't just with an s
             $table = strtolower($table); //the database names are in lowercase
         }
 
@@ -133,7 +133,7 @@ abstract class Model
         }
 
         //if we are here, then table doesn't exist, check for view
-        $view = 'v_'.$table;
+        $view = 'v_' . $table;
         $stmt->bindValue(':table', $view, PDO::PARAM_STR);
         $stmt->execute();
         $exists = $stmt->rowCount() > 0; //will return 1 if table exists or 0 if non existant
@@ -212,7 +212,7 @@ abstract class Model
     protected function getRowById($rowId, $table = ''): array
     {
         $tableName = $this->getTable($table);
-        $idName = 'id'.$tableName;
+        $idName = 'id' . $tableName;
         $sql = "SELECT * FROM $tableName WHERE $idName = :rowId";
         $this->query($sql);
         $this->bind(':rowId', $rowId);

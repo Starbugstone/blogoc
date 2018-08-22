@@ -67,7 +67,7 @@ class Router
             $specialNamespace = array_shift($url);
 
             //making sure we have a single backslash
-            $specialNamespace = rtrim($specialNamespace, '\\').'\\';
+            $specialNamespace = rtrim($specialNamespace, '\\') . '\\';
 
             //capitalize the special namespace
             $specialNamespace = $this->convertToStudlyCaps($specialNamespace);
@@ -134,7 +134,7 @@ class Router
     {
 
         //try to create the controller object
-        $fullControllerName = $this->currentNamespace.$this->currentController;
+        $fullControllerName = $this->currentNamespace . $this->currentController;
 
         //make sure the class exists before continuing
         if (!class_exists($fullControllerName)) {
