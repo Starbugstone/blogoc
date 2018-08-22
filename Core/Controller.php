@@ -47,9 +47,11 @@ abstract class Controller
 
     /**
      * Controller constructor.
+     * We get the module list and construct it. We can also over wright the module in app but sill has to inherit from core module
      * @param Container $container
      *
-     * @throws \ErrorException
+     * @throws \ErrorException on module loading error
+     * @throws \ReflectionException should never be thrown since only child classes call this
      */
     public function __construct(Container $container)
     {
@@ -60,25 +62,49 @@ abstract class Controller
 
         //We load all our module objects into our object
         foreach ($this->loadModules as $loadModule) {
-            $loadModuleObj = 'Core\\Modules\\' . $loadModule;
-
-            $loadModuleName = lcfirst($loadModule);
-            $loadedModule = new $loadModuleObj($this->container);
-            //Modules must be children of the Module template
-            if (!is_subclass_of($loadedModule, 'Core\Modules\Module')) {
-                throw new \ErrorException('Modules musit be a sub class of module');
-            }
-
-            //we are not allowed to create public modules, they must be a placeholder ready
-            if (!property_exists($this, $loadModuleName)) {
-                throw new \ErrorException('class var ' . $loadModuleName . ' not present');
-            }
-            $this->$loadModuleName = $loadedModule;
+            $this->loadModule($loadModule);
         }
         $this->session = $this->container->getSession();
 
         //Setting up csrf token security for all calls
         $this->data['csrf_token'] = $this->csrf->getCsrfKey(); //storing the security id into the data array to be sent to the view and added in the meta head
+    }
+
+    /**
+     * load the module to the object
+     * We loog for module in the namespace, then in app and finaly in the core.
+     * This enables us to over-ride the core or app module with a custom module for the namespace.
+     * @param $loadModule string grabbed from the loadmodules array
+     * @throws \ErrorException if module doesn't exits
+     * @throws \ReflectionException should never be thrown since only child classes call this
+     */
+    private function loadModule($loadModule)
+    {
+        $loadModuleName = lcfirst($loadModule);
+        //checking for module in namespace, app and core.
+        $childClassNamespace = new \ReflectionClass(get_class($this));
+        $childClassNamespace = $childClassNamespace->getNamespaceName();
+        if (class_exists($childClassNamespace . '\\Modules\\' . $loadModule)) {
+            $loadModuleObj = $childClassNamespace . '\\' . $loadModule;
+        } elseif (class_exists('App\\Modules\\' . $loadModule)) {
+            $loadModuleObj = 'App\\Modules\\' . $loadModule;
+        } elseif (class_exists('Core\\Modules\\' . $loadModule)) {
+            $loadModuleObj = 'Core\\Modules\\' . $loadModule;
+        } else {
+            throw new \ErrorException('module ' . $loadModule . ' does not exist');
+        }
+
+        //Modules must be children of the Module template
+        if (!is_subclass_of($loadModuleObj, 'Core\Modules\Module')) {
+            throw new \ErrorException('Module ' . $loadModuleName . ' must be a sub class of module');
+        }
+
+        $loadedModule = new $loadModuleObj($this->container);
+        //we are not allowed to create public modules, they must be a placeholder ready
+        if (!property_exists($this, $loadModuleName)) {
+            throw new \ErrorException('the protected or private variable of ' . $loadModuleName . ' is not present');
+        }
+        $this->$loadModuleName = $loadedModule;
     }
 
     public function index()
@@ -137,6 +163,10 @@ abstract class Controller
             $classMethods['class_object_methods'] = get_class_methods(get_class($this));
             $classMethods['class_object_vars'] = get_object_vars($this);
             $classMethods['session_vars'] = $_SESSION;
+            $classMethods['namespace'] = __NAMESPACE__;
+            $childClassNamespace = new \ReflectionClass(get_class($this));
+            $childClassNamespace = $childClassNamespace->getNamespaceName();
+            $classMethods['classNamespace'] = $childClassNamespace;
 
             $this->data['dev_info'] = $classMethods;
         }
