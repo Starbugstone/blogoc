@@ -79,13 +79,16 @@ DROP TABLE IF EXISTS `configs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `configs` (
-  `configsName` varchar(255) NOT NULL,
-  `configsValue` text NOT NULL,
+  `idconfigs` int(11) NOT NULL AUTO_INCREMENT,
+  `configs_name` varchar(255) NOT NULL,
+  `configs_value` varchar(255) NOT NULL,
   `configs_class_idconfigsclass` int(11) NOT NULL,
-  UNIQUE KEY `configName_UNIQUE` (`configsName`),
+  PRIMARY KEY (`idconfigs`),
+  UNIQUE KEY `configName_UNIQUE` (`configs_name`),
+  UNIQUE KEY `idconfigs_UNIQUE` (`idconfigs`),
   KEY `fk_config_config_class1_idx` (`configs_class_idconfigsclass`),
   CONSTRAINT `fk_config_config_class1` FOREIGN KEY (`configs_class_idconfigsclass`) REFERENCES `configs_class` (`idconfigsclass`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -94,6 +97,7 @@ CREATE TABLE `configs` (
 
 LOCK TABLES `configs` WRITE;
 /*!40000 ALTER TABLE `configs` DISABLE KEYS */;
+INSERT INTO `configs` VALUES (1,'front_text_1','',1),(2,'front_text_2','',1),(3,'front_text_3','',1),(4,'social_icons_1','',2),(5,'social_icons_2','',2),(6,'social_icons_3','',2),(7,'social_icons_4','',2),(8,'social_icons_5','',2),(9,'site_name','',4),(10,'about_me_image','',3),(11,'front_text_1_subtext','',1),(12,'front_text_2_subtext','',1),(13,'front_text_3_subtext','',1);
 /*!40000 ALTER TABLE `configs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -109,7 +113,7 @@ CREATE TABLE `configs_class` (
   `class` varchar(255) NOT NULL,
   PRIMARY KEY (`idconfigsclass`),
   UNIQUE KEY `configName_UNIQUE` (`idconfigsclass`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -118,6 +122,7 @@ CREATE TABLE `configs_class` (
 
 LOCK TABLES `configs_class` WRITE;
 /*!40000 ALTER TABLE `configs_class` DISABLE KEYS */;
+INSERT INTO `configs_class` VALUES (1,'20_front_page_text'),(2,'21_front_page_social_icons'),(3,'22_front_page_other'),(4,'10_global_site_configuration');
 /*!40000 ALTER TABLE `configs_class` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -194,9 +199,10 @@ DROP TABLE IF EXISTS `roles`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `roles` (
   `idroles` int(11) NOT NULL AUTO_INCREMENT,
-  `roles_name` varchar(255) DEFAULT NULL,
+  `role_name` varchar(255) DEFAULT NULL,
+  `role_level` int(11) DEFAULT NULL,
   PRIMARY KEY (`idroles`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -205,6 +211,7 @@ CREATE TABLE `roles` (
 
 LOCK TABLES `roles` WRITE;
 /*!40000 ALTER TABLE `roles` DISABLE KEYS */;
+INSERT INTO `roles` VALUES (1,'User',1),(2,'Admin',2);
 /*!40000 ALTER TABLE `roles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -282,4 +289,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-21 14:14:14
+-- Dump completed on 2018-08-22 17:52:22

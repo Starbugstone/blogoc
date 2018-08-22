@@ -1,0 +1,10 @@
+{% extends "Admin/Base.twig" %}
+{% block main %}
+    {% for key, val in configList %}
+        <h1>{{ key |replace({'_':' '})}}</h1>
+        {% for config in val %}
+            <p>{{ config.configs_name }}</p>
+            <p>value {{ config.idconfigs }}: {{ config.configs_value }}</p>
+        {% endfor %}
+    {% endfor %}
+{% endblock %}
