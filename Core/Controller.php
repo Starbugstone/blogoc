@@ -126,12 +126,19 @@ abstract class Controller
         $twig->display($template . '.twig', $this->data);
     }
 
-    protected function devHelper(){
-        $this->data['dev'] = true;
-        $classMethods =[];
-        $classMethods['class_object_methods']=get_class_methods(get_class($this));
-        $classMethods['class_object_vars']=get_object_vars($this);
-        $classMethods['session_vars'] = $_SESSION;
-        $this->data['dev_info'] = $classMethods;
+    protected function devHelper($var = ''){
+        if(!isset($this->data['dev_info'])){
+            $this->data['dev'] = true;
+            $classMethods =[];
+            if($var != ''){
+                $classMethods['passed_var'] = $var;
+            }
+            $classMethods['class_object_methods']=get_class_methods(get_class($this));
+            $classMethods['class_object_vars']=get_object_vars($this);
+            $classMethods['session_vars'] = $_SESSION;
+
+            $this->data['dev_info'] = $classMethods;
+        }
+
     }
 }
