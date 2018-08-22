@@ -42,6 +42,6 @@ class Response
         }
 
         header("location: /" . $url);
-        die(); //after redirect do not execute anything else from the function
+        exit(); //after redirect do not execute anything else from the function
     }
 }
