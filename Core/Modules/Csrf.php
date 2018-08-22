@@ -1,22 +1,19 @@
 <?php
 
-namespace Core;
+namespace Core\Modules;
 
+use Core\Container;
+use Core\JsonException;
 
 /**
  * Class Csrf
  * @package Core
  */
-class Csrf
+class Csrf extends Module
 {
     /**
-     * @var Container dependency injector
-     */
-    private $container;
-
-    /**
      * our session object
-     * @var Dependency\Session|session
+     * @var \Core\Dependency\Session
      */
     private $session;
 
@@ -29,7 +26,7 @@ class Csrf
      */
     public function __construct(Container $container)
     {
-        $this->container = $container;
+        parent::__construct($container);
         $this->session = $this->container->getSession();
         //Setting up csrf token security for all calls
         $this->setCsrf();
@@ -40,7 +37,7 @@ class Csrf
      * We set our CSRF token if none is already set
      *
      */
-    public function setCsrf():void
+    public function setCsrf(): void
     {
         if (!$this->session->isParamSet('csrf_token')) {
             try {
@@ -63,15 +60,16 @@ class Csrf
     }
 
     /**
-     * Checks if the csrf_token passed in the header is the same as the token stored in the session
+     * Checks if the csrf_token passed in the header via JSON is the same as the token stored in the session
      *
      * @throws JsonException
      */
-    public function checkCsrf():void
+    public function checkJsonCsrf(): void
     {
-        header('Content-Type: application/json');
 
-        $headers = $this->container->getHeaders();
+        $this->container->getResponse()->setHeaderContentType('json');
+
+        $headers = $this->container->getRequest()->getHeaders();
 
         if (!isset($headers['csrf_token'])) {
             throw new JsonException('No CSRF token.');

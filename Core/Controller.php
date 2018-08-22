@@ -29,24 +29,65 @@ abstract class Controller
     protected $session;
 
     /**
-     * Our Csrf security module for ajax calls
-     * @var Csrf
+     * this will automaticly load all the modules listed and store them as $moduleName in tle class
+     * Child classes can call aditional modules by calling $this->
+     * @var array List of modules to load
      */
-    protected $Csrf;
+    protected $loadModules = [
+        'Csrf',
+        'AlertBox'
+    ];
+
+    /**
+     * We need to declare out modules here, else they will be public
+     * @var object
+     */
+    protected $csrf;
+    protected $alertBox;
 
     /**
      * Controller constructor.
      * @param Container $container
      *
+     * @throws \ErrorException
      */
     public function __construct(Container $container)
     {
         $this->container = $container;
+
+        //removing any duplicates that could have been passed in child classes
+        $this->loadModules = array_unique($this->loadModules);
+
+        //We load all our module objects into our object
+        foreach ($this->loadModules as $loadModule) {
+            $loadModuleObj = 'Core\\Modules\\' . $loadModule;
+
+            $loadModuleName = lcfirst($loadModule);
+            $loadedModule = new $loadModuleObj($this->container);
+            //Modules must be children of the Module template
+            if (!is_subclass_of($loadedModule, 'Core\Modules\Module')) {
+                throw new \ErrorException('Modules musit be a sub class of module');
+            }
+
+            //we are not allowed to create public modules, they must be a placeholder ready
+            if (!property_exists($this, $loadModuleName)) {
+                throw new \ErrorException('class var ' . $loadModuleName . ' not present');
+            }
+            $this->$loadModuleName = $loadedModule;
+        }
         $this->session = $this->container->getSession();
 
         //Setting up csrf token security for all calls
-        $this->Csrf = new Csrf($container);
-        $this->data['csrf_token'] = $this->Csrf->getCsrfKey(); //storing the security id into the data array to be sent to the view and added in the meta head
+        $this->data['csrf_token'] = $this->csrf->getCsrfKey(); //storing the security id into the data array to be sent to the view and added in the meta head
+    }
+
+    public function index()
+    {
+        //if no index, then redirect to the home page or throw an error if in dev; just for debugging purposes
+        if (Config::DEV_ENVIRONMENT) {
+            throw new \ErrorException("no index() available in controller call");
+        }
+        $this->container->getResponse()->redirect();
     }
 
     /**
@@ -74,26 +115,31 @@ abstract class Controller
      */
     public function renderView($template): void
     {
+        //checking if any alerts and pas the to the template
+        if ($this->alertBox->alertsPending()) {
+            $this->data['alert_messages'] = $this->alertBox->getAlerts();
+        }
+        if (Config::DEV_ENVIRONMENT) {
+            $this->devHelper();
+        }
         $twig = $this->container->getTemplate();
         $twig->display($template . '.twig', $this->data);
     }
 
-    /**
-     * gets our depandancy injection to be passed to models
-     * @return Container
-     */
-    public function getContainer()
+    protected function devHelper($var = '')
     {
-        return $this->container;
-    }
+        if (!isset($this->data['dev_info'])) {
+            $this->data['dev'] = true;
+            $classMethods = [];
+            if ($var != '') {
+                $classMethods['passed_var'] = $var;
+            }
+            $classMethods['class_object_methods'] = get_class_methods(get_class($this));
+            $classMethods['class_object_vars'] = get_object_vars($this);
+            $classMethods['session_vars'] = $_SESSION;
 
-    /**
-     * gets out csrf object
-     * @return Csrf
-     */
-    public function getCsrf():Csrf
-    {
-        return $this->Csrf;
-    }
+            $this->data['dev_info'] = $classMethods;
+        }
 
+    }
 }

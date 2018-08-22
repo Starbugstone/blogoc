@@ -56,7 +56,7 @@ abstract class Model
      * binding the parameters to the query. Need the stmt to be declared before via query()
      * @param $param
      * @param $value
-     * @param null $type
+     * @param  $type
      * @throws \Exception error if no sql query to bind to
      */
     protected function bind($param, $value, $type = null): void
@@ -113,7 +113,7 @@ abstract class Model
     private function getTable(string $table = null): string
     {
         //If no table is passed, get the calling model name
-        if ($table == null) {
+        if ($table === null) {
             $reflect = new \ReflectionClass(get_class($this));
             $table = $reflect->getShortName(); //this is to only get the model name, otherwise we get the full namespace
             $table = $table . 's'; //adding the s since the table should be plural. Might be some special case where the plural isn't just with an s

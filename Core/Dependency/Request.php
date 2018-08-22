@@ -62,4 +62,16 @@ class Request
         return $https . '://' . $host . '/';
     }
 
+    /**
+     * Gettint the headers
+     * @return array
+     */
+    public function getHeaders(): array
+    {
+        if (apache_request_headers() != false) {
+            return apache_request_headers();
+        }
+        return [];
+    }
+
 }

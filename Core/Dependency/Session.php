@@ -34,7 +34,7 @@ class Session
     public function get($param)
     {
 
-        return $_SESSION[$param];
+        return $_SESSION[$param] ?? null;
     }
 
     /**
@@ -79,5 +79,12 @@ class Session
         unset($_SESSION[$param]);
     }
 
+    /**
+     * Remove all the session variables.
+     */
+    public function unsetAll()
+    {
+        session_unset(); //probably have to do some checking, might want to keep some stuff
+    }
 
 }

@@ -3,6 +3,7 @@
 namespace Core;
 
 use Core\Dependency\Request;
+use Core\Dependency\Response;
 use Core\Dependency\Session;
 use PDO;
 
@@ -20,7 +21,7 @@ class Container
 
     //used for the model connection
     /**
-     * @var null this is to store the pdo connection. We only need to set once
+     * @var PDO this is to store the pdo connection. We only need to set once
      */
     private $dbh = null;
 
@@ -34,11 +35,14 @@ class Container
      */
     private $session;
 
+
+    private $response;
+
     /**
      * gets the twig template environment
      * @return \Twig_Environment
      */
-    public function getTemplate():\Twig_Environment
+    public function getTemplate(): \Twig_Environment
     {
         $twigOptions = [];
         if (!Config::DEV_ENVIRONMENT) {
@@ -56,7 +60,7 @@ class Container
      * create the database connection via PDO
      * @return PDO
      */
-    public function setPdo():\PDO
+    public function setPdo(): \PDO
     {
         if ($this->dbh) {
             return $this->dbh;
@@ -71,19 +75,12 @@ class Container
         return $this->dbh;
     }
 
-    /**
-     * Gettint the headers
-     * @return array
-     */
-    public function getHeaders():array {
-        return apache_request_headers();
-    }
 
     /**
      * Creates the request object if not already present and returns it
      * @return Dependency\Request|Request
      */
-    public function getRequest():Dependency\Request
+    public function getRequest(): Dependency\Request
     {
         if (!$this->request) {
             $this->request = new Request();
@@ -92,10 +89,22 @@ class Container
     }
 
     /**
+     * Creates the response object if not already present and returns it
+     * @return Response
+     */
+    public function getResponse(): Dependency\Response
+    {
+        if (!$this->response) {
+            $this->response = new Response();
+        }
+        return $this->response;
+    }
+
+    /**
      * Creates the session object if not already present and returns it
      * @return Dependency\Session|session
      */
-    public function getSession():Dependency\Session
+    public function getSession(): Dependency\Session
     {
         if (!$this->session) {
             $this->session = new Session();

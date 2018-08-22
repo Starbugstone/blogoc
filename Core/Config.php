@@ -7,7 +7,6 @@ namespace Core;
  *
  * PHP version 7
  */
-
 class Config
 {
     /**

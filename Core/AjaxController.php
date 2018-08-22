@@ -15,10 +15,16 @@ abstract class AjaxController extends Controller
 
     /**
      * The request object to handle all gets and posts
-     * @var Dependency\Request|Request
+     * @var Dependency\Request
      *
      */
     protected $request;
+
+    /**
+     * The response module to handle response messages
+     * @var Dependency\Response
+     */
+    protected $response;
 
     /**
      * On construction, we imediatly check for security and bail out on the first sign of fraude
@@ -32,18 +38,21 @@ abstract class AjaxController extends Controller
     public function __construct(Container $container)
     {
         parent::__construct($container);
+
         $this->request = $container->getRequest(); //adding our request object as it will be needed in the ajax calls
+        $this->response = $container->getResponse();
+
         //we only allow xmlHTTPRequests here for security
         $this->checkXlmRequest();
         $this->checkReferer();
-        $this->Csrf->checkCsrf();
+        $this->csrf->checkJsonCsrf();
     }
 
     /**
      * Checks if we have an Xml Http request and throws an error if not
      * @throws \ErrorException
      */
-    private function checkXlmRequest():void
+    private function checkXlmRequest(): void
     {
         if (!$this->request->isXmlRequest()) {
             throw new \ErrorException('Call not permitted', 404);
@@ -54,7 +63,7 @@ abstract class AjaxController extends Controller
      * Check if the request is coming from the same domain as the base url of the site
      * @throws JsonException
      */
-    private function checkReferer():void
+    private function checkReferer(): void
     {
 
         $referer = $this->request->getReferer();
@@ -71,11 +80,11 @@ abstract class AjaxController extends Controller
 
     /**
      * Construct our json reply message
-     * @param null $message
+     * @param $message
      * @param int $code
      * @return string json encoded message
      */
-    public function jsonResponse($message = null, $code = 200):string
+    public function jsonResponse($message = null, $code = 200): string
     {
         // clear the old headers
         //header_remove(); //->this removes our csrf error checking so no go for the moment.
@@ -84,7 +93,8 @@ abstract class AjaxController extends Controller
         // set the header to make sure cache is forced
         header("Cache-Control: no-transform,public,max-age=300,s-maxage=900");
         // treat this as json
-        header('Content-Type: application/json');
+        //header('Content-Type: application/json');
+        $this->response->setHeaderContentType('json');
         $status = array(
             200 => '200 OK',
             400 => '400 Bad Request',

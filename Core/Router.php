@@ -32,7 +32,7 @@ class Router
 
     /**
      * the current parameters
-     * @var string
+     * @var array
      */
     private $currentParams = [];
 
@@ -96,12 +96,13 @@ class Router
      * Get the controller, action and params from the url= string
      *
      * @return array decomposed url
+     * @throws \Exception
      */
     protected function getUrl(): array
     {
 
         $url = $this->container->getRequest()->getData('url');
-        if($url){
+        if ($url) {
             //remove right slash
             $url = rtrim($url, '/');
 
