@@ -14,12 +14,12 @@ use PDO;
 abstract class Model
 {
     /**
-     * @var null|PDO the database handeler
+     * @var PDO the database handeler
      */
     protected $dbh;
 
     /**
-     * @var \PDOStatement the prepared sql statement
+     * @var \PDOStatement|boolean the prepared sql statement
      */
     protected $stmt;
 
