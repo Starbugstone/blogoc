@@ -60,7 +60,7 @@
 }
 
 .sidebar {
-  width: $sidebar-collapsed-width !important;
+  width: $sidebar-collapsed-width;
   background-color: $gray-900;
   min-height: calc(100vh - #{$navbar-base-height});
   @include sidebar-icons;
@@ -75,14 +75,14 @@
     }
   }
   &.toggled {
-    width: 0 !important;
+    width: 0;
     overflow: hidden;
   }
 }
 
 @media (min-width: 768px) {
   .sidebar {
-    width: $sidebar-base-width !important;
+    width: $sidebar-base-width;
 
     .nav-item {
       .nav-link {
@@ -97,7 +97,7 @@
         }
       }
       .dropdown-menu {
-        position: static !important;
+        position: static;
         margin: 0 1rem;
         // Position fix for Firefox
         top: 0;
@@ -108,7 +108,7 @@
     }
     &.toggled {
       overflow: visible;
-      width: $sidebar-collapsed-width !important;
+      width: $sidebar-collapsed-width;
       @include sidebar-icons;
     }
   }
