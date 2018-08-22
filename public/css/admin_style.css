@@ -63,7 +63,7 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
     width: auto; } }
 
 .sidebar {
-  width: 90px;
+  width: 90px !important;
   background-color: #212529;
   min-height: calc(100vh - 56px); }
   .sidebar .nav-item:last-child {
@@ -76,13 +76,13 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
       font-size: 0.65rem;
       display: block; }
   .sidebar .nav-item .dropdown-menu {
-    position: absolute;
-    transform: none;
-    left: calc(90px + 0.5rem);
+    position: absolute !important;
+    transform: none !important;
+    left: calc(90px + 0.5rem) !important;
     margin: 0; }
     .sidebar .nav-item .dropdown-menu.dropup {
       bottom: 0;
-      top: auto; }
+      top: auto !important; }
   .sidebar .nav-item.dropdown .dropdown-toggle::after {
     display: none; }
   .sidebar .nav-item .nav-link {
@@ -90,12 +90,12 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
     .sidebar .nav-item .nav-link:active, .sidebar .nav-item .nav-link:focus, .sidebar .nav-item .nav-link:hover {
       color: rgba(255, 255, 255, 0.75); }
   .sidebar.toggled {
-    width: 0;
+    width: 0 !important;
     overflow: hidden; }
 
 @media (min-width: 768px) {
   .sidebar {
-    width: 225px; }
+    width: 225px !important; }
     .sidebar .nav-item .nav-link {
       display: block;
       width: 100%;
@@ -106,14 +106,14 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
         font-size: 1rem;
         display: inline; }
     .sidebar .nav-item .dropdown-menu {
-      position: static;
+      position: static !important;
       margin: 0 1rem;
       top: 0; }
     .sidebar .nav-item.dropdown .dropdown-toggle::after {
       display: block; }
     .sidebar.toggled {
       overflow: visible;
-      width: 90px; }
+      width: 90px !important; }
       .sidebar.toggled .nav-item:last-child {
         margin-bottom: 1rem; }
       .sidebar.toggled .nav-item .nav-link {
@@ -124,13 +124,13 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
           font-size: 0.65rem;
           display: block; }
       .sidebar.toggled .nav-item .dropdown-menu {
-        position: absolute;
-        transform: none;
-        left: calc(90px + 0.5rem);
+        position: absolute !important;
+        transform: none !important;
+        left: calc(90px + 0.5rem) !important;
         margin: 0; }
         .sidebar.toggled .nav-item .dropdown-menu.dropup {
           bottom: 0;
-          top: auto; }
+          top: auto !important; }
       .sidebar.toggled .nav-item.dropdown .dropdown-toggle::after {
         display: none; } }
 
