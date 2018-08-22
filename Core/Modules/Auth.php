@@ -12,8 +12,6 @@ use \Core\Container;
 class Auth extends Module
 {
 
-    //TODO session_level isn't explicit enough. Have to change things up a bit. Probably use user_role_name and user_role_level
-
     /**
      * get the user type
      * @return mixed
@@ -21,7 +19,7 @@ class Auth extends Module
     public function getUser()
     {
         $session = $this->container->getSession();
-        return $session->get('session_level');
+        return $session->get('user_role_name');
     }
 
     /**
@@ -29,25 +27,10 @@ class Auth extends Module
      * Returns an int for easier user control.
      * @return int
      */
-    public function getUserLevel()
+    public function getUserLevel(): int
     {
         $session = $this->container->getSession();
-        //For testing, setting the user level
-        //$session->set('session_level', 'Admin');
-
-        //get session level from the actual $_SESSION
-        $sessionLevel = $session->get('session_level');
-        //we could use a binary system for the rights but not much granular levels to take care of
-        if ($sessionLevel) {
-            if ($sessionLevel === 'Admin') {
-                return 2;
-            }
-            if ($sessionLevel === 'User') {
-                return 1;
-            }
-        }
-
-        return 0;
+        return $session->get('user_role_level') ?? 0;
     }
 
     /**
