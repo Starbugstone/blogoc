@@ -1,0 +1,11 @@
+{% if showErrors is defined %}
+    <p>Uncaught exception : <i>{{ classException }}</i></p>
+    <p>Message : <i>{{ exceptionMessage }}</i></p>
+    <p>
+        Stack Trace : <br>
+    <pre>{{ stackTrace }}</pre>
+    </p>
+    <p>Thrown in : <b>{{ thrownIn }}</b></p>
+{% else %}
+    <p>{{ exceptionMessage }}</p>
+{% endif %}

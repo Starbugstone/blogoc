@@ -1,7 +1,7 @@
 <?php
 
 namespace Core;
-/*
+/**
  * Router, will take in url parameters in the form
  * index.php?url=Controller/Method/param1/param2
  *
@@ -9,7 +9,8 @@ namespace Core;
  *
  * PHP version 7
  */
-class Router{
+class Router
+{
 
     /**
      * the default namespace
@@ -31,7 +32,7 @@ class Router{
 
     /**
      * the current parameters
-     * @var string
+     * @var array
      */
     private $currentParams = [];
 
@@ -45,6 +46,8 @@ class Router{
         'ajax'
     ];
 
+    private $container;
+
 
     /**
      * Router constructor, will set the controller, method and params
@@ -52,17 +55,19 @@ class Router{
      * will then call the dispatcher to instantiate the controller and method
      *
      */
-    public function __construct(){
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
         //get the current url
         $url = $this->getUrl();
 
         //checking if a special namespace is present at the start of the url.
         //if so, then strip and set the new namespace
-        if(isset($url[0]) && in_array($url[0],$this->sections) ){
+        if (isset($url[0]) && in_array($url[0], $this->sections)) {
             $specialNamespace = array_shift($url);
 
             //making sure we have a single backslash
-            $specialNamespace = rtrim($specialNamespace,'\\').'\\';
+            $specialNamespace = rtrim($specialNamespace, '\\') . '\\';
 
             //capitalize the special namespace
             $specialNamespace = $this->convertToStudlyCaps($specialNamespace);
@@ -71,18 +76,18 @@ class Router{
         }
 
         //applying the controllers and methods
-        if (isset($url[0]) && $url[0] != null){
+        if (isset($url[0]) && $url[0] != null) {
             $this->currentController = $this->convertToStudlyCaps($url[0]);
             unset($url[0]);
         }
 
-        if(isset($url[1]) && $url[1] != null){
+        if (isset($url[1]) && $url[1] != null) {
             $this->currentMethod = $this->convertToCamelCase($url[1]);
             unset($url[1]);
         }
 
         //grabbing the remaining parameters
-        $this->currentParams = $url? array_values($url) : [];
+        $this->currentParams = $url ? array_values($url) : [];
         $this->dispatch();
     }
 
@@ -91,11 +96,15 @@ class Router{
      * Get the controller, action and params from the url= string
      *
      * @return array decomposed url
+     * @throws \Exception
      */
-    protected function getUrl(): array{
-        if(isset($_GET['url'])){
+    protected function getUrl(): array
+    {
+
+        $url = $this->container->getRequest()->getData('url');
+        if ($url) {
             //remove right slash
-            $url = rtrim($_GET['url'], '/');
+            $url = rtrim($url, '/');
 
             //convert all to lower for easier comparing. Will convert to camelCase after
             //this will avoid cap probs with links and user input
@@ -110,7 +119,7 @@ class Router{
             return $url;
         }
         return [];
-   }
+    }
 
 
     /**
@@ -121,25 +130,29 @@ class Router{
      *
      * @throws  \exception if the controller or method doesn't exist
      */
-    protected function dispatch(): void{
+    protected function dispatch(): void
+    {
 
         //try to create the controller object
-        $controllerWithNamespace = $this->currentNamespace.$this->currentController;
-        if(class_exists($controllerWithNamespace)){
-            $controllerInstantiated = new $controllerWithNamespace();
+        $fullControllerName = $this->currentNamespace . $this->currentController;
 
-            //try to run the associated method and the pass parameters
-            $methodToRun = $this->currentMethod;
-            if(method_exists($controllerInstantiated, $methodToRun)){
-                call_user_func_array([$controllerInstantiated, $methodToRun], $this->currentParams);
-            }else{
-                throw new \Exception("ERROR - Method <i>$methodToRun</i>() doesn't exist or is inaccessible");
-            }
-
-        }else{
-            throw new \Exception("Class <i>$controllerWithNamespace</i> doesn't exist", 404);
+        //make sure the class exists before continuing
+        if (!class_exists($fullControllerName)) {
+            throw new \Exception("Class $fullControllerName doesn't exist", 404);
         }
-   }
+
+        //instantiate our controller
+        $controllerObj = new $fullControllerName($this->container);
+        //try to run the associated method and the pass parameters
+        $methodToRun = $this->currentMethod;
+
+        //make sure our method exists before continuing
+        if (!method_exists($controllerObj, $methodToRun)) {
+            throw new \Exception("ERROR - Method $methodToRun() doesn't exist or is inaccessible");
+        }
+
+        call_user_func_array([$controllerObj, $methodToRun], $this->currentParams);
+    }
 
     /**
      * Convert the string with hyphens to StudlyCaps,
@@ -149,7 +162,8 @@ class Router{
      *
      * @return string
      */
-    protected function convertToStudlyCaps($string): string{
+    protected function convertToStudlyCaps($string): string
+    {
         return str_replace(' ', '', ucwords(str_replace('-', ' ', $string)));
     }
 
@@ -161,7 +175,8 @@ class Router{
      *
      * @return string
      */
-    protected function convertToCamelCase($string): string{
+    protected function convertToCamelCase($string): string
+    {
         return lcfirst($this->convertToStudlyCaps($string));
     }
 }

@@ -1,0 +1,29 @@
+.features-icons {
+  padding-top: 7rem;
+  padding-bottom: 7rem;
+  h3{
+    font-family: $font1;
+  }
+  p{
+    font-family: $font2;
+  }
+  .features-icons-item {
+    max-width: 20rem;
+    .features-icons-icon {
+      height: 7rem;
+      i {
+        font-size: 2rem;
+      }
+    }
+    .social-icon{
+      i{
+        padding-right: 1rem;
+      }
+    }
+    .about-me {
+      img{
+        height: 7rem;
+      }
+    }
+  }
+}
