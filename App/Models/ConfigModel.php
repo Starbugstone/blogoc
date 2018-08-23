@@ -15,26 +15,23 @@ class ConfigModel extends Model
      * @return array
      * @throws \Exception
      */
-    public function getAllConfig():array
+    public function getAllConfig(): array
     {
         $returnData = [];
-        //Grabbing the configs class
-        $sql = 'select * from configs_class order by class';
+        $sql = 'SELECT configs.idconfigs, configs.configs_name, configs.configs_value, configs_class.class as class  FROM blogoc.configs 
+                inner join blogoc.configs_class on configs.configs_class_idconfigsclass = configs_class.idconfigsclass
+                order by class;';
         $this->query($sql);
         $this->execute();
-        $configClass = $this->stmt->fetchAll();
-
-        //getting the configurations grouped by class
-        $sql = "select idconfigs, configs_name, configs_value from configs where configs_class_idconfigsclass = :classId";
-        $this->query($sql);
-
+        $configClass = $this->fetchAll();
         foreach ($configClass as $class) {
             //we remove the first 3 characters as they are used for ordering (10_global_site_configuration)
             $className = substr($class->class, 3);
 
-            $this->bind(':classId', $class->idconfigsclass);
-            $this->execute();
-            $returnData[$className] = $this->stmt->fetchAll();
+            if (!isset($returnData[$className])) {
+                $returnData[$className] = [];
+            }
+            $returnData[$className][] = $class;
         }
         return $returnData;
     }

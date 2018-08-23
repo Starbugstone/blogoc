@@ -95,6 +95,22 @@ abstract class Model
         return $this->stmt->execute();
     }
 
+    /**
+     * fetches the result from an executed query
+     * @return array
+     */
+    protected function fetchAll(){
+        return $this->stmt->fetchAll();
+    }
+
+    /**
+     * returns a single line from the executed query
+     * @return mixed
+     */
+    protected function fetch(){
+        return $this->stmt->fetch();
+    }
+
     /*
      * END generic PDO query constructor
      * ---------------------------------------------
