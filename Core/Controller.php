@@ -182,7 +182,7 @@ abstract class Controller
 
         $this->addToDevHelper('Class Methods', get_class_methods(get_class($this)));
         $this->addToDevHelper('Session Vars', $this->session->getAllSessionVars());
-        $this->addToDevHelper('uri', $this->container->getRequest()->getUri()]);
+        $this->addToDevHelper('uri', $this->container->getRequest()->getUri());
         $childClassNamespace = new \ReflectionClass(get_class($this));
         $childClassNamespace = $childClassNamespace->getNamespaceName();
         $this->addToDevHelper('Child Namespace', $childClassNamespace);
