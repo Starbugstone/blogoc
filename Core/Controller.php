@@ -72,62 +72,58 @@ abstract class Controller
 
     /**
      * load the module to the object
-     * We loog for module in the namespace, then in app and finaly in the core.
+     * We look for module in the namespace, then in app and finally in the core.
      * This enables us to over-ride the core or app module with a custom module for the namespace.
-     * @param $loadModule string grabbed from the loadmodules array
+     * @param $loadModule string the module to search for and load
      * @throws \ErrorException if module doesn't exits
-     * @throws \ReflectionException should never be thrown since only child classes call this
+     * @throws \ReflectionException
      */
     private function loadModule($loadModule)
     {
         $loadModuleName = lcfirst($loadModule);
-        //checking for module in namespace, app and core.
-        $loadModuleObj = '';
-        $found = false;
-        $childClassNamespace = new \ReflectionClass(get_class($this));
-        $childClassNamespace = $childClassNamespace->getNamespaceName();
-        //check in classNameSpace, make sure we are not already in App or core
-        if (class_exists($childClassNamespace . '\\Modules\\' . $loadModule)) {
-            if($childClassNamespace !== 'App\\Modules\\' || $childClassNamespace !== 'Core\\Modules\\'){
-                $loadModuleObj = $childClassNamespace . '\\' . $loadModule;
-                $found = true;
-            }
-        }
-        //check in app
-        if (class_exists('App\\Modules\\' . $loadModule)) {
-            if($found && Config::DEV_ENVIRONMENT){
-                $this->alertBox->setAlert($loadModule.' already defined in namespace', 'error');
-            }
-            if(!$found){
-                $loadModuleObj = 'App\\Modules\\' . $loadModule;
-                $found = true;
-            }
-        }
-        //check in core, send error popup if overcharged
-        if (class_exists('Core\\Modules\\' . $loadModule)) {
-            if($found && Config::DEV_ENVIRONMENT){
-                $this->alertBox->setAlert($loadModule.' already defined in app', 'error');
-            }
-            if(!$found){
-                $loadModuleObj = 'Core\\Modules\\' . $loadModule;
-                $found = true;
-            }
-        }
-        if(!$found || $loadModuleObj ==='') {
-            throw new \ErrorException('module ' . $loadModule . ' does not exist or not loaded');
-        }
-
+        $loadModuleObj = $this->getModuleNamespace($loadModule);
         //Modules must be children of the Module template
         if (!is_subclass_of($loadModuleObj, 'Core\Modules\Module')) {
             throw new \ErrorException('Module ' . $loadModuleName . ' must be a sub class of module');
         }
-
         $loadedModule = new $loadModuleObj($this->container);
         //we are not allowed to create public modules, they must be a placeholder ready
         if (!property_exists($this, $loadModuleName)) {
             throw new \ErrorException('the protected or private variable of ' . $loadModuleName . ' is not present');
         }
         $this->$loadModuleName = $loadedModule;
+    }
+
+    /**
+     * takes a module to load and verifies if exists in the current namespace modules, app modules or core modules
+     * @param $loadModule string Module to look for
+     * @return string the full module namespace
+     * @throws \ErrorException if no module is found
+     * @throws \ReflectionException Should never happen since we are calling on $this
+     */
+    private function getModuleNamespace($loadModule)
+    {
+        $childClass = new \ReflectionClass(get_class($this));
+        $childClassNamespace = $childClass->getNamespaceName();
+        //check in classNameSpace
+        if (class_exists($childClassNamespace . '\\Modules\\' . $loadModule)) {
+            $this->addToDevHelper('module ' . $loadModule . ' loaded', $childClassNamespace . '\\' . $loadModule);
+            return $childClassNamespace . '\\' . $loadModule;
+        }
+        //check in app
+        if (class_exists('App\\Modules\\' . $loadModule)) {
+            $this->addToDevHelper('module ' . $loadModule . ' loaded', 'App\\Modules\\' . $loadModule);
+            return 'App\\Modules\\' . $loadModule;
+        }
+        //check in core, send error popup if overcharged
+        if (class_exists('Core\\Modules\\' . $loadModule)) {
+            $this->addToDevHelper('module ' . $loadModule . ' loaded', 'Core\\Modules\\' . $loadModule);
+            return 'Core\\Modules\\' . $loadModule;
+        }
+
+        //if we are here then no module found
+        throw new \ErrorException('module ' . $loadModule . ' does not exist or not loaded');
+
     }
 
     public function index()
@@ -161,6 +157,7 @@ abstract class Controller
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
+     * @throws \ReflectionException
      */
     public function renderView($template): void
     {
@@ -175,24 +172,42 @@ abstract class Controller
         $twig->display($template . '.twig', $this->data);
     }
 
-    protected function devHelper($var = '')
+    /**
+     * construct a dev helper panel
+     * @throws \ReflectionException
+     */
+    protected function devHelper()
     {
-        if (!isset($this->data['dev_info'])) {
-            $this->data['dev'] = true;
+        $this->data['dev'] = true;
+
+        $this->addToDevHelper('Class Methods', get_class_methods(get_class($this)));
+        $this->addToDevHelper('Session Vars', $_SESSION);
+
+        $childClassNamespace = new \ReflectionClass(get_class($this));
+        $childClassNamespace = $childClassNamespace->getNamespaceName();
+        $this->addToDevHelper('Child Namespace', $childClassNamespace);
+
+        //for our object variables, we don't want the devinfo
+        $objVars = get_object_vars($this);
+        unset($objVars['data']['dev_info']);
+        $this->addToDevHelper('Object Variables', $objVars);
+    }
+
+    /**
+     * add info to our dev helper panel
+     * @param $name
+     * @param $var
+     */
+    protected function addToDevHelper($name, $var)
+    {
+        //only populate if in dev environment
+        if (Config::DEV_ENVIRONMENT){
             $classMethods = [];
-            if ($var != '') {
-                $classMethods['passed_var'] = $var;
+            $classMethods[$name] = $var;
+            if (!isset($this->data['dev_info'])) {
+                $this->data['dev_info'] = [];
             }
-            $classMethods['class_object_methods'] = get_class_methods(get_class($this));
-            $classMethods['class_object_vars'] = get_object_vars($this);
-            $classMethods['session_vars'] = $_SESSION;
-            $classMethods['namespace'] = __NAMESPACE__;
-            $childClassNamespace = new \ReflectionClass(get_class($this));
-            $childClassNamespace = $childClassNamespace->getNamespaceName();
-            $classMethods['classNamespace'] = $childClassNamespace;
-
-            $this->data['dev_info'] = $classMethods;
+            $this->data['dev_info'] += $classMethods;
         }
-
     }
 }
