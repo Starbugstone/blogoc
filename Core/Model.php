@@ -2,6 +2,7 @@
 
 namespace Core;
 
+use Core\Traits\StringFunctions;
 use PDO;
 
 /**
@@ -13,6 +14,7 @@ use PDO;
  */
 abstract class Model
 {
+    use StringFunctions;
     /**
      * @var PDO the database handeler
      */
@@ -126,12 +128,14 @@ abstract class Model
      * @throws \Exception table or view doesn't exist
      * @return string table or view name
      */
-    protected function getTable(string $table = null): string
+    protected function getTable(String $table = null): String
     {
         //If no table is passed, get the calling model name
         if ($table === null) {
             $reflect = new \ReflectionClass(get_class($this));
             $table = $reflect->getShortName(); //this is to only get the model name, otherwise we get the full namespace
+            //since our models all end with Model, we should remove it.
+            $table = $this->removeFromEnd($table, 'Model');
             $table = $table . 's'; //adding the s since the table should be plural. Might be some special case where the plural isn't just with an s
             $table = strtolower($table); //the database names are in lowercase
         }
@@ -262,7 +266,7 @@ abstract class Model
      * @throws \ReflectionException (probably not, but will throw an exception if debugging is on and no results)
      * @throws \Exception if the column name consists of other characters than lower case, numbers and underscore for security
      */
-    protected function getRowByColumn($columnName, $value, $table = ''): array
+    protected function getRowByColumn(String $columnName, $value, $table = ''): array
     {
         $tableName = $this->getTable($table);
         $columnNameOk = preg_match("/^[a-z0-9_]+$/i", $columnName); //testing if column name only has lower case, numbers and underscore
@@ -284,7 +288,7 @@ abstract class Model
      * @return array result or empty array
      * @throws \ReflectionException (probably not, but will throw an exception if debugging is on and no results)
      */
-    protected function getRowBySlug(string $slug, $table = ''): array
+    protected function getRowBySlug(String $slug, $table = ''): array
     {
         $tableName = $this->getTable($table);
         $slugName = $tableName.'_slug';
