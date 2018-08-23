@@ -18,9 +18,13 @@ class ConfigModel extends Model
     public function getAllConfig(): array
     {
         $returnData = [];
-        $sql = 'SELECT configs.idconfigs, configs.configs_name, configs.configs_value, configs_class.class as class  FROM blogoc.configs 
-                inner join blogoc.configs_class on configs.configs_class_idconfigsclass = configs_class.idconfigsclass
-                order by class;';
+        //getting our tables
+        $configsTbl = $this->getTablePrefix('configs');
+        $configsClassTbl = $this->getTablePrefix('configs_class');
+        $sql = "SELECT idconfigs, configs_name, configs_value, class FROM  $configsTbl 
+                inner join $configsClassTbl on $configsTbl.configs_class_idconfigsclass = $configsClassTbl.idconfigsclass
+                order by class;";
+
         $this->query($sql);
         $this->execute();
         $configClass = $this->fetchAll();

@@ -126,7 +126,7 @@ abstract class Model
      * @throws \Exception table or view doesn't exist
      * @return string table or view name
      */
-    private function getTable(string $table = null): string
+    protected function getTable(string $table = null): string
     {
         //If no table is passed, get the calling model name
         if ($table === null) {
@@ -136,10 +136,7 @@ abstract class Model
             $table = strtolower($table); //the database names are in lowercase
         }
 
-        if(Config::TABLE_PREFIX != '')
-        {
-            $table = Config::TABLE_PREFIX.'_'.$table;
-        }
+        $table = $this->getTablePrefix($table);
 
         //see if table exists
         $sql = "SHOW TABLES LIKE :table";
@@ -167,6 +164,20 @@ abstract class Model
         //neither table or view exists
         //throw an error
         throw new \Exception("Table or view $table doesn't exist");
+    }
+
+    /**
+     * This function adds the table prefix if set and returns the name
+     * Use this if we are sure of the table name. Avoids the DB calls
+     * @param $table string the table name
+     * @return string
+     */
+    protected function getTablePrefix($table){
+        if(Config::TABLE_PREFIX != '')
+        {
+            $table = Config::TABLE_PREFIX.'_'.$table;
+        }
+        return $table;
     }
 
     /**
