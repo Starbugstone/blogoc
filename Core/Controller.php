@@ -82,6 +82,7 @@ abstract class Controller
     {
         $loadModuleName = lcfirst($loadModule);
         //checking for module in namespace, app and core.
+        $loadModuleObj = '';
         $found = false;
         $childClassNamespace = new \ReflectionClass(get_class($this));
         $childClassNamespace = $childClassNamespace->getNamespaceName();
@@ -112,8 +113,8 @@ abstract class Controller
                 $found = true;
             }
         }
-        if(!$found) {
-            throw new \ErrorException('module ' . $loadModule . ' does not exist');
+        if(!$found || $loadModuleObj ==='') {
+            throw new \ErrorException('module ' . $loadModule . ' does not exist or not loaded');
         }
 
         //Modules must be children of the Module template
