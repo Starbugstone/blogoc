@@ -87,4 +87,12 @@ class Session
         session_unset(); //probably have to do some checking, might want to keep some stuff
     }
 
+    /**
+     * return the entire session superglobal. mainly for debugging purposes
+     * @return mixed
+     */
+    public function getAllSessionVars(){
+        return $_SESSION;
+    }
+
 }

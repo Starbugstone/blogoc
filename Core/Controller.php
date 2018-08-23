@@ -181,7 +181,7 @@ abstract class Controller
         $this->data['dev'] = true;
 
         $this->addToDevHelper('Class Methods', get_class_methods(get_class($this)));
-        $this->addToDevHelper('Session Vars', $_SESSION);
+        $this->addToDevHelper('Session Vars', $this->session->getAllSessionVars());
 
         $childClassNamespace = new \ReflectionClass(get_class($this));
         $childClassNamespace = $childClassNamespace->getNamespaceName();
