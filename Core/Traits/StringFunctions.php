@@ -50,4 +50,18 @@ trait StringFunctions
         }
         return $string;
     }
+
+    /**
+     * remove some characters from the front of the string
+     * @param string $string the string to be decapitated
+     * @param string $head the head to be cut off ("OFF WITH HIS HEAD")
+     * @return string
+     */
+    public function removeFromBeginning(string $string, string $head): string
+    {
+        if ($this->startsWith($string, $head)) {
+            $string = substr($string, strlen($head));
+        }
+        return $string;
+    }
 }

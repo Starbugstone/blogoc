@@ -39,4 +39,9 @@ class ConfigModel extends Model
         }
         return $returnData;
     }
+
+    public function updateConfig(int $id, string $param){
+        echo $id.' - '.$param.'<br>';
+        //TODO need to push to sql
+    }
 }
