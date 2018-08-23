@@ -30,6 +30,10 @@ class Request
         throw new \Exception("Unknown Request Method");
     }
 
+    public function getUri(){
+        return $_SERVER['REQUEST_URI'];
+    }
+
     /**
      * checks if the request is a XML HTTP REQUEST
      * @return bool

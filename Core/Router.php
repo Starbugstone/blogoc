@@ -101,10 +101,12 @@ class Router
     protected function getUrl(): array
     {
 
-        $url = $this->container->getRequest()->getData('url');
+        //$url = $this->container->getRequest()->getData('url');
+        $url = $this->container->getRequest()->getUri();
         if ($url) {
             //remove right slash
             $url = rtrim($url, '/');
+            $url = ltrim($url, '/');
 
             //convert all to lower for easier comparing. Will convert to camelCase after
             //this will avoid cap probs with links and user input
@@ -115,7 +117,11 @@ class Router
 
             //EXPLODE, BOOM, TRANSFORMERS, MICHAEL BAY
             $url = explode('/', $url);
-
+            /*echo 'url: '.$this->container->getRequest()->getData('url');
+            echo '<pre>';
+            var_dump($url);
+            var_dump($_SERVER['REQUEST_URI']);
+            die();*/
             return $url;
         }
         return [];

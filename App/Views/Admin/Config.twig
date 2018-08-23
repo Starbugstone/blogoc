@@ -7,7 +7,7 @@
         {% for config in val %}
             <div class="form-group col-10">
                 <label for="config-{{ config.idconfigs }}">{{ config.configs_name|replace({'_':' '}) }}</label>
-                <input type="text" class="form-control" id="config-{{ config.idconfigs }}" data-configId="{{ config.idconfigs }}" value="{{ config.configs_value }}">
+                <input type="text" class="form-control" name="config-{{ config.idconfigs }}" id="config-{{ config.idconfigs }}" data-configId="{{ config.idconfigs }}" value="{{ config.configs_value }}">
 
             </div>
         {% endfor %}
