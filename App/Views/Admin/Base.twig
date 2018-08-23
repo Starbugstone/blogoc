@@ -21,10 +21,10 @@
 </head>
 <body>
 
-    {% include 'Admin/Includes/navbar.twig' %}
+    {% include 'Admin/Includes/Navbar.twig' %}
 
     <div id="wrapper">
-        {% include 'Admin/Includes/sidebar.twig' %}
+        {% include 'Admin/Includes/Sidebar.twig' %}
 
 
         <div id="content-wrapper">
@@ -71,7 +71,7 @@
     </div>
 
 {% if dev is defined %}
-    {% include "Includes/dev-info.twig" %}
+    {% include "Includes/Dev-info.twig" %}
 {% endif %}
 
 <script
@@ -87,7 +87,7 @@
 <script type="text/javascript" src="/js/admin_script.js"></script>
 
 {% if alert_messages is defined %}
-    {% include "Includes/error-messaging-script.twig" %}
+    {% include "Includes/Error-messaging-script.twig" %}
 {% endif %}
 
 </body>
