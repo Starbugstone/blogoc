@@ -117,11 +117,7 @@ class Router
 
             //EXPLODE, BOOM, TRANSFORMERS, MICHAEL BAY
             $url = explode('/', $url);
-            /*echo 'url: '.$this->container->getRequest()->getData('url');
-            echo '<pre>';
-            var_dump($url);
-            var_dump($_SERVER['REQUEST_URI']);
-            die();*/
+
             return $url;
         }
         return [];

@@ -30,6 +30,10 @@ class Request
         throw new \Exception("Unknown Request Method");
     }
 
+    /**
+     * get the current uri for routing
+     * @return mixed
+     */
     public function getUri(){
         return $_SERVER['REQUEST_URI'];
     }
