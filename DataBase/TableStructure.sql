@@ -4,7 +4,7 @@ USE `blogoc`;
 --
 -- Host: 127.0.0.1    Database: blogoc
 -- ------------------------------------------------------
--- Server version	5.5.5-10.1.31-MariaDB
+-- Server version	5.5.5-10.1.30-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -98,7 +98,7 @@ CREATE TABLE `configs` (
 
 LOCK TABLES `configs` WRITE;
 /*!40000 ALTER TABLE `configs` DISABLE KEYS */;
-INSERT INTO `configs` VALUES (1,'front_text_1','','string',1),(2,'front_text_2','','string',1),(3,'front_text_3','','string',1),(4,'social_icons_1','','url',2),(5,'social_icons_2','','url',2),(6,'social_icons_3','','url',2),(7,'social_icons_4','','url',2),(8,'social_icons_5','','url',2),(9,'site_name','My great blog','string',4),(10,'about_me_image','','url',3),(11,'front_text_1_subtext','','string',1),(12,'front_text_2_subtext','','string',1),(13,'front_text_3_subtext','','string',1);
+INSERT INTO `configs` VALUES (1,'front_text_1','aa','string',1),(2,'front_text_2','aaaf','string',1),(3,'front_text_3','','string',1),(4,'social_icons_linkedin','https://www.linkedin.com/in/matthew-clancy-024597ba/','url',2),(5,'social_icons_github','https://github.com/Starbugstone','url',2),(6,'social_icons_twitter','https://twitter.com/StarbugStone','url',2),(7,'social_icons_facebook','','url',2),(8,'social_icons_website','https://starbugstone.eu','url',2),(9,'site_name','Blog OC','string',4),(10,'about_me_image','https://pbs.twimg.com/profile_images/3676317209/243cf055afcb2baa9fd894e5305985fa_400x400.jpeg','image',3),(11,'front_text_1_subtext','','string',1),(12,'front_text_2_subtext','','string',1),(13,'front_text_3_subtext','','string',1);
 /*!40000 ALTER TABLE `configs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -290,4 +290,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-24  8:09:26
+-- Dump completed on 2018-08-24 14:24:45

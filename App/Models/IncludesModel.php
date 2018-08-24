@@ -17,27 +17,16 @@ class IncludesModel extends Model
      * @return array the categories and access URL
      * @throws \ReflectionException
      */
-    public function getMenu():array
+    public function getMenu(): array
     {
         $data = [];
         //get the categories from database
         $categories = $this->getResultSet('categories');
-        foreach ( $categories as $category) {
-            $data +=[
-                $category->category_name => '/category/'.$category->categories_slug
+        foreach ($categories as $category) {
+            $data += [
+                $category->category_name => '/category/' . $category->categories_slug
             ];
         }
         return $data;
     }
-
-    /**
-     * Gets the Jumbotron elements
-     * @return array
-     */
-    public function getJumbotron(): array
-    {
-        $data = [];
-        return $data;
-    }
-
 }

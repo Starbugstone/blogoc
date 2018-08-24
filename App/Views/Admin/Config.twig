@@ -1,18 +1,91 @@
 {% extends "Admin/Base.twig" %}
+
+{% block title %}Site configuration{% endblock %}
+
 {% block main %}
 
     {% for key, val in configList %}
-        <h1>{{ key |replace({'_':' '})}}</h1>
+        <h1>{{ key |replace({'_':' '}) }}</h1>
         <form action="/admin/update/update-config" method="post">
-        {% for config in val %}
-            <div class="form-group col-10">
-                <label for="config-{{ config.idconfigs }}">{{ config.configs_name|replace({'_':' '}) }}</label>
-                <input type="text" class="form-control" name="config-{{ config.idconfigs }}" id="config-{{ config.idconfigs }}" data-configId="{{ config.idconfigs }}" value="{{ config.configs_value }}">
+            {% for config in val %}
+                <div class="form-group col-10">
+                    <label for="config-{{ config.idconfigs }}">{{ config.configs_name|replace({'_':' '}) }}</label>
+                    <span id="config-{{ config.idconfigs }}-icon"></span>
+                    {% if config.configs_type == 'image' %}
+                        <input type="text" class="form-control" name="config-{{ config.idconfigs }}"
+                               id="config-{{ config.idconfigs }}" data-configId="{{ config.idconfigs }}"
+                               data-configType="{{ config.configs_type }}"
+                               value="{{ config.configs_value }}"><a class="btn btn-primary" href="#">Upload img</a>
+                    {% else %}
+                        <input type="text" class="form-control" name="config-{{ config.idconfigs }}"
+                               id="config-{{ config.idconfigs }}" data-configId="{{ config.idconfigs }}"
+                               value="{{ config.configs_value }}">
+                    {% endif %}
 
-            </div>
-        {% endfor %}
-            <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary ml-3 update-config-button">Update</button>
         </form>
     {% endfor %}
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(".update-config-button").each(function () {
+            var $data = {};
+            $(this).on("click", function ($e) {
+                $e.preventDefault();
+                var $inputs = $(this).parent('form:first').find('input');
+                $.each($inputs, function ($key, $value) {
+                    $("#" + $value.id + "-icon").html("<i class=\" fa fa-spinner fa-spin\"></i>");
+                    $data[$key] = {"dbId": $value.dataset.configid, "value": $value.value, 'id': $value.id, 'config': $value.dataset.configType};
+                });
+                $data_json = JSON.stringify($data);
+                //console.log($data_json);
+                setupAjax();
+                $.ajax({
+                    url: "/ajax/update/updateConfig",
+                    type: "POST",
+                    data: {'config-update': $data_json},
+                    success: function ($result) {
+
+                        //console.log($result);
+                        $.each($result['successId'], function ($key, $id) {
+                            $("#" + $id + "-icon").html("<i class=\" fa fa-check\"></i>");
+                        });
+                        $.each($result['errorId'], function ($key, $id) {
+                            $("#" + $id + "-icon").html("<i class=\" fa fa-times\"></i>");
+                        });
+                        toastr.options = {
+                            "closeButton": true,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": false,
+                            "positionClass": "toast-bottom-right",
+                            "preventDuplicates": false,
+                            "onclick": null,
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "6000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "slideDown",
+                            "hideMethod": "slideUp"
+                        }
+                        if ($result['success']) {
+                            toastr.success('update Ok');
+                        } else {
+                            toastr.Warning('Update has errors');
+                        }
+
+                    }
+                });
+            });
+
+
+        });
+    </script>
 
 {% endblock %}

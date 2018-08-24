@@ -210,7 +210,7 @@ abstract class Model
      * @return array the results from database
      * @throws \ReflectionException
      */
-    protected function getResultSet($table = ''): array
+    protected function getResultSet($table = null): array
     {
         $tableName = $this->getTable($table);
         $sql = "SELECT * FROM $tableName"; //can not pass table name as :parameter. since we already have tested if the table exists, this var should be safe.
@@ -227,7 +227,7 @@ abstract class Model
      * @return array the results from database
      * @throws \ReflectionException
      */
-    protected function getResultSetLimited($limit, $table = ''): array
+    protected function getResultSetLimited($limit, $table = null): array
     {
         $tableName = $this->getTable($table);
         $sql = "SELECT * FROM $tableName LIMIT :limit";
@@ -245,7 +245,7 @@ abstract class Model
      * @return array result or empty array
      * @throws \ReflectionException (probably not, but will throw an exception if debugging is on and no results)
      */
-    protected function getRowById($rowId, $table = ''): array
+    protected function getRowById($rowId, $table = null): array
     {
         $tableName = $this->getTable($table);
         $idName = 'id' . $tableName;
@@ -266,7 +266,7 @@ abstract class Model
      * @throws \ReflectionException (probably not, but will throw an exception if debugging is on and no results)
      * @throws \Exception if the column name consists of other characters than lower case, numbers and underscore for security
      */
-    protected function getRowByColumn(String $columnName, $value, $table = ''): array
+    protected function getRowByColumn(String $columnName, $value, $table = null): array
     {
         $tableName = $this->getTable($table);
         $columnNameOk = preg_match("/^[a-z0-9_]+$/i", $columnName); //testing if column name only has lower case, numbers and underscore
@@ -288,7 +288,7 @@ abstract class Model
      * @return array result or empty array
      * @throws \ReflectionException (probably not, but will throw an exception if debugging is on and no results)
      */
-    protected function getRowBySlug(String $slug, $table = ''): array
+    protected function getRowBySlug(String $slug, $table = null): array
     {
         $tableName = $this->getTable($table);
         $slugName = $tableName.'_slug';

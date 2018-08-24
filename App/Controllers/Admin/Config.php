@@ -17,6 +17,7 @@ class Config extends AdminController
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
+     * @throws \ReflectionException
      */
     public function index()
     {
@@ -27,7 +28,7 @@ class Config extends AdminController
         $this->data['userLevel'] = $this->auth->getUserLevel();
 
         $configObj = new ConfigModel($this->container);
-        $this->data['configList'] = $configObj->getAllConfig();
+        $this->data['configList'] = $configObj->getAllConfigOrdered();
 
 
 

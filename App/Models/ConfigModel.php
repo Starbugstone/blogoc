@@ -15,13 +15,13 @@ class ConfigModel extends Model
      * @return array
      * @throws \Exception
      */
-    public function getAllConfig(): array
+    public function getAllConfigOrdered(): array
     {
         $returnData = [];
         //getting our tables
         $configsTbl = $this->getTablePrefix('configs');
         $configsClassTbl = $this->getTablePrefix('configs_class');
-        $sql = "SELECT idconfigs, configs_name, configs_value, class FROM  $configsTbl 
+        $sql = "SELECT idconfigs, configs_name, configs_type, configs_value, class FROM  $configsTbl 
                 INNER JOIN $configsClassTbl ON $configsTbl.configs_class_idconfigsclass = $configsClassTbl.idconfigsclass
                 ORDER BY class;";
 
@@ -38,6 +38,11 @@ class ConfigModel extends Model
             $returnData[$className][] = $class;
         }
         return $returnData;
+    }
+
+    public function getAllConfig()
+    {
+        return $this->getResultSet();
     }
 
     /**
