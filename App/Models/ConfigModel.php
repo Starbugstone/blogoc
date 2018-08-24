@@ -57,13 +57,13 @@ class ConfigModel extends Model
      * @return bool update success
      * @throws \Exception error
      */
-    public function updateConfig(int $id, string $param):bool
+    public function updateConfig(int $idTable, string $param):bool
     {
         $configsTbl = $this->getTablePrefix('configs');
         $sql = "UPDATE $configsTbl SET configs_value = :param WHERE idconfigs = :id";
         $this->query($sql);
         $this->bind(':param', $param);
-        $this->bind(':id', $id);
+        $this->bind(':id', $idTable);
         return $this->execute();
 
     }
