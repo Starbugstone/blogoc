@@ -98,7 +98,7 @@ CREATE TABLE `configs` (
 
 LOCK TABLES `configs` WRITE;
 /*!40000 ALTER TABLE `configs` DISABLE KEYS */;
-INSERT INTO `configs` VALUES (1,'front_text_1','aa','string',1),(2,'front_text_2','aaaf','string',1),(3,'front_text_3','','string',1),(4,'social_icons_linkedin','https://www.linkedin.com/in/matthew-clancy-024597ba/','url',2),(5,'social_icons_github','https://github.com/Starbugstone','url',2),(6,'social_icons_twitter','https://twitter.com/StarbugStone','url',2),(7,'social_icons_facebook','','url',2),(8,'social_icons_website','https://starbugstone.eu','url',2),(9,'site_name','Blog OC','string',4),(10,'about_me_image','https://pbs.twimg.com/profile_images/3676317209/243cf055afcb2baa9fd894e5305985fa_400x400.jpeg','image',3),(11,'front_text_1_subtext','','string',1),(12,'front_text_2_subtext','','string',1),(13,'front_text_3_subtext','','string',1);
+INSERT INTO `configs` VALUES (1,'front_text_1','Developping tomorrows Web','string',1),(2,'front_text_2','If I can imagine it','string',1),(3,'front_text_3','Smoke me a kipper,','string',1),(4,'social_icons_linkedin','https://www.linkedin.com/in/matthew-clancy-024597ba/','url',2),(5,'social_icons_github','https://github.com/Starbugstone','url',2),(6,'social_icons_twitter','https://twitter.com/StarbugStone','url',2),(7,'social_icons_facebook','','url',2),(8,'social_icons_website','https://starbugstone.eu','url',2),(9,'site_name','Blog OC','string',4),(10,'about_me_image','https://pbs.twimg.com/profile_images/3676317209/243cf055afcb2baa9fd894e5305985fa_400x400.jpeg','image',3),(11,'front_text_1_subtext','The starbug way','string',1),(12,'front_text_2_subtext','I can probably code it !','string',1),(13,'front_text_3_subtext','I\'ll be back for breakfast','string',1);
 /*!40000 ALTER TABLE `configs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -152,7 +152,7 @@ CREATE TABLE `posts` (
   KEY `fk_post_category1_idx` (`categories_idcategories`),
   CONSTRAINT `fk_post_category1` FOREIGN KEY (`categories_idcategories`) REFERENCES `categories` (`idcategories`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_post_user1` FOREIGN KEY (`author_iduser`) REFERENCES `users` (`idusers`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -161,6 +161,7 @@ CREATE TABLE `posts` (
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
+INSERT INTO `posts` VALUES (1,'TEST POST',NULL,3,'BLA',1,'0000-00-00 00:00:00','0000-00-00 00:00:00',1,1,'bla');
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -188,6 +189,7 @@ CREATE TABLE `posts_has_tags` (
 
 LOCK TABLES `posts_has_tags` WRITE;
 /*!40000 ALTER TABLE `posts_has_tags` DISABLE KEYS */;
+INSERT INTO `posts_has_tags` VALUES (1,1),(1,2);
 /*!40000 ALTER TABLE `posts_has_tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -227,7 +229,7 @@ CREATE TABLE `tags` (
   `idtags` int(11) NOT NULL AUTO_INCREMENT,
   `tag_name` varchar(255) NOT NULL,
   PRIMARY KEY (`idtags`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -236,6 +238,7 @@ CREATE TABLE `tags` (
 
 LOCK TABLES `tags` WRITE;
 /*!40000 ALTER TABLE `tags` DISABLE KEYS */;
+INSERT INTO `tags` VALUES (1,'test'),(2,'lorem');
 /*!40000 ALTER TABLE `tags` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -251,6 +254,7 @@ CREATE TABLE `users` (
   `pseudo` varchar(255) DEFAULT NULL,
   `avatar` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
+  `Password` varchar(255) DEFAULT NULL,
   `surname` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `creation_date` datetime NOT NULL,
@@ -265,7 +269,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `email_UNIQUE` (`email`),
   KEY `fk_user_role_idx` (`roles_idroles`),
   CONSTRAINT `fk_user_role` FOREIGN KEY (`roles_idroles`) REFERENCES `roles` (`idroles`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -274,6 +278,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'Test',NULL,'test@me.com',NULL,'Doe','John','0000-00-00 00:00:00',NULL,2,NULL,0,0,NULL,NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -290,4 +295,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-24 14:24:45
+-- Dump completed on 2018-08-24 15:31:33
