@@ -2,6 +2,7 @@
 
 namespace Core\Modules;
 
+use Core\Constant;
 use \Core\Container;
 
 /**
@@ -40,7 +41,7 @@ class Auth extends Module
     public function isAdmin()
     {
         $userLevel = $this->getUserLevel();
-        if ($userLevel > 1) {
+        if ($userLevel >= Constant::ADMIN_LEVEL) {
             return true;
         }
         return false;
@@ -53,7 +54,7 @@ class Auth extends Module
     public function isUser()
     {
         $userLevel = $this->getUserLevel();
-        if ($userLevel > 0) {
+        if ($userLevel >= Constant::USER_LEVEL) {
             return true;
         }
         return false;
