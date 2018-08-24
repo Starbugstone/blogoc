@@ -19,15 +19,17 @@ class Update extends AdminController
      */
     public function updateConfig()
     {
+        //Security checks
         $this->onlyAdmin();
         if (!$this->container->getRequest()->isPost()) {
             $this->alertBox->setAlert('Only post messages allowed', 'error');
             $this->container->getResponse()->redirect('admin');
         }
+
         $configModel = new ConfigModel($this->container);
         $posts = $this->container->getRequest()->getDataFull();
-
         $success = true;
+
         foreach ($posts as $key => $config) {
             $configId = $this->removeFromBeginning($key, 'config-');
             if (!$configModel->updateConfig($configId, $config)) {

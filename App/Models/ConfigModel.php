@@ -40,6 +40,11 @@ class ConfigModel extends Model
         return $returnData;
     }
 
+    /**
+     * gets the entire config table
+     * @return array
+     * @throws \ReflectionException
+     */
     public function getAllConfig()
     {
         return $this->getResultSet();
@@ -52,7 +57,7 @@ class ConfigModel extends Model
      * @return bool update success
      * @throws \Exception error
      */
-    public function updateConfig(int $id, string $param)
+    public function updateConfig(int $id, string $param):bool
     {
         $configsTbl = $this->getTablePrefix('configs');
         $sql = "UPDATE $configsTbl SET configs_value = :param WHERE idconfigs = :id";

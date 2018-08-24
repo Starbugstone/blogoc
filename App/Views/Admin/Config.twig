@@ -8,18 +8,16 @@
         <h1>{{ key |replace({'_':' '}) }}</h1>
         <form action="/admin/update/update-config" method="post">
             {% for config in val %}
-                <div class="form-group col-10">
+                <div class="form-group col-8">
                     <label for="config-{{ config.idconfigs }}">{{ config.configs_name|replace({'_':' '}) }}</label>
                     <span id="config-{{ config.idconfigs }}-icon"></span>
-                    {% if config.configs_type == 'image' %}
+
                         <input type="text" class="form-control" name="config-{{ config.idconfigs }}"
                                id="config-{{ config.idconfigs }}" data-configId="{{ config.idconfigs }}"
                                data-configType="{{ config.configs_type }}"
-                               value="{{ config.configs_value }}"><a class="btn btn-primary" href="#">Upload img</a>
-                    {% else %}
-                        <input type="text" class="form-control" name="config-{{ config.idconfigs }}"
-                               id="config-{{ config.idconfigs }}" data-configId="{{ config.idconfigs }}"
                                value="{{ config.configs_value }}">
+                    {% if config.configs_type == 'image' %}
+                        <a class="btn btn-primary" href="#">Upload img</a>
                     {% endif %}
 
                 </div>
@@ -42,15 +40,12 @@
                     $data[$key] = {"dbId": $value.dataset.configid, "value": $value.value, 'id': $value.id, 'config': $value.dataset.configType};
                 });
                 $data_json = JSON.stringify($data);
-                //console.log($data_json);
                 setupAjax();
                 $.ajax({
                     url: "/ajax/update/updateConfig",
                     type: "POST",
                     data: {'config-update': $data_json},
                     success: function ($result) {
-
-                        //console.log($result);
                         $.each($result['successId'], function ($key, $id) {
                             $("#" + $id + "-icon").html("<i class=\" fa fa-check\"></i>");
                         });

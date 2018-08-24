@@ -11,8 +11,13 @@ class Update extends AjaxController
 {
     use StringFunctions;
 
+    /**
+     * Update the site configuration via Ajax post
+     * @throws JsonException
+     */
     public function updateConfig()
     {
+        //security checks
         $this->onlyAdmin();
         if (!$this->container->getRequest()->isPost()) {
             throw new JsonException('Call is not post');
