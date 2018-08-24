@@ -22,8 +22,8 @@ class ConfigModel extends Model
         $configsTbl = $this->getTablePrefix('configs');
         $configsClassTbl = $this->getTablePrefix('configs_class');
         $sql = "SELECT idconfigs, configs_name, configs_value, class FROM  $configsTbl 
-                inner join $configsClassTbl on $configsTbl.configs_class_idconfigsclass = $configsClassTbl.idconfigsclass
-                order by class;";
+                INNER JOIN $configsClassTbl ON $configsTbl.configs_class_idconfigsclass = $configsClassTbl.idconfigsclass
+                ORDER BY class;";
 
         $this->query($sql);
         $this->execute();
@@ -40,8 +40,21 @@ class ConfigModel extends Model
         return $returnData;
     }
 
-    public function updateConfig(int $id, string $param){
-        echo $id.' - '.$param.'<br>';
-        //TODO need to push to sql
+    /**
+     * updates the site config table
+     * @param int $id id of the config
+     * @param string $param paramter to update
+     * @return bool update success
+     * @throws \Exception error
+     */
+    public function updateConfig(int $id, string $param)
+    {
+        $configsTbl = $this->getTablePrefix('configs');
+        $sql = "UPDATE $configsTbl SET configs_value = :param WHERE idconfigs = :id";
+        $this->query($sql);
+        $this->bind(':param', $param);
+        $this->bind(':id', $id);
+        return $this->execute();
+
     }
 }

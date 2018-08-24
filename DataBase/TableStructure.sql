@@ -4,7 +4,7 @@ USE `blogoc`;
 --
 -- Host: 127.0.0.1    Database: blogoc
 -- ------------------------------------------------------
--- Server version	5.5.5-10.1.30-MariaDB
+-- Server version	5.5.5-10.1.31-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -82,6 +82,7 @@ CREATE TABLE `configs` (
   `idconfigs` int(11) NOT NULL AUTO_INCREMENT,
   `configs_name` varchar(255) NOT NULL,
   `configs_value` varchar(255) NOT NULL,
+  `configs_type` varchar(255) DEFAULT NULL,
   `configs_class_idconfigsclass` int(11) NOT NULL,
   PRIMARY KEY (`idconfigs`),
   UNIQUE KEY `configName_UNIQUE` (`configs_name`),
@@ -97,7 +98,7 @@ CREATE TABLE `configs` (
 
 LOCK TABLES `configs` WRITE;
 /*!40000 ALTER TABLE `configs` DISABLE KEYS */;
-INSERT INTO `configs` VALUES (1,'front_text_1','',1),(2,'front_text_2','',1),(3,'front_text_3','',1),(4,'social_icons_1','',2),(5,'social_icons_2','',2),(6,'social_icons_3','',2),(7,'social_icons_4','',2),(8,'social_icons_5','',2),(9,'site_name','',4),(10,'about_me_image','',3),(11,'front_text_1_subtext','',1),(12,'front_text_2_subtext','',1),(13,'front_text_3_subtext','',1);
+INSERT INTO `configs` VALUES (1,'front_text_1','','string',1),(2,'front_text_2','','string',1),(3,'front_text_3','','string',1),(4,'social_icons_1','','url',2),(5,'social_icons_2','','url',2),(6,'social_icons_3','','url',2),(7,'social_icons_4','','url',2),(8,'social_icons_5','','url',2),(9,'site_name','My great blog','string',4),(10,'about_me_image','','url',3),(11,'front_text_1_subtext','','string',1),(12,'front_text_2_subtext','','string',1),(13,'front_text_3_subtext','','string',1);
 /*!40000 ALTER TABLE `configs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -289,4 +290,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-22 17:52:22
+-- Dump completed on 2018-08-24  8:09:26
