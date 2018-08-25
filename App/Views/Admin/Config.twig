@@ -6,7 +6,7 @@
 
     {% for key, val in configList %}
         <h1>{{ key |replace({'_':' '}) }}</h1>
-        <form action="/admin/update/update-config" method="post">
+        <form action="/admin/update/update-config" method="post" class="update-config">
             {% for config in val %}
                 <div class="form-group col-8">
                     <label for="config-{{ config.idconfigs }}">{{ config.configs_name|replace({'_':' '}) }}</label>
@@ -30,11 +30,11 @@
 
 {% block js %}
     <script>
-        $(".update-config-button").each(function () {
+        $(".update-config").each(function () {
             var $data = {};
-            $(this).on("click", function ($e) {
+            $(this).on("submit", function ($e) {
                 $e.preventDefault();
-                var $inputs = $(this).parent('form:first').find('input');
+                var $inputs = $(this).find('input');
                 $.each($inputs, function ($key, $value) {
                     $("#" + $value.id + "-icon").html("<i class=\" fa fa-spinner fa-spin\"></i>");
                     $data[$key] = {"dbId": $value.dataset.configid, "value": $value.value, 'id': $value.id, 'config': $value.dataset.configType};
