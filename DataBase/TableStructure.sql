@@ -1,10 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `blogoc` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `blogoc`;
 -- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: blogoc
 -- ------------------------------------------------------
--- Server version	5.5.5-10.1.30-MariaDB
+-- Server version	5.5.5-10.1.31-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -152,7 +150,7 @@ CREATE TABLE `posts` (
   KEY `fk_post_category1_idx` (`categories_idcategories`),
   CONSTRAINT `fk_post_category1` FOREIGN KEY (`categories_idcategories`) REFERENCES `categories` (`idcategories`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_post_user1` FOREIGN KEY (`author_iduser`) REFERENCES `users` (`idusers`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -161,7 +159,7 @@ CREATE TABLE `posts` (
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
-INSERT INTO `posts` VALUES (1,'TEST POST',NULL,3,'BLA',1,'0000-00-00 00:00:00','0000-00-00 00:00:00',1,1,'bla');
+INSERT INTO `posts` VALUES (1,'TEST POST','http://lorempixel.com/400/200/',3,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam condimentum, erat id congue imperdiet, dolor magna porta ex, id faucibus justo nulla vel erat. Ut auctor, ligula et luctus vestibulum, purus mauris vulputate leo, id imperdiet felis odio eget augue. Aliquam ut sagittis sem. Nunc ut mi porttitor, aliquam leo nec, dignissim dui. Ut at dolor nisl. Cras congue at quam eu dapibus. Nullam id est vitae nunc volutpat auctor sit amet eget turpis.',1,'0000-00-00 00:00:00','0000-00-00 00:00:00',1,1,'bla'),(2,'TEST POST2','http://lorempixel.com/400/200/',3,'dolor sit amet, consectetur adipiscing elit. Nam condimentum, erat id congue imperdiet, dolor magna porta ex, id faucibus justo nulla vel erat. Ut auctor, ligula et luctus vestibulum, purus mauris vulputate leo, id imperdiet felis odio eget augue. Aliquam ut sagittis sem. Nunc ut mi porttitor, aliquam leo nec, dignissim dui. Ut at dolor nisl. Cras congue at quam eu dapibus. Nullam id est vitae nunc volutpat auctor sit amet eget turpis. Aenean eget lectus vel ante malesuada pellentesque quis aliquam justo. Nulla a vehicula libero. Curabitur nec accumsan leo. Nunc sagittis velit nec mollis luctus. Nam in suscipit velit, ut imperdiet dolor. Nullam nec elit congue, semper nisi quis, commodo magna. Vivamus sagittis, urna vel fringilla scelerisque, metus nulla mattis lorem, eget viverra justo ligula sit amet ex. In tempor consequat tortor. Morbi ullamcorper eros at velit accumsan, blandit tincidunt elit viverra. Aenean tincidunt mattis tortor. Phasellus id nisi ornare, fermentum nisi in, egestas dolor. Pellentesque purus nulla, congue sit amet libero dignissim, varius facilisis metus. Sed sed lacinia nunc. Aliquam quis gravida est. Morbi ut aliquam diam.',1,'0000-00-00 00:00:00','0000-00-00 00:00:00',1,1,'bla2'),(3,'TEST POST3','http://lorempixel.com/400/200/',3,'BLA Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam condimentum, erat id congue imperdiet, dolor magna porta ex, id faucibus justo nulla vel erat. Ut auctor, ligula et luctus vestibulum, purus mauris vulputate leo, id imperdiet felis odio eget augue. Aliquam ut sagittis sem. Nunc ut mi porttitor, aliquam leo nec, dignissim dui. Ut at dolor nisl. Cras congue at quam eu dapibus. Nullam id est vitae nunc volutpat auctor sit amet eget turpis.',1,'0000-00-00 00:00:00','0000-00-00 00:00:00',1,1,'bla3'),(4,'TEST POST4','http://lorempixel.com/400/200/',3,'BLA',1,'0000-00-00 00:00:00','0000-00-00 00:00:00',1,1,'bla4');
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -295,4 +293,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-24 15:31:33
+-- Dump completed on 2018-08-27  0:00:41

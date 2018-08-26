@@ -2,6 +2,9 @@
 
 namespace Core\Traits;
 
+use Core\Constant;
+use Twig\Error\Error;
+
 /**
  * a trait with some string related helpers
  * Trait StringFunctions
@@ -63,5 +66,22 @@ trait StringFunctions
             $string = substr($string, strlen($head));
         }
         return $string;
+    }
+
+    public function getExcerpt($text, $count=Constant::EXCERPT_WORD_COUNT){
+        if($count < 1){
+            throw new \ErrorException('excerpt length too low');
+        }
+
+        $text = str_replace("  ", " ", $text);
+        $string = explode(" ", $text);
+        $trimed = '';
+        for ( $wordCounter = 0; $wordCounter < $count; $wordCounter++ ){
+            $trimed .= $string[$wordCounter];
+            if ( $wordCounter < $count-1 ){ $trimed .= " "; }
+            else { $trimed .= "..."; }
+        }
+        $trimed = trim($trimed);
+        return $trimed;
     }
 }
