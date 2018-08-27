@@ -6,6 +6,8 @@ $.ajaxSetup({
     }
 });
 
+
+
 //test ajax request response
 $("#ajaxtest").click(function(){
     $.ajax({
