@@ -1,5 +1,18 @@
 {% extends "Admin/Base.twig" %}
 
 {% block main %}
-TEST
+<form action="/admin/new/post" method="post">
+    <textarea id="newPostTextArea"></textarea>
+</form>
+{% endblock %}
+
+{% block js %}
+<script>
+    tinymce.init({
+        selector: "#newPostTextArea",
+        statusbar: false,
+        min_height: 250,
+    });
+</script>
+
 {% endblock %}
