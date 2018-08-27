@@ -1,17 +1,19 @@
 <?php
-
 namespace App\Models;
 
 use Core\Model;
 
-/**
- * Class IncludesModel
- * All the included views data (menu, jumbotron, ...)
- * the returned data should then be stored in a $data['var'] and the view will check if var is set
- * @package App\Models
- */
-class IncludesModel extends Model
-{
+class CategoryModel extends Model{
+
+    /**
+     * get the list of categories and return all the data
+     * @return array the categories
+     * @throws \ReflectionException
+     */
+    public function getCategories(){
+        return $this->getResultSet('categories');
+    }
+
     /**
      * get all the menu elements from the database
      * @return array the categories and access URL
@@ -21,7 +23,7 @@ class IncludesModel extends Model
     {
         $data = [];
         //get the categories from database
-        $categories = $this->getResultSet('categories');
+        $categories = $this->getCategories();
         foreach ($categories as $category) {
             $data += [
                 $category->category_name => '/category/' . $category->categories_slug

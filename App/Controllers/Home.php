@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\CategoryModel;
 use App\Models\ConfigModel;
 use App\Models\IncludesModel;
 use App\Models\PostModel;
@@ -31,8 +32,8 @@ class Home extends \Core\Controller
         $frontPosts = $frontPostModel->getFrontPosts();
 
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
-        $Includes = new IncludesModel($this->container);
-        $this->data['navigation'] = $Includes->getMenu();
+        $categoryModel = new CategoryModel($this->container);
+        $this->data['navigation'] = $categoryModel->getMenu();
         $this->data['jumbotron'] = true;
         $this->data['front_posts'] = $frontPosts;
         $this->renderView('Home');

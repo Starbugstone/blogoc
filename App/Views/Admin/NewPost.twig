@@ -2,17 +2,17 @@
 
 {% block main %}
 <form action="/admin/new/post" method="post">
+    <select name="Categories">
+        {% for category in categories %}
+            <option value="{{ category.idcategories }}">{{ category.category_name }}</option>
+        {% endfor %}
+    </select>
     <textarea id="newPostTextArea"></textarea>
 </form>
 {% endblock %}
 
 {% block js %}
 <script>
-    /*tinymce.init({
-        selector: "#newPostTextArea",
-        statusbar: false,
-        min_height: 250,
-    });*/
     setupTinymce("#newPostTextArea");
 </script>
 

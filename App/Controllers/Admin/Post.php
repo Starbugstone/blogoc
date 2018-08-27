@@ -1,6 +1,7 @@
 <?php
 namespace App\Controllers\Admin;
 
+use App\Models\CategoryModel;
 use Core\AdminController;
 
 class Post extends AdminController{
@@ -10,6 +11,8 @@ class Post extends AdminController{
      */
     public function new(){
         $this->onlyAdmin();
+        $categoryModel = new CategoryModel($this->container);
+        $this->data['categories'] = $categoryModel->getCategories();
         $this->renderView('Admin/NewPost');
     }
 
