@@ -68,13 +68,23 @@ trait StringFunctions
         return $string;
     }
 
-    public function getExcerpt($text, $count=Constant::EXCERPT_WORD_COUNT){
+    /**
+     * create an excerpt, shortening the text to a specific number of words
+     * @param string $text the text to shorten
+     * @param int $count number of words
+     * @return string the shortend text
+     * @throws \ErrorException
+     */
+    public function getExcerpt(string $text, int $count=Constant::EXCERPT_WORD_COUNT){
         if($count < 1){
             throw new \ErrorException('excerpt length too low');
         }
 
         $text = str_replace("  ", " ", $text);
         $string = explode(" ", $text);
+        if(count($string) <= $count){
+            return $text;
+        }
         $trimed = '';
         for ( $wordCounter = 0; $wordCounter < $count; $wordCounter++ ){
             $trimed .= $string[$wordCounter];
