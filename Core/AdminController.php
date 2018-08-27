@@ -22,6 +22,9 @@ abstract class AdminController extends Controller
         $this->loadModules[] = 'AlertBox';
         parent::__construct($container);
 
+        //Sending the auth level to the data
+        $this->data['userRole'] = $this->auth->getUserRole();
+        $this->data['userLevel'] = $this->auth->getUserLevel();
     }
 
     protected function onlyAdmin(){

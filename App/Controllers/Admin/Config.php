@@ -23,9 +23,7 @@ class Config extends AdminController
     {
         $this->onlyAdmin();
 
-        //going to have to think of a better way of handeling this.
-        $this->data['userRole'] = 'Admin';
-        $this->data['userLevel'] = $this->auth->getUserLevel();
+
 
         $configObj = new ConfigModel($this->container);
         $this->data['configList'] = $configObj->getAllConfigOrdered();

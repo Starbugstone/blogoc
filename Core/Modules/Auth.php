@@ -34,6 +34,12 @@ class Auth extends Module
         return $session->get('user_role_level') ?? 0;
     }
 
+    public function getUserRole():string
+    {
+        $session = $this->container->getSession();
+        return $session->get('user_role_name') ?? '';
+    }
+
     /**
      * is the connected user an Admin
      * @return bool
