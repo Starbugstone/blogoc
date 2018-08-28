@@ -10,6 +10,7 @@ class SiteConfig extends Module
     /**
      * Gets the entire site configuration and arranges it into a displayable list
      * @return array the config ordered and ready to display
+     * @throws \ReflectionException
      */
     public function getSiteConfig()
     {

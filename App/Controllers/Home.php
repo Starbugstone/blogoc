@@ -3,8 +3,6 @@
 namespace App\Controllers;
 
 use App\Models\CategoryModel;
-use App\Models\ConfigModel;
-use App\Models\IncludesModel;
 use App\Models\PostModel;
 use Core\Container;
 
