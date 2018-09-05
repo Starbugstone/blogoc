@@ -9,11 +9,11 @@
         <form action="/admin/update/update-config" method="post" class="update-config">
             {% for config in val %}
                 <div class="form-group col-8">
-                    <label for="config-{{ config.idconfigs }}">{{ config.configs_name|replace({'_':' '}) }}</label>
-                    <span id="config-{{ config.idconfigs }}-icon"></span>
+                    <label for="{{ config.idconfigs }}">{{ config.configs_name|replace({'_':' '}) }}</label>
+                    <span id="{{ config.idconfigs }}-icon"></span>
 
-                        <input type="text" class="form-control" name="config-{{ config.idconfigs }}"
-                               id="config-{{ config.idconfigs }}" data-configId="{{ config.idconfigs }}"
+                        <input type="text" class="form-control" name="{{ config.idconfigs }}"
+                               id="{{ config.idconfigs }}" data-configId="{{ config.idconfigs }}"
                                data-configType="{{ config.configs_type }}"
                                value="{{ config.configs_value }}">
                     {% if config.configs_type == 'image' %}
@@ -40,41 +40,24 @@
                     $data[$key] = {"dbId": $value.dataset.configid, "value": $value.value, 'id': $value.id, 'config': $value.dataset.configType};
                 });
                 $data_json = JSON.stringify($data);
+
                 setupAjax();
+
                 $.ajax({
                     url: "/ajax/update/updateConfig",
-                    type: "POST",
                     data: {'config-update': $data_json},
-                    success: function ($result) {
-                        $.each($result['successId'], function ($key, $id) {
-                            $("#" + $id + "-icon").html("<i class=\" fa fa-check\"></i>");
-                        });
-                        $.each($result['errorId'], function ($key, $id) {
-                            $("#" + $id + "-icon").html("<i class=\" fa fa-times\"></i>");
-                        });
-                        toastr.options = {
-                            "closeButton": true,
-                            "debug": false,
-                            "newestOnTop": false,
-                            "progressBar": false,
-                            "positionClass": "toast-bottom-right",
-                            "preventDuplicates": false,
-                            "onclick": null,
-                            "showDuration": "300",
-                            "hideDuration": "1000",
-                            "timeOut": "6000",
-                            "extendedTimeOut": "1000",
-                            "showEasing": "swing",
-                            "hideEasing": "linear",
-                            "showMethod": "slideDown",
-                            "hideMethod": "slideUp"
-                        }
-                        if ($result['success']) {
-                            toastr.success('update Ok');
-                        } else {
-                            toastr.Warning('Update has errors');
-                        }
-
+                }).done(function($result){
+                    $.each($result['successId'], function ($key, $id) {
+                        $("#" + $id + "-icon").html("<i class=\" fa fa-check\"></i>");
+                    });
+                    $.each($result['errorId'], function ($key, $id) {
+                        $("#" + $id + "-icon").html("<i class=\" fa fa-times\"></i>");
+                    });
+                    setupToastr();
+                    if ($result['success']) {
+                        toastr.success('update Ok');
+                    } else {
+                        toastr.Warning('Update has errors');
                     }
                 });
             });

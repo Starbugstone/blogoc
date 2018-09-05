@@ -31,8 +31,7 @@ class Update extends AdminController
         $success = true;
 
         foreach ($posts as $key => $config) {
-            $configId = $this->removeFromBeginning($key, 'config-');
-            if (!$configModel->updateConfig($configId, $config)) {
+            if (!$configModel->updateConfig($key, $config)) {
                 $success = false;
             }
         }
