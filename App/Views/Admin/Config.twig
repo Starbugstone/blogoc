@@ -31,15 +31,10 @@
 {% block js %}
     <script>
         $(".update-config").each(function () {
-            var $data = {};
+
             $(this).on("submit", function ($e) {
                 $e.preventDefault();
-                var $inputs = $(this).find('input');
-                $.each($inputs, function ($key, $value) {
-                    $("#" + $value.id + "-icon").html("<i class=\" fa fa-spinner fa-spin\"></i>");
-                    $data[$key] = {"dbId": $value.dataset.configid, "value": $value.value, 'id': $value.id, 'config': $value.dataset.configType};
-                });
-                $data_json = JSON.stringify($data);
+                var $data_json = JSON.stringify($(this).serializeArray());
 
                 setupAjax();
 
