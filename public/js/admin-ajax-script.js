@@ -28,6 +28,6 @@ function setupToastr(){
         "hideEasing": "linear",
         "showMethod": "slideDown",
         "hideMethod": "slideUp"
-    }
+    };
 }
 
