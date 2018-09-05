@@ -10,7 +10,9 @@ function setupAjax() {
     });
 }
 
-function setupToastr() {
+
+//Setting the toastr alert buttons
+function setupToastr(){
     toastr.options = {
         "closeButton": true,
         "debug": false,

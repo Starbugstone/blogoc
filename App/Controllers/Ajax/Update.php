@@ -34,11 +34,12 @@ class Update extends AjaxController
 
         foreach ($configUpdate as $update) {
 
-            if (!$configModel->updateConfig($update->dbId, $update->value)) {
+
+            if (!$configModel->updateConfig($update->name, $update->value)) {
                 $result['success'] = false;
-                $result['errorId'][] = $update->id;
+                $result['errorId'][] = $update->name;
             } else {
-                $result['successId'][] = $update->id;
+                $result['successId'][] = $update->name;
             }
         }
 
