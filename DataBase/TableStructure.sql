@@ -2,7 +2,7 @@
 --
 -- Host: 127.0.0.1    Database: blogoc
 -- ------------------------------------------------------
--- Server version	5.5.5-10.1.31-MariaDB
+-- Server version	5.5.5-10.1.30-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -96,7 +96,7 @@ CREATE TABLE `configs` (
 
 LOCK TABLES `configs` WRITE;
 /*!40000 ALTER TABLE `configs` DISABLE KEYS */;
-INSERT INTO `configs` VALUES (1,'front_text_1','Developping tomorrows Web','string',1),(2,'front_text_2','If I can imagine it','string',1),(3,'front_text_3','Smoke me a kipper,','string',1),(4,'social_icons_linkedin','https://www.linkedin.com/in/matthew-clancy-024597ba/','url',2),(5,'social_icons_github','https://github.com/Starbugstone','url',2),(6,'social_icons_twitter','https://twitter.com/StarbugStone','url',2),(7,'social_icons_facebook','','url',2),(8,'social_icons_website','https://starbugstone.eu','url',2),(9,'site_name','Blog OC','string',4),(10,'about_me_image','https://pbs.twimg.com/profile_images/3676317209/243cf055afcb2baa9fd894e5305985fa_400x400.jpeg','image',3),(11,'front_text_1_subtext','The starbug way','string',1),(12,'front_text_2_subtext','I can probably code it !','string',1),(13,'front_text_3_subtext','I\'ll be back for breakfast','string',1);
+INSERT INTO `configs` VALUES (1,'front_text_1','Developping tomorrows Web','1',1),(2,'front_text_2','If I can imagine it','1',1),(3,'front_text_3','Smoke me a kipper,','1',1),(4,'social_icons_linkedin','https://www.linkedin.com/in/matthew-clancy-024597ba/','2',2),(5,'social_icons_github','https://github.com/Starbugstone','2',2),(6,'social_icons_twitter','https://twitter.com/StarbugStone','2',2),(7,'social_icons_facebook','','2',2),(8,'social_icons_website','https://starbugstone.eu','2',2),(9,'site_name','Blog OC','1',4),(10,'about_me_image','https://pbs.twimg.com/profile_images/3676317209/243cf055afcb2baa9fd894e5305985fa_400x400.jpeg','3',3),(11,'front_text_1_subtext','The starbug way','1',1),(12,'front_text_2_subtext','I can probably code it !','1',1),(13,'front_text_3_subtext','I\'ll be back for breakfast','1',1);
 /*!40000 ALTER TABLE `configs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -123,6 +123,30 @@ LOCK TABLES `configs_class` WRITE;
 /*!40000 ALTER TABLE `configs_class` DISABLE KEYS */;
 INSERT INTO `configs_class` VALUES (1,'20_front_page_text'),(2,'21_front_page_social_icons'),(3,'22_front_page_other'),(4,'10_global_site_configuration');
 /*!40000 ALTER TABLE `configs_class` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `configs_type`
+--
+
+DROP TABLE IF EXISTS `configs_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `configs_type` (
+  `idconfigs_type` int(11) NOT NULL AUTO_INCREMENT,
+  `configs_type_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`idconfigs_type`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `configs_type`
+--
+
+LOCK TABLES `configs_type` WRITE;
+/*!40000 ALTER TABLE `configs_type` DISABLE KEYS */;
+INSERT INTO `configs_type` VALUES (1,'text'),(2,'url'),(3,'image');
+/*!40000 ALTER TABLE `configs_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -293,4 +317,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-27  0:00:41
+-- Dump completed on 2018-09-10 13:49:21

@@ -21,8 +21,10 @@ class ConfigModel extends Model
         //getting our tables
         $configsTbl = $this->getTablePrefix('configs');
         $configsClassTbl = $this->getTablePrefix('configs_class');
-        $sql = "SELECT idconfigs, configs_name, configs_type, configs_value, class FROM  $configsTbl 
-                INNER JOIN $configsClassTbl ON $configsTbl.configs_class_idconfigsclass = $configsClassTbl.idconfigsclass
+        $configTypeTbl = $this->getTablePrefix('configs_type');
+        $sql = "SELECT idconfigs, configs_name, configs_type_name, configs_value, class FROM  $configsTbl 
+                INNER JOIN $configsClassTbl ON $configsTbl.configs_class_idconfigsclass = $configsClassTbl.idconfigsclass 
+                INNER JOIN $configTypeTbl ON $configsTbl.configs_type = $configTypeTbl.idconfigs_type
                 ORDER BY class;";
 
         $this->query($sql);
