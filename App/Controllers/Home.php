@@ -2,6 +2,10 @@
 
 namespace App\Controllers;
 
+use App\Models\ConfigModel;
+use App\Models\IncludesModel;
+use Core\Container;
+
 /**
  * Class Home
  *
@@ -12,11 +16,21 @@ namespace App\Controllers;
 class Home extends \Core\Controller
 {
 
+    protected $siteConfig;
+
+    public function __construct(Container $container)
+    {
+        $this->loadModules[] = 'SiteConfig';
+        parent::__construct($container);
+    }
+
     public function index()
     {
-        $Includes = new \App\Models\Includes($this->container);
+
+        $this->data['configs'] = $this->siteConfig->getSiteConfig();
+        $Includes = new IncludesModel($this->container);
         $this->data['navigation'] = $Includes->getMenu();
-        $this->data['jumbotron'] = $Includes->getJumbotron();
+        $this->data['jumbotron'] = true;
         $this->renderView('Home');
     }
 }

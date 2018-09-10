@@ -2,6 +2,7 @@
 
 namespace Core;
 
+use Core\Traits\StringFunctions;
 use PDO;
 
 /**
@@ -13,6 +14,7 @@ use PDO;
  */
 abstract class Model
 {
+    use StringFunctions;
     /**
      * @var PDO the database handeler
      */
@@ -95,6 +97,22 @@ abstract class Model
         return $this->stmt->execute();
     }
 
+    /**
+     * fetches the result from an executed query
+     * @return array
+     */
+    protected function fetchAll(){
+        return $this->stmt->fetchAll();
+    }
+
+    /**
+     * returns a single line from the executed query
+     * @return mixed
+     */
+    protected function fetch(){
+        return $this->stmt->fetch();
+    }
+
     /*
      * END generic PDO query constructor
      * ---------------------------------------------
@@ -110,20 +128,19 @@ abstract class Model
      * @throws \Exception table or view doesn't exist
      * @return string table or view name
      */
-    private function getTable(string $table = null): string
+    protected function getTable(String $table = null): String
     {
         //If no table is passed, get the calling model name
         if ($table === null) {
             $reflect = new \ReflectionClass(get_class($this));
             $table = $reflect->getShortName(); //this is to only get the model name, otherwise we get the full namespace
+            //since our models all end with Model, we should remove it.
+            $table = $this->removeFromEnd($table, 'Model');
             $table = $table . 's'; //adding the s since the table should be plural. Might be some special case where the plural isn't just with an s
             $table = strtolower($table); //the database names are in lowercase
         }
 
-        if(Config::TABLE_PREFIX != '')
-        {
-            $table = Config::TABLE_PREFIX.'_'.$table;
-        }
+        $table = $this->getTablePrefix($table);
 
         //see if table exists
         $sql = "SHOW TABLES LIKE :table";
@@ -154,6 +171,20 @@ abstract class Model
     }
 
     /**
+     * This function adds the table prefix if set and returns the name
+     * Use this if we are sure of the table name. Avoids the DB calls
+     * @param $table string the table name
+     * @return string
+     */
+    protected function getTablePrefix($table){
+        if(Config::TABLE_PREFIX != '')
+        {
+            $table = Config::TABLE_PREFIX.'_'.$table;
+        }
+        return $table;
+    }
+
+    /**
      * checks if the result from a PDO query has any data.
      * If yes then we return the array
      * If debugging is enabled we throw an exception on no results
@@ -179,7 +210,7 @@ abstract class Model
      * @return array the results from database
      * @throws \ReflectionException
      */
-    protected function getResultSet($table = ''): array
+    protected function getResultSet($table = null): array
     {
         $tableName = $this->getTable($table);
         $sql = "SELECT * FROM $tableName"; //can not pass table name as :parameter. since we already have tested if the table exists, this var should be safe.
@@ -196,7 +227,7 @@ abstract class Model
      * @return array the results from database
      * @throws \ReflectionException
      */
-    protected function getResultSetLimited($limit, $table = ''): array
+    protected function getResultSetLimited($limit, $table = null): array
     {
         $tableName = $this->getTable($table);
         $sql = "SELECT * FROM $tableName LIMIT :limit";
@@ -214,7 +245,7 @@ abstract class Model
      * @return array result or empty array
      * @throws \ReflectionException (probably not, but will throw an exception if debugging is on and no results)
      */
-    protected function getRowById($rowId, $table = ''): array
+    protected function getRowById($rowId, $table = null): array
     {
         $tableName = $this->getTable($table);
         $idName = 'id' . $tableName;
@@ -235,7 +266,7 @@ abstract class Model
      * @throws \ReflectionException (probably not, but will throw an exception if debugging is on and no results)
      * @throws \Exception if the column name consists of other characters than lower case, numbers and underscore for security
      */
-    protected function getRowByColumn($columnName, $value, $table = ''): array
+    protected function getRowByColumn(String $columnName, $value, $table = null): array
     {
         $tableName = $this->getTable($table);
         $columnNameOk = preg_match("/^[a-z0-9_]+$/i", $columnName); //testing if column name only has lower case, numbers and underscore
@@ -257,7 +288,7 @@ abstract class Model
      * @return array result or empty array
      * @throws \ReflectionException (probably not, but will throw an exception if debugging is on and no results)
      */
-    protected function getRowBySlug(string $slug, $table = ''): array
+    protected function getRowBySlug(String $slug, $table = null): array
     {
         $tableName = $this->getTable($table);
         $slugName = $tableName.'_slug';

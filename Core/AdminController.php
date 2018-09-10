@@ -24,5 +24,12 @@ abstract class AdminController extends Controller
 
     }
 
+    protected function onlyAdmin(){
+        if(!$this->auth->isAdmin()){
+            $this->alertBox->setAlert("Only admins can access this", 'error');
+            $this->container->getResponse()->redirect('/admin');
+        }
+    }
+
 
 }

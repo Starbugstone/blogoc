@@ -27,7 +27,7 @@
 <!-- Header -->
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" id="mainNav">
-        <a class="navbar-brand hvr-underline-from-center" href="/">BlogOC</a>
+        <a class="navbar-brand hvr-underline-from-center" href="/">{{ configs.site_name }}</a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
                 data-target="#navbarList" aria-controls="navbarList" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -35,14 +35,14 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarList">
             {% if navigation is defined %}
-                {% include "Includes/menu.twig" %}
+                {% include "Includes/Menu.twig" %}
             {% endif %}
 
         </div>
 
     </nav>
     {% if jumbotron is defined %}
-        {% include "Includes/jumbotron.twig" %}
+        {% include "Includes/Jumbotron.twig" %}
     {% else %}
         <div class="menuPadder"></div>
     {% endif %}
@@ -63,9 +63,12 @@
     </div>
 </footer>
 {% if navigation is defined %}
-    {% include "Includes/logon-modal.twig" %}
+    {% include "Includes/Logon-modal.twig" %}
 {% endif %}
 
+{% if dev is defined %}
+    {% include "Includes/Dev-info.twig" %}
+{% endif %}
 <script
         src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
@@ -80,7 +83,7 @@
 <script type="text/javascript" src="/js/ajax-script.js"></script>
 
 {% if alert_messages is defined %}
-    {% include "Includes/error-messaging-script.twig" %}
+    {% include "Includes/Error-messaging-script.twig" %}
 {% endif %}
 </body>
 </html>

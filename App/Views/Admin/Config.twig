@@ -1,0 +1,68 @@
+{% extends "Admin/Base.twig" %}
+
+{% block title %}Site configuration{% endblock %}
+
+{% block main %}
+
+    {% for key, val in configList %}
+        <h1>{{ key |replace({'_':' '}) }}</h1>
+        <form action="/admin/update/update-config" method="post" class="update-config">
+            {% for config in val %}
+                {% set inputType = config.configs_type_name %}
+                {% if config.configs_type_name == 'image' %}
+                    {% set inputType = 'url' %}
+                {% endif %}
+                <div class="form-group col-8">
+                    <label for="{{ config.idconfigs }}">{{ config.configs_name|replace({'_':' '}) }}</label>
+                    <span id="{{ config.idconfigs }}-icon"></span>
+
+                        <input type="{{ inputType }}" class="form-control" name="{{ config.idconfigs }}"
+                               id="{{ config.idconfigs }}" data-configId="{{ config.idconfigs }}"
+                               data-configType="{{ config.configs_type }}"
+                               value="{{ config.configs_value }}">
+                    {% if config.configs_type_name == 'image' %}
+                        <a class="btn btn-primary" href="#">Upload img</a>
+                    {% endif %}
+
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary ml-3 update-config-button">Update</button>
+        </form>
+    {% endfor %}
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(".update-config").each(function () {
+
+            $(this).on("submit", function ($e) {
+                $e.preventDefault();
+                var $data_json = JSON.stringify($(this).serializeArray());
+
+                setupAjax();
+
+                $.ajax({
+                    url: "/ajax/update/updateConfig",
+                    data: {'config-update': $data_json},
+                }).done(function($result){
+                    $.each($result['successId'], function ($key, $id) {
+                        $("#" + $id + "-icon").html("<i class=\" fa fa-check\"></i>");
+                    });
+                    $.each($result['errorId'], function ($key, $id) {
+                        $("#" + $id + "-icon").html("<i class=\" fa fa-times\"></i>");
+                    });
+                    setupToastr();
+                    if ($result['success']) {
+                        toastr.success('update Ok');
+                    } else {
+                        toastr.Warning('Update has errors');
+                    }
+                });
+            });
+
+
+        });
+    </script>
+
+{% endblock %}
