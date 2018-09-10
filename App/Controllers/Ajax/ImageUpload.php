@@ -20,7 +20,7 @@ class ImageUpload extends AjaxController{
 // Images upload path
         $imageFolder = "uploaded_images/";
 
-        $temp = $this->container->getRequest()->getUploadeFiles();
+        $temp = $this->container->getRequest()->getUploadedFiles();
 
         //need to clean up
         if(is_uploaded_file($temp['tmp_name'])){
@@ -47,7 +47,7 @@ class ImageUpload extends AjaxController{
             }
 
             // Accept upload if there was no origin, or if it is an accepted origin
-            $filetowrite = $imageFolder . $temp['name'];
+            $filetowrite = $this->imageFolder . $temp['name'];
             move_uploaded_file($temp['tmp_name'], $filetowrite);
 
             // Respond to the successful upload with JSON.
