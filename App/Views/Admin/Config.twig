@@ -8,15 +8,19 @@
         <h1>{{ key |replace({'_':' '}) }}</h1>
         <form action="/admin/update/update-config" method="post" class="update-config">
             {% for config in val %}
+                {% set inputType = config.configs_type_name %}
+                {% if config.configs_type_name == 'image' %}
+                    {% set inputType = 'url' %}
+                {% endif %}
                 <div class="form-group col-8">
                     <label for="{{ config.idconfigs }}">{{ config.configs_name|replace({'_':' '}) }}</label>
                     <span id="{{ config.idconfigs }}-icon"></span>
 
-                        <input type="text" class="form-control" name="{{ config.idconfigs }}"
+                        <input type="{{ inputType }}" class="form-control" name="{{ config.idconfigs }}"
                                id="{{ config.idconfigs }}" data-configId="{{ config.idconfigs }}"
                                data-configType="{{ config.configs_type }}"
                                value="{{ config.configs_value }}">
-                    {% if config.configs_type == 'image' %}
+                    {% if config.configs_type_name == 'image' %}
                         <a class="btn btn-primary" href="#">Upload img</a>
                     {% endif %}
 
