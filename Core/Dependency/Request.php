@@ -110,4 +110,12 @@ class Request
             return apache_request_headers() ?: [];
     }
 
+    /**
+     * @return mixed
+     */
+    public function getUploadedFiles(){
+        reset($_FILES);
+        return current($_FILES);
+    }
+
 }
