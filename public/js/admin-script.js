@@ -21,6 +21,9 @@ function setupTinymce($selector){
         //width: "100%",
         min_height: 250,
 
+        relative_urls : false,
+        remove_script_host: false,
+        //document_base_url: '/',
 
 
         /* plugin */
@@ -34,14 +37,14 @@ function setupTinymce($selector){
         /* Images uploading
         https://www.codexworld.com/tinymce-upload-image-to-server-using-php/
         */
-        //images_upload_url: "upload.php",
-        //automatic_uploads : false, /* Not sure about this */
-        /*images_upload_handler: function(blobInfo, success, failure){
+        images_upload_url: "/ajax/image-upload/tinymce-upload",
+        automatic_uploads : false, /* Not sure about this */
+        images_upload_handler: function(blobInfo, success, failure){
             var xhr, formData;
 
             xhr = new XMLHttpRequest();
             xhr.withCredentials = false;
-            xhr.open('POST', 'upload.php');
+            xhr.open('POST', '/ajax/image-upload/tinymce-upload');
 
             xhr.onload = function() {
                 var json;
@@ -65,7 +68,7 @@ function setupTinymce($selector){
             formData.append('file', blobInfo.blob(), blobInfo.filename());
 
             xhr.send(formData);
-        },*/
+        },
 
     });
 }

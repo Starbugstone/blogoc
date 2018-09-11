@@ -24,7 +24,7 @@ class ImageUpload extends AjaxController{
 
         //need to clean up
         if(is_uploaded_file($temp['tmp_name'])){
-            if(isset($_SERVER['HTTP_ORIGIN'])){
+            /*if(isset($_SERVER['HTTP_ORIGIN'])){
                 // Same-origin requests won't set an origin. If the origin is set, it must be valid.
                 if(in_array($_SERVER['HTTP_ORIGIN'], $accepted_origins)){
                     header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
@@ -32,7 +32,7 @@ class ImageUpload extends AjaxController{
                     header("HTTP/1.1 403 Origin Denied");
                     return;
                 }
-            }
+            }*/
 
             // Sanitize input
             if(preg_match("/([^\w\s\d\-_~,;:\[\]\(\).])|([\.]{2,})/", $temp['name'])){
