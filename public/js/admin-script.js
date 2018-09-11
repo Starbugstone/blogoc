@@ -6,6 +6,8 @@ $("#sidebarToggle").click(function (e) {
 });
 
 function setupTinymce($selector){
+    //getting our base URL
+    var url = window.location.origin;
     tinymce.init({
         selector: $selector,
 
@@ -23,7 +25,7 @@ function setupTinymce($selector){
 
         relative_urls : false,
         remove_script_host: false,
-        //document_base_url: '/',
+        document_base_url: url, //we want to call from the base url
 
 
         /* plugin */
@@ -44,7 +46,10 @@ function setupTinymce($selector){
 
             xhr = new XMLHttpRequest();
             xhr.withCredentials = false;
+
             xhr.open('POST', '/ajax/image-upload/tinymce-upload');
+            xhr.setRequestHeader('csrf_token',$("meta[name=\"csrf_token\"]").attr("content")); //seneding our csrf token.
+            xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest"); //seneding our XML header.
 
             xhr.onload = function() {
                 var json;

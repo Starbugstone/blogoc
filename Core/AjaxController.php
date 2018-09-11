@@ -46,9 +46,9 @@ abstract class AjaxController extends Controller
         $this->response = $container->getResponse();
 
         //we only allow xmlHTTPRequests here for security
-        //$this->checkXlmRequest();
+        $this->checkXlmRequest();
         $this->checkReferer();
-        //$this->csrf->checkJsonCsrf();
+        $this->csrf->checkJsonCsrf();
     }
 
     /**
