@@ -5,7 +5,7 @@ $("#sidebarToggle").click(function (e) {
     $(".sidebar").toggleClass("toggled");
 });
 
-function setupTinymce($selector){
+function setupTinymce($selector) {
     //getting our base URL
     var url = window.location.origin;
     tinymce.init({
@@ -23,7 +23,7 @@ function setupTinymce($selector){
         //width: "100%",
         min_height: 250,
 
-        relative_urls : false,
+        relative_urls: false,
         remove_script_host: false,
         document_base_url: url, //we want to call from the base url
 
@@ -40,29 +40,29 @@ function setupTinymce($selector){
         https://www.codexworld.com/tinymce-upload-image-to-server-using-php/
         */
         images_upload_url: "/ajax/image-upload/tinymce-upload",
-        automatic_uploads : false, /* Not sure about this */
-        images_upload_handler: function(blobInfo, success, failure){
+        automatic_uploads: false, /* Not sure about this */
+        images_upload_handler: function (blobInfo, success, failure) {
             var xhr, formData;
 
             xhr = new XMLHttpRequest();
             xhr.withCredentials = false;
 
-            xhr.open('POST', '/ajax/image-upload/tinymce-upload');
-            xhr.setRequestHeader('csrf_token',$("meta[name=\"csrf_token\"]").attr("content")); //seneding our csrf token.
+            xhr.open("POST", "/ajax/image-upload/tinymce-upload");
+            xhr.setRequestHeader("csrf_token", $("meta[name=\"csrf_token\"]").attr("content")); //seneding our csrf token.
             xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest"); //seneding our XML header.
 
-            xhr.onload = function() {
+            xhr.onload = function () {
                 var json;
 
-                if (xhr.status != 200) {
-                    failure('HTTP Error: ' + xhr.status);
+                if (xhr.status !== 200) {
+                    failure("HTTP Error: " + xhr.status);
                     return;
                 }
 
                 json = JSON.parse(xhr.responseText);
 
-                if (!json || typeof json.location != 'string') {
-                    failure('Invalid JSON: ' + xhr.responseText);
+                if (!json || typeof json.location != "string") {
+                    failure("Invalid JSON: " + xhr.responseText);
                     return;
                 }
 
@@ -70,7 +70,7 @@ function setupTinymce($selector){
             };
 
             formData = new FormData();
-            formData.append('file', blobInfo.blob(), blobInfo.filename());
+            formData.append("file", blobInfo.blob(), blobInfo.filename());
 
             xhr.send(formData);
         },

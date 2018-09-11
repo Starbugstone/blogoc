@@ -49,7 +49,8 @@ class Request
      * is the call a post
      * @return bool
      */
-    public function isPost():bool{
+    public function isPost(): bool
+    {
         return $_SERVER['REQUEST_METHOD'] === 'POST';
     }
 
@@ -57,7 +58,8 @@ class Request
      * is the call a get
      * @return bool
      */
-    public function isGet():bool{
+    public function isGet(): bool
+    {
         return $_SERVER['REQUEST_METHOD'] === 'GET';
     }
 
@@ -65,7 +67,8 @@ class Request
      * get the current uri for routing
      * @return mixed
      */
-    public function getUri(){
+    public function getUri()
+    {
         return $_SERVER['REQUEST_URI'];
     }
 
@@ -107,13 +110,15 @@ class Request
      */
     public function getHeaders(): array
     {
-            return apache_request_headers() ?: [];
+        return apache_request_headers() ?: [];
     }
 
     /**
+     * Getting the uploaded file
      * @return mixed
      */
-    public function getUploadedFiles(){
+    public function getUploadedFiles()
+    {
         reset($_FILES);
         return current($_FILES);
     }
