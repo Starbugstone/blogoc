@@ -4,10 +4,20 @@
 <form action="/admin/new/post" method="post">
 
     <div class="row">
-        <div class="form-group col-8">
-            <textarea id="newPostTextArea"></textarea>
+        <div class="form-group col-md-12">
+            <label for="newPostTitle">Post Name</label>
+            <input type="text" id="newPostTitle" name="newPostTitle">
         </div>
-        <div class="form-group col-4">
+        <div class="form-group col-md-12">
+            <label for="newPostSlug">Post Slug</label>
+            <input type="text" id="newPostSlug" name="newPostSlug">
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-8">
+            <textarea id="newPostTextArea" name="newPostTextArea"></textarea>
+        </div>
+        <div class="form-group col-md-4">
             <label for="categorySelector">Select a category</label>
             <select name="categorySelector" id="categorySelector" class="form-control">
                 {% for category in categories %}
@@ -23,6 +33,23 @@
 {% block js %}
 <script>
     setupTinymce("#newPostTextArea");
+
+    //Slugify the title on key up
+    setupAjax();
+    var $slugRequest = null;
+    $("#newPostTitle").keyup(function () {
+        $text = $("#newPostTitle").val();
+        if($slugRequest !== null){
+            $slugRequest.abort();
+        }
+
+        $slugRequest = $.ajax({
+            url: "/ajax/ajaxSlugify/slugify-string",
+            data: {'slugText-update': $text}
+        }).done(function($result){
+            $("#newPostSlug").val($result.slug);
+        });
+    });
 </script>
 
 {% endblock %}
