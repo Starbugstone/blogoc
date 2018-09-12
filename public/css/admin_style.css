@@ -26,6 +26,12 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
   body.fixed-nav.sidebar-toggled #content-wrapper {
     padding-left: 90px; } }
 
+.selected-tags {
+  border-radius: 50px;
+  text-align: center;
+  background-color: aliceblue;
+  margin-top: 3px; }
+
 .navbar-nav .form-inline .input-group {
   width: 100%; }
 

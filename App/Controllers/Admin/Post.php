@@ -2,6 +2,7 @@
 namespace App\Controllers\Admin;
 
 use App\Models\CategoryModel;
+use App\Models\TagsModel;
 use Core\AdminController;
 
 class Post extends AdminController{
@@ -12,7 +13,9 @@ class Post extends AdminController{
     public function new(){
         $this->onlyAdmin();
         $categoryModel = new CategoryModel($this->container);
+        $tagModel = new TagsModel($this->container);
         $this->data['categories'] = $categoryModel->getCategories();
+        $this->data['tags'] = $tagModel->getTags();
         $this->renderView('Admin/NewPost');
     }
 

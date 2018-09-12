@@ -24,6 +24,22 @@
                     <option value="{{ category.idcategories }}">{{ category.category_name }}</option>
                 {% endfor %}
             </select>
+            <label for="tagSelector">add tags</label>
+
+            <div class="input-group">
+
+                <input list="tags" type="text" class="form-control" id="tagSelector" name="tagSelector" data-idtags="" autocomplete="off">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" id="addTag">Add</button>
+               </span>
+                <datalist id="tags">
+                    {% for tag in tags %}
+                        <option id="tags-{{ tag.tag_name }}" value="{{ tag.tag_name }}" data-idtags="{{ tag.idtags }}"></option>
+                    {% endfor %}
+                </datalist>
+            </div>
+            <span id="selectedTags"></span>
+
         </div>
     </div>
 
@@ -50,6 +66,23 @@
             $("#newPostSlug").val($result.slug);
         });
     });
+
+    //Add tag
+
+    $("#addTag").on("click",function($e){
+        //add the tag + id to the post
+        //Also must create new tags
+        var value = $("#tagSelector").val();
+        var option = $("#tags").find("[value=\""+value+"\"]");
+        var tagHtml = "<span><input class=\"selected-tags\" type=\"text\" data-idtags=\""+option.data("idtags")+"\" value=\""+value+"\" readonly><i class=\"fa fa-times-circle-o\" aria-hidden=\"true\" onclick=\"closeMe(this)\"></i></span>";
+        $("#selectedTags").append(tagHtml);
+        $("#tagSelector").val("");
+    });
+
+    //remove tag
+    function closeMe(element){
+        $(element).parent("span").remove();
+    }
 </script>
 
 {% endblock %}
