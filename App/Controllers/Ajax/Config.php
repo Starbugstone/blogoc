@@ -7,7 +7,7 @@ use Core\AjaxController;
 use Core\JsonException;
 use Core\Traits\StringFunctions;
 
-class Update extends AjaxController
+class Config extends AjaxController
 {
     use StringFunctions;
 
@@ -15,7 +15,7 @@ class Update extends AjaxController
      * Update the site configuration via Ajax post
      * @throws JsonException
      */
-    public function updateConfig()
+    public function update()
     {
         //security checks
         $this->onlyAdmin();

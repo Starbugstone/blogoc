@@ -6,7 +6,7 @@
 
     {% for key, val in configList %}
         <h1>{{ key |replace({'_':' '}) }}</h1>
-        <form action="/admin/update/update-config" method="post" class="update-config">
+        <form action="/admin/config/update-config" method="post" class="update-config">
             {% for config in val %}
                 {% set inputType = config.configs_type_name %}
                 {% if config.configs_type_name == 'image' %}
@@ -16,12 +16,12 @@
                     <label for="{{ config.idconfigs }}">{{ config.configs_name|replace({'_':' '}) }}</label>
                     <span id="{{ config.idconfigs }}-icon"></span>
 
-                        <input type="{{ inputType }}" class="form-control" name="{{ config.idconfigs }}"
-                               id="{{ config.idconfigs }}" data-configId="{{ config.idconfigs }}"
-                               data-configType="{{ config.configs_type }}"
-                               value="{{ config.configs_value }}">
+                    <input type="{{ inputType }}" class="form-control" name="{{ config.idconfigs }}"
+                           id="{{ config.idconfigs }}" data-configId="{{ config.idconfigs }}"
+                           data-configType="{{ config.configs_type }}"
+                           value="{{ config.configs_value }}">
                     {% if config.configs_type_name == 'image' %}
-                        <a class="btn btn-primary" href="#">Upload img</a>
+                        <!--<a class="btn btn-primary" href="#">Upload img</a>-->
                     {% endif %}
 
                 </div>
@@ -44,9 +44,9 @@
                 setupAjax();
 
                 $.ajax({
-                    url: "/ajax/update/updateConfig",
+                    url: "/ajax/config/update",
                     data: {'config-update': $data_json},
-                }).done(function($result){
+                }).done(function ($result) {
                     $.each($result['successId'], function ($key, $id) {
                         $("#" + $id + "-icon").html("<i class=\" fa fa-check\"></i>");
                     });
