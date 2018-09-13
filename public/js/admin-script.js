@@ -24,9 +24,10 @@ function setupTinymce($selector) {
         min_height: 250,
 
         relative_urls: false,
-        remove_script_host: false,
+        remove_script_host: true,
         document_base_url: url, //we want to call from the base url
-
+        convert_urls: true,
+        //document_base_url: "/",
 
         /* plugin */
         plugins: [

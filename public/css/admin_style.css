@@ -32,6 +32,23 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
   background-color: aliceblue;
   margin-top: 3px; }
 
+.chip {
+  display: inline-block;
+  padding: 0 25px;
+  height: 50px;
+  font-size: 16px;
+  line-height: 50px;
+  border-radius: 25px;
+  background-color: #f1f1f1; }
+  .chip .closebtn {
+    padding-left: 10px;
+    color: #888;
+    font-weight: bold;
+    font-size: 20px;
+    cursor: pointer; }
+  .chip .closebtn:hover {
+    color: #000; }
+
 .navbar-nav .form-inline .input-group {
   width: 100%; }
 

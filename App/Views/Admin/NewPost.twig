@@ -86,14 +86,16 @@
             if ($value !== "") { //only do action if we have a tag
                 var $option = $("#tags").find("[value=\"" + $value + "\"]");
 
-                var $tagHtml = "<span>";
-                $tagHtml += "<input name=\"tags[" + $tagNumber + "][name]\" class=\"selected-tags\" type=\"text\" value=\"" + $value + "\" readonly>";
+                var $tagHtml = "<span class=\"tagChip\">";
+
+                $tagHtml += "<div class=\"chip mx-1 mt-2\">" +$value+ "<i class=\"fa fa-times-circle-o closebtn\" aria-hidden=\"true\" onclick=\"closeMe(this)\"></i>"+"</div>";
+
+                //the tag value
+                $tagHtml += "<input name=\"tags[" + $tagNumber + "][name]\" class=\"selected-tags\" type=\"hidden\" value=\"" + $value + "\" readonly>";
 
                 if ($option.length > 0) { //if the tag already exists, add the id
                     $tagHtml += "<input name=\"tags[" + $tagNumber + "][id]\" class=\"selected-tags\" type=\"hidden\" value=\"" + $option.data("idtags") + "\" readonly>";
                 }
-
-                $tagHtml += "<i class=\"fa fa-times-circle-o\" aria-hidden=\"true\" onclick=\"closeMe(this)\"></i>";
                 $tagHtml += "</span>";
                 $("#selectedTags").append($tagHtml);
                 $("#tagSelector").val("");
@@ -103,7 +105,7 @@
 
         //remove tag
         function closeMe($element) {
-            $($element).parent("span").remove();
+            $($element).parents("span.tagChip").remove();
         }
 
         //ajax to do the testing before submit
