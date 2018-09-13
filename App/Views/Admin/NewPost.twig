@@ -109,7 +109,12 @@
         }
 
         //ajax to do the testing before submit
-
+        $("#newPost").on("submit", function($e){
+            if($("#tagSelector").is(":focus")){
+                $e.preventDefault();
+                $("#addTag").click();
+            }
+        });
     </script>
 
 {% endblock %}
