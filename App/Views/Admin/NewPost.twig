@@ -110,10 +110,14 @@
 
         //ajax to do the testing before submit
         $("#newPost").on("submit", function($e){
+            //over-ride the submit button if we are adding tags. Just add tag instead
             if($("#tagSelector").is(":focus")){
                 $e.preventDefault();
                 $("#addTag").click();
+                return;
             }
+            
+
         });
     </script>
 
