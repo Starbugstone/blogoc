@@ -4,7 +4,8 @@
     "ext-json": "*",
     "php": "^7.1",
     "twig/twig": "^2.0",
-    "cocur/slugify": "^3.1"
+    "cocur/slugify": "^3.1",
+    "kartik-v/bootstrap-fileinput": "@dev"
   },
   "autoload": {
     "psr-4": {
