@@ -10,7 +10,7 @@
             {% for config in val %}
                 {% set inputType = config.configs_type_name %}
                 {% if config.configs_type_name == 'image' %}
-                    {% set inputType = 'url' %}
+                    {% set inputType = 'text' %}
                 {% endif %}
                 <div class="form-group col-8">
                     <label for="{{ config.idconfigs }}">{{ config.configs_name|replace({'_':' '}) }}</label>
@@ -21,7 +21,10 @@
                            data-configType="{{ config.configs_type }}"
                            value="{{ config.configs_value }}">
                     {% if config.configs_type_name == 'image' %}
-                        <!--<a class="btn btn-primary" href="#">Upload img</a>-->
+                        <p class="text-center mt-3 display-image"><img src="{{ config.configs_value }}"
+                                                                       class="rounded-circle display-image"
+                                                                       style="height: 7rem"></p>
+                        <input type="file" class="image-upload">
                     {% endif %}
 
                 </div>
@@ -34,14 +37,16 @@
 
 {% block js %}
     <script>
+        //init our headers for ajax calls
+        setupAjax();
+
+        //The form submit ajax call
         $(".update-config").each(function () {
 
             $(this).on("submit", function ($e) {
                 $e.preventDefault();
 
                 var $data_json = JSON.stringify($(this).serializeArray());
-
-                setupAjax();
 
                 $.ajax({
                     url: "/ajax/config/update",
@@ -63,6 +68,27 @@
             });
 
 
+        });
+
+        //Initialise the file upload
+        $("input.image-upload").each(function () {
+            var $setImage = $(this).siblings("p.display-image").children("img.display-image");
+            var $setUrl = $(this).siblings("input.form-control");
+            $(this).fileinput({
+                showPreview: false,
+                uploadUrl: "/ajax/image-upload/file-input-config-upload",
+                maxFileCount: 1,
+                showRemove: false
+            });
+
+            //once the file is uploaded
+            $(this).on('fileuploaded', function (event, data) {
+                var $url = "/" + data.response["location"];
+                $setImage.attr("src", $url);
+                $setUrl.attr("value", $url);
+                setupToastr();
+                toastr.info('image uploaded, update to save');
+            });
         });
     </script>
 
