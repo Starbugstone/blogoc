@@ -75,7 +75,7 @@ class ImageUpload extends AjaxController
         //security checks, only admins can upload images to config
         $this->onlyAdmin();
         if (!$this->container->getRequest()->isPost()) {
-            throw new JsonException('Call is not post');
+            throw new \Core\JsonException('Call is not post');
         }
         $tempFile = $this->request->getUploadedFiles();
 
