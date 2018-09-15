@@ -15,7 +15,7 @@ class ImageUpload extends AjaxController
 
     /**
      * check if the image name is valid
-     * @param $image filename to check
+     * @param $image string filename to check
      * @return bool if image name is valid
      *
      */
@@ -43,7 +43,7 @@ class ImageUpload extends AjaxController
         //security checks, only admins can upload images to posts
         $this->onlyAdmin();
         if (!$this->container->getRequest()->isPost()) {
-            throw new JsonException('Call is not post');
+            throw new \Core\JsonException('Call is not post');
         }
 
         $tempFile = $this->request->getUploadedFiles();
