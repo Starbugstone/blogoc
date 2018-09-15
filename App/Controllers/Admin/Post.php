@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Models\CategoryModel;
 use App\Models\PostModel;
+use App\Models\SlugModel;
 use App\Models\TagsModel;
 use Core\AdminController;
 
@@ -67,11 +68,17 @@ class Post extends AdminController
         $onFrontpage = $posts["isOnFrontPage"];
         $idUser = 1; //TODO Get from session
 
+        $slugModel = new SlugModel($this->container);
+        if (!$slugModel->isUnique($postSlug, "posts", "posts_slug")) {
+            die("SLUG not unique");
+        }
+
         $postModel = new PostModel($this->container);
 
-        $postId = $postModel->newPost($title,$postImage,$idCategory,$article,$idUser,$published,$onFrontpage,$postSlug);
+        $postId = $postModel->newPost($title, $postImage, $idCategory, $article, $idUser, $published, $onFrontpage,
+            $postSlug);
 
-        echo"<p>new post ID : ".$postId."</p>";
+        echo "<p>new post ID : " . $postId . "</p>";
 
         echo "<pre>";
         var_dump($posts);
