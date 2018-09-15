@@ -24,6 +24,7 @@ class Login extends Controller
     {
         $this->session->set('user_role_name', 'Admin');
         $this->session->set('user_role_level', 2);
+        $this->session->set('user_id',1);
         $this->alertBox->setAlert('Connected as admin');
         $this->container->getResponse()->redirect('/admin/');
     }

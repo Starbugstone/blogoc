@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Models\CategoryModel;
+use App\Models\PostModel;
 use App\Models\TagsModel;
 use Core\AdminController;
 
@@ -56,6 +57,21 @@ class Post extends AdminController
         //Tags, check if duplicate before creating new tag
         //Tags, must have created the post and got the id before associating the tags
         //grab author from session
+
+        $title = $posts["newPostTitle"];
+        $postImage = "http://lorempixel.com/400/200/"; //TODO Change this, need image upload
+        $postSlug = $posts["newPostSlug"]; //TODO Check if unique
+        $article = $posts["newPostTextArea"];
+        $idCategory = $posts["categorySelector"];
+        $published = $posts["isPublished"];
+        $onFrontpage = $posts["isOnFrontPage"];
+        $idUser = 1; //TODO Get from session
+
+        $postModel = new PostModel($this->container);
+
+        $postId = $postModel->newPost($title,$postImage,$idCategory,$article,$idUser,$published,$onFrontpage,$postSlug);
+
+        echo"<p>new post ID : ".$postId."</p>";
 
         echo "<pre>";
         var_dump($posts);

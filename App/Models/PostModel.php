@@ -66,4 +66,38 @@ class PostModel extends Model
     {
         return $this->getAllPosts($offset, $limit, false);
     }
+
+
+    public function newPost(
+        string $title,
+        string $postImage,
+        int $idCategory,
+        string $article,
+        int $idUser,
+        int $published,
+        int $onFrontPage,
+        string $postSlug
+    ) {
+
+        $postsTbl = $this->getTablePrefix('posts');
+        $sql = "
+          INSERT INTO $postsTbl (title, post_image, categories_idcategories, article, author_iduser, creation_date, published, on_front_page, posts_slug)
+          VALUES (:title, :post_image, :categories_idcategories, :article, :author_iduser, NOW(), :published, :on_front_page, :posts_slug)
+        ";
+        $stmt = $this->dbh->prepare($sql);
+        $stmt->bindValue(':title', $title);
+        $stmt->bindValue(':post_image', $postImage);
+        $stmt->bindValue(':categories_idcategories', $idCategory);
+        $stmt->bindValue(':article', $article);
+        $stmt->bindValue(':author_iduser', $idUser);
+        $stmt->bindValue(':published', $published);
+        $stmt->bindValue(':on_front_page', $onFrontPage);
+        $stmt->bindValue(':posts_slug', $postSlug);
+
+        $stmt->execute();
+
+        return $this->dbh->lastInsertId();
+
+    }
+
 }
