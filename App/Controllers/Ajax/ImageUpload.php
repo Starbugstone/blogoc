@@ -19,7 +19,7 @@ class ImageUpload extends AjaxController
      * @return bool if image name is valid
      *
      */
-    private function isimageValid($image)
+    private function isimageValid($image):bool
     {
         // Sanitize input
         if (preg_match("/([^\w\s\d\-_~,;:\[\]\(\).])|([\.]{2,})/", $image)) {
@@ -32,6 +32,30 @@ class ImageUpload extends AjaxController
         }
 
         return true;
+    }
+
+    /**
+     * @param $tempFile array
+     * @param $folder string
+     */
+    private function fileInputUpload(array $tempFile, string $folder)
+    {
+        if (is_uploaded_file($tempFile['tmp_name'])) {
+            if (!$this->isimageValid($tempFile['name'])) {
+                echo json_encode(array('error' => 'Invalid name or file extension'));
+                return;
+            }
+
+            $filetowrite = $folder . $tempFile['name'];
+            move_uploaded_file($tempFile['tmp_name'], $filetowrite);
+
+            // Respond to the successful upload with JSON.
+            echo json_encode(array('location' => $filetowrite));
+        } else {
+            // Notify editor that the upload failed
+            echo json_encode(array('error' => 'Upload failed'));
+        }
+
     }
 
     /**
@@ -79,23 +103,23 @@ class ImageUpload extends AjaxController
         }
         $tempFile = $this->request->getUploadedFiles();
 
-        //need to clean up
-        if (is_uploaded_file($tempFile['tmp_name'])) {
-            if (!$this->isimageValid($tempFile['name'])) {
-                echo json_encode(array('error' => 'Invalid name or file extension'));
-                return;
-            }
+        $this->fileInputUpload($tempFile, $this->configFolder);
 
-            $filetowrite = $this->configFolder . $tempFile['name'];
-            move_uploaded_file($tempFile['tmp_name'], $filetowrite);
-
-            // Respond to the successful upload with JSON.
-            echo json_encode(array('location' => $filetowrite));
-        } else {
-            // Notify editor that the upload failed
-            echo json_encode(array('error' => 'Upload failed'));
-        }
     }
 
+    /**
+     * Upload for the file input in the configuration
+     */
+    public function fileInputPostUpload()
+    {
+        //security checks, only admins can upload images to config
+        $this->onlyAdmin();
+        if (!$this->container->getRequest()->isPost()) {
+            throw new \Core\JsonException('Call is not post');
+        }
+        $tempFile = $this->request->getUploadedFiles();
+
+        $this->fileInputUpload($tempFile, $this->imageFolder);
+    }
 
 }

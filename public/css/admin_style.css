@@ -49,6 +49,9 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
   .chip .closebtn:hover {
     color: #000; }
 
+.image-upload-height {
+  height: 7rem; }
+
 .navbar-nav .form-inline .input-group {
   width: 100%; }
 

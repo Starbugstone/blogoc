@@ -15,6 +15,17 @@
 
             </div>
             <div class="form-group col-lg-4">
+
+                <label for="newPostImage">Post Image</label>
+
+                <input type="text" class="form-control" name="newPostImage" id="newPostImage" value="">
+
+                    <p class="text-center mt-3 display-image image-upload-height">
+                        <img src="" class="img-thumbnail display-image img-fluid image-upload-height">
+                    </p>
+                    <input type="file" class="image-upload" id="postImageUpload">
+
+
                 <label for="categorySelector">Select a category</label>
                 <select name="categorySelector" id="categorySelector" class="form-control">
                     {% for category in categories %}
@@ -60,10 +71,10 @@
 
 {% block js %}
     <script>
+        setupAjax();
         setupTinymce("#newPostTextArea");
 
         //Slugify the title on key up
-        setupAjax();
         var $slugRequest = null;
         $("#newPostTitle").keyup(function () {
             $text = $("#newPostTitle").val();
@@ -116,9 +127,38 @@
                 $("#addTag").click();
                 return;
             }
-            
-
         });
+
+        //---------------------------------------
+        // Post image upload
+        //---------------------------------------
+
+        //Initialise the file upload
+        var $postImageUpload = $("#postImageUpload");
+
+        var $setImage = $postImageUpload.siblings("p.display-image").children("img.display-image");
+        var $setUrl = $postImageUpload.siblings("input.form-control");
+        $postImageUpload.fileinput({
+            showPreview: false,
+            uploadUrl: "/ajax/image-upload/file-input-post-upload",
+            maxFileCount: 1,
+            showRemove: false
+        });
+
+        //once the file is uploaded
+        $postImageUpload.on('fileuploaded', function (event, data) {
+            var $url = "/" + data.response["location"];
+            $setImage.attr("src", $url);
+            $setUrl.attr("value", $url);
+            setupToastr();
+            toastr.info('image uploaded');
+        });
+
+        //if we enter a url
+        $("#newPostImage").keyup(function(){
+            $setImage.attr("src", $(this).val());
+        });
+
     </script>
 
 {% endblock %}

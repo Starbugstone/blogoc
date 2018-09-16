@@ -21,9 +21,9 @@
                            data-configType="{{ config.configs_type }}"
                            value="{{ config.configs_value }}">
                     {% if config.configs_type_name == 'image' %}
-                        <p class="text-center mt-3 display-image"><img src="{{ config.configs_value }}"
-                                                                       class="rounded-circle display-image"
-                                                                       style="height: 7rem"></p>
+                        <p class="text-center mt-3 display-image image-upload-height">
+                            <img src="{{ config.configs_value }}" class="rounded-circle display-image img-fluid image-upload-height">
+                        </p>
                         <input type="file" class="image-upload">
                     {% endif %}
 
@@ -70,6 +70,10 @@
 
         });
 
+        //---------------------------------------
+        // Config image upload
+        //---------------------------------------
+
         //Initialise the file upload
         $("input.image-upload").each(function () {
             var $setImage = $(this).siblings("p.display-image").children("img.display-image");
@@ -88,6 +92,11 @@
                 $setUrl.attr("value", $url);
                 setupToastr();
                 toastr.info('image uploaded, update to save');
+            });
+
+            //if we enter a url
+            $setUrl.keyup(function(){
+                $setImage.attr("src", $(this).val());
             });
         });
     </script>
