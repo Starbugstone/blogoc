@@ -57,6 +57,7 @@ class Post extends AdminController
             $this->response->redirect('admin');
         }
         $posts = $this->container->getRequest()->getDataFull();
+        $userSessionid = $this->container->getSession()->get("user_id");
 
         //TODO
         //Slug, check if duplicate
@@ -71,7 +72,7 @@ class Post extends AdminController
         $idCategory = $posts["categorySelector"];
         $published = $posts["isPublished"];
         $onFrontpage = $posts["isOnFrontPage"];
-        $idUser = 1; //TODO Get from session
+        $idUser = $userSessionid;
 
         $slugModel = new SlugModel($this->container);
         if (!$slugModel->isUnique($postSlug, "posts", "posts_slug")) {
