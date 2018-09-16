@@ -30,6 +30,7 @@ class PostModel extends Model
         if ($isFrontPage) {
             $sql .= " WHERE on_front_page = 1";
         }
+        $sql .= " ORDER BY $postsTbl.creation_date DESC";
         $sql .= " LIMIT $limit OFFSET $offset";
         $this->query($sql);
         $this->execute();
@@ -68,6 +69,18 @@ class PostModel extends Model
     }
 
 
+    /**
+     * Create a new post
+     * @param string $title
+     * @param string $postImage
+     * @param int $idCategory
+     * @param string $article
+     * @param int $idUser
+     * @param int $published
+     * @param int $onFrontPage
+     * @param string $postSlug
+     * @return string
+     */
     public function newPost(
         string $title,
         string $postImage,

@@ -87,6 +87,7 @@ trait StringFunctions
         }
         $trimed = '';
         for ( $wordCounter = 0; $wordCounter < $count; $wordCounter++ ){
+            //TODO Take into account the "read more" tag
             $trimed .= $string[$wordCounter];
             if ( $wordCounter < $count-1 ){ $trimed .= " "; }
             else { $trimed .= "..."; }
