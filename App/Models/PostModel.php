@@ -3,12 +3,25 @@
 namespace App\Models;
 
 use Core\Constant;
+use Core\Container;
 use Core\Model;
 use Core\Traits\StringFunctions;
 
 class PostModel extends Model
 {
     use StringFunctions;
+
+    private $postsTbl;
+    private $categoriesTbl;
+    private $usersTbl;
+
+    public function __construct(Container $container)
+    {
+        parent::__construct($container);
+        $this->postsTbl = $this->getTablePrefix('posts');
+        $this->categoriesTbl = $this->getTablePrefix('categories');
+        $this->usersTbl = $this->getTablePrefix('users');
+    }
 
     /**
      * get all the posts with details
@@ -20,17 +33,13 @@ class PostModel extends Model
      */
     private function getAllPosts(int $offset, int $limit, bool $isFrontPage = false)
     {
-        $postsTbl = $this->getTablePrefix('posts');
-        $categoriesTbl = $this->getTablePrefix('categories');
-        $usersTbl = $this->getTablePrefix('users');
-
-        $sql = "SELECT title, post_image,article,$postsTbl.last_update, posts_slug, category_name, categories_slug, pseudo as author, idusers
-                FROM $postsTbl INNER JOIN $categoriesTbl ON $postsTbl.categories_idcategories = $categoriesTbl.idcategories
-                INNER JOIN $usersTbl ON $postsTbl.author_iduser = $usersTbl.idusers";
+        $sql = "SELECT title, post_image,article,$this->postsTbl.last_update, posts_slug, category_name, categories_slug, pseudo as author, idusers
+                FROM $this->postsTbl INNER JOIN $this->categoriesTbl ON $this->postsTbl.categories_idcategories = $this->categoriesTbl.idcategories
+                INNER JOIN $this->usersTbl ON $this->postsTbl.author_iduser = $this->usersTbl.idusers";
         if ($isFrontPage) {
             $sql .= " WHERE on_front_page = 1";
         }
-        $sql .= " ORDER BY $postsTbl.creation_date DESC";
+        $sql .= " ORDER BY $this->postsTbl.creation_date DESC";
         $sql .= " LIMIT $limit OFFSET $offset";
         $this->query($sql);
         $this->execute();
@@ -91,23 +100,21 @@ class PostModel extends Model
         int $onFrontPage,
         string $postSlug
     ) {
-
-        $postsTbl = $this->getTablePrefix('posts');
         $sql = "
-          INSERT INTO $postsTbl (title, post_image, categories_idcategories, article, author_iduser, creation_date, published, on_front_page, posts_slug)
+          INSERT INTO $this->postsTbl (title, post_image, categories_idcategories, article, author_iduser, creation_date, published, on_front_page, posts_slug)
           VALUES (:title, :post_image, :categories_idcategories, :article, :author_iduser, NOW(), :published, :on_front_page, :posts_slug)
         ";
-        $stmt = $this->dbh->prepare($sql);
-        $stmt->bindValue(':title', $title);
-        $stmt->bindValue(':post_image', $postImage);
-        $stmt->bindValue(':categories_idcategories', $idCategory);
-        $stmt->bindValue(':article', $article);
-        $stmt->bindValue(':author_iduser', $idUser);
-        $stmt->bindValue(':published', $published);
-        $stmt->bindValue(':on_front_page', $onFrontPage);
-        $stmt->bindValue(':posts_slug', $postSlug);
+        $this->query($sql);
+        $this->bind(':title', $title);
+        $this->bind(':post_image', $postImage);
+        $this->bind(':categories_idcategories', $idCategory);
+        $this->bind(':article', $article);
+        $this->bind(':author_iduser', $idUser);
+        $this->bind(':published', $published);
+        $this->bind(':on_front_page', $onFrontPage);
+        $this->bind(':posts_slug', $postSlug);
 
-        $stmt->execute();
+        $this->execute();
 
         return $this->dbh->lastInsertId();
 
