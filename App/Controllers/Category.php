@@ -19,6 +19,15 @@ class Category extends Controller
         parent::__construct($container);
     }
 
+    /**
+     * show all posts in a category
+     * @param string $categorySlug the slug passed via url
+     * @throws \ErrorException
+     * @throws \ReflectionException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public function posts(string $categorySlug)
     {
         $slugModel = new SlugModel($this->container);

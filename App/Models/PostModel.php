@@ -89,6 +89,7 @@ class PostModel extends Model
      * @param int $onFrontPage
      * @param string $postSlug
      * @return string
+     * @throws \Exception
      */
     public function newPost(
         string $title,
@@ -120,7 +121,13 @@ class PostModel extends Model
 
     }
 
-    public function getPostsInCategory(int $categoryId):array
+    /**
+     * get all the posts from a certain category
+     * @param int $categoryId the id of the category
+     * @return array list of posts in set category
+     * @throws \Exception
+     */
+    public function getPostsInCategory(int $categoryId): array
     {
         $sql = "SELECT * FROM $this->postsTbl WHERE categories_idcategories = :categoryId;";
         $this->query($sql);
