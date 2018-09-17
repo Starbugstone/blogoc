@@ -100,6 +100,11 @@ trait StringFunctions
         return $trimed;
     }
 
+    /**
+     * check passed string, returns true if the string contains alphaNum or _ or -. use for checking database tables, column names or slugs
+     * @param string $string the string to analyse
+     * @return bool
+     */
     public function isAlphaNum(string $string): bool
     {
         if (preg_match("/^[A-Za-z0-9_-]+$/", $string)) {
