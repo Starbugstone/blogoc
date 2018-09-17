@@ -120,4 +120,14 @@ class PostModel extends Model
 
     }
 
+    public function getPostsInCategory(int $categoryId):array
+    {
+        $sql = "SELECT * FROM $this->postsTbl WHERE categories_idcategories = :categoryId;";
+        $this->query($sql);
+        $this->bind(":categoryId", $categoryId, \PDO::PARAM_INT);
+        $this->execute();
+
+        return $this->fetchAll();
+    }
+
 }

@@ -1,0 +1,12 @@
+{% extends "Base.twig" %}
+
+{% block title %}Category Page{% endblock %}
+
+{% block main %}
+    {% for post in posts %}
+        <p>{{ post.title }}</p>
+    {% endfor %}
+{% endblock %}
+
+{% block js %}
+{% endblock %}

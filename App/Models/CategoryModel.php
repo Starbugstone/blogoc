@@ -26,7 +26,7 @@ class CategoryModel extends Model{
         $categories = $this->getCategories();
         foreach ($categories as $category) {
             $data += [
-                $category->category_name => '/category/' . $category->categories_slug
+                $category->category_name => '/category/posts/' . $category->categories_slug
             ];
         }
         return $data;

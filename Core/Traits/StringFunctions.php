@@ -75,24 +75,36 @@ trait StringFunctions
      * @return string the shortend text
      * @throws \ErrorException
      */
-    public function getExcerpt(string $text, int $count=Constant::EXCERPT_WORD_COUNT){
-        if($count < 1){
+    public function getExcerpt(string $text, int $count = Constant::EXCERPT_WORD_COUNT)
+    {
+        if ($count < 1) {
             throw new \ErrorException('excerpt length too low');
         }
 
         $text = str_replace("  ", " ", $text);
         $string = explode(" ", $text);
-        if(count($string) <= $count){
+        if (count($string) <= $count) {
             return $text;
         }
         $trimed = '';
-        for ( $wordCounter = 0; $wordCounter < $count; $wordCounter++ ){
+        for ($wordCounter = 0; $wordCounter < $count; $wordCounter++) {
             //TODO Take into account the "read more" tag
             $trimed .= $string[$wordCounter];
-            if ( $wordCounter < $count-1 ){ $trimed .= " "; }
-            else { $trimed .= "..."; }
+            if ($wordCounter < $count - 1) {
+                $trimed .= " ";
+            } else {
+                $trimed .= "...";
+            }
         }
         $trimed = trim($trimed);
         return $trimed;
+    }
+
+    public function isAlphaNum(string $string): bool
+    {
+        if (preg_match("/^[A-Za-z0-9_-]+$/", $string)) {
+            return true;
+        }
+        return false;
     }
 }
