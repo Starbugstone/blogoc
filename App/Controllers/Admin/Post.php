@@ -75,18 +75,25 @@ class Post extends AdminController
         $idUser = $userSessionid;
 
         $slugModel = new SlugModel($this->container);
+        $tagModel = new TagsModel($this->container);
+        $postModel = new PostModel($this->container);
+
+        //security and error checks
         if (!$slugModel->isUnique($postSlug, "posts", "posts_slug")) {
             die("SLUG not unique");
         }
-
-        $postModel = new PostModel($this->container);
-
-        $postId = $postModel->newPost($title, $postImage, $idCategory, $article, $idUser, $published, $onFrontpage,
-            $postSlug);
+        
+        $postId = $postModel->newPost($title, $postImage, $idCategory, $article, $idUser, $published, $onFrontpage, $postSlug);
 
         echo "<p>new post ID : " . $postId . "</p>";
 
-        //TODO add the tags and create new tags if necessary
+        foreach ($posts["tags"] as $tag) {
+            if(isset($tag["id"])){
+                $tagModel->addTagToPost($postId, $tag["id"]);
+                continue;
+            }
+            $tagModel->addNewTagToPost($postId, $tag["name"]);
+        }
 
         echo "<pre>";
         var_dump($posts);
