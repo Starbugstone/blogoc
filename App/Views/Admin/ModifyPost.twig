@@ -1,6 +1,7 @@
 {% extends "Admin/Base.twig" %}
 
 {% block main %}
+    <h1>TO BE UPDATED</h1>
     <form action="/admin/post/create-new-post" method="post" id="newPost">
         <div class="row">
             <div class="form-group col-lg-8">
@@ -120,7 +121,6 @@
         }
 
         //ajax to do the testing before submit
-        var $submitting=false;
         $("#newPost").on("submit", function($e){
             //over-ride the submit button if we are adding tags. Just add tag instead
             if($("#tagSelector").is(":focus")){
@@ -128,32 +128,6 @@
                 $("#addTag").click();
                 return;
             }
-
-            //submitting toggle to avoid loop
-
-            if(!$submitting){
-
-                //TODO check other elements
-
-                $e.preventDefault(); //stop the send while ajax verification
-                $slugValue = $("#newPostSlug").val();
-                $.ajax({
-                    url: "/ajax/post-verification/is-slug-unique/",
-                    data: {'postSlug': $slugValue}
-                }).done(function($result){
-                    if($result)
-                    {
-                        $submitting = true;
-                        $("#newPost").submit();
-                        return;
-                    }
-                    setupToastr();
-                    toastr.error('Slug not unique');
-                });
-            }
-
-
-
         });
 
         //---------------------------------------
