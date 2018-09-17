@@ -87,13 +87,16 @@ class Post extends AdminController
 
         echo "<p>new post ID : " . $postId . "</p>";
 
-        foreach ($posts["tags"] as $tag) {
-            if(isset($tag["id"])){
-                $tagModel->addTagToPost($postId, $tag["id"]);
-                continue;
+        if(isset($posts["tags"])){
+            foreach ($posts["tags"] as $tag) {
+                if(isset($tag["id"])){
+                    $tagModel->addTagToPost($postId, $tag["id"]);
+                    continue;
+                }
+                $tagModel->addNewTagToPost($postId, $tag["name"]);
             }
-            $tagModel->addNewTagToPost($postId, $tag["name"]);
         }
+
 
         echo "<pre>";
         var_dump($posts);
