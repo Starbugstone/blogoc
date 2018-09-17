@@ -31,7 +31,7 @@ class PostModel extends Model
      * @return array list of posts
      * @throws \ErrorException
      */
-    private function getAllPosts(int $offset, int $limit, bool $isFrontPage = false)
+    private function getAllPosts(int $offset, int $limit, bool $isFrontPage = false):array
     {
         $sql = "SELECT title, post_image,article,$this->postsTbl.last_update, posts_slug, category_name, categories_slug, pseudo as author, idusers
                 FROM $this->postsTbl INNER JOIN $this->categoriesTbl ON $this->postsTbl.categories_idcategories = $this->categoriesTbl.idcategories
@@ -40,8 +40,10 @@ class PostModel extends Model
             $sql .= " WHERE on_front_page = 1";
         }
         $sql .= " ORDER BY $this->postsTbl.creation_date DESC";
-        $sql .= " LIMIT $limit OFFSET $offset";
+        $sql .= " LIMIT :limit OFFSET :offset";
         $this->query($sql);
+        $this->bind(":limit", $limit);
+        $this->bind(":offset", $offset);
         $this->execute();
         $results = $this->fetchAll();
         $sendResults = [];
@@ -124,17 +126,34 @@ class PostModel extends Model
     /**
      * get all the posts from a certain category
      * @param int $categoryId the id of the category
+     * @param int $offset the offset for pagination
+     * @param int $limit the limit to display
      * @return array list of posts in set category
      * @throws \Exception
      */
-    public function getPostsInCategory(int $categoryId): array
+    public function getPostsInCategory(int $categoryId, int $offset = 0, int $limit = Constant::POSTS_PER_PAGE): array
     {
-        $sql = "SELECT * FROM $this->postsTbl WHERE categories_idcategories = :categoryId;";
+        $sql = "SELECT title, post_image,article,$this->postsTbl.last_update, posts_slug, category_name, categories_slug, pseudo as author, idusers
+                FROM $this->postsTbl INNER JOIN $this->categoriesTbl ON $this->postsTbl.categories_idcategories = $this->categoriesTbl.idcategories
+                INNER JOIN $this->usersTbl ON $this->postsTbl.author_iduser = $this->usersTbl.idusers
+                WHERE categories_idcategories = :categoryId 
+                ORDER BY $this->postsTbl.creation_date DESC
+                LIMIT :limit OFFSET :offset
+                ";
         $this->query($sql);
         $this->bind(":categoryId", $categoryId, \PDO::PARAM_INT);
+        $this->bind(":limit", $limit);
+        $this->bind(":offset", $offset);
         $this->execute();
 
-        return $this->fetchAll();
+        $results = $this->fetchAll();
+        $sendResults = [];
+        //we create the excerpt for the text and add it to the object
+        foreach ($results as $result) {
+            $result->{'excerpt'} = $this->getExcerpt($result->article);
+            $sendResults[] = $result;
+        }
+        return $sendResults;
     }
 
 }

@@ -2,7 +2,7 @@
 --
 -- Host: 127.0.0.1    Database: blogoc
 -- ------------------------------------------------------
--- Server version	5.5.5-10.1.30-MariaDB
+-- Server version	5.5.5-10.1.31-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -80,13 +80,15 @@ CREATE TABLE `configs` (
   `idconfigs` int(11) NOT NULL AUTO_INCREMENT,
   `configs_name` varchar(255) NOT NULL,
   `configs_value` varchar(255) NOT NULL,
-  `configs_type` varchar(255) DEFAULT NULL,
   `configs_class_idconfigsclass` int(11) NOT NULL,
+  `configs_type_idconfigs_type` int(11) NOT NULL,
   PRIMARY KEY (`idconfigs`),
   UNIQUE KEY `configName_UNIQUE` (`configs_name`),
   UNIQUE KEY `idconfigs_UNIQUE` (`idconfigs`),
   KEY `fk_config_config_class1_idx` (`configs_class_idconfigsclass`),
-  CONSTRAINT `fk_config_config_class1` FOREIGN KEY (`configs_class_idconfigsclass`) REFERENCES `configs_class` (`idconfigsclass`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `fk_configs_configs_type1_idx` (`configs_type_idconfigs_type`),
+  CONSTRAINT `fk_config_config_class1` FOREIGN KEY (`configs_class_idconfigsclass`) REFERENCES `configs_class` (`idconfigsclass`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_configs_configs_type1` FOREIGN KEY (`configs_type_idconfigs_type`) REFERENCES `configs_type` (`idconfigs_type`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -96,7 +98,7 @@ CREATE TABLE `configs` (
 
 LOCK TABLES `configs` WRITE;
 /*!40000 ALTER TABLE `configs` DISABLE KEYS */;
-INSERT INTO `configs` VALUES (1,'front_text_1','Developping tomorrows Web','1',1),(2,'front_text_2','If I can imagine it','1',1),(3,'front_text_3','Smoke me a kipper,','1',1),(4,'social_icons_linkedin','https://www.linkedin.com/in/matthew-clancy-024597ba/','2',2),(5,'social_icons_github','https://github.com/Starbugstone','2',2),(6,'social_icons_twitter','https://twitter.com/StarbugStone','2',2),(7,'social_icons_facebook','','2',2),(8,'social_icons_website','https://starbugstone.eu','2',2),(9,'site_name','Blog OC','1',4),(10,'about_me_image','https://pbs.twimg.com/profile_images/3676317209/243cf055afcb2baa9fd894e5305985fa_400x400.jpeg','3',3),(11,'front_text_1_subtext','The starbug way','1',1),(12,'front_text_2_subtext','I can probably code it !','1',1),(13,'front_text_3_subtext','I\'ll be back for breakfast','1',1);
+INSERT INTO `configs` VALUES (1,'front_text_1','Developping tomorrows Web',1,1),(2,'front_text_2','If I can imagine it',1,1),(3,'front_text_3','Smoke me a kipper,',1,1),(4,'social_icons_linkedin','https://www.linkedin.com/in/matthew-clancy-024597ba/',2,2),(5,'social_icons_github','https://github.com/Starbugstone',2,2),(6,'social_icons_twitter','https://twitter.com/StarbugStone',2,2),(7,'social_icons_facebook','',2,2),(8,'social_icons_website','https://starbugstone.eu',2,2),(9,'site_name','Blog OC',4,1),(10,'about_me_image','/config_images/tournesol.jpg',3,3),(11,'front_text_1_subtext','The starbug way',1,1),(12,'front_text_2_subtext','I can probably code it !',1,1),(13,'front_text_3_subtext','I\'ll be back for breakfast',1,1);
 /*!40000 ALTER TABLE `configs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -174,7 +176,7 @@ CREATE TABLE `posts` (
   KEY `fk_post_category1_idx` (`categories_idcategories`),
   CONSTRAINT `fk_post_category1` FOREIGN KEY (`categories_idcategories`) REFERENCES `categories` (`idcategories`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_post_user1` FOREIGN KEY (`author_iduser`) REFERENCES `users` (`idusers`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -183,7 +185,7 @@ CREATE TABLE `posts` (
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
-INSERT INTO `posts` VALUES (1,'TEST POST','http://lorempixel.com/400/200/',3,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam condimentum, erat id congue imperdiet, dolor magna porta ex, id faucibus justo nulla vel erat. Ut auctor, ligula et luctus vestibulum, purus mauris vulputate leo, id imperdiet felis odio eget augue. Aliquam ut sagittis sem. Nunc ut mi porttitor, aliquam leo nec, dignissim dui. Ut at dolor nisl. Cras congue at quam eu dapibus. Nullam id est vitae nunc volutpat auctor sit amet eget turpis.',1,'0000-00-00 00:00:00','0000-00-00 00:00:00',1,1,'bla'),(2,'TEST POST2','http://lorempixel.com/400/200/',3,'dolor sit amet, consectetur adipiscing elit. Nam condimentum, erat id congue imperdiet, dolor magna porta ex, id faucibus justo nulla vel erat. Ut auctor, ligula et luctus vestibulum, purus mauris vulputate leo, id imperdiet felis odio eget augue. Aliquam ut sagittis sem. Nunc ut mi porttitor, aliquam leo nec, dignissim dui. Ut at dolor nisl. Cras congue at quam eu dapibus. Nullam id est vitae nunc volutpat auctor sit amet eget turpis. Aenean eget lectus vel ante malesuada pellentesque quis aliquam justo. Nulla a vehicula libero. Curabitur nec accumsan leo. Nunc sagittis velit nec mollis luctus. Nam in suscipit velit, ut imperdiet dolor. Nullam nec elit congue, semper nisi quis, commodo magna. Vivamus sagittis, urna vel fringilla scelerisque, metus nulla mattis lorem, eget viverra justo ligula sit amet ex. In tempor consequat tortor. Morbi ullamcorper eros at velit accumsan, blandit tincidunt elit viverra. Aenean tincidunt mattis tortor. Phasellus id nisi ornare, fermentum nisi in, egestas dolor. Pellentesque purus nulla, congue sit amet libero dignissim, varius facilisis metus. Sed sed lacinia nunc. Aliquam quis gravida est. Morbi ut aliquam diam.',1,'0000-00-00 00:00:00','0000-00-00 00:00:00',1,1,'bla2'),(3,'TEST POST3','http://lorempixel.com/400/200/',3,'BLA Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam condimentum, erat id congue imperdiet, dolor magna porta ex, id faucibus justo nulla vel erat. Ut auctor, ligula et luctus vestibulum, purus mauris vulputate leo, id imperdiet felis odio eget augue. Aliquam ut sagittis sem. Nunc ut mi porttitor, aliquam leo nec, dignissim dui. Ut at dolor nisl. Cras congue at quam eu dapibus. Nullam id est vitae nunc volutpat auctor sit amet eget turpis.',1,'0000-00-00 00:00:00','0000-00-00 00:00:00',1,1,'bla3'),(4,'TEST POST4','http://lorempixel.com/400/200/',3,'BLA',1,'0000-00-00 00:00:00','0000-00-00 00:00:00',1,1,'bla4');
+INSERT INTO `posts` VALUES (1,'TEST POST','http://lorempixel.com/400/200/',3,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam condimentum, erat id congue imperdiet, dolor magna porta ex, id faucibus justo nulla vel erat. Ut auctor, ligula et luctus vestibulum, purus mauris vulputate leo, id imperdiet felis odio eget augue. Aliquam ut sagittis sem. Nunc ut mi porttitor, aliquam leo nec, dignissim dui. Ut at dolor nisl. Cras congue at quam eu dapibus. Nullam id est vitae nunc volutpat auctor sit amet eget turpis.',1,'0000-00-00 00:00:00','0000-00-00 00:00:00',1,1,'bla'),(2,'TEST POST2','http://lorempixel.com/400/200/',3,'dolor sit amet, consectetur adipiscing elit. Nam condimentum, erat id congue imperdiet, dolor magna porta ex, id faucibus justo nulla vel erat. Ut auctor, ligula et luctus vestibulum, purus mauris vulputate leo, id imperdiet felis odio eget augue. Aliquam ut sagittis sem. Nunc ut mi porttitor, aliquam leo nec, dignissim dui. Ut at dolor nisl. Cras congue at quam eu dapibus. Nullam id est vitae nunc volutpat auctor sit amet eget turpis. Aenean eget lectus vel ante malesuada pellentesque quis aliquam justo. Nulla a vehicula libero. Curabitur nec accumsan leo. Nunc sagittis velit nec mollis luctus. Nam in suscipit velit, ut imperdiet dolor. Nullam nec elit congue, semper nisi quis, commodo magna. Vivamus sagittis, urna vel fringilla scelerisque, metus nulla mattis lorem, eget viverra justo ligula sit amet ex. In tempor consequat tortor. Morbi ullamcorper eros at velit accumsan, blandit tincidunt elit viverra. Aenean tincidunt mattis tortor. Phasellus id nisi ornare, fermentum nisi in, egestas dolor. Pellentesque purus nulla, congue sit amet libero dignissim, varius facilisis metus. Sed sed lacinia nunc. Aliquam quis gravida est. Morbi ut aliquam diam.',1,'0000-00-00 00:00:00','0000-00-00 00:00:00',1,1,'bla2'),(3,'TEST POST3','http://lorempixel.com/400/200/',3,'BLA Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam condimentum, erat id congue imperdiet, dolor magna porta ex, id faucibus justo nulla vel erat. Ut auctor, ligula et luctus vestibulum, purus mauris vulputate leo, id imperdiet felis odio eget augue. Aliquam ut sagittis sem. Nunc ut mi porttitor, aliquam leo nec, dignissim dui. Ut at dolor nisl. Cras congue at quam eu dapibus. Nullam id est vitae nunc volutpat auctor sit amet eget turpis.',1,'0000-00-00 00:00:00','0000-00-00 00:00:00',1,1,'bla3'),(4,'TEST POST4','http://lorempixel.com/400/200/',3,'BLA',1,'0000-00-00 00:00:00','0000-00-00 00:00:00',1,1,'bla4'),(8,'TEST','http://lorempixel.com/400/200/',4,'TEST Article',1,'0000-00-00 00:00:00','2018-09-15 11:46:42',1,0,'TEST_1');
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -251,7 +253,7 @@ CREATE TABLE `tags` (
   `idtags` int(11) NOT NULL AUTO_INCREMENT,
   `tag_name` varchar(255) NOT NULL,
   PRIMARY KEY (`idtags`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -305,8 +307,51 @@ INSERT INTO `users` VALUES (1,'Test',NULL,'test@me.com',NULL,'Doe','John','0000-
 UNLOCK TABLES;
 
 --
+-- Temporary view structure for view `v_fullposts`
+--
+
+DROP TABLE IF EXISTS `v_fullposts`;
+/*!50001 DROP VIEW IF EXISTS `v_fullposts`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `v_fullposts` AS SELECT 
+ 1 AS `idposts`,
+ 1 AS `title`,
+ 1 AS `post_image`,
+ 1 AS `article`,
+ 1 AS `last_update`,
+ 1 AS `creation_date`,
+ 1 AS `posts_slug`,
+ 1 AS `published`,
+ 1 AS `on_front_page`,
+ 1 AS `pseudo`,
+ 1 AS `avatar`,
+ 1 AS `email`,
+ 1 AS `category_name`,
+ 1 AS `categories_slug`*/;
+SET character_set_client = @saved_cs_client;
+
+--
 -- Dumping routines for database 'blogoc'
 --
+
+--
+-- Final view structure for view `v_fullposts`
+--
+
+/*!50001 DROP VIEW IF EXISTS `v_fullposts`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `v_fullposts` AS select `posts`.`idposts` AS `idposts`,`posts`.`title` AS `title`,`posts`.`post_image` AS `post_image`,`posts`.`article` AS `article`,`posts`.`last_update` AS `last_update`,`posts`.`creation_date` AS `creation_date`,`posts`.`posts_slug` AS `posts_slug`,`posts`.`published` AS `published`,`posts`.`on_front_page` AS `on_front_page`,`users`.`pseudo` AS `pseudo`,`users`.`avatar` AS `avatar`,`users`.`email` AS `email`,`categories`.`category_name` AS `category_name`,`categories`.`categories_slug` AS `categories_slug` from ((`posts` join `users` on((`posts`.`author_iduser` = `users`.`idusers`))) join `categories` on((`posts`.`categories_idcategories` = `categories`.`idcategories`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -317,4 +362,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-09-10 13:49:21
+-- Dump completed on 2018-09-17 22:25:23
