@@ -20,10 +20,10 @@
 
                 <input type="text" class="form-control" name="newPostImage" id="newPostImage" value="">
 
-                    <p class="text-center mt-3 display-image image-upload-height">
-                        <img src="" class="img-thumbnail display-image img-fluid image-upload-height">
-                    </p>
-                    <input type="file" class="image-upload" id="postImageUpload">
+                <p class="text-center mt-3 display-image image-upload-height">
+                    <img src="" class="img-thumbnail display-image img-fluid image-upload-height">
+                </p>
+                <input type="file" class="image-upload" id="postImageUpload">
 
 
                 <label for="categorySelector">Select a category</label>
@@ -99,7 +99,7 @@
 
                 var $tagHtml = "<span class=\"tagChip\">";
 
-                $tagHtml += "<div class=\"chip mx-1 mt-2\">" +$value+ "<i class=\"fa fa-times-circle-o closebtn\" aria-hidden=\"true\" onclick=\"closeMe(this)\"></i>"+"</div>";
+                $tagHtml += "<div class=\"chip mx-1 mt-2\">" + $value + "<i class=\"fa fa-times-circle-o closebtn\" aria-hidden=\"true\" onclick=\"closeMe(this)\"></i>" + "</div>";
 
                 //the tag value
                 $tagHtml += "<input name=\"tags[" + $tagNumber + "][name]\" class=\"selected-tags\" type=\"hidden\" value=\"" + $value + "\" readonly>";
@@ -120,10 +120,10 @@
         }
 
         //ajax to do the testing before submit
-        var $submitting=false;
-        $("#newPost").on("submit", function($e){
+        var $submitting = false;
+        $("#newPost").on("submit", function ($e) {
             //over-ride the submit button if we are adding tags. Just add tag instead
-            if($("#tagSelector").is(":focus")){
+            if ($("#tagSelector").is(":focus")) {
                 $e.preventDefault();
                 $("#addTag").click();
                 return;
@@ -131,28 +131,32 @@
 
             //submitting toggle to avoid loop
 
-            if(!$submitting){
-
-                //TODO check other elements
-
+            if (!$submitting) {
+                setupToastr();
                 $e.preventDefault(); //stop the send while ajax verification
+                if ($("#newPostTitle").val().trim() == "") {
+                    toastr.error("title is empty");
+                    return
+                }
+                if ($("#newPostSlug").val().trim() == "") {
+                    toastr.error("Slug is empty");
+                    return
+                }
+
                 $slugValue = $("#newPostSlug").val();
                 $.ajax({
                     url: "/ajax/post-verification/is-slug-unique/",
                     data: {'postSlug': $slugValue}
-                }).done(function($result){
-                    if($result)
-                    {
+                }).done(function ($result) {
+                    if ($result) {
                         $submitting = true;
                         $("#newPost").submit();
                         return;
                     }
-                    setupToastr();
+
                     toastr.error('Slug not unique');
                 });
             }
-
-
 
         });
 
@@ -182,7 +186,7 @@
         });
 
         //if we enter a url
-        $("#newPostImage").keyup(function(){
+        $("#newPostImage").keyup(function () {
             $setImage.attr("src", $(this).val());
         });
 

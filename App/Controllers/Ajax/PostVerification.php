@@ -1,9 +1,12 @@
 <?php
+
 namespace App\Controllers\Ajax;
 
 use App\Models\SlugModel;
 use Core\AjaxController;
-class PostVerification extends AjaxController{
+
+class PostVerification extends AjaxController
+{
 
     /**
      * checks if the slug is unique
@@ -15,7 +18,7 @@ class PostVerification extends AjaxController{
     {
         $this->onlyAdmin();
         if (!$this->container->getRequest()->isPost()) {
-            throw new JsonException('Call is not post');
+            throw new \Core\JsonException('Call is not post');
         }
 
         $postSlug = $this->request->getData("postSlug");
@@ -24,6 +27,5 @@ class PostVerification extends AjaxController{
         $data = $slugModel->isUnique($postSlug, "posts", "posts_slug");
         echo json_encode($data);
     }
-
 
 }

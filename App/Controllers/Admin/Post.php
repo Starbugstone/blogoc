@@ -43,12 +43,15 @@ class Post extends AdminController
     public function modify(int $idPost)
     {
         $this->onlyAdmin();
+
         $categoryModel = new CategoryModel($this->container);
         $tagModel = new TagsModel($this->container);
+        $postModel = new PostModel($this->container);
+
+        $this->data['post'] =
         $this->data['categories'] = $categoryModel->getCategories();
         $this->data['tags'] = $tagModel->getTags();
         $this->renderView('Admin/ModifyPost');
-
     }
 
     /**
@@ -82,36 +85,37 @@ class Post extends AdminController
         $postModel = new PostModel($this->container);
 
         //security and error checks
-        $error=false;
-        if($title == "")
-        {
-            $error=true;
+        $error = false;
+        if ($title == "") {
+            $error = true;
             $this->alertBox->setAlert("empty title not allowed", "error");
         }
+        if ($postSlug == "") {
+            $error = true;
+            $this->alertBox->setAlert("empty slug not allowed", "error");
+        }
         if (!$slugModel->isUnique($postSlug, "posts", "posts_slug")) {
-            $error=true;
+            $error = true;
             $this->alertBox->setAlert("Slug not unique", "error");
         }
 
-        if($error)
-        {
+        if ($error) {
             $this->container->getResponse()->redirect("admin/post/new");
         }
 
-        $postId = $postModel->newPost($title, $postImage, $idCategory, $article, $idUser, $published, $onFrontpage, $postSlug);
+        $postId = $postModel->newPost($title, $postImage, $idCategory, $article, $idUser, $published, $onFrontpage,
+            $postSlug);
 
-        echo "<p>new post ID : " . $postId . "</p>";
-
-        if(isset($posts["tags"])){
+        if (isset($posts["tags"])) {
             foreach ($posts["tags"] as $tag) {
-                if(isset($tag["id"])){
+                if (isset($tag["id"])) {
                     $tagModel->addTagToPost($postId, $tag["id"]);
                     continue;
                 }
                 $tagModel->addNewTagToPost($postId, $tag["name"]);
             }
         }
-        $this->alertBox->setAlert("Post ".$title." Created");
-        $this->container->getResponse()->redirect("admin/post/modify/".$postId);
+        $this->alertBox->setAlert("Post " . $title . " Created");
+        $this->container->getResponse()->redirect("admin/post/modify/" . $postId);
     }
 }
