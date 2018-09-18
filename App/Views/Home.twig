@@ -59,17 +59,18 @@
     <section class="showcase">
         <div class="container-fluid p-0">
             {% for post in front_posts %}
-            <div class="row no-gutters wow lightSpeedIn">
+                <div class="row no-gutters wow lightSpeedIn">
 
-                <div class="col-lg-6 {% if loop.index is odd %}order-lg-2{% endif %} text-white showcase-img "
-                     style="background-image: url('{{ post.post_image }}');"></div>
-                <div class="col-lg-6 {% if loop.index is odd %}order-lg-1{% endif %} my-auto showcase-text">
-                    <h2>{{ post.title }}</h2>
-                    <p class="lead mb-0">{{ post.excerpt|raw }}</p>
-                    <p><a href="/post/{{ post.posts_slug }}">Read more</a> </p>
-                    <p>Category: <a href="/category/{{ post.categories_slug }}">{{ post.category_name }}</a> - Author: <a href="/user/{{ post.idusers }}">{{ post.author }}</a> </p>
+                    <div class="col-lg-6 {% if loop.index is odd %}order-lg-2{% endif %} text-white showcase-img "
+                         style="background-image: url('{{ post.post_image }}');"></div>
+                    <div class="col-lg-6 {% if loop.index is odd %}order-lg-1{% endif %} my-auto showcase-text">
+                        <h2>{{ post.title }}</h2>
+                        <p class="lead mb-0">{{ post.excerpt|raw }}</p>
+                        <p><a href="/post/{{ post.posts_slug }}">Read more</a></p>
+                        <p>Category: <a href="/category/posts/{{ post.categories_slug }}">{{ post.category_name }}</a> -
+                            Author: <a href="/user/{{ post.idusers }}">{{ post.author }}</a></p>
+                    </div>
                 </div>
-            </div>
             {% endfor %}
 
         </div>

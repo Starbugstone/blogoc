@@ -126,15 +126,18 @@ div.masthead {
       height: 7rem; }
 
 .showcase .showcase-text {
-  padding: 3rem; }
+  padding: 3rem;
+  overflow-wrap: break-word;
+  overflow: hidden; }
 
 .showcase .showcase-img {
   min-height: 30rem;
+  background-position: center;
   background-size: cover; }
 
 @media (min-width: 768px) {
   .showcase .showcase-text {
-    padding: 7rem; } }
+    padding: 1rem; } }
 
 /* Taken from hover.css */
 /* Underline From Center */
