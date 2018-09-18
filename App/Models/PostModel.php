@@ -156,4 +156,24 @@ class PostModel extends Model
         return $sendResults;
     }
 
+
+    /**
+     * get a single post from it's ID
+     * @param int $postid the post ID to get
+     * @return array the single post details
+     * @throws \Exception
+     */
+    public function getSinglePost(int $postid) //TODO Add this return type to others, although the return false might be an issue, update the fetch and fetchall methods ?
+    {
+        $sql = "SELECT title, post_image,article,$this->postsTbl.last_update, posts_slug, categories_idcategories, category_name, published, on_front_page, categories_slug, pseudo as author, idusers
+                FROM $this->postsTbl INNER JOIN $this->categoriesTbl ON $this->postsTbl.categories_idcategories = $this->categoriesTbl.idcategories
+                INNER JOIN $this->usersTbl ON $this->postsTbl.author_iduser = $this->usersTbl.idusers
+                WHERE idposts = :postId 
+                ;";
+        $this->query($sql);
+        $this->bind(":postId", $postid, \PDO::PARAM_INT);
+        $this->execute();
+
+        return $this->fetch();
+    }
 }

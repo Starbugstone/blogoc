@@ -127,5 +127,23 @@ class TagsModel extends Model{
         $this->execute();
     }
 
+    /**
+     * get all tags associated to a post
+     * @param int $postId the post ID
+     * @return array the associated tags
+     * @throws \Exception
+     */
+    public function getTagsOnPost(int $postId)
+    {
+        $sql = "SELECT tag_name, idtags FROM $this->tagTbl 
+        INNER JOIN $this->tagAssoTbl ON  $this->tagTbl.idtags = $this->tagAssoTbl.tag_idtags
+        WHERE post_idposts = :postId
+        ";
+        $this->query($sql);
+        $this->bind(":postId", $postId);
+        $this->execute();
+
+        return $this->fetchAll();
+    }
 
 }

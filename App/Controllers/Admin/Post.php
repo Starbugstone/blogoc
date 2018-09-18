@@ -30,7 +30,6 @@ class Post extends AdminController
     public function list()
     {
         $this->onlyAdmin();
-
     }
 
     /**
@@ -39,16 +38,21 @@ class Post extends AdminController
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
+     * @throws \ErrorException
      */
-    public function modify(int $idPost)
+    public function modify(string $slug):void
     {
         $this->onlyAdmin();
 
         $categoryModel = new CategoryModel($this->container);
         $tagModel = new TagsModel($this->container);
         $postModel = new PostModel($this->container);
+        $slugModel = new SlugModel($this->container);
 
-        $this->data['post'] =
+        $postId = $slugModel->getIdFromSlug($slug,"posts","posts_slug", "idposts");
+
+        $this->data['post'] = $postModel->getSinglePost($postId);
+        $this->data['postTags'] = $tagModel->getTagsOnPost($postId);
         $this->data['categories'] = $categoryModel->getCategories();
         $this->data['tags'] = $tagModel->getTags();
         $this->renderView('Admin/ModifyPost');
@@ -116,6 +120,32 @@ class Post extends AdminController
             }
         }
         $this->alertBox->setAlert("Post " . $title . " Created");
-        $this->container->getResponse()->redirect("admin/post/modify/" . $postId);
+        $this->container->getResponse()->redirect("admin/post/modify/" . $postSlug);
+    }
+
+    /**
+     * update a post
+     * @throws \Exception
+     */
+    public function modifyPost()
+    {
+        //Security checks
+        $this->onlyAdmin();
+        if (!$this->request->isPost()) {
+            $this->alertBox->setAlert('Only post messages allowed', 'error');
+            $this->response->redirect('admin');
+        }
+
+        $posts = $this->container->getRequest()->getDataFull();
+
+        /*TODO
+        update the post
+        add and delete tags -> for that compare list of tags already set (added and missing tags ...) ??
+
+        */
+
+        echo "<pre>";
+        var_dump($posts);
+        die();
     }
 }
