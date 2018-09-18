@@ -80,9 +80,9 @@ trait StringFunctions
         if ($count < 1) {
             throw new \ErrorException('excerpt length too low');
         }
-
         $text = str_replace("  ", " ", $text);
-        $string = explode(" ", $text);
+        //exploding on space except for in img, p and span.
+        $string = preg_split('/(<img[^>]+\>)|(<p[^>]+\>)|(<span[^>]+\>)|\s/', $text, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
         if (count($string) <= $count) {
             return $text;
         }
@@ -93,11 +93,27 @@ trait StringFunctions
             if ($wordCounter < $count - 1) {
                 $trimed .= " ";
             } else {
-                $trimed .= "...";
+                $trimed .= "[...]";
             }
         }
-        $trimed = trim($trimed);
-        return $trimed;
+
+        //clean up unclosed html
+        //grabbed from https://gist.github.com/JayWood/348752b568ecd63ae5ce#gistcomment-2310550
+        libxml_use_internal_errors(true);
+
+        $dom = new \DOMDocument;
+        $dom->loadHTML($trimed);
+
+        // Strip wrapping <html> and <body> tags
+        $mock = new \DOMDocument;
+        $body = $dom->getElementsByTagName('body')->item(0);
+        foreach ($body->childNodes as $child) {
+            $mock->appendChild($mock->importNode($child, true));
+        }
+
+        $fixed = trim($mock->saveHTML());
+        
+        return $fixed;
     }
 
     /**
