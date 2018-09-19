@@ -31,7 +31,7 @@ class PostModel extends Model
      * @return array list of posts
      * @throws \ErrorException
      */
-    private function getAllPosts(int $offset, int $limit, bool $isFrontPage = false):array
+    private function getAllPosts(int $offset, int $limit, bool $isFrontPage = false): array
     {
         $sql = "SELECT title, post_image,article,$this->postsTbl.last_update, posts_slug, category_name, categories_slug, pseudo as author, idusers
                 FROM $this->postsTbl INNER JOIN $this->categoriesTbl ON $this->postsTbl.categories_idcategories = $this->categoriesTbl.idcategories
@@ -122,7 +122,20 @@ class PostModel extends Model
         return $this->dbh->lastInsertId();
     }
 
-
+    /**
+     * Update a post with new values
+     * @param int $postId
+     * @param string $title
+     * @param string $postImage
+     * @param int $idCategory
+     * @param string $article
+     * @param int $idUser
+     * @param int $published
+     * @param int $onFrontPage
+     * @param string $postSlug
+     * @return bool
+     * @throws \Exception
+     */
     public function modifyPost(
         int $postId,
         string $title,
@@ -133,9 +146,8 @@ class PostModel extends Model
         int $published,
         int $onFrontPage,
         string $postSlug
-    )
-    {
-        $sql="
+    ) {
+        $sql = "
             UPDATE $this->postsTbl 
             SET 
                 title = :title,
@@ -151,15 +163,15 @@ class PostModel extends Model
               idposts = :postId
         ;";
         $this->query($sql);
-        $this->bind(":title",$title);
-        $this->bind(":postImage",$postImage);
-        $this->bind(":idCategory",$idCategory);
-        $this->bind(":article",$article);
-        $this->bind(":idUser",$idUser);
-        $this->bind(":published",$published);
-        $this->bind(":onFrontPage",$onFrontPage);
-        $this->bind(":postSlug",$postSlug);
-        $this->bind(":postId",$postId);
+        $this->bind(":title", $title);
+        $this->bind(":postImage", $postImage);
+        $this->bind(":idCategory", $idCategory);
+        $this->bind(":article", $article);
+        $this->bind(":idUser", $idUser);
+        $this->bind(":published", $published);
+        $this->bind(":onFrontPage", $onFrontPage);
+        $this->bind(":postSlug", $postSlug);
+        $this->bind(":postId", $postId);
 
         return $this->execute();
     }
