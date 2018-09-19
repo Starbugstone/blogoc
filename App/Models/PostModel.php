@@ -104,8 +104,8 @@ class PostModel extends Model
         string $postSlug
     ) {
         $sql = "
-          INSERT INTO $this->postsTbl (title, post_image, categories_idcategories, article, author_iduser, creation_date, published, on_front_page, posts_slug)
-          VALUES (:title, :post_image, :categories_idcategories, :article, :author_iduser, NOW(), :published, :on_front_page, :posts_slug)
+          INSERT INTO $this->postsTbl (title, post_image, categories_idcategories, article, author_iduser, creation_date, last_update, published, on_front_page, posts_slug)
+          VALUES (:title, :post_image, :categories_idcategories, :article, :author_iduser, NOW(), NOW(), :published, :on_front_page, :posts_slug)
         ";
         $this->query($sql);
         $this->bind(':title', $title);
@@ -120,7 +120,48 @@ class PostModel extends Model
         $this->execute();
 
         return $this->dbh->lastInsertId();
+    }
 
+
+    public function modifyPost(
+        int $postId,
+        string $title,
+        string $postImage,
+        int $idCategory,
+        string $article,
+        int $idUser,
+        int $published,
+        int $onFrontPage,
+        string $postSlug
+    )
+    {
+        $sql="
+            UPDATE $this->postsTbl 
+            SET 
+                title = :title,
+                post_image = :postImage,
+                categories_idcategories = :idCategory,
+                article = :article,
+                author_iduser = :idUser,
+                last_update = NOW(),
+                published = :published,
+                on_front_page = :onFrontPage,
+                posts_slug = :postSlug
+            WHERE
+              idposts = :postId
+        ;";
+        $this->query($sql);
+        $this->bind(":title",$title);
+        $this->bind(":postImage",$postImage);
+        $this->bind(":idCategory",$idCategory);
+        $this->bind(":article",$article);
+        $this->bind(":idUser",$idUser);
+        $this->bind(":published",$published);
+        $this->bind(":onFrontPage",$onFrontPage);
+        $this->bind(":postSlug",$postSlug);
+        $this->bind(":postId",$postId);
+
+        return $this->execute();
     }
 
     /**
@@ -163,9 +204,9 @@ class PostModel extends Model
      * @return array the single post details
      * @throws \Exception
      */
-    public function getSinglePost(int $postid) //TODO Add this return type to others, although the return false might be an issue, update the fetch and fetchall methods ?
+    public function getSinglePost(int $postid)
     {
-        $sql = "SELECT title, post_image,article,$this->postsTbl.last_update, posts_slug, categories_idcategories, category_name, published, on_front_page, categories_slug, pseudo as author, idusers
+        $sql = "SELECT idposts, title, post_image,article,$this->postsTbl.last_update, posts_slug, categories_idcategories, category_name, published, on_front_page, categories_slug, pseudo as author, idusers
                 FROM $this->postsTbl INNER JOIN $this->categoriesTbl ON $this->postsTbl.categories_idcategories = $this->categoriesTbl.idcategories
                 INNER JOIN $this->usersTbl ON $this->postsTbl.author_iduser = $this->usersTbl.idusers
                 WHERE idposts = :postId 

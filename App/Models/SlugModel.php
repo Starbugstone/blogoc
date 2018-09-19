@@ -72,4 +72,39 @@ class SlugModel extends Model
         return $this->stmt->fetchColumn();
 
     }
+
+    /**
+     * get the slug from an Id
+     * @param int $searchId
+     * @param string $table
+     * @param string $columnName
+     * @param string $idColumn
+     * @return string
+     * @throws \ErrorException
+     */
+    public function getSlugFromId(int $searchId, string $table, string $columnName, string $slugColumn): string
+    {
+        if (!$this->isAlphaNum($table)) {
+            throw new \ErrorException("Invalid table name " . $table);
+        }
+
+        if (!$this->isAlphaNum($columnName)) {
+            throw new \ErrorException("Invalid Slug Column name " . $columnName);
+        }
+
+        if (!$this->isAlphaNum($slugColumn)) {
+            throw new \ErrorException("Invalid ID Column name " . $columnName);
+        }
+
+        $slugTbl = $this->getTablePrefix($table);
+
+        $sql = "SELECT $slugColumn FROM $slugTbl WHERE $columnName = :searchId";
+        $this->query($sql);
+        $this->bind(":searchId", $searchId);
+        $this->execute();
+        if (!$this->stmt->rowCount() > 0) {
+            return 0;
+        }
+        return $this->stmt->fetchColumn();
+    }
 }

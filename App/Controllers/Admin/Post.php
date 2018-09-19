@@ -40,7 +40,7 @@ class Post extends AdminController
      * @throws \Twig_Error_Syntax
      * @throws \ErrorException
      */
-    public function modify(string $slug):void
+    public function modify(string $slug): void
     {
         $this->onlyAdmin();
 
@@ -49,7 +49,7 @@ class Post extends AdminController
         $postModel = new PostModel($this->container);
         $slugModel = new SlugModel($this->container);
 
-        $postId = $slugModel->getIdFromSlug($slug,"posts","posts_slug", "idposts");
+        $postId = $slugModel->getIdFromSlug($slug, "posts", "posts_slug", "idposts");
 
         $this->data['post'] = $postModel->getSinglePost($postId);
         $this->data['postTags'] = $tagModel->getTagsOnPost($postId);
@@ -119,8 +119,14 @@ class Post extends AdminController
                 $tagModel->addNewTagToPost($postId, $tag["name"]);
             }
         }
-        $this->alertBox->setAlert("Post " . $title . " Created");
-        $this->container->getResponse()->redirect("admin/post/modify/" . $postSlug);
+
+        if ($postId != null) {
+            $this->alertBox->setAlert("Post " . $title . " Created");
+            $this->container->getResponse()->redirect("admin/post/modify/" . $postSlug);
+        }
+        $this->alertBox->setAlert("Error creating " . $title, "error");
+        $this->container->getResponse()->redirect("admin/post/new");
+
     }
 
     /**
@@ -137,15 +143,72 @@ class Post extends AdminController
         }
 
         $posts = $this->container->getRequest()->getDataFull();
+        $userSessionid = $this->container->getSession()->get("user_id");
 
-        /*TODO
-        update the post
-        add and delete tags -> for that compare list of tags already set (added and missing tags ...) ??
+        $postId = $posts["postId"];
+        $title = trim($posts["postTitle"]);
+        $postImage = $posts["postImage"]; //TODO Sanatize the input ? Or will PDO be enough ?
+        $postSlug = trim($posts["postSlug"]);
+        $article = $posts["postTextArea"];
+        $idCategory = $posts["categorySelector"];
+        $published = $posts["isPublished"];
+        $onFrontpage = $posts["isOnFrontPage"];
+        $idUser = $userSessionid;
 
-        */
 
-        echo "<pre>";
-        var_dump($posts);
-        die();
+        $slugModel = new SlugModel($this->container);
+        $tagModel = new TagsModel($this->container);
+        $postModel = new PostModel($this->container);
+
+        //security and error checks
+        $originalPostSlug = $slugModel->getSlugFromId($postId, "posts", "idposts",
+            "posts_slug");
+        $error = false;
+        if ($title == "") {
+            $error = true;
+            $this->alertBox->setAlert("empty title not allowed", "error");
+        }
+
+        if ($postSlug == "") {
+            $error = true;
+            $this->alertBox->setAlert("empty slug not allowed", "error");
+        }
+
+        if ($postSlug != $originalPostSlug) //if the slug has been updated
+        {
+            if (!$slugModel->isUnique($postSlug, "posts", "posts_slug")) {
+                $error = true;
+                $originalPostSlug = $slugModel->getSlugFromId($postId, "posts", "idposts", "posts_slug");
+                $this->alertBox->setAlert("Slug not unique", "error");
+            }
+        }
+        if ($error) {
+            $this->container->getResponse()->redirect("admin/post/modify/$originalPostSlug");
+        }
+
+        $postUpdate = $postModel->modifyPost($postId, $title, $postImage, $idCategory, $article, $idUser, $published,
+            $onFrontpage, $postSlug);
+
+        // Tags
+        //remove all tags
+        $tagModel->removeTagsOnPost($postId);
+        //set new tags
+        if (isset($posts["tags"])) {
+            foreach ($posts["tags"] as $tag) {
+                if (isset($tag["id"])) {
+                    $tagModel->addTagToPost($postId, $tag["id"]);
+                    continue;
+                }
+                $tagModel->addNewTagToPost($postId, $tag["name"]);
+            }
+        }
+
+        if ($postUpdate) {
+            $this->alertBox->setAlert("Post " . $title . " Updated");
+            $this->container->getResponse()->redirect("admin/post/modify/" . $postSlug);
+        }
+        $this->alertBox->setAlert("Error updating " . $title, "error");
+        $this->container->getResponse()->redirect("admin/post/modify/" . $originalPostSlug);
+
     }
 }

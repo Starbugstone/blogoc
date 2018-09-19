@@ -4,7 +4,7 @@
 
 {% block main %}
     {% for post in posts %}
-        <p>{{ post.title }}</p>
+        <p>{{ post.title }} <a href="/admin/post/modify/{{ post.posts_slug }}">mod</a> </p>
     {% endfor %}
 {% endblock %}
 

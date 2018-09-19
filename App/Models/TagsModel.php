@@ -146,4 +146,21 @@ class TagsModel extends Model{
         return $this->fetchAll();
     }
 
+
+    /**
+     * Remove all tags from a post
+     * @param int $postId the post ID
+     * @throws \Exception
+     */
+    public function removeTagsOnPost(int $postId)
+    {
+        $sql = "
+            DELETE FROM $this->tagAssoTbl
+            WHERE post_idposts = :postId
+        ;";
+        $this->query($sql);
+        $this->bind(":postId", $postId);
+        $this->execute();
+    }
+
 }
