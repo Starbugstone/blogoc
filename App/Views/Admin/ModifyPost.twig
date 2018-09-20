@@ -72,13 +72,13 @@
                                 {{ postTag.tag_name }}
                                 <i class="fa fa-times-circle-o closebtn" aria-hidden="true" onclick="closeMe(this)"></i>
                             </div>
-                            <input name="tags[{{ loop.index }}][name]" class="selected-tags" type="hidden" value="{{ postTag.tag_name }}">
-                            <input name="tags[{{ loop.index }}][id]" class="selected-tags" type="hidden" value="{{ postTag.idtags }}">
+                            <input name="tags[{{ loop.index }}][name]" class="selected-tags" type="hidden"
+                                   value="{{ postTag.tag_name }}">
+                            <input name="tags[{{ loop.index }}][id]" class="selected-tags" type="hidden"
+                                   value="{{ postTag.idtags }}">
                         </span>
                     {% endfor %}
                 </span>
-
-                <p>TODO : Author credentials ?? securty, only the author can modify the post ?? or too much hassle ?</p>
 
             </div>
         </div>
@@ -129,7 +129,6 @@
                 return;
             }
 
-            // TODO update tag if slug has been changed, then check for duplicate
         });
 
         //---------------------------------------

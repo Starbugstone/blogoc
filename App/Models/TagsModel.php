@@ -1,10 +1,12 @@
 <?php
+
 namespace App\Models;
 
 use Core\Container;
 use Core\Model;
 
-class TagsModel extends Model{
+class TagsModel extends Model
+{
 
     private $tagAssoTbl;
     private $tagTbl;
@@ -16,7 +18,14 @@ class TagsModel extends Model{
         $this->tagTbl = $this->getTablePrefix("tags");
     }
 
-    private function postHasTag(int $postId, int $tagId):bool
+    /**
+     * check if post has a specific tag
+     * @param int $postId
+     * @param int $tagId
+     * @return bool
+     * @throws \Exception
+     */
+    private function postHasTag(int $postId, int $tagId): bool
     {
 
         $sql = "SELECT * FROM $this->tagAssoTbl WHERE post_idposts = :postId AND tag_idtags = :tagId";
@@ -33,14 +42,14 @@ class TagsModel extends Model{
      * @return int
      * @throws \Exception
      */
-    private function getTagId(string $tagName):int
+    private function getTagId(string $tagName): int
     {
         $sql = "SELECT idtags FROM $this->tagTbl WHERE tag_name = :tagName";
         $this->query($sql);
         $this->bind(':tagName', $tagName);
         $this->execute();
         //if no rows, return zero
-        if(!$this->stmt->rowCount() > 0){
+        if (!$this->stmt->rowCount() > 0) {
             return 0;
         }
         return $this->stmt->fetchColumn();
@@ -52,7 +61,7 @@ class TagsModel extends Model{
      * @return int the inserted tag ID
      * @throws \Exception
      */
-    private function createNewTag(string $tag):int
+    private function createNewTag(string $tag): int
     {
         $sql = "INSERT INTO $this->tagTbl (tag_name) VALUES (:tag)";
         $this->query($sql);
@@ -80,8 +89,8 @@ class TagsModel extends Model{
     public function addTagToPost(int $postId, int $tagId)
     {
         //if the post already has the tag, do nothing
-        if($this->postHasTag($postId, $tagId)){
-           return;
+        if ($this->postHasTag($postId, $tagId)) {
+            return;
         }
 
         $sql = "INSERT INTO $this->tagAssoTbl (post_idposts, tag_idtags) VALUES (:postId, :tagId)";
@@ -101,7 +110,7 @@ class TagsModel extends Model{
     {
         //check if tag doesn't already exist
         $tagId = $this->getTagId($tag);
-        if($tagId === 0){
+        if ($tagId === 0) {
             $tagId = $this->createNewTag($tag);
         }
         $this->addTagToPost($postId, $tagId);
@@ -116,7 +125,7 @@ class TagsModel extends Model{
     public function removeTagFromPost(int $postId, int $tagId)
     {
         //if the tag isn't present, do nothing
-        if(!$this->postHasTag($postId, $tagId)){
+        if (!$this->postHasTag($postId, $tagId)) {
             return;
         }
 

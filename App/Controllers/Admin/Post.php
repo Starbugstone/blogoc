@@ -30,6 +30,8 @@ class Post extends AdminController
     public function list()
     {
         $this->onlyAdmin();
+
+        $this->renderView("Admin/ListPost");
     }
 
     /**
@@ -77,7 +79,7 @@ class Post extends AdminController
 
         $title = trim($posts["newPostTitle"]);
         $postImage = $posts["newPostImage"]; //TODO Sanatize the input ? Or will PDO be enough ?
-        $postSlug = trim($posts["newPostSlug"]); //TODO Check if unique
+        $postSlug = trim($posts["newPostSlug"]);
         $article = $posts["newPostTextArea"];
         $idCategory = $posts["categorySelector"];
         $published = $posts["isPublished"];
@@ -120,6 +122,7 @@ class Post extends AdminController
             }
         }
 
+        //checking result and redirecting
         if ($postId != null) {
             $this->alertBox->setAlert("Post " . $title . " Created");
             $this->container->getResponse()->redirect("admin/post/modify/" . $postSlug);
@@ -143,18 +146,15 @@ class Post extends AdminController
         }
 
         $posts = $this->container->getRequest()->getDataFull();
-        $userSessionid = $this->container->getSession()->get("user_id");
 
         $postId = $posts["postId"];
         $title = trim($posts["postTitle"]);
-        $postImage = $posts["postImage"]; //TODO Sanatize the input ? Or will PDO be enough ?
+        $postImage = $posts["postImage"];
         $postSlug = trim($posts["postSlug"]);
         $article = $posts["postTextArea"];
         $idCategory = $posts["categorySelector"];
         $published = $posts["isPublished"];
         $onFrontpage = $posts["isOnFrontPage"];
-        $idUser = $userSessionid;
-
 
         $slugModel = new SlugModel($this->container);
         $tagModel = new TagsModel($this->container);
@@ -186,7 +186,8 @@ class Post extends AdminController
             $this->container->getResponse()->redirect("admin/post/modify/$originalPostSlug");
         }
 
-        $postUpdate = $postModel->modifyPost($postId, $title, $postImage, $idCategory, $article, $idUser, $published,
+        //Update the post
+        $postUpdate = $postModel->modifyPost($postId, $title, $postImage, $idCategory, $article, $published,
             $onFrontpage, $postSlug);
 
         // Tags
@@ -203,12 +204,12 @@ class Post extends AdminController
             }
         }
 
+        //checking result and redirecting
         if ($postUpdate) {
             $this->alertBox->setAlert("Post " . $title . " Updated");
             $this->container->getResponse()->redirect("admin/post/modify/" . $postSlug);
         }
         $this->alertBox->setAlert("Error updating " . $title, "error");
         $this->container->getResponse()->redirect("admin/post/modify/" . $originalPostSlug);
-
     }
 }

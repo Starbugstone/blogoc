@@ -22,5 +22,5 @@ class Constant
     const FRONT_PAGE_POSTS = 3;
     const POSTS_PER_PAGE = 10;
 
-    const EXCERPT_WORD_COUNT =20;
+    const EXCERPT_WORD_COUNT =50;
 }
