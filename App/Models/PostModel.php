@@ -27,7 +27,7 @@ class PostModel extends Model
      * the base Select SQL to get the information from the post table and joined tables
      * @return string
      */
-    private function basePostSelect():string
+    private function basePostSelect(): string
     {
         $sql = "SELECT idposts, title, post_image,article,$this->postsTbl.last_update, posts_slug, categories_idcategories, category_name, published, on_front_page, categories_slug, pseudo as author, idusers
                 FROM $this->postsTbl INNER JOIN $this->categoriesTbl ON $this->postsTbl.categories_idcategories = $this->categoriesTbl.idcategories
@@ -41,7 +41,7 @@ class PostModel extends Model
      * @return array
      * @throws \ErrorException
      */
-    private function addExcerpt(array $posts):array
+    private function addExcerpt(array $posts): array
     {
         $sendResults = [];
         //we create the excerpt for the text and add it to the object
@@ -82,7 +82,7 @@ class PostModel extends Model
      * @return int
      * @throws \Exception
      */
-    public function totalNumberPosts():int
+    public function totalNumberPosts(): int
     {
         $sql = "SELECT COUNT(*) FROM $this->postsTbl WHERE published = 1";
         $this->query($sql);
@@ -96,7 +96,7 @@ class PostModel extends Model
      * @return int
      * @throws \Exception
      */
-    public function totalNumberPostsInCategory(int $categoryId):int
+    public function totalNumberPostsInCategory(int $categoryId): int
     {
         $sql = "SELECT COUNT(*) FROM $this->postsTbl WHERE published = 1 AND categories_idcategories = :categoryId ";
         $this->query($sql);
@@ -112,7 +112,7 @@ class PostModel extends Model
      * @return array
      * @throws \ErrorException
      */
-    public function getFrontPosts(int $offset = 0, int $limit = Constant::FRONT_PAGE_POSTS):array
+    public function getFrontPosts(int $offset = 0, int $limit = Constant::FRONT_PAGE_POSTS): array
     {
         return $this->getAllPublishedPosts($offset, $limit, true);
     }
@@ -124,7 +124,7 @@ class PostModel extends Model
      * @return array
      * @throws \ErrorException
      */
-    public function getPosts(int $offset = 0, int $limit = Constant::POSTS_PER_PAGE):array
+    public function getPosts(int $offset = 0, int $limit = Constant::POSTS_PER_PAGE): array
     {
         return $this->getAllPublishedPosts($offset, $limit, false);
     }
@@ -159,16 +159,13 @@ class PostModel extends Model
         return $sendResults;
     }
 
-
-
-
     /**
      * get a single post from it's ID
      * @param int $postid the post ID to get
      * @return array the single post details
      * @throws \Exception
      */
-    public function getSinglePost(int $postid):array
+    public function getSinglePost(int $postid): array
     {
         $sql = $this->basePostSelect();
         $sql .= " WHERE idposts = :postId;";
@@ -201,8 +198,7 @@ class PostModel extends Model
         int $published,
         int $onFrontPage,
         string $postSlug
-    ):int
-    {
+    ): int {
         $sql = "
           INSERT INTO $this->postsTbl (title, post_image, categories_idcategories, article, author_iduser, creation_date, last_update, published, on_front_page, posts_slug)
           VALUES (:title, :post_image, :categories_idcategories, :article, :author_iduser, NOW(), NOW(), :published, :on_front_page, :posts_slug)
@@ -244,8 +240,7 @@ class PostModel extends Model
         int $published,
         int $onFrontPage,
         string $postSlug
-    ):bool
-    {
+    ): bool {
         $sql = "
             UPDATE $this->postsTbl 
             SET 

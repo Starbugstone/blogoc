@@ -1,16 +1,19 @@
 <?php
+
 namespace App\Models;
 
 use Core\Model;
 
-class CategoryModel extends Model{
+class CategoryModel extends Model
+{
 
     /**
      * get the list of categories and return all the data
      * @return array the categories
      * @throws \ReflectionException
      */
-    public function getCategories(){
+    public function getCategories()
+    {
         return $this->getResultSet('categories');
     }
 

@@ -42,12 +42,12 @@ class Category extends Controller
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function posts(string $categorySlug, string $page="page-1")
+    public function posts(string $categorySlug, string $page = "page-1")
     {
 
 
         $categoryId = $this->slugModel->getIdFromSlug($categorySlug, "categories", "categories_slug", "idcategories");
-        $totalPosts = $this->postModel->totalNumberPostsInCategory($categoryId) ;
+        $totalPosts = $this->postModel->totalNumberPostsInCategory($categoryId);
 
         $pagination = $this->pagination->getPagination($page, $totalPosts);
 
@@ -55,7 +55,7 @@ class Category extends Controller
 
 
         $this->data['navigation'] = $this->categoryModel->getMenu();
-        $this->data['posts'] = $this->postModel->getPostsInCategory($categoryId,$pagination["offset"]);
+        $this->data['posts'] = $this->postModel->getPostsInCategory($categoryId, $pagination["offset"]);
         $this->data['pagination'] = $pagination;
         $this->data['categorySlug'] = $categorySlug;
 
@@ -63,7 +63,7 @@ class Category extends Controller
 
     }
 
-    public function allPosts(string $page="page-1")
+    public function allPosts(string $page = "page-1")
     {
         $totalPosts = $this->postModel->totalNumberPosts();
 
