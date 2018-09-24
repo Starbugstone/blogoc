@@ -35,6 +35,29 @@ class ImageUpload extends AjaxController
     }
 
     /**
+     * Check if file exists and add a number to avoid overwrite
+     * @param string $fileUrl the file name + folder
+     * @return string the unique file name
+     */
+    private function getFilename(string $folder, string $file):string
+    {
+
+        $fileUrl = $folder . $file;
+        $filePath = $_SERVER['DOCUMENT_ROOT']."/public/".$fileUrl;
+        if(file_exists($filePath) !== 1)
+        {
+            $fileNum = 0;
+            while(file_exists($filePath))
+            {
+                $fileUrl = $folder.$fileNum."_".$file;
+                $filePath = $_SERVER['DOCUMENT_ROOT']."/public/".$fileUrl;
+                $fileNum += 1;
+            }
+        }
+        return $fileUrl;
+    }
+
+    /**
      * @param $tempFile array
      * @param $folder string
      */
@@ -46,7 +69,8 @@ class ImageUpload extends AjaxController
                 return;
             }
 
-            $filetowrite = $folder . $tempFile['name'];
+            //$filetowrite = $folder . $tempFile['name'];
+            $filetowrite = $this->getFilename($folder, $tempFile['name']);
             move_uploaded_file($tempFile['tmp_name'], $filetowrite);
 
             // Respond to the successful upload with JSON.
@@ -79,7 +103,8 @@ class ImageUpload extends AjaxController
                 return;
             }
 
-            $filetowrite = $this->imageFolder . $tempFile['name'];
+            //$filetowrite = $this->imageFolder . $tempFile['name'];
+            $filetowrite = $this->getFilename($folder, $tempFile['name']);
             move_uploaded_file($tempFile['tmp_name'], $filetowrite);
 
             // Respond to the successful upload with JSON.
