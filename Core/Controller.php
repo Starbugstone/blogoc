@@ -210,4 +210,18 @@ abstract class Controller
             $this->data['dev_info'] += $classMethods;
         }
     }
+
+    /**
+     * get all the session variables
+     * @return mixed
+     */
+    protected function getSessionVars()
+    {
+        return $this->container->getSession()->getAllSessionVars();
+    }
+
+    protected function sendSessionVars()
+    {
+        $this->data['session'] = $this->getSessionVars();
+    }
 }

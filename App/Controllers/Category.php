@@ -66,6 +66,8 @@ class Category extends Controller
 
         $pagination = $this->pagination->getPagination($page, $totalPosts);
 
+        $this->sendSessionVars();
+
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
 
 

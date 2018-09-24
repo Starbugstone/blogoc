@@ -30,9 +30,12 @@
                     </div>
 
                 </div>
-                <div class="admin float-right mr-3">
-                    <a href="/admin/post/modify/{{ post.posts_slug }}">mod</a>
+                {% if session.user_role_level >= 2 %}
+                <div class="admin float-right mr-3 mt-2">
+                    <a href="/admin/post/modify/{{ post.posts_slug }}">Edit <i class="fa fa-pencil" aria-hidden="true"></i></a>
                 </div>
+                {% endif %}
+
             </article>
 
         </div>
