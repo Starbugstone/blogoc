@@ -60,7 +60,7 @@ class PostModel extends Model
      * @return array list of posts
      * @throws \ErrorException
      */
-    private function getAllPosts(int $offset, int $limit, bool $isFrontPage = false): array
+    private function getAllPublishedPosts(int $offset, int $limit, bool $isFrontPage = false): array
     {
         $sql = $this->basePostSelect();
         $sql .= " WHERE published = 1";
@@ -78,6 +78,34 @@ class PostModel extends Model
     }
 
     /**
+     * get the total number of posts, useful for pagination
+     * @return int
+     * @throws \Exception
+     */
+    public function totalNumberPosts():int
+    {
+        $sql = "SELECT COUNT(*) FROM $this->postsTbl WHERE published = 1";
+        $this->query($sql);
+        $this->execute();
+        return $this->stmt->fetchColumn();
+    }
+
+    /**
+     * get the total number of posts in a category, useful for pagination
+     * @param int $categoryId
+     * @return int
+     * @throws \Exception
+     */
+    public function totalNumberPostsInCategory(int $categoryId):int
+    {
+        $sql = "SELECT COUNT(*) FROM $this->postsTbl WHERE published = 1 AND categories_idcategories = :categoryId ";
+        $this->query($sql);
+        $this->bind(":categoryId", $categoryId, \PDO::PARAM_INT);
+        $this->execute();
+        return $this->stmt->fetchColumn();
+    }
+
+    /**
      * get the list of front posts
      * @param int $offset
      * @param int $limit
@@ -86,7 +114,7 @@ class PostModel extends Model
      */
     public function getFrontPosts(int $offset = 0, int $limit = Constant::FRONT_PAGE_POSTS):array
     {
-        return $this->getAllPosts($offset, $limit, true);
+        return $this->getAllPublishedPosts($offset, $limit, true);
     }
 
     /**
@@ -98,9 +126,58 @@ class PostModel extends Model
      */
     public function getPosts(int $offset = 0, int $limit = Constant::POSTS_PER_PAGE):array
     {
-        return $this->getAllPosts($offset, $limit, false);
+        return $this->getAllPublishedPosts($offset, $limit, false);
     }
 
+    /**
+     * get all the posts from a certain category
+     * @param int $categoryId the id of the category
+     * @param int $offset the offset for pagination
+     * @param int $limit the limit to display
+     * @return array list of posts in set category
+     * @throws \Exception
+     */
+    public function getPostsInCategory(int $categoryId, int $offset = 0, int $limit = Constant::POSTS_PER_PAGE): array
+    {
+        $sql = $this->basePostSelect();
+        $sql .= " WHERE categories_idcategories = :categoryId 
+                ORDER BY $this->postsTbl.creation_date DESC
+                LIMIT :limit OFFSET :offset;";
+        $this->query($sql);
+        $this->bind(":categoryId", $categoryId, \PDO::PARAM_INT);
+        $this->bind(":limit", $limit);
+        $this->bind(":offset", $offset);
+        $this->execute();
+
+        $results = $this->fetchAll();
+        $sendResults = [];
+        //we create the excerpt for the text and add it to the object
+        foreach ($results as $result) {
+            $result->{'excerpt'} = $this->getExcerpt($result->article);
+            $sendResults[] = $result;
+        }
+        return $sendResults;
+    }
+
+
+
+
+    /**
+     * get a single post from it's ID
+     * @param int $postid the post ID to get
+     * @return array the single post details
+     * @throws \Exception
+     */
+    public function getSinglePost(int $postid):array
+    {
+        $sql = $this->basePostSelect();
+        $sql .= " WHERE idposts = :postId;";
+        $this->query($sql);
+        $this->bind(":postId", $postid, \PDO::PARAM_INT);
+        $this->execute();
+
+        return $this->fetch();
+    }
 
     /**
      * Create a new post
@@ -196,51 +273,5 @@ class PostModel extends Model
         return $this->execute();
     }
 
-    /**
-     * get all the posts from a certain category
-     * @param int $categoryId the id of the category
-     * @param int $offset the offset for pagination
-     * @param int $limit the limit to display
-     * @return array list of posts in set category
-     * @throws \Exception
-     */
-    public function getPostsInCategory(int $categoryId, int $offset = 0, int $limit = Constant::POSTS_PER_PAGE): array
-    {
-        $sql = $this->basePostSelect();
-        $sql .= " WHERE categories_idcategories = :categoryId 
-                ORDER BY $this->postsTbl.creation_date DESC
-                LIMIT :limit OFFSET :offset;";
-        $this->query($sql);
-        $this->bind(":categoryId", $categoryId, \PDO::PARAM_INT);
-        $this->bind(":limit", $limit);
-        $this->bind(":offset", $offset);
-        $this->execute();
 
-        $results = $this->fetchAll();
-        $sendResults = [];
-        //we create the excerpt for the text and add it to the object
-        foreach ($results as $result) {
-            $result->{'excerpt'} = $this->getExcerpt($result->article);
-            $sendResults[] = $result;
-        }
-        return $sendResults;
-    }
-
-
-    /**
-     * get a single post from it's ID
-     * @param int $postid the post ID to get
-     * @return array the single post details
-     * @throws \Exception
-     */
-    public function getSinglePost(int $postid):array
-    {
-        $sql = $this->basePostSelect();
-        $sql .= " WHERE idposts = :postId;";
-        $this->query($sql);
-        $this->bind(":postId", $postid, \PDO::PARAM_INT);
-        $this->execute();
-
-        return $this->fetch();
-    }
 }

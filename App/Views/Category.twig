@@ -6,6 +6,18 @@
     {% for post in posts %}
         <p>{{ post.title }} <a href="/admin/post/modify/{{ post.posts_slug }}">mod</a> </p>
     {% endfor %}
+
+    {% set categorySlugUrl = "all-posts/" %}
+    {% if categorySlug is defined %}
+        {% set categorySlugUrl = "posts/"~categorySlug~"/" %}
+    {% endif %}
+
+    {% if pagination.pageNo > "1" %}
+        <a href="/category/{{ categorySlugUrl }}page-{{ pagination.pageNo-1 }}">Previous page</a>
+    {% endif %}
+    {% if pagination.pageNo  < pagination.totalPages %}
+        <a href="/category/{{ categorySlugUrl }}page-{{ pagination.pageNo+1 }}">Next page</a>
+    {% endif %}
 {% endblock %}
 
 {% block js %}
