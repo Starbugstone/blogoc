@@ -4,20 +4,56 @@
 
 {% block main %}
     {% for post in posts %}
-        <p>{{ post.title }} <a href="/admin/post/modify/{{ post.posts_slug }}">mod</a></p>
-    {% endfor %}
 
+        <div class="col-12 my-2">
+            <article class="category-listing shadow-sm border-dark">
+                <div class="row justify-content-center no-gutters">
+                    <div class="col-md-10 text-center">
+                        <h2 class="entry-title">
+                            <a href="#">{{ post.title }}</a>
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="row align-items-center no-gutters">
+                    <div class="col-md-3">
+                        <div class="index_article_post_image ml-1">
+                            <a class="index_article_post_image_link hoverImage rounded "
+                               href="https://chaletsetcaviar.starbugstone.eu/chalet-de-test/">
+                                <div class="postThumbnail rounded border-dark shadow-sm" style="background-image : url({{ post.post_image }})">
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-9 px-2 text-center">
+                        {{ post.excerpt|raw  }}
+                    </div>
+
+                </div>
+                <div class="admin">
+                    <a href="/admin/post/modify/{{ post.posts_slug }}">mod</a>
+                </div>
+            </article>
+
+        </div>
+    {% endfor %}
+    <div class="pagination">
+    {# Taking care of the pagination #}
+    {# generating previous / next page url, Are we searching in a category or all pages ? #}
     {% set categorySlugUrl = "all-posts/" %}
     {% if categorySlug is defined %}
         {% set categorySlugUrl = "posts/"~categorySlug~"/" %}
     {% endif %}
-
+    <p>
+    {# Creating previous and next page links #}
     {% if pagination.pageNo > "1" %}
-        <a href="/category/{{ categorySlugUrl }}page-{{ pagination.pageNo-1 }}">Previous page</a>
+        <a href="/category/{{ categorySlugUrl }}page-{{ pagination.pageNo-1 }}" class="float-left">Previous page</a>
     {% endif %}
     {% if pagination.pageNo  < pagination.totalPages %}
-        <a href="/category/{{ categorySlugUrl }}page-{{ pagination.pageNo+1 }}">Next page</a>
+        <a href="/category/{{ categorySlugUrl }}page-{{ pagination.pageNo+1 }}" class="float-right">Next page</a>
     {% endif %}
+    </p>
+    </div>
 {% endblock %}
 
 {% block js %}
