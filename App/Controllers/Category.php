@@ -5,14 +5,11 @@ namespace App\Controllers;
 use App\Models\CategoryModel;
 use App\Models\PostModel;
 use App\Models\SlugModel;
-use Core\Constant;
 use Core\Container;
 use Core\Controller;
-use Core\Traits\StringFunctions;
 
 class Category extends Controller
 {
-    use StringFunctions;
 
     protected $siteConfig;
     protected $pagination;

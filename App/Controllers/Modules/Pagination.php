@@ -26,7 +26,7 @@ class Pagination extends Module
             throw new \Exception("Pagination Error", "404");
         }
         $pageNo = $this->removeFromBeginning($page, "page-");
-        if(!is_int($pageNo)){
+        if(!filter_var($pageNo, FILTER_VALIDATE_INT)){
             throw new \Exception("Invalid page number");
         }
         $offset = ($pageNo - 1) * $rowsPerPage;
