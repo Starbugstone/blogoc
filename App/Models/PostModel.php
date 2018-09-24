@@ -165,7 +165,7 @@ class PostModel extends Model
      * @return array the single post details
      * @throws \Exception
      */
-    public function getSinglePost(int $postid): array
+    public function getSinglePost(int $postid)
     {
         $sql = $this->basePostSelect();
         $sql .= " WHERE idposts = :postId;";
