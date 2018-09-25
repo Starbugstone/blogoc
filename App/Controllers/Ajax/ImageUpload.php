@@ -104,7 +104,7 @@ class ImageUpload extends AjaxController
             }
 
             //$filetowrite = $this->imageFolder . $tempFile['name'];
-            $filetowrite = $this->getFilename($folder, $tempFile['name']);
+            $filetowrite = $this->getFilename($this->imageFolder, $tempFile['name']);
             move_uploaded_file($tempFile['tmp_name'], $filetowrite);
 
             // Respond to the successful upload with JSON.
