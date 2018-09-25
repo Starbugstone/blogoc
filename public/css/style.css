@@ -129,6 +129,10 @@ div.masthead {
   padding: 3rem;
   overflow-wrap: break-word;
   overflow: hidden; }
+  .showcase .showcase-text h2 {
+    text-align: center; }
+    .showcase .showcase-text h2 a {
+      color: #868e96; }
 
 .showcase .showcase-img {
   min-height: 30rem;

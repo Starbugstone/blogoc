@@ -10,7 +10,7 @@
                 <div class="row justify-content-center no-gutters">
                     <div class="col-md-10 text-center">
                         <h2 class="entry-title">
-                            <a href="#">{{ post.title }}</a>
+                            <a href="/post/view-post/{{ post.posts_slug }}">{{ post.title }}</a>
                         </h2>
                     </div>
                 </div>
@@ -19,7 +19,7 @@
                     <div class="col-md-3">
                         <div class="index_article_post_image ml-1">
                             <a class="index_article_post_image_link hoverImage rounded"
-                               href="#">
+                               href="/post/view-post/{{ post.posts_slug }}">
                                 <div class="postThumbnail rounded border-dark shadow-sm" style="background-image : url({{ post.post_image }})">
                                 </div>
                             </a>
