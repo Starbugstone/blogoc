@@ -9,6 +9,7 @@ use Core\Container;
 
 class Author extends Controller{
 
+
     protected $siteConfig;
     protected $pagination;
 
@@ -29,13 +30,13 @@ class Author extends Controller{
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function posts($authorId, string $page = "page-1")
+    public function posts(int $authorId, string $page = "page-1")
     {
         $categoryModel = new CategoryModel($this->container);
         $postModel = new PostModel($this->container);
-        $paginationModel = new PaginationModel($this->container);
 
-        $totalPosts = $paginationModel->totalNumberPostsByAuthor($authorId);
+        $totalPosts = $postModel->totalNumberPostsByAuthor($authorId);
+
         $pagination = $this->pagination->getPagination($page, $totalPosts);
 
         $this->sendSessionVars();
