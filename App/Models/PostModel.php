@@ -17,6 +17,9 @@ class PostModel extends Model
     private $usersTbl;
     private $postTagTbl;
 
+    //does our query need the tags table to be joined ?
+    private $queryWithTags = false;
+
     public function __construct(Container $container)
     {
         parent::__construct($container);
@@ -28,6 +31,7 @@ class PostModel extends Model
 
     /**
      * the base Select SQL to get the information from the post table and joined tables
+     * @param bool $withTags
      * @return string
      */
     private function basePostSelect(): string
@@ -35,8 +39,10 @@ class PostModel extends Model
         $sql = "SELECT idposts, title, post_image,article,$this->postsTbl.last_update, posts_slug, categories_idcategories, category_name, published, on_front_page, categories_slug, pseudo as author, idusers
                 FROM $this->postsTbl 
                 INNER JOIN $this->categoriesTbl ON $this->postsTbl.categories_idcategories = $this->categoriesTbl.idcategories 
-                INNER JOIN $this->usersTbl ON $this->postsTbl.author_iduser = $this->usersTbl.idusers
-                LEFT JOIN $this->postTagTbl ON $this->postsTbl.idposts = $this->postTagTbl.post_idposts";
+                INNER JOIN $this->usersTbl ON $this->postsTbl.author_iduser = $this->usersTbl.idusers";
+        if ($this->queryWithTags) {
+            $sql .= " LEFT JOIN $this->postTagTbl ON $this->postsTbl.idposts = $this->postTagTbl.post_idposts";
+        }
         return $sql;
     }
 
@@ -63,11 +69,16 @@ class PostModel extends Model
      * @param int $limit the number of posts
      * @param bool $isFrontPage extract only front page posts
      * @param array $select list of select limiters
+     * @param bool $withTags
      * @return array list of posts
      * @throws \ErrorException
      */
-    private function getAllPublishedPosts(int $offset, int $limit, bool $isFrontPage = false, array $select = []): array
-    {
+    private function getAllPublishedPosts(
+        int $offset,
+        int $limit,
+        bool $isFrontPage = false,
+        array $select = []
+    ): array {
         $sql = $this->basePostSelect();
         $sql .= " WHERE published = 1";
         if ($isFrontPage) {
@@ -100,16 +111,17 @@ class PostModel extends Model
     /**
      * Count the number of published posts
      * @param array $select list of select limiters
+     * @param bool $withTags
      * @return int number of posts
      * @throws Exception
      */
     private function countNumberPosts(array $select = []): int
     {
-        $sql = "
-                SELECT COUNT(*) FROM $this->postsTbl
-                LEFT JOIN $this->postTagTbl ON $this->postsTbl.idposts = $this->postTagTbl.post_idposts
-                WHERE published = 1
-                ";
+        $sql = "SELECT COUNT(*) FROM $this->postsTbl";
+        if ($this->queryWithTags) {
+            $sql .= " LEFT JOIN $this->postTagTbl ON $this->postsTbl.idposts = $this->postTagTbl.post_idposts";
+        }
+        $sql .= " WHERE published = 1";
         if ($select != null) {
             foreach ($select as $col => $val) {
                 if (!$this->isAlphaNum($col)) {
@@ -168,6 +180,7 @@ class PostModel extends Model
      */
     public function totalNumberPostsByTag(int $tagId): int
     {
+        $this->queryWithTags = true;
         return $this->countNumberPosts(["tag_idtags" => $tagId]);
     }
 
@@ -223,7 +236,7 @@ class PostModel extends Model
     }
 
     /**
-     * get all the posts with a certan tag
+     * get all the posts with a certain tag
      * @param int $tagId
      * @param int $offset
      * @param int $limit
@@ -232,6 +245,7 @@ class PostModel extends Model
      */
     public function getPostsWithTag(int $tagId, int $offset = 0, int $limit = Constant::POSTS_PER_PAGE): array
     {
+        $this->queryWithTags = true;
         return $this->getPosts($offset, ["tag_idtags" => $tagId], $limit);
     }
 
