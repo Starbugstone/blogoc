@@ -78,34 +78,6 @@ class PostModel extends Model
     }
 
     /**
-     * get the total number of posts, useful for pagination
-     * @return int
-     * @throws \Exception
-     */
-    public function totalNumberPosts(): int
-    {
-        $sql = "SELECT COUNT(*) FROM $this->postsTbl WHERE published = 1";
-        $this->query($sql);
-        $this->execute();
-        return $this->stmt->fetchColumn();
-    }
-
-    /**
-     * get the total number of posts in a category, useful for pagination
-     * @param int $categoryId
-     * @return int
-     * @throws \Exception
-     */
-    public function totalNumberPostsInCategory(int $categoryId): int
-    {
-        $sql = "SELECT COUNT(*) FROM $this->postsTbl WHERE published = 1 AND categories_idcategories = :categoryId ";
-        $this->query($sql);
-        $this->bind(":categoryId", $categoryId, \PDO::PARAM_INT);
-        $this->execute();
-        return $this->stmt->fetchColumn();
-    }
-
-    /**
      * get the list of front posts
      * @param int $offset
      * @param int $limit
@@ -150,13 +122,31 @@ class PostModel extends Model
         $this->execute();
 
         $results = $this->fetchAll();
-        $sendResults = [];
-        //we create the excerpt for the text and add it to the object
-        foreach ($results as $result) {
-            $result->{'excerpt'} = $this->getExcerpt($result->article);
-            $sendResults[] = $result;
-        }
-        return $sendResults;
+        return $this->addExcerpt($results);
+    }
+
+    /**
+     * get all the posts with a specific author
+     * @param int $authorId
+     * @param int $offset
+     * @param int $limit
+     * @return array
+     * @throws \ErrorException
+     */
+    public function getPostsWithAuthor(int $authorId, int $offset = 0, int $limit = Constant::POSTS_PER_PAGE): array
+    {
+        $sql = $this->basePostSelect();
+        $sql .= " WHERE author_iduser = :authorId 
+                ORDER BY $this->postsTbl.creation_date DESC
+                LIMIT :limit OFFSET :offset;";
+        $this->query($sql);
+        $this->bind(":authorId", $authorId, \PDO::PARAM_INT);
+        $this->bind(":limit", $limit);
+        $this->bind(":offset", $offset);
+        $this->execute();
+
+        $results = $this->fetchAll();
+        return $this->addExcerpt($results);
     }
 
     /**

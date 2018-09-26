@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\CategoryModel;
+use App\Models\PaginationModel;
 use App\Models\PostModel;
 use App\Models\SlugModel;
 use Core\Container;
@@ -17,6 +18,7 @@ class Category extends Controller
     private $slugModel;
     private $postModel;
     private $categoryModel;
+    private $paginationModel;
 
     public function __construct(Container $container)
     {
@@ -26,6 +28,7 @@ class Category extends Controller
         $this->slugModel = new SlugModel($this->container);
         $this->postModel = new PostModel($this->container);
         $this->categoryModel = new CategoryModel($this->container);
+        $this->paginationModel = new PaginationModel($this->container);
 
         $this->sendSessionVars();
 
@@ -46,7 +49,7 @@ class Category extends Controller
 
 
         $categoryId = $this->slugModel->getIdFromSlug($categorySlug, "categories", "categories_slug", "idcategories");
-        $totalPosts = $this->postModel->totalNumberPostsInCategory($categoryId);
+        $totalPosts = $this->paginationModel->totalNumberPostsInCategory($categoryId);
 
         $pagination = $this->pagination->getPagination($page, $totalPosts);
 
@@ -62,9 +65,18 @@ class Category extends Controller
 
     }
 
+    /**
+     * list all the posts no matter what category
+     * @param string $page
+     * @throws \ErrorException
+     * @throws \ReflectionException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public function allPosts(string $page = "page-1")
     {
-        $totalPosts = $this->postModel->totalNumberPosts();
+        $totalPosts = $this->paginationModel->totalNumberPosts();
 
         $pagination = $this->pagination->getPagination($page, $totalPosts);
 
