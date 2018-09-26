@@ -212,3 +212,28 @@ article.category-listing {
 
 .pagination p {
   width: 100%; }
+
+.single-post h1, .single-post h2 {
+  color: #495057; }
+
+.single-post .post-info a {
+  color: #868e96; }
+
+.chip {
+  display: inline-block;
+  padding: 0 25px;
+  height: 50px;
+  font-size: 16px;
+  line-height: 50px;
+  border-radius: 25px;
+  background-color: #f1f1f1; }
+  .chip, .chip a {
+    color: #495057; }
+  .chip .closebtn {
+    padding-left: 10px;
+    color: #888;
+    font-weight: bold;
+    font-size: 20px;
+    cursor: pointer; }
+  .chip .closebtn:hover {
+    color: #000; }

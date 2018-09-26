@@ -27,6 +27,8 @@ class Category extends Controller
         $this->postModel = new PostModel($this->container);
         $this->categoryModel = new CategoryModel($this->container);
 
+        $this->sendSessionVars();
+
     }
 
     /**
@@ -66,7 +68,7 @@ class Category extends Controller
 
         $pagination = $this->pagination->getPagination($page, $totalPosts);
 
-        $this->sendSessionVars();
+
 
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
 

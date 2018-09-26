@@ -1,0 +1,11 @@
+.single-post{
+  & h1, & h2{
+    color: $gray-700;
+  }
+
+  .post-info{
+    a{
+      color:$gray-600;
+    }
+  }
+}
