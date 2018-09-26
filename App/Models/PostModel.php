@@ -74,11 +74,9 @@ class PostModel extends Model
             $sql .= " AND on_front_page = 1";
         }
         //if we have a limiting parameter
-        if($select != null)
-        {
-            foreach ($select as $col => $val)
-            {
-                if(!$this->isAlphaNum($col)){
+        if ($select != null) {
+            foreach ($select as $col => $val) {
+                if (!$this->isAlphaNum($col)) {
                     throw new Exception("Invalid column name");
                 }
                 $sql .= " AND $col = :$col";
@@ -87,11 +85,9 @@ class PostModel extends Model
         $sql .= " ORDER BY $this->postsTbl.creation_date DESC";
         $sql .= " LIMIT :limit OFFSET :offset";
         $this->query($sql);
-        if($select != null)
-        {
-            foreach ($select as $col => $val)
-            {
-                $this->bind(":".$col,$val);
+        if ($select != null) {
+            foreach ($select as $col => $val) {
+                $this->bind(":" . $col, $val);
             }
         }
         $this->bind(":limit", $limit);
@@ -107,7 +103,7 @@ class PostModel extends Model
      * @return int number of posts
      * @throws Exception
      */
-    private function numberPosts(array $select=[]): int
+    private function countNumberPosts(array $select = []): int
     {
         $sql = "
                 SELECT COUNT(*) FROM $this->postsTbl
@@ -139,7 +135,7 @@ class PostModel extends Model
      */
     public function totalNumberPosts(): int
     {
-        return $this->numberPosts();
+        return $this->countNumberPosts();
     }
 
     /**
@@ -150,7 +146,7 @@ class PostModel extends Model
      */
     public function totalNumberPostsInCategory(int $categoryId): int
     {
-        return $this->numberPosts(["categories_idcategories" =>$categoryId]);
+        return $this->countNumberPosts(["categories_idcategories" => $categoryId]);
     }
 
     /**
@@ -159,9 +155,9 @@ class PostModel extends Model
      * @return int
      * @throws Exception
      */
-    public function totalNumberPostsByAuthor(int $authorId):int
+    public function totalNumberPostsByAuthor(int $authorId): int
     {
-        return $this->numberPosts(["author_iduser" =>$authorId]);
+        return $this->countNumberPosts(["author_iduser" => $authorId]);
     }
 
     /**
@@ -170,11 +166,10 @@ class PostModel extends Model
      * @return int
      * @throws Exception
      */
-    public function totalNumberPostsByTag(int $tagId):int
+    public function totalNumberPostsByTag(int $tagId): int
     {
-        return $this->numberPosts(["tag_idtags" =>$tagId]);
+        return $this->countNumberPosts(["tag_idtags" => $tagId]);
     }
-
 
     /**
      * get the list of front posts
@@ -196,7 +191,7 @@ class PostModel extends Model
      * @return array
      * @throws \ErrorException
      */
-    public function getPosts(int $offset = 0, array $select=[], int $limit = Constant::POSTS_PER_PAGE): array
+    public function getPosts(int $offset = 0, array $select = [], int $limit = Constant::POSTS_PER_PAGE): array
     {
         return $this->getAllPublishedPosts($offset, $limit, false, $select);
     }
@@ -224,7 +219,7 @@ class PostModel extends Model
      */
     public function getPostsWithAuthor(int $authorId, int $offset = 0, int $limit = Constant::POSTS_PER_PAGE): array
     {
-        return $this->getPosts($offset, ["author_iduser"=>$authorId], $limit);
+        return $this->getPosts($offset, ["author_iduser" => $authorId], $limit);
     }
 
     /**
