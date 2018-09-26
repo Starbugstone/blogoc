@@ -20,8 +20,7 @@ function setupTinymce($selector) {
         skin: "lightgray",
 
         /* width and height of the editor */
-        //width: "100%",
-        min_height: 250,
+        min_height: 450,
 
         relative_urls: false,
         remove_script_host: true,
@@ -31,11 +30,15 @@ function setupTinymce($selector) {
 
         /* plugin */
         plugins: [
-            "code pagebreak image"
+            "code pagebreak image hr lists preview fullscreen textcolor emoticons"
         ],
 
         /* toolbar */
-        //toolbar: "undo redo | image code | pagebreak",
+        menubar: false,
+        toolbar: [
+            "bold italic underline strikethrough | formatselect forecolor backcolor | bullist numlist | alignleft aligncenter alignright alignjustify",
+            " undo redo | emoticons image hr pagebreak | alignnone removeformat | fullscreen code preview"
+        ],
 
         /* Images uploading
         https://www.codexworld.com/tinymce-upload-image-to-server-using-php/
