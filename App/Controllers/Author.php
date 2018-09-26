@@ -36,7 +36,6 @@ class Author extends Controller{
         $postModel = new PostModel($this->container);
 
         $totalPosts = $postModel->totalNumberPostsByAuthor($authorId);
-
         $pagination = $this->pagination->getPagination($page, $totalPosts);
 
         $this->sendSessionVars();

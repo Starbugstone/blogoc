@@ -43,16 +43,11 @@ class Category extends Controller
      */
     public function posts(string $categorySlug, string $page = "page-1")
     {
-
-
         $categoryId = $this->slugModel->getIdFromSlug($categorySlug, "categories", "categories_slug", "idcategories");
         $totalPosts = $this->postModel->totalNumberPostsInCategory($categoryId);
-
         $pagination = $this->pagination->getPagination($page, $totalPosts);
 
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
-
-
         $this->data['navigation'] = $this->categoryModel->getMenu();
         $this->data['posts'] = $this->postModel->getPostsInCategory($categoryId, $pagination["offset"]);
         $this->data['pagination'] = $pagination;
@@ -74,14 +69,9 @@ class Category extends Controller
     public function allPosts(string $page = "page-1")
     {
         $totalPosts = $this->postModel->totalNumberPosts();
-
         $pagination = $this->pagination->getPagination($page, $totalPosts);
 
-
-
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
-
-
         $this->data['navigation'] = $this->categoryModel->getMenu();
         $this->data['posts'] = $this->postModel->getPosts($pagination["offset"]);
         $this->data['pagination'] = $pagination;
