@@ -90,6 +90,13 @@ trait StringFunctions
 
         //exploding on space except for in img, p and span.
         $string = preg_split('/(<img[^>]+\>)|(<p[^>]+\>)|(<span[^>]+\>)|\s/', $text, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+
+        //The preg split can return false, probably will never happen but just in case.
+        if(!$string)
+        {
+            throw new \Error("excerpt generation failed");
+        }
+
         if (count($string) <= $count) {
             return $text;
         }

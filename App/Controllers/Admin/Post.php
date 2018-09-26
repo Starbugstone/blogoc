@@ -86,6 +86,11 @@ class Post extends AdminController
         $onFrontpage = $posts["isOnFrontPage"];
         $idUser = $userSessionid;
 
+        if(!is_int($idUser) || $idUser === null)
+        {
+            throw new \Error("Invalid userID");
+        }
+
         $slugModel = new SlugModel($this->container);
         $tagModel = new TagsModel($this->container);
         $postModel = new PostModel($this->container);

@@ -67,7 +67,7 @@ class TagsModel extends Model
         $this->query($sql);
         $this->bind(":tag", $tag);
         $this->execute();
-        return $this->dbh->lastInsertId();
+        return (int)$this->dbh->lastInsertId();
 
     }
 

@@ -2,7 +2,6 @@
 namespace App\Controllers;
 
 use App\Models\CategoryModel;
-use App\Models\PaginationModel;
 use App\Models\PostModel;
 use Core\Controller;
 use Core\Container;

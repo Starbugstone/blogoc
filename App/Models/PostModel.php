@@ -291,7 +291,7 @@ class PostModel extends Model
 
         $this->execute();
 
-        return $this->dbh->lastInsertId();
+        return (int)$this->dbh->lastInsertId();
     }
 
     /**
