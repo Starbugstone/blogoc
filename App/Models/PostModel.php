@@ -14,13 +14,15 @@ class PostModel extends Model
     private $postsTbl;
     private $categoriesTbl;
     private $usersTbl;
+    private $postTagTbl;
 
     public function __construct(Container $container)
     {
         parent::__construct($container);
-        $this->postsTbl = $this->getTablePrefix('posts');
-        $this->categoriesTbl = $this->getTablePrefix('categories');
-        $this->usersTbl = $this->getTablePrefix('users');
+        $this->postsTbl = $this->getTablePrefix("posts");
+        $this->categoriesTbl = $this->getTablePrefix("categories");
+        $this->usersTbl = $this->getTablePrefix("users");
+        $this->postTagTbl = $this->getTablePrefix("posts_has_tags");
     }
 
     /**
@@ -121,6 +123,22 @@ class PostModel extends Model
     }
 
     /**
+     * get number of posts with tag
+     * @param int $tagId
+     * @return int
+     * @throws \Exception
+     */
+    public function totalNumberPostsByTag(int $tagId):int
+    {
+        $sql = "SELECT COUNT(*) FROM $this->postTagTbl WHERE tag_idtags = :tagId ";
+        $this->query($sql);
+        $this->bind(":tagId", $tagId, \PDO::PARAM_INT);
+        $this->execute();
+        return $this->stmt->fetchColumn();
+    }
+
+
+    /**
      * get the list of front posts
      * @param int $offset
      * @param int $limit
@@ -184,6 +202,27 @@ class PostModel extends Model
                 LIMIT :limit OFFSET :offset;";
         $this->query($sql);
         $this->bind(":authorId", $authorId, \PDO::PARAM_INT);
+        $this->bind(":limit", $limit);
+        $this->bind(":offset", $offset);
+        $this->execute();
+
+        $results = $this->fetchAll();
+        return $this->addExcerpt($results);
+    }
+
+
+    public function getPostsWithTag(int $tagId, int $offset = 0, int $limit = Constant::POSTS_PER_PAGE): array
+    {
+        $sql = "SELECT idposts, title, post_image,article,$this->postsTbl.last_update, posts_slug, categories_idcategories, category_name, published, on_front_page, categories_slug, pseudo as author, idusers
+                FROM $this->postsTbl INNER JOIN $this->categoriesTbl ON $this->postsTbl.categories_idcategories = $this->categoriesTbl.idcategories
+                INNER JOIN $this->usersTbl ON $this->postsTbl.author_iduser = $this->usersTbl.idusers
+                LEFT JOIN $this->postTagTbl ON $this->postsTbl.idposts = $this->postTagTbl.post_idposts
+                WHERE tag_idtags = :tagId
+                ORDER BY $this->postsTbl.creation_date DESC
+                LIMIT :limit OFFSET :offset;";
+
+        $this->query($sql);
+        $this->bind(":tagId", $tagId, \PDO::PARAM_INT);
         $this->bind(":limit", $limit);
         $this->bind(":offset", $offset);
         $this->execute();

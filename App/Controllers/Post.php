@@ -26,7 +26,7 @@ class Post extends Controller{
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function viewPost($slug){
+    public function viewPost(string $slug){
 
         $tagModel = new TagsModel($this->container);
         $postModel = new PostModel($this->container);
