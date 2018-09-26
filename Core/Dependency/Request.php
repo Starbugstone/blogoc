@@ -123,4 +123,12 @@ class Request
         return current($_FILES);
     }
 
+    /**
+     * getting the server document root
+     */
+    public function getDocumentRoot()
+    {
+        return $_SERVER['DOCUMENT_ROOT'];
+    }
+
 }

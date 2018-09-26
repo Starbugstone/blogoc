@@ -44,14 +44,15 @@ class ImageUpload extends AjaxController
     {
 
         $fileUrl = $folder . $file;
-        $filePath = $_SERVER['DOCUMENT_ROOT']."/public/".$fileUrl;
+        $docRoot = $this->request->getDocumentRoot();
+        $filePath = $docRoot."/public/".$fileUrl;
         if(file_exists($filePath) !== 1)
         {
             $fileNum = 0;
             while(file_exists($filePath))
             {
                 $fileUrl = $folder.$fileNum."_".$file;
-                $filePath = $_SERVER['DOCUMENT_ROOT']."/public/".$fileUrl;
+                $filePath = $docRoot."/public/".$fileUrl;
                 $fileNum += 1;
             }
         }
