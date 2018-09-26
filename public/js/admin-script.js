@@ -40,6 +40,9 @@ function setupTinymce($selector) {
             " undo redo | emoticons image hr pagebreak | alignnone removeformat | fullscreen code preview"
         ],
 
+        /* Page Break */
+        pagebreak_separator: "<!-- EndOfExcerptBlogOc -->",
+
         /* Images uploading
         https://www.codexworld.com/tinymce-upload-image-to-server-using-php/
         */

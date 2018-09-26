@@ -81,6 +81,13 @@ trait StringFunctions
             throw new \ErrorException('excerpt length too low');
         }
         $text = str_replace("  ", " ", $text);
+
+        //Searching for the page break tag
+        $breakTagPosition = strpos($text, "<!-- EndOfExcerptBlogOc -->");
+        if($breakTagPosition > 0){
+            return $this->completeDom(substr($text, 0, $breakTagPosition));
+        }
+
         //exploding on space except for in img, p and span.
         $string = preg_split('/(<img[^>]+\>)|(<p[^>]+\>)|(<span[^>]+\>)|\s/', $text, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
         if (count($string) <= $count) {
@@ -88,7 +95,6 @@ trait StringFunctions
         }
         $trimed = '';
         for ($wordCounter = 0; $wordCounter < $count; $wordCounter++) {
-            //TODO Take into account the "read more" tag
             $trimed .= $string[$wordCounter];
             if ($wordCounter < $count - 1) {
                 $trimed .= " ";
@@ -97,12 +103,21 @@ trait StringFunctions
             }
         }
 
-        //clean up unclosed html
+        return $this->completeDom($trimed);
+    }
+
+    /**
+     * Close the dom in given $text
+     * @param string $text unclean html
+     * @return string cleaned up html
+     */
+    private function completeDom(string $text): string
+    {
         //grabbed from https://gist.github.com/JayWood/348752b568ecd63ae5ce#gistcomment-2310550
         libxml_use_internal_errors(true);
 
         $dom = new \DOMDocument;
-        $dom->loadHTML($trimed);
+        $dom->loadHTML($text);
 
         // Strip wrapping <html> and <body> tags
         $mock = new \DOMDocument;
@@ -111,9 +126,7 @@ trait StringFunctions
             $mock->appendChild($mock->importNode($child, true));
         }
 
-        $fixed = trim($mock->saveHTML());
-        
-        return $fixed;
+        return trim($mock->saveHTML());
     }
 
     /**
