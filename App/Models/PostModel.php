@@ -6,6 +6,7 @@ use Core\Constant;
 use Core\Container;
 use Core\Model;
 use Core\Traits\StringFunctions;
+use Exception;
 
 class PostModel extends Model
 {
@@ -32,8 +33,10 @@ class PostModel extends Model
     private function basePostSelect(): string
     {
         $sql = "SELECT idposts, title, post_image,article,$this->postsTbl.last_update, posts_slug, categories_idcategories, category_name, published, on_front_page, categories_slug, pseudo as author, idusers
-                FROM $this->postsTbl INNER JOIN $this->categoriesTbl ON $this->postsTbl.categories_idcategories = $this->categoriesTbl.idcategories
-                INNER JOIN $this->usersTbl ON $this->postsTbl.author_iduser = $this->usersTbl.idusers";
+                FROM $this->postsTbl 
+                INNER JOIN $this->categoriesTbl ON $this->postsTbl.categories_idcategories = $this->categoriesTbl.idcategories 
+                INNER JOIN $this->usersTbl ON $this->postsTbl.author_iduser = $this->usersTbl.idusers
+                LEFT JOIN $this->postTagTbl ON $this->postsTbl.idposts = $this->postTagTbl.post_idposts";
         return $sql;
     }
 
@@ -59,19 +62,38 @@ class PostModel extends Model
      * @param int $offset where to start (for pagination)
      * @param int $limit the number of posts
      * @param bool $isFrontPage extract only front page posts
+     * @param array $select list of select limiters
      * @return array list of posts
      * @throws \ErrorException
      */
-    private function getAllPublishedPosts(int $offset, int $limit, bool $isFrontPage = false): array
+    private function getAllPublishedPosts(int $offset, int $limit, bool $isFrontPage = false, array $select = []): array
     {
         $sql = $this->basePostSelect();
         $sql .= " WHERE published = 1";
         if ($isFrontPage) {
             $sql .= " AND on_front_page = 1";
         }
+        //if we have a limiting parameter
+        if($select != null)
+        {
+            foreach ($select as $col => $val)
+            {
+                if(!$this->isAlphaNum($col)){
+                    throw new Exception("Invalid column name");
+                }
+                $sql .= " AND $col = :$col";
+            }
+        }
         $sql .= " ORDER BY $this->postsTbl.creation_date DESC";
         $sql .= " LIMIT :limit OFFSET :offset";
         $this->query($sql);
+        if($select != null)
+        {
+            foreach ($select as $col => $val)
+            {
+                $this->bind(":".$col,$val);
+            }
+        }
         $this->bind(":limit", $limit);
         $this->bind(":offset", $offset);
         $this->execute();
@@ -80,61 +102,77 @@ class PostModel extends Model
     }
 
     /**
+     * Count the number of published posts
+     * @param array $select list of select limiters
+     * @return int number of posts
+     * @throws Exception
+     */
+    private function numberPosts(array $select=[]): int
+    {
+        $sql = "
+                SELECT COUNT(*) FROM $this->postsTbl
+                LEFT JOIN $this->postTagTbl ON $this->postsTbl.idposts = $this->postTagTbl.post_idposts
+                WHERE published = 1
+                ";
+        if ($select != null) {
+            foreach ($select as $col => $val) {
+                if (!$this->isAlphaNum($col)) {
+                    throw new Exception("Invalid column name");
+                }
+                $sql .= " AND $col = :$col";
+            }
+        }
+        $this->query($sql);
+        if ($select != null) {
+            foreach ($select as $col => $val) {
+                $this->bind(":" . $col, $val);
+            }
+        }
+        $this->execute();
+        return $this->stmt->fetchColumn();
+    }
+
+    /**
      * get the total number of posts
      * @return int
-     * @throws \Exception
+     * @throws Exception
      */
     public function totalNumberPosts(): int
     {
-        $sql = "SELECT COUNT(*) FROM $this->postsTbl WHERE published = 1";
-        $this->query($sql);
-        $this->execute();
-        return $this->stmt->fetchColumn();
+        return $this->numberPosts();
     }
 
     /**
      * get the total number of posts in a category
      * @param int $categoryId
      * @return int
-     * @throws \Exception
+     * @throws Exception
      */
     public function totalNumberPostsInCategory(int $categoryId): int
     {
-        $sql = "SELECT COUNT(*) FROM $this->postsTbl WHERE published = 1 AND categories_idcategories = :categoryId ";
-        $this->query($sql);
-        $this->bind(":categoryId", $categoryId, \PDO::PARAM_INT);
-        $this->execute();
-        return $this->stmt->fetchColumn();
+        return $this->numberPosts(["categories_idcategories" =>$categoryId]);
     }
 
     /**
-     * get the total number of posts in a category
-     * @param int $authorid
+     * get the total number of posts by an author
+     * @param int $authorId
      * @return int
-     * @throws \Exception
+     * @throws Exception
      */
-    public function totalNumberPostsByAuthor(int $authorid):int
+    public function totalNumberPostsByAuthor(int $authorId):int
     {
-        $sql = "SELECT COUNT(*) FROM $this->postsTbl WHERE published = 1 AND author_iduser = :authorId ";
-        $this->query($sql);
-        $this->bind(":authorId", $authorid, \PDO::PARAM_INT);
-        $this->execute();
-        return $this->stmt->fetchColumn();
+        return $this->numberPosts(["author_iduser" =>$authorId]);
     }
 
     /**
-     * get number of posts with tag
+     * get the total number of posts with tag
      * @param int $tagId
      * @return int
-     * @throws \Exception
+     * @throws Exception
      */
     public function totalNumberPostsByTag(int $tagId):int
     {
-        $sql = "SELECT COUNT(*) FROM $this->postTagTbl WHERE tag_idtags = :tagId ";
-        $this->query($sql);
-        $this->bind(":tagId", $tagId, \PDO::PARAM_INT);
-        $this->execute();
-        return $this->stmt->fetchColumn();
+        return $this->numberPosts(["tag_idtags" =>$tagId]);
     }
 
 
@@ -153,13 +191,14 @@ class PostModel extends Model
     /**
      * get the list of all the posts.
      * @param int $offset
+     * @param array $select array of limiters [$key => $val] will convert to "where $key = $val"
      * @param int $limit
      * @return array
      * @throws \ErrorException
      */
-    public function getPosts(int $offset = 0, int $limit = Constant::POSTS_PER_PAGE): array
+    public function getPosts(int $offset = 0, array $select=[], int $limit = Constant::POSTS_PER_PAGE): array
     {
-        return $this->getAllPublishedPosts($offset, $limit, false);
+        return $this->getAllPublishedPosts($offset, $limit, false, $select);
     }
 
     /**
@@ -168,22 +207,11 @@ class PostModel extends Model
      * @param int $offset the offset for pagination
      * @param int $limit the limit to display
      * @return array list of posts in set category
-     * @throws \Exception
+     * @throws Exception
      */
     public function getPostsInCategory(int $categoryId, int $offset = 0, int $limit = Constant::POSTS_PER_PAGE): array
     {
-        $sql = $this->basePostSelect();
-        $sql .= " WHERE categories_idcategories = :categoryId 
-                ORDER BY $this->postsTbl.creation_date DESC
-                LIMIT :limit OFFSET :offset;";
-        $this->query($sql);
-        $this->bind(":categoryId", $categoryId, \PDO::PARAM_INT);
-        $this->bind(":limit", $limit);
-        $this->bind(":offset", $offset);
-        $this->execute();
-
-        $results = $this->fetchAll();
-        return $this->addExcerpt($results);
+        return $this->getPosts($offset, ["categories_idcategories" => $categoryId], $limit);
     }
 
     /**
@@ -196,46 +224,27 @@ class PostModel extends Model
      */
     public function getPostsWithAuthor(int $authorId, int $offset = 0, int $limit = Constant::POSTS_PER_PAGE): array
     {
-        $sql = $this->basePostSelect();
-        $sql .= " WHERE author_iduser = :authorId 
-                ORDER BY $this->postsTbl.creation_date DESC
-                LIMIT :limit OFFSET :offset;";
-        $this->query($sql);
-        $this->bind(":authorId", $authorId, \PDO::PARAM_INT);
-        $this->bind(":limit", $limit);
-        $this->bind(":offset", $offset);
-        $this->execute();
-
-        $results = $this->fetchAll();
-        return $this->addExcerpt($results);
+        return $this->getPosts($offset, ["author_iduser"=>$authorId], $limit);
     }
 
-
+    /**
+     * get all the posts with a certan tag
+     * @param int $tagId
+     * @param int $offset
+     * @param int $limit
+     * @return array
+     * @throws \ErrorException
+     */
     public function getPostsWithTag(int $tagId, int $offset = 0, int $limit = Constant::POSTS_PER_PAGE): array
     {
-        $sql = "SELECT idposts, title, post_image,article,$this->postsTbl.last_update, posts_slug, categories_idcategories, category_name, published, on_front_page, categories_slug, pseudo as author, idusers
-                FROM $this->postsTbl INNER JOIN $this->categoriesTbl ON $this->postsTbl.categories_idcategories = $this->categoriesTbl.idcategories
-                INNER JOIN $this->usersTbl ON $this->postsTbl.author_iduser = $this->usersTbl.idusers
-                LEFT JOIN $this->postTagTbl ON $this->postsTbl.idposts = $this->postTagTbl.post_idposts
-                WHERE tag_idtags = :tagId
-                ORDER BY $this->postsTbl.creation_date DESC
-                LIMIT :limit OFFSET :offset;";
-
-        $this->query($sql);
-        $this->bind(":tagId", $tagId, \PDO::PARAM_INT);
-        $this->bind(":limit", $limit);
-        $this->bind(":offset", $offset);
-        $this->execute();
-
-        $results = $this->fetchAll();
-        return $this->addExcerpt($results);
+        return $this->getPosts($offset, ["tag_idtags" => $tagId], $limit);
     }
 
     /**
      * get a single post from it's ID
      * @param int $postid the post ID to get
      * @return array the single post details
-     * @throws \Exception
+     * @throws Exception
      */
     public function getSinglePost(int $postid)
     {
@@ -259,7 +268,7 @@ class PostModel extends Model
      * @param int $onFrontPage
      * @param string $postSlug
      * @return int the id of created post
-     * @throws \Exception
+     * @throws Exception
      */
     public function newPost(
         string $title,
@@ -301,7 +310,7 @@ class PostModel extends Model
      * @param int $onFrontPage
      * @param string $postSlug
      * @return bool success
-     * @throws \Exception
+     * @throws Exception
      */
     public function modifyPost(
         int $postId,
