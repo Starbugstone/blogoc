@@ -54,8 +54,8 @@ class ConfigModel extends Model
 
     /**
      * updates the site config table
-     * @param int $id id of the config
-     * @param string $param paramter to update
+     * @param int $idTable
+     * @param string $param parameter to update
      * @return bool update success
      * @throws \Exception error
      */

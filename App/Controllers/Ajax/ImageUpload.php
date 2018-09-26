@@ -19,7 +19,7 @@ class ImageUpload extends AjaxController
      * @return bool if image name is valid
      *
      */
-    private function isimageValid($image):bool
+    private function isImageValid($image):bool
     {
         // Sanitize input
         if (preg_match("/([^\w\s\d\-_~,;:\[\]\(\).])|([\.]{2,})/", $image)) {
@@ -36,7 +36,8 @@ class ImageUpload extends AjaxController
 
     /**
      * Check if file exists and add a number to avoid overwrite
-     * @param string $fileUrl the file name + folder
+     * @param string $folder destination folder
+     * @param string $file destination filename
      * @return string the unique file name
      */
     private function getFilename(string $folder, string $file):string
@@ -64,12 +65,11 @@ class ImageUpload extends AjaxController
     private function fileInputUpload(array $tempFile, string $folder)
     {
         if (is_uploaded_file($tempFile['tmp_name'])) {
-            if (!$this->isimageValid($tempFile['name'])) {
+            if (!$this->isImageValid($tempFile['name'])) {
                 echo json_encode(array('error' => 'Invalid name or file extension'));
                 return;
             }
 
-            //$filetowrite = $folder . $tempFile['name'];
             $filetowrite = $this->getFilename($folder, $tempFile['name']);
             move_uploaded_file($tempFile['tmp_name'], $filetowrite);
 
@@ -98,7 +98,7 @@ class ImageUpload extends AjaxController
 
         //need to clean up
         if (is_uploaded_file($tempFile['tmp_name'])) {
-            if (!$this->isimageValid($tempFile['name'])) {
+            if (!$this->isImageValid($tempFile['name'])) {
                 header("HTTP/1.1 400 Invalid file name or file extension.");
                 return;
             }
