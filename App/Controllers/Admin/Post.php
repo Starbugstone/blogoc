@@ -21,7 +21,7 @@ class Post extends AdminController
         $tagModel = new TagsModel($this->container);
         $this->data['categories'] = $categoryModel->getCategories();
         $this->data['tags'] = $tagModel->getTags();
-        $this->renderView('Admin/NewPost');
+        $this->renderView('Admin/Post');
     }
 
     /**
@@ -57,7 +57,7 @@ class Post extends AdminController
         $this->data['postTags'] = $tagModel->getTagsOnPost($postId);
         $this->data['categories'] = $categoryModel->getCategories();
         $this->data['tags'] = $tagModel->getTags();
-        $this->renderView('Admin/ModifyPost');
+        $this->renderView('Admin/Post');
     }
 
     /**
@@ -77,10 +77,10 @@ class Post extends AdminController
         $userSessionid = $this->container->getSession()->get("user_id");
 
 
-        $title = trim($posts["newPostTitle"]);
-        $postImage = $posts["newPostImage"]; //TODO Sanatize the input ? Or will PDO be enough ?
-        $postSlug = trim($posts["newPostSlug"]);
-        $article = $posts["newPostTextArea"];
+        $title = trim($posts["postTitle"]);
+        $postImage = $posts["postImage"]; //TODO Sanatize the input ? Or will PDO be enough ?
+        $postSlug = trim($posts["postSlug"]);
+        $article = $posts["postTextArea"];
         $idCategory = $posts["categorySelector"];
         $published = $posts["isPublished"];
         $onFrontpage = $posts["isOnFrontPage"];
