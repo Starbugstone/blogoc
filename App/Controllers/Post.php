@@ -4,7 +4,7 @@ namespace App\Controllers;
 use App\Models\CategoryModel;
 use App\Models\PostModel;
 use App\Models\SlugModel;
-use App\Models\TagsModel;
+use App\Models\TagModel;
 use Core\Controller;
 use Core\Container;
 
@@ -28,7 +28,7 @@ class Post extends Controller{
      */
     public function viewPost(string $slug){
 
-        $tagModel = new TagsModel($this->container);
+        $tagModel = new TagModel($this->container);
         $postModel = new PostModel($this->container);
         $slugModel = new SlugModel($this->container);
         $categoryModel = new CategoryModel($this->container);

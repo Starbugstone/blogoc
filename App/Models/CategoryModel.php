@@ -34,4 +34,9 @@ class CategoryModel extends Model
         }
         return $data;
     }
+
+    public function getCategoryDetails(int $categoryId)
+    {
+        return $this->getRowById($categoryId, "categories");
+    }
 }

@@ -3,6 +3,7 @@ namespace App\Controllers;
 
 use App\Models\CategoryModel;
 use App\Models\PostModel;
+use App\Models\TagModel;
 use Core\Controller;
 use Core\Container;
 
@@ -30,6 +31,7 @@ class Tag extends Controller{
     {
         $categoryModel = new CategoryModel($this->container);
         $postModel = new PostModel($this->container);
+        $tagModel = new TagModel($this->container);
 
         $totalPosts = $postModel->totalNumberPostsByTag($tagId);
         $pagination = $this->pagination->getPagination($page, $totalPosts);
@@ -40,6 +42,7 @@ class Tag extends Controller{
         $this->data['navigation'] = $categoryModel->getMenu();
         $this->data['pagination'] = $pagination;
         $this->data['tagId'] = $tagId;
+        $this->data['tag'] = $tagModel->getTagDetails($tagId);
         $this->renderView('Tag');
     }
 }

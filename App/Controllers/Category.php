@@ -52,6 +52,7 @@ class Category extends Controller
         $this->data['posts'] = $this->postModel->getPostsInCategory($categoryId, $pagination["offset"]);
         $this->data['pagination'] = $pagination;
         $this->data['categorySlug'] = $categorySlug;
+        $this->data['category'] = $this->categoryModel->getCategoryDetails($categoryId);
 
         $this->renderView('Category');
 

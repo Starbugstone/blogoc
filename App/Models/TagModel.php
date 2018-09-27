@@ -5,7 +5,7 @@ namespace App\Models;
 use Core\Container;
 use Core\Model;
 
-class TagsModel extends Model
+class TagModel extends Model
 {
 
     private $tagAssoTbl;
@@ -170,6 +170,11 @@ class TagsModel extends Model
         $this->query($sql);
         $this->bind(":postId", $postId);
         $this->execute();
+    }
+
+    public function getTagDetails(int $tagId)
+    {
+        return $this->getRowById($tagId);
     }
 
 }

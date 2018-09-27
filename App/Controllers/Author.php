@@ -3,6 +3,7 @@ namespace App\Controllers;
 
 use App\Models\CategoryModel;
 use App\Models\PostModel;
+use App\Models\UserModel;
 use Core\Controller;
 use Core\Container;
 
@@ -33,6 +34,7 @@ class Author extends Controller{
     {
         $categoryModel = new CategoryModel($this->container);
         $postModel = new PostModel($this->container);
+        $userModel = new UserModel($this->container);
 
         $totalPosts = $postModel->totalNumberPostsByAuthor($authorId);
         $pagination = $this->pagination->getPagination($page, $totalPosts);
@@ -43,6 +45,8 @@ class Author extends Controller{
         $this->data['navigation'] = $categoryModel->getMenu();
         $this->data['pagination'] = $pagination;
         $this->data['authorId'] = $authorId;
+        $this->data['user'] = $userModel->getAuthorDetails($authorId);
+
         $this->renderView('Author');
     }
 }

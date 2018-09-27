@@ -193,7 +193,7 @@ abstract class Model
      * @return array the result or empty
      * @throws \Exception if debugging is on and no result
      */
-    private function returnArray($result): array
+    private function returnArray($result)
     {
         if ($result) {
             return $result;
@@ -245,7 +245,7 @@ abstract class Model
      * @return array result or empty array
      * @throws \ReflectionException (probably not, but will throw an exception if debugging is on and no results)
      */
-    protected function getRowById($rowId, $table = null): array
+    protected function getRowById($rowId, $table = null)
     {
         $tableName = $this->getTable($table);
         $idName = 'id' . $tableName;

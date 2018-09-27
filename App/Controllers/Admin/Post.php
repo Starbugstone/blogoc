@@ -5,7 +5,7 @@ namespace App\Controllers\Admin;
 use App\Models\CategoryModel;
 use App\Models\PostModel;
 use App\Models\SlugModel;
-use App\Models\TagsModel;
+use App\Models\TagModel;
 use Core\AdminController;
 
 class Post extends AdminController
@@ -18,7 +18,7 @@ class Post extends AdminController
     {
         $this->onlyAdmin();
         $categoryModel = new CategoryModel($this->container);
-        $tagModel = new TagsModel($this->container);
+        $tagModel = new TagModel($this->container);
         $this->data['categories'] = $categoryModel->getCategories();
         $this->data['tags'] = $tagModel->getTags();
         $this->renderView('Admin/Post');
@@ -47,7 +47,7 @@ class Post extends AdminController
         $this->onlyAdmin();
 
         $categoryModel = new CategoryModel($this->container);
-        $tagModel = new TagsModel($this->container);
+        $tagModel = new TagModel($this->container);
         $postModel = new PostModel($this->container);
         $slugModel = new SlugModel($this->container);
 
@@ -92,7 +92,7 @@ class Post extends AdminController
         }
 
         $slugModel = new SlugModel($this->container);
-        $tagModel = new TagsModel($this->container);
+        $tagModel = new TagModel($this->container);
         $postModel = new PostModel($this->container);
 
         //security and error checks
@@ -162,7 +162,7 @@ class Post extends AdminController
         $onFrontpage = $posts["isOnFrontPage"];
 
         $slugModel = new SlugModel($this->container);
-        $tagModel = new TagsModel($this->container);
+        $tagModel = new TagModel($this->container);
         $postModel = new PostModel($this->container);
 
         //security and error checks
