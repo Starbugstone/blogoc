@@ -272,12 +272,14 @@
 
         var $setImage = $postImageUpload.siblings("p.display-image").children("img.display-image");
         var $setUrl = $postImageUpload.siblings("input.form-control");
-        $postImageUpload.fileinput({
+        var $fileInputOptions = {
             showPreview: false,
             uploadUrl: "/ajax/image-upload/file-input-post-upload",
             maxFileCount: 1,
-            showRemove: false
-        });
+            showRemove: false,
+            allowedFileTypes:['image']
+        }
+        $postImageUpload.fileinput($fileInputOptions);
 
         //once the file is uploaded
         $postImageUpload.on('fileuploaded', function (event, data) {
@@ -286,6 +288,16 @@
             $setUrl.attr("value", $url);
             setupToastr();
             toastr.info('image uploaded');
+            $postImageUpload.fileinput('clearStack').fileinput('refresh', $fileInputOptions);
+        });
+
+        $postImageUpload.on('fileuploaderror', function(event, data, msg) {
+
+            setupToastr();
+            toastr.error(msg);
+            $postImageUpload.fileinput('clearStack').fileinput('refresh', $fileInputOptions);
+
+
         });
 
         //if we enter a url

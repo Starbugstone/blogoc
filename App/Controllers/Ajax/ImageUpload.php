@@ -71,14 +71,15 @@ class ImageUpload extends AjaxController
                 return;
             }
 
-            $filetowrite = $this->getFilename($folder, $tempFile['name']);
+            $filetowrite = $this->getFilename($folder, basename($tempFile['name']));
             move_uploaded_file($tempFile['tmp_name'], $filetowrite);
 
             // Respond to the successful upload with JSON.
             echo json_encode(array('location' => $filetowrite));
         } else {
             // Notify editor that the upload failed
-            echo json_encode(array('error' => 'Upload failed'));
+            echo json_encode(array('error' => 'Upload failed, file might be too big'));
+
         }
 
     }
@@ -104,7 +105,7 @@ class ImageUpload extends AjaxController
                 return;
             }
 
-            $filetowrite = $this->getFilename($this->imageFolder, $tempFile['name']);
+            $filetowrite = $this->getFilename($this->imageFolder, basename($tempFile['name']));
             move_uploaded_file($tempFile['tmp_name'], $filetowrite);
 
             // Respond to the successful upload with JSON.
@@ -143,7 +144,6 @@ class ImageUpload extends AjaxController
             throw new \Core\JsonException('Call is not post');
         }
         $tempFile = $this->request->getUploadedFiles();
-
         $this->fileInputUpload($tempFile, $this->imageFolder);
     }
 
