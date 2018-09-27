@@ -4,9 +4,11 @@ namespace App\Controllers\Ajax;
 
 use App\Models\SlugModel;
 use Core\AjaxController;
+use Core\Traits\StringFunctions;
 
 class PostVerification extends AjaxController
 {
+    use StringFunctions;
 
     /**
      * checks if the slug is unique
@@ -23,8 +25,14 @@ class PostVerification extends AjaxController
 
         $postSlug = $this->request->getData("postSlug");
 
-        $slugModel = new SlugModel($this->container);
-        $data = $slugModel->isUnique($postSlug, "posts", "posts_slug");
+        $data = false;
+        if($this->isAlphaNum($postSlug))
+        {
+            $slugModel = new SlugModel($this->container);
+
+            $data = $slugModel->isUnique($postSlug, "posts", "posts_slug");
+        }
+
         echo json_encode($data);
     }
 

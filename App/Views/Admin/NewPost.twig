@@ -7,9 +7,11 @@
 
                 <label for="newPostTitle">Post Name</label>
                 <input type="text" class="form-control" id="newPostTitle" name="newPostTitle">
+                <small id="newPostTitleHelp" class="form-text text-muted  mb-3"></small>
 
                 <label for="newPostSlug">Post Slug</label>
-                <input type="text" class="form-control mb-3" id="newPostSlug" name="newPostSlug">
+                <input type="text" class="form-control" id="newPostSlug" name="newPostSlug" data-manual="false">
+                <small id="newPostSlugHelp" class="form-text text-muted  mb-3"></small>
 
                 <textarea id="newPostTextArea" name="newPostTextArea"></textarea>
 
@@ -77,6 +79,11 @@
         //Slugify the title on key up
         var $slugRequest = null;
         $("#newPostTitle").keyup(function () {
+            //if we have manualy set the slug, do not update
+            if($("#newPostSlug").attr("data-manual") == "true")
+            {
+                return;
+            }
             $text = $("#newPostTitle").val();
             if ($slugRequest !== null) {
                 $slugRequest.abort();
@@ -86,8 +93,41 @@
                 url: "/ajax/ajaxSlugify/slugify-string",
                 data: {'slugText-update': $text}
             }).done(function ($result) {
-                $("#newPostSlug").val($result.slug);
+                $("#newPostSlug").val($result.slug).change();
             });
+        });
+
+        function removeManualSlug(){
+            $("#newPostSlug").attr("data-manual","false");
+            $("#newPostTitleHelp").html("");
+            $("#newPostTitle").keyup();
+        }
+
+        //check if slug is unique
+        var $slugUniqueRequest = null;
+        $("#newPostSlug").keyup(function(){
+            //we are manualy updating the slug
+            $(this).attr("data-manual","true");
+            $("#newPostTitleHelp").html("Slug manual input <i class=\"fa fa-times-circle-o\" onclick=\"removeManualSlug()\" aria-hidden=\"true\"></i>");
+            $(this).change();
+        });
+        $("#newPostSlug").change(function(){
+            $slug = $(this).val();
+            if ($slugUniqueRequest !== null){
+                $slugUniqueRequest.abort();
+            }
+            $("#newPostSlugHelp").html("<i class=\"fa fa-spinner fa-spin\" aria-hidden=\"true\"></i>Slug not unique");
+            $slugUniqueRequest = $.ajax({
+                url: "/ajax/post-verification/is-slug-unique/",
+                data: {'postSlug': $slug}
+            }).done(function($result){
+                if(!$result){
+                    $("#newPostSlugHelp").html("<i class=\"fa fa-times\" aria-hidden=\"true\"></i>Slug not unique or invalid");
+                    return;
+                }
+                $("#newPostSlugHelp").html("<i class=\"fa fa-check\" aria-hidden=\"true\"></i>Slug is valid");
+            });
+
         });
 
         //Add tag
