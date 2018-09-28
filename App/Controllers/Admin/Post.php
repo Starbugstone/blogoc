@@ -7,9 +7,18 @@ use App\Models\PostModel;
 use App\Models\SlugModel;
 use App\Models\TagModel;
 use Core\AdminController;
+use Core\Container;
 
 class Post extends AdminController
 {
+
+    protected $siteConfig;
+
+    public function __construct(Container $container)
+    {
+        $this->loadModules[] = 'SiteConfig';
+        parent::__construct($container);
+    }
 
     /**
      * page for new post
@@ -19,6 +28,7 @@ class Post extends AdminController
         $this->onlyAdmin();
         $categoryModel = new CategoryModel($this->container);
         $tagModel = new TagModel($this->container);
+        $this->data['configs'] = $this->siteConfig->getSiteConfig();
         $this->data['categories'] = $categoryModel->getCategories();
         $this->data['tags'] = $tagModel->getTags();
         $this->renderView('Admin/Post');
@@ -53,6 +63,7 @@ class Post extends AdminController
 
         $postId = $slugModel->getIdFromSlug($slug, "posts", "posts_slug", "idposts");
 
+        $this->data['configs'] = $this->siteConfig->getSiteConfig();
         $this->data['post'] = $postModel->getSinglePost($postId);
         $this->data['postTags'] = $tagModel->getTagsOnPost($postId);
         $this->data['categories'] = $categoryModel->getCategories();

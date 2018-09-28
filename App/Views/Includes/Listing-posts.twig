@@ -15,7 +15,7 @@
                     <div class="index_article_post_image ml-1">
                         <a class="index_article_post_image_link hoverImage rounded"
                            href="/post/view-post/{{ post.posts_slug }}">
-                            <div class="postThumbnail rounded border-dark shadow-sm" style="background-image : url({{ post.post_image }})">
+                            <div class="postThumbnail rounded border-dark shadow-sm" style="background-image : url({{ not post.post_image ? configs.no_image_replacement : post.post_image }})">
                             </div>
                         </a>
                     </div>

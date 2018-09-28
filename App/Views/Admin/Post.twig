@@ -35,7 +35,7 @@
                 <input type="text" class="form-control" name="postImage" id="postImage" value="{{ post.post_image }}">
 
                 <p class="text-center mt-3 display-image image-upload-height">
-                    <img src="{{ post.post_image }}" class="img-thumbnail display-image img-fluid image-upload-height">
+                    <img src="{{ not post.post_image ? configs.no_image_replacement : post.post_image }}" class="img-thumbnail display-image img-fluid image-upload-height">
                 </p>
                 <input type="file" class="image-upload" id="postImageUpload">
 

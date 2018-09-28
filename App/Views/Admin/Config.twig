@@ -22,7 +22,7 @@
                            value="{{ config.configs_value }}">
                     {% if config.configs_type_name == 'image' %}
                         <p class="text-center mt-3 display-image image-upload-height">
-                            <img src="{{ config.configs_value }}" class="rounded-circle display-image img-fluid image-upload-height">
+                            <img src="{{ config.configs_value }}" class="img-thumbnail display-image img-fluid image-upload-height">
                         </p>
                         <input type="file" class="image-upload">
                     {% endif %}
