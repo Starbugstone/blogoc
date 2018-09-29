@@ -67,7 +67,7 @@ class Post extends AdminController
     public function list()
     {
         $this->onlyAdmin();
-
+        //$this->data["list"] = $this->postModel->
         $this->renderView("Admin/ListPost");
     }
 

@@ -64,6 +64,21 @@ class PostModel extends Model
     }
 
     /**
+     * get all posts, no restriction
+     */
+    private function getAllPosts(int $offset, int $limit)
+    {
+        $sql = $this->basePostSelect();
+        $sql .= " ORDER BY $this->postsTbl.creation_date DESC";
+        $sql .= " LIMIT :limit OFFSET :offset";
+        $this->bind(":limit", $limit);
+        $this->bind(":offset", $offset);
+        $this->execute();
+        $results = $this->fetchAll();
+        return $this->addExcerpt($results);
+    }
+
+    /**
      * get all the posts with details. Only selecting posts that are published
      * @param int $offset where to start (for pagination)
      * @param int $limit the number of posts
@@ -115,13 +130,16 @@ class PostModel extends Model
      * @return int number of posts
      * @throws Exception
      */
-    private function countNumberPosts(array $select = []): int
+    private function countNumberPosts(array $select = [], $published=true): int
     {
         $sql = "SELECT COUNT(*) FROM $this->postsTbl";
         if ($this->queryWithTags) {
             $sql .= " LEFT JOIN $this->postTagTbl ON $this->postsTbl.idposts = $this->postTagTbl.post_idposts";
         }
-        $sql .= " WHERE published = 1";
+        if($published)
+        {
+            $sql .= " WHERE published = 1";
+        }
         if ($select != null) {
             foreach ($select as $col => $val) {
                 if (!$this->isAlphaNum($col)) {
@@ -148,6 +166,16 @@ class PostModel extends Model
     public function totalNumberPosts(): int
     {
         return $this->countNumberPosts();
+    }
+
+    /**
+     * get the total number of posts + unpublished
+     * @return int
+     * @throws Exception
+     */
+    public function totalNumberFullPosts(): int
+    {
+        return $this->countNumberPosts([], false);
     }
 
     /**
@@ -197,17 +225,18 @@ class PostModel extends Model
     }
 
     /**
-     * get the list of all the posts.
-     * @param int $offset
-     * @param array $select array of limiters [$key => $val] will convert to "where $key = $val"
-     * @param int $limit
-     * @return array
-     * @throws \ErrorException
-     */
+ * get the list of all the posts.
+ * @param int $offset
+ * @param array $select array of limiters [$key => $val] will convert to "where $key = $val"
+ * @param int $limit
+ * @return array
+ * @throws \ErrorException
+ */
     public function getPosts(int $offset = 0, array $select = [], int $limit = Constant::POSTS_PER_PAGE): array
     {
         return $this->getAllPublishedPosts($offset, $limit, false, $select);
     }
+
 
     /**
      * get all the posts from a certain category
