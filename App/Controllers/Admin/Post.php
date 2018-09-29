@@ -14,10 +14,42 @@ class Post extends AdminController
 
     protected $siteConfig;
 
+    private $categoryModel;
+    private $tagModel;
+    private $postModel;
+    private $slugModel;
+
     public function __construct(Container $container)
     {
         $this->loadModules[] = 'SiteConfig';
         parent::__construct($container);
+
+        $this->categoryModel = new CategoryModel($this->container);
+        $this->tagModel = new TagModel($this->container);
+        $this->postModel = new PostModel($this->container);
+        $this->slugModel = new SlugModel($this->container);
+
+        //adding the necessary default data
+        $this->data['configs'] = $this->siteConfig->getSiteConfig();
+        $this->data['categories'] = $this->categoryModel->getCategories();
+        $this->data['tags'] = $this->tagModel->getTags();
+    }
+
+    /**
+     * add tags to a post
+     * @param array $tags list of tags to apply
+     * @param int $postId the post to add tags to
+     * @throws \Exception
+     */
+    private function addTags(array $tags, int $postId):void
+    {
+        foreach ($tags as $tag) {
+            if (isset($tag["id"])) {
+                $this->tagModel->addTagToPost($postId, $tag["id"]);
+                continue;
+            }
+            $this->tagModel->addNewTagToPost($postId, $tag["name"]);
+        }
     }
 
     /**
@@ -26,11 +58,6 @@ class Post extends AdminController
     public function new()
     {
         $this->onlyAdmin();
-        $categoryModel = new CategoryModel($this->container);
-        $tagModel = new TagModel($this->container);
-        $this->data['configs'] = $this->siteConfig->getSiteConfig();
-        $this->data['categories'] = $categoryModel->getCategories();
-        $this->data['tags'] = $tagModel->getTags();
         $this->renderView('Admin/Post');
     }
 
@@ -56,18 +83,10 @@ class Post extends AdminController
     {
         $this->onlyAdmin();
 
-        $categoryModel = new CategoryModel($this->container);
-        $tagModel = new TagModel($this->container);
-        $postModel = new PostModel($this->container);
-        $slugModel = new SlugModel($this->container);
+        $postId = $this->slugModel->getIdFromSlug($slug, "posts", "posts_slug", "idposts");
 
-        $postId = $slugModel->getIdFromSlug($slug, "posts", "posts_slug", "idposts");
-
-        $this->data['configs'] = $this->siteConfig->getSiteConfig();
-        $this->data['post'] = $postModel->getSinglePost($postId);
-        $this->data['postTags'] = $tagModel->getTagsOnPost($postId);
-        $this->data['categories'] = $categoryModel->getCategories();
-        $this->data['tags'] = $tagModel->getTags();
+        $this->data['post'] = $this->postModel->getSinglePost($postId);
+        $this->data['postTags'] = $this->tagModel->getTagsOnPost($postId);
         $this->renderView('Admin/Post');
     }
 
@@ -85,26 +104,22 @@ class Post extends AdminController
         }
 
         $posts = $this->container->getRequest()->getDataFull();
-        $userSessionid = $this->container->getSession()->get("user_id");
+        $userSessionId = $this->container->getSession()->get("user_id");
 
 
         $title = trim($posts["postTitle"]);
-        $postImage = $posts["postImage"]; //TODO Sanatize the input ? Or will PDO be enough ?
+        $postImage = $posts["postImage"];
         $postSlug = trim($posts["postSlug"]);
         $article = $posts["postTextArea"];
         $idCategory = $posts["categorySelector"];
         $published = $posts["isPublished"];
         $onFrontpage = $posts["isOnFrontPage"];
-        $idUser = $userSessionid;
+        $idUser = $userSessionId;
 
         if(!is_int($idUser) || $idUser === null)
         {
             throw new \Error("Invalid userID");
         }
-
-        $slugModel = new SlugModel($this->container);
-        $tagModel = new TagModel($this->container);
-        $postModel = new PostModel($this->container);
 
         //security and error checks
         $error = false;
@@ -116,7 +131,7 @@ class Post extends AdminController
             $error = true;
             $this->alertBox->setAlert("empty slug not allowed", "error");
         }
-        if (!$slugModel->isUnique($postSlug, "posts", "posts_slug")) {
+        if (!$this->slugModel->isUnique($postSlug, "posts", "posts_slug")) {
             $error = true;
             $this->alertBox->setAlert("Slug not unique", "error");
         }
@@ -125,17 +140,12 @@ class Post extends AdminController
             $this->container->getResponse()->redirect("admin/post/new");
         }
 
-        $postId = $postModel->newPost($title, $postImage, $idCategory, $article, $idUser, $published, $onFrontpage,
+        $postId = $this->postModel->newPost($title, $postImage, $idCategory, $article, $idUser, $published, $onFrontpage,
             $postSlug);
 
+        //Taking care of tags.
         if (isset($posts["tags"])) {
-            foreach ($posts["tags"] as $tag) {
-                if (isset($tag["id"])) {
-                    $tagModel->addTagToPost($postId, $tag["id"]);
-                    continue;
-                }
-                $tagModel->addNewTagToPost($postId, $tag["name"]);
-            }
+            $this->addTags($posts["tags"], $postId);
         }
 
         //checking result and redirecting
@@ -172,12 +182,8 @@ class Post extends AdminController
         $published = $posts["isPublished"];
         $onFrontpage = $posts["isOnFrontPage"];
 
-        $slugModel = new SlugModel($this->container);
-        $tagModel = new TagModel($this->container);
-        $postModel = new PostModel($this->container);
-
         //security and error checks
-        $originalPostSlug = $slugModel->getSlugFromId($postId, "posts", "idposts",
+        $originalPostSlug = $this->slugModel->getSlugFromId($postId, "posts", "idposts",
             "posts_slug");
         $error = false;
         if ($title == "") {
@@ -192,9 +198,9 @@ class Post extends AdminController
 
         if ($postSlug != $originalPostSlug) //if the slug has been updated
         {
-            if (!$slugModel->isUnique($postSlug, "posts", "posts_slug")) {
+            if (!$this->slugModel->isUnique($postSlug, "posts", "posts_slug")) {
                 $error = true;
-                $originalPostSlug = $slugModel->getSlugFromId($postId, "posts", "idposts", "posts_slug");
+                $originalPostSlug = $this->slugModel->getSlugFromId($postId, "posts", "idposts", "posts_slug");
                 $this->alertBox->setAlert("Slug not unique", "error");
             }
         }
@@ -203,21 +209,15 @@ class Post extends AdminController
         }
 
         //Update the post
-        $postUpdate = $postModel->modifyPost($postId, $title, $postImage, $idCategory, $article, $published,
+        $postUpdate = $this->postModel->modifyPost($postId, $title, $postImage, $idCategory, $article, $published,
             $onFrontpage, $postSlug);
 
         // Tags
         //remove all tags
-        $tagModel->removeTagsOnPost($postId);
+        $this->tagModel->removeTagsOnPost($postId);
         //set new tags
         if (isset($posts["tags"])) {
-            foreach ($posts["tags"] as $tag) {
-                if (isset($tag["id"])) {
-                    $tagModel->addTagToPost($postId, $tag["id"]);
-                    continue;
-                }
-                $tagModel->addNewTagToPost($postId, $tag["name"]);
-            }
+            $this->addTags($posts["tags"], $postId);
         }
 
         //checking result and redirecting
