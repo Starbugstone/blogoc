@@ -5,6 +5,7 @@ namespace App\Controllers\Admin;
 use App\Models\ConfigModel;
 use Core\AdminController;
 use Core\Traits\StringFunctions;
+use Core\Container;
 
 /**
  * all to do with the config page
@@ -53,7 +54,7 @@ class Config extends AdminController
             $this->alertBox->setAlert('Only post messages allowed', 'error');
             $this->container->getResponse()->redirect('admin');
         }
-        
+
         $posts = $this->container->getRequest()->getDataFull();
         $success = true;
 
