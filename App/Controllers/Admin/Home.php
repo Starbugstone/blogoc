@@ -9,7 +9,7 @@ class Home extends \Core\AdminController
     public function index()
     {
         if(!$this->auth->isUser()){
-            $this->alertBox->setAlert("You must be connected to acces the admin interface", 'warning');
+            $this->alertBox->setAlert("You must be connected to access the admin interface", 'warning');
             $this->container->getResponse()->redirect();
         }
 

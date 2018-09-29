@@ -16,6 +16,14 @@ class Config extends AdminController
 
     use StringFunctions;
 
+    private $configModel;
+
+    public function __construct(Container $container)
+    {
+        parent::__construct($container);
+        $this->configModel = new ConfigModel($this->container);
+    }
+
     /**
      * Shows the config page with all of the config options
      * @throws \Twig_Error_Loader
@@ -27,9 +35,7 @@ class Config extends AdminController
     {
         $this->onlyAdmin();
 
-
-        $configObj = new ConfigModel($this->container);
-        $this->data['configList'] = $configObj->getAllConfigOrdered();
+        $this->data['configList'] = $this->configModel->getAllConfigOrdered();
         $this->renderView('Admin/Config');
     }
 
@@ -47,13 +53,12 @@ class Config extends AdminController
             $this->alertBox->setAlert('Only post messages allowed', 'error');
             $this->container->getResponse()->redirect('admin');
         }
-
-        $configModel = new ConfigModel($this->container);
+        
         $posts = $this->container->getRequest()->getDataFull();
         $success = true;
 
         foreach ($posts as $key => $config) {
-            if (!$configModel->updateConfig($key, $config)) {
+            if (!$this->configModel->updateConfig($key, $config)) {
                 $success = false;
             }
         }
