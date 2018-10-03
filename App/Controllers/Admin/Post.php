@@ -248,4 +248,25 @@ class Post extends AdminController
         $this->alertBox->setAlert("Error updating " . $title, "error");
         $this->container->getResponse()->redirect("admin/post/modify/" . $originalPostSlug);
     }
+
+
+    /**
+     * deletes a specific post
+     * @param int $postId
+     * @throws \Exception
+     */
+    public function deletePost(int $postId)
+    {
+        $postTitle = $this->postModel->getTitleFromId($postId);
+        //first remove tags or foreign key error
+        $this->tagModel->removeTagsOnPost($postId);
+        $removedPost = $this->postModel->deletePost($postId);
+
+        if($removedPost)
+        {
+            $this->alertBox->setAlert("Post ".$postTitle." deleted");
+        }
+
+        $this->response->redirect("admin/post/list/");
+    }
 }

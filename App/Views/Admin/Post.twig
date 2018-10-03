@@ -96,6 +96,7 @@
         <span id="submitResult"></span>
         {% if post is defined %}
             <a href="/post/view-post/{{ post.posts_slug }}" class="btn btn-info">View post</a>
+            <a href="/admin/post/delete-post/{{ post.idposts }}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> Delete post</a>
         {% endif %}
     </form>
 {% endblock %}

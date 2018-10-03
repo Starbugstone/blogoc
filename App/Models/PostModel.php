@@ -396,5 +396,38 @@ class PostModel extends Model
         return $this->execute();
     }
 
+    /**
+     * Removes a post from the DataBase
+     * @param int $postId
+     * @return bool
+     * @throws Exception
+     */
+    public function deletePost(int $postId):bool
+    {
+        $sql = "
+        DELETE FROM $this->postsTbl 
+        WHERE idposts = :postId
+        ";
+        $this->query($sql);
+        $this->bind(":postId", $postId);
+        return $this->execute();
+    }
+
+
+    /**
+     * get the post title from ID
+     * @param int $postId
+     * @return string
+     * @throws Exception
+     */
+    public function getTitleFromId(int $postId):string
+    {
+        $sql = "SELECT title from $this->postsTbl WHERE idposts = :postId";
+        $this->query($sql);
+        $this->bind(":postId", $postId);
+        $this->execute();
+        return $this->stmt->fetchColumn();
+    }
+
 
 }

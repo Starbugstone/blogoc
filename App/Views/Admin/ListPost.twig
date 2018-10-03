@@ -1,11 +1,15 @@
 {% extends "Admin/Base.twig" %}
 {% block main %}
     <h1>Post list</h1>
+    <p><a href="/admin/post/new" class="btn btn-success"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add new post</a></p>
     <table style="width: 100%;">
         <tr>
             <th>Image</th>
             <th>Title</th>
             <th>Author</th>
+            <th>last Update</th>
+            <th>On front page</th>
+            <th>Published</th>
             <th>Links</th>
         </tr>
         {% for post in posts %}
@@ -13,7 +17,14 @@
             <td><img src="{{ not post.post_image ? configs.no_image_replacement : post.post_image }}" style="max-height: 100px; max-width: 100px;"> </td>
             <td>{{ post.title }}</td>
             <td>{{ post.author }}</td>
-            <td>Mod / del</td>
+            <td>{{ post.last_update }}</td>
+            <td>{{ post.on_front_page ? "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>" : "<i class=\"fa fa-times\" aria-hidden=\"true\"></i>"}}</td>
+            <td>{{ post.published ? "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>" : "<i class=\"fa fa-times\" aria-hidden=\"true\"></i>"}}</td>
+            <td>
+                <a href="/post/view-post/{{ post.posts_slug }}" class="btn btn-success"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                <a href="/admin/post/modify/{{ post.posts_slug }}" class="btn btn-warning"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                <a href="/admin/post/delete-post/{{ post.idposts }}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></a>
+            </td>
         </tr>
         {% endfor %}
     </table>
