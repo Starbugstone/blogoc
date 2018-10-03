@@ -71,6 +71,7 @@ class PostModel extends Model
         $sql = $this->basePostSelect();
         $sql .= " ORDER BY $this->postsTbl.creation_date DESC";
         $sql .= " LIMIT :limit OFFSET :offset";
+        $this->query($sql);
         $this->bind(":limit", $limit);
         $this->bind(":offset", $offset);
         $this->execute();
@@ -235,6 +236,14 @@ class PostModel extends Model
     public function getPosts(int $offset = 0, array $select = [], int $limit = Constant::POSTS_PER_PAGE): array
     {
         return $this->getAllPublishedPosts($offset, $limit, false, $select);
+    }
+
+    /**
+     *
+     */
+    public function getFullPosts(int $offset = 0, int $limit = Constant::POSTS_PER_PAGE): array
+    {
+        return $this->getAllPosts($offset, $limit);
     }
 
 

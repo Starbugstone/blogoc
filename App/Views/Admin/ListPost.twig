@@ -1,6 +1,37 @@
 {% extends "Admin/Base.twig" %}
 {% block main %}
     <h1>Post list</h1>
+    <table style="width: 100%;">
+        <tr>
+            <th>Image</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Links</th>
+        </tr>
+        {% for post in posts %}
+        <tr>
+            <td><img src="{{ not post.post_image ? configs.no_image_replacement : post.post_image }}" style="max-height: 100px; max-width: 100px;"> </td>
+            <td>{{ post.title }}</td>
+            <td>{{ post.author }}</td>
+            <td>Mod / del</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    {%  set pageUrl = "/admin/post/list" %}
+    <div class="pagination">
+        {# Taking care of the pagination #}
+        <p>
+            {# Creating previous and next page links #}
+            {% if pagination.pageNo > "1" %}
+                <a href="{{ pageUrl }}/page-{{ pagination.pageNo-1 }}{{ not paginationPostsPerPage ? "" : "/"~paginationPostsPerPage}}" class="float-left">Previous page</a>
+            {% endif %}
+            {% if pagination.pageNo  < pagination.totalPages %}
+                <a href="{{ pageUrl }}/page-{{ pagination.pageNo+1 }}{{ not paginationPostsPerPage ? "" : "/"~paginationPostsPerPage }}" class="float-right">Next page</a>
+            {% endif %}
+        </p>
+    </div>
+
 {% endblock %}
 
 {% block js %}

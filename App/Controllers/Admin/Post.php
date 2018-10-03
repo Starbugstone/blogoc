@@ -13,6 +13,7 @@ class Post extends AdminController
 {
 
     protected $siteConfig;
+    protected $pagination;
 
     private $categoryModel;
     private $tagModel;
@@ -22,6 +23,7 @@ class Post extends AdminController
     public function __construct(Container $container)
     {
         $this->loadModules[] = 'SiteConfig';
+        $this->loadModules[] = 'pagination';
         parent::__construct($container);
 
         $this->categoryModel = new CategoryModel($this->container);
@@ -32,7 +34,6 @@ class Post extends AdminController
         //adding the necessary default data
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
         $this->data['categories'] = $this->categoryModel->getCategories();
-        $this->data['tags'] = $this->tagModel->getTags();
     }
 
     /**
@@ -58,16 +59,34 @@ class Post extends AdminController
     public function new()
     {
         $this->onlyAdmin();
+        $this->data['tags'] = $this->tagModel->getTags();
         $this->renderView('Admin/Post');
     }
 
     /**
      * Lists all the posts
+     * @param string $page
+     * @param int $postsPerPage
+     * @throws \ReflectionException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
-    public function list()
+    public function list(string $page = "page-1", int $postsPerPage = 20)
     {
         $this->onlyAdmin();
-        //$this->data["list"] = $this->postModel->
+
+        $defaultPostsPerpage = 20;
+
+        $totalPosts = $this->postModel->totalNumberFullPosts();
+        $pagination = $this->pagination->getPagination($page, $totalPosts, $postsPerPage);
+
+        if($postsPerPage !== $defaultPostsPerpage){
+            $this->data['paginationPostsPerPage'] = $postsPerPage;
+        }
+
+        $this->data["posts"] = $this->postModel->getFullPosts($pagination["offset"], $postsPerPage);
+        $this->data['pagination'] = $pagination;
         $this->renderView("Admin/ListPost");
     }
 
@@ -87,6 +106,7 @@ class Post extends AdminController
 
         $this->data['post'] = $this->postModel->getSinglePost($postId);
         $this->data['postTags'] = $this->tagModel->getTagsOnPost($postId);
+        $this->data['tags'] = $this->tagModel->getTags();
         $this->renderView('Admin/Post');
     }
 

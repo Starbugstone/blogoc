@@ -148,6 +148,9 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
   height: calc(100vh - 56px);
   overflow-y: auto; }
 
+.pagination p {
+  width: 100%; }
+
 .chip {
   display: inline-block;
   padding: 0 25px;
