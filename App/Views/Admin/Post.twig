@@ -156,7 +156,7 @@
                 $slugUniqueRequest.abort();
             }
             $(this).data("original", "false");//we have updated the slug, setting tag for check
-            $("#postSlugHelp").html("<i class=\"fa fa-spinner fa-spin\" aria-hidden=\"true\"></i>Slug not unique");
+            $("#postSlugHelp").html("<i class=\"fa fa-spinner fa-spin\" aria-hidden=\"true\"></i>");
             $slugUniqueRequest = $.ajax({
                 url: "/ajax/post-verification/is-slug-unique/",
                 data: {'postSlug': $slug}
