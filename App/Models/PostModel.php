@@ -430,4 +430,37 @@ class PostModel extends Model
     }
 
 
+    public function setPublished(bool $state, int $postId)
+    {
+        $sql = "
+            UPDATE $this->postsTbl 
+            SET
+              last_update = NOW(),
+              published = :published
+            WHERE
+              idposts = :postId
+        ";
+        $this->query($sql);
+        $this->bind(":postId", $postId);
+        $this->bind(":published", $state);
+
+        return $this->execute();
+    }
+
+    public function setOnFrontPage(bool $state, int $postId)
+    {
+        $sql = "
+            UPDATE $this->postsTbl 
+            SET
+              last_update = NOW(),
+              on_front_page = :onFrontPage
+            WHERE
+              idposts = :postId
+        ";
+        $this->query($sql);
+        $this->bind(":postId", $postId);
+        $this->bind(":onFrontPage", $state);
+
+        return $this->execute();
+    }
 }
