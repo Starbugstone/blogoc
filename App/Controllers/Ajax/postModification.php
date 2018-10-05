@@ -17,6 +17,10 @@ class postModification extends AjaxController{
         $this->postModule = new PostModel($this->container);
     }
 
+    /**
+     * Ajax call to update the published state of a post
+     * @throws \Core\JsonException
+     */
     public function modifyPublished()
     {
         $this->onlyAdmin();
@@ -32,6 +36,10 @@ class postModification extends AjaxController{
         echo json_encode($result);
     }
 
+    /**
+     * Ajax call to update the on front page state of a post
+     * @throws \Core\JsonException
+     */
     public function modifyOnFrontPage()
     {
         $this->onlyAdmin();

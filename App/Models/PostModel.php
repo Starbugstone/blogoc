@@ -430,6 +430,13 @@ class PostModel extends Model
     }
 
 
+    /**
+     * Set or unset the published state of a post
+     * @param bool $state
+     * @param int $postId
+     * @return bool
+     * @throws Exception
+     */
     public function setPublished(bool $state, int $postId)
     {
         $sql = "
@@ -447,6 +454,13 @@ class PostModel extends Model
         return $this->execute();
     }
 
+    /**
+     * set or unset the on front page state of a post
+     * @param bool $state
+     * @param int $postId
+     * @return bool
+     * @throws Exception
+     */
     public function setOnFrontPage(bool $state, int $postId)
     {
         $sql = "
