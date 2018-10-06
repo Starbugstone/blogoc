@@ -40,4 +40,109 @@ class Tag extends AdminController{
         $this->data['pagination'] = $pagination;
         $this->renderView("Admin/ListTag");
     }
+
+    /**
+     * Post function to update a tag
+     * @throws \ErrorException
+     */
+    public function update()
+    {
+        $this->onlyAdmin();
+        if (!$this->request->isPost()) {
+            $this->alertBox->setAlert('Only post messages allowed', 'error');
+            $this->response->redirect('admin');
+        }
+
+        $tag = $this->request->getDataFull();
+
+        $tagId = $tag["idtags"];
+        $tagName = $tag["tag_name"];
+
+
+        //Sanity check on ID
+        if($tagId == null )
+        {
+            throw new \ErrorException("invalid tag ID");
+        }
+
+        //Error checking
+        $error = false;
+        if($tagName == "")
+        {
+            $error = true;
+            $this->alertBox->setAlert("empty name not allowed", "error");
+        }
+
+        if ($error) {
+            $this->response->redirect("/admin/tag/list");
+        }
+
+        $tagUpdate = $this->tagModel->update($tagId, $tagName);
+
+        //checking result and redirecting
+        if ($tagUpdate) {
+            $this->alertBox->setAlert("Tag " . $tagName . " updated");
+            $this->response->redirect("/admin/tag/list/");
+        }
+        $this->alertBox->setAlert("Error updating " . $tagName, "error");
+        $this->response->redirect("/admin/tag/list/");
+    }
+
+    /**
+     * Delete a specific tag
+     * @param int $tagId
+     * @throws \Exception
+     */
+    public function delete(int $tagId)
+    {
+        $this->onlyAdmin();
+        $tagName = $this->tagModel->getNameFromId($tagId);
+
+        $removedTag = $this->tagModel->delete($tagId);
+
+        if($removedTag)
+        {
+            $this->alertBox->setAlert("Tag ".$tagName." deleted");
+        }
+
+        $this->response->redirect("/admin/tag/list/");
+
+    }
+
+    /**
+     * create a new tag
+     */
+    public function new()
+    {
+        $this->onlyAdmin();
+        if (!$this->request->isPost()) {
+            $this->alertBox->setAlert('Only post messages allowed', 'error');
+            $this->response->redirect('admin');
+        }
+
+        $tag = $this->request->getDataFull();
+        $tagName = $tag["tag_name"];
+
+        //Error checking
+        $error = false;
+        if($tagName == "")
+        {
+            $error = true;
+            $this->alertBox->setAlert("empty name not allowed", "error");
+        }
+
+        if ($error) {
+            $this->container->getResponse()->redirect("/admin/tag/list");
+        }
+
+        $tagNew = $this->tagModel->new($tagName);
+
+        //checking result and redirecting
+        if ($tagNew) {
+            $this->alertBox->setAlert("Tag " . $tagName . " created");
+            $this->response->redirect("/admin/tag/list/");
+        }
+        $this->alertBox->setAlert("Error creating " . $tagName, "error");
+        $this->response->redirect("/admin/tag/list/");
+    }
 }

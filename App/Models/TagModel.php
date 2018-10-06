@@ -98,6 +98,24 @@ class TagModel extends Model
     }
 
     /**
+     * delete a tag from all posts
+     * @param int $tagId
+     * @return bool
+     * @throws \Exception
+     */
+    private function deleteTagOnAllPosts(int $tagId)
+    {
+        $sql = "
+        DELETE 
+        FROM $this->tagAssoTbl 
+        WHERE tag_idtags = :tagId
+        ";
+        $this->query($sql);
+        $this->bind(":tagId", $tagId);
+        return $this->execute();
+    }
+
+    /**
      * @return array the list of all the tags
      * @throws \ReflectionException
      */
@@ -198,9 +216,83 @@ class TagModel extends Model
         $this->execute();
     }
 
+    /**
+     * return all the tag details
+     * @param int $tagId
+     * @return array
+     * @throws \ReflectionException
+     */
     public function getTagDetails(int $tagId)
     {
         return $this->getRowById($tagId);
+    }
+
+    /**
+     * create a new tag
+     * @param string $tag
+     * @return bool
+     * @throws \Exception
+     */
+    public function new(string $tag)
+    {
+        $tagId = $this->createNewTag($tag);
+        return is_int($tagId);
+    }
+
+    /**
+     * Update an existing tag
+     * @param int $tagId
+     * @param string $tagName
+     * @return bool
+     * @throws \Exception
+     */
+    public function update(int $tagId, string $tagName)
+    {
+        $sql = "
+            UPDATE $this->tagTbl 
+            SET
+              tag_name = :tagName
+            WHERE
+              idtags = :tagId
+        ";
+        $this->query($sql);
+        $this->bind(":tagName", $tagName);
+        $this->bind(":tagId", $tagId);
+        return $this->execute();
+    }
+
+    /**
+     * Delete a tag
+     * @param int $tagId
+     * @return bool
+     * @throws \Exception
+     */
+    public function delete(int $tagId)
+    {
+        $this->deleteTagOnAllPosts($tagId);
+        $sql = "
+        DELETE
+        FROM $this->tagTbl
+        WHERE idtags = :tagId
+        ";
+        $this->query($sql);
+        $this->bind(":tagId", $tagId);
+        return $this->execute();
+    }
+
+    /**
+     * get tag name from ID
+     * @param int $tagId
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getNameFromId(int $tagId)
+    {
+        $sql = "SELECT tag_name from $this->tagTbl WHERE idtags = :tagId";
+        $this->query($sql);
+        $this->bind(":tagId", $tagId);
+        $this->execute();
+        return $this->stmt->fetchColumn();
     }
 
 }

@@ -1,6 +1,6 @@
 {% extends "Admin/Base.twig" %}
 {% block main %}
-    <h1>Category List</h1>
+    <h1>Tag List</h1>
     <div class="row">
         <div class="col">
             Name
@@ -23,44 +23,22 @@
                                 class="fa fa-eye" aria-hidden="true"></i></a>
                     <button type="submit" class="btn btn-warning"><i class="fa fa-floppy-o" aria-hidden="true"></i>
                     </button>
-                    <a href="/admin/tag/delete/{{ category.idtags }}" class="btn btn-danger"><i
+                    <a href="/admin/tag/delete/{{ tag.idtags }}" class="btn btn-danger"><i
                                 class="fa fa-trash" aria-hidden="true" onclick="ajaxDelete(event, this)"></i></a>
                 </div>
             </div>
         </form>
     {% endfor %}
-    <button class="btn btn-success" id="addNewTag"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add new
-        tag
-    </button>
-
-
 
     {% include "Includes/Pagination.twig" with {'pagination': pagination, 'pageUrl' :'/admin/tag/list', paginationPostsPerPage: paginationPostsPerPage} %}
 
 {% endblock %}
 
 {% block js %}
+
     <script>
+
         setupAjax();
-
-        //slugify
-        var $slugRequest = null;
-
-        function slugify($this) {
-            if ($slugRequest !== null) {
-                $slugRequest.abort();
-            }
-            let $that = jQuery($this);
-            let $slugInput = $that.parent("div").next("div").children("input").first();
-            $slugRequest = $.ajax({
-                url: "/ajax/ajaxSlugify/slugify-string",
-                data: {'slugText-update': $that.val()}
-            }).done(function ($result) {
-                //set the resluting slug and trigger change to see if unique
-                $slugInput.val($result.slug);
-            });
-        }
-
         //Add a new tag
         $("#addNewTag").click(function () {
             $htmlForm = "<form action=\"/admin/tag/new\" method=\"post\" onsubmit=\"ajaxNew(event, this)\">\n" +
@@ -75,27 +53,7 @@
                 "        </form>";
             $(this).before($htmlForm);
         });
-
-        //Ajax new call
-        function ajaxNew($e, $this) {
-            var $that = jQuery($this);
-            $e.preventDefault();
-            $e.stopPropagation();
-            var $data_json = JSON.stringify($that.serializeArray());
-            $.ajax({
-                url: "/ajax/tag/new",
-                data: {'tag-new': $data_json},
-            }).done(function ($result) {
-                setupToastr();
-                if ($result['success']) {
-                    toastr.success('New tag created');
-                    $that.find("button>i").first().after("<i class=\"fa fa-check\" aria-hidden=\"true\"></i>");
-                } else {
-                    toastr.Warning('Tag creation has errors');
-                    $that.find("button>i").first().after("<i class=\"fa fa-cross\" aria-hidden=\"true\"></i>");
-                }
-            });
-        }
+{#
 
         //Ajax save call
         function ajaxSave($e, $this) {
@@ -137,6 +95,7 @@
                     toastr.Warning('Error deleting');
                 }
             });
-        }
+        }    #}
     </script>
+
 {% endblock %}
