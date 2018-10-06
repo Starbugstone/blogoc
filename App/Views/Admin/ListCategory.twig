@@ -85,7 +85,7 @@
         });
 
         //Ajax new call
-        function ajaxNew($e, $this){
+        function ajaxNew($e, $this) {
             var $that = jQuery($this);
             $e.preventDefault();
             $e.stopPropagation();
@@ -127,8 +127,7 @@
         }
 
         //Ajax delete call
-        function ajaxDelete($e, $this)
-        {
+        function ajaxDelete($e, $this) {
             $e.preventDefault();
             $e.stopPropagation();
             var $that = jQuery($this).parents("form").first();
@@ -141,7 +140,7 @@
                 setupToastr();
                 if ($result['success']) {
                     toastr.success('Delete Ok');
-                    $that.remove();
+                    $that.fadeOut("slow");
                 } else {
                     toastr.Warning('Error deleting');
                 }
