@@ -7,6 +7,7 @@ use App\Models\PostModel;
 use App\Models\SlugModel;
 use App\Models\TagModel;
 use Core\AdminController;
+use Core\Constant;
 use Core\Container;
 
 class Post extends AdminController
@@ -72,16 +73,14 @@ class Post extends AdminController
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function list(string $page = "page-1", int $postsPerPage = 20)
+    public function list(string $page = "page-1", int $postsPerPage = Constant::LIST_PER_PAGE)
     {
         $this->onlyAdmin();
-
-        $defaultPostsPerpage = 20;
 
         $totalPosts = $this->postModel->totalNumberFullPosts();
         $pagination = $this->pagination->getPagination($page, $totalPosts, $postsPerPage);
 
-        if($postsPerPage !== $defaultPostsPerpage){
+        if($postsPerPage !== Constant::LIST_PER_PAGE){
             $this->data['paginationPostsPerPage'] = $postsPerPage;
         }
 

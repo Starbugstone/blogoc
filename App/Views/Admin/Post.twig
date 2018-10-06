@@ -113,7 +113,6 @@
         //Slugify the title on key up
         var $slugRequest = null;
         $("#postTitle").keyup(function () {
-            console.log($("#postSlug").data("manual"));
             //if we have manually set the slug, do not update
             if ($("#postSlug").data("manual") == true) {
                 return;

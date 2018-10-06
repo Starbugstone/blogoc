@@ -239,7 +239,7 @@ class PostModel extends Model
     }
 
     /**
-     *
+     *gets all the posts
      */
     public function getFullPosts(int $offset = 0, int $limit = Constant::POSTS_PER_PAGE): array
     {
