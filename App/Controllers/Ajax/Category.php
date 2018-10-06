@@ -63,6 +63,7 @@ class Category extends AjaxController
     }
 
     /**
+     * Delete a category via Ajax
      * @throws \Core\JsonException
      */
     public function delete()
