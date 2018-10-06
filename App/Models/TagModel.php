@@ -19,6 +19,32 @@ class TagModel extends Model
     }
 
     /**
+     * Counts the number of tags in DB
+     * @return int
+     * @throws \Exception
+     */
+    public function countTags(): int
+    {
+        $sql = "SELECT COUNT(*) FROM $this->tagTbl";
+        $this->query($sql);
+        $this->execute();
+        return $this->stmt->fetchColumn();
+    }
+
+    public function getTagList(int $offset = 0, int $limit = Constant::POSTS_PER_PAGE)
+    {
+        $sql = "
+            SELECT * FROM $this->tagTbl 
+            LIMIT :limit OFFSET :offset
+        ";
+        $this->query($sql);
+        $this->bind(":limit", $limit);
+        $this->bind(":offset", $offset);
+        $this->execute();
+        return $this->fetchAll();
+    }
+
+    /**
      * check if post has a specific tag
      * @param int $postId
      * @param int $tagId

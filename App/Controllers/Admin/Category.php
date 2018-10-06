@@ -5,8 +5,8 @@ namespace App\Controllers\Admin;
 use App\Models\CategoryModel;
 use App\Models\SlugModel;
 use Core\AdminController;
+use Core\Constant;
 use Core\Container;
-use Twig\Error\Error;
 
 class Category extends AdminController{
 
@@ -39,16 +39,15 @@ class Category extends AdminController{
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function list(string $page = "page-1", int $linesPerPage = 20)
+    public function list(string $page = "page-1", int $linesPerPage = Constant::LIST_PER_PAGE)
     {
         $this->onlyAdmin();
 
-        $defaultLinesPerPage = 20;
 
         $totalCategories = $this->categoryModel->countCategories();
         $pagination = $this->pagination->getPagination($page, $totalCategories, $linesPerPage);
 
-        if($linesPerPage !== $defaultLinesPerPage){
+        if($linesPerPage !== Constant::LIST_PER_PAGE){
             $this->data['paginationPostsPerPage'] = $linesPerPage;
         }
 

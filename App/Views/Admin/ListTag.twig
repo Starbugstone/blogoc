@@ -5,42 +5,37 @@
         <div class="col">
             Name
         </div>
-        <div class="col">
-            Slug
-        </div>
+
         <div class="col">
             Links
         </div>
     </div>
-    {% for category in posts %}
-        <form action="/admin/category/update" method="post" onsubmit="ajaxSave(event, this)">
+    {% for tag in posts %}
+        <form action="/admin/tag/update" method="post" onsubmit="ajaxSave(event, this)">
             <div class="row mt-3">
                 <div class="col">
-                    <input type="hidden" value="{{ category.idcategories }}" name="idcategories">
-                    <input type="text" value="{{ category.category_name }}" name="category_name"
-                           class="w-100 categoryNameInput" onkeyup="slugify(this)">
+                    <input type="hidden" value="{{ tag.idtags }}" name="idtags">
+                    <input type="text" value="{{ tag.tag_name }}" name="tag_name"
+                           class="w-100 categoryNameInput">
                 </div>
                 <div class="col">
-                    <input type="text" value="{{ category.categories_slug }}" name="categories_slug" class="w-100">
-                </div>
-                <div class="col">
-                    <a href="/category/posts/{{ category.categories_slug }}" class="btn btn-success"><i
+                    <a href="/tag/posts/{{ tag.idtags }}" class="btn btn-success"><i
                                 class="fa fa-eye" aria-hidden="true"></i></a>
                     <button type="submit" class="btn btn-warning"><i class="fa fa-floppy-o" aria-hidden="true"></i>
                     </button>
-                    <a href="/admin/category/delete/{{ category.idcategories }}" class="btn btn-danger"><i
+                    <a href="/admin/tag/delete/{{ category.idtags }}" class="btn btn-danger"><i
                                 class="fa fa-trash" aria-hidden="true" onclick="ajaxDelete(event, this)"></i></a>
                 </div>
             </div>
         </form>
     {% endfor %}
-    <button class="btn btn-success" id="addNewCategory"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add new
-        category
+    <button class="btn btn-success" id="addNewTag"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add new
+        tag
     </button>
 
 
 
-    {% include "Includes/Pagination.twig" with {'pagination': pagination, 'pageUrl' :'/admin/category/list', paginationPostsPerPage: paginationPostsPerPage} %}
+    {% include "Includes/Pagination.twig" with {'pagination': pagination, 'pageUrl' :'/admin/tag/list', paginationPostsPerPage: paginationPostsPerPage} %}
 
 {% endblock %}
 
@@ -66,15 +61,12 @@
             });
         }
 
-        //Add a new category
-        $("#addNewCategory").click(function () {
-            $htmlForm = "<form action=\"/admin/category/new\" method=\"post\" onsubmit=\"ajaxNew(event, this)\">\n" +
+        //Add a new tag
+        $("#addNewTag").click(function () {
+            $htmlForm = "<form action=\"/admin/tag/new\" method=\"post\" onsubmit=\"ajaxNew(event, this)\">\n" +
                 "            <div class=\"row mt-3\">\n" +
                 "                <div class=\"col\">\n" +
-                "                    <input type=\"text\" name=\"category_name\" class=\"w-100 categoryNameInput\" onkeyup=\"slugify(this)\">\n" +
-                "                </div>\n" +
-                "                <div class=\"col\">\n" +
-                "                    <input type=\"text\" name=\"categories_slug\" class=\"w-100\">\n" +
+                "                    <input type=\"text\" name=\"tag_name\" class=\"w-100 tagNameInput\">\n" +
                 "                </div>\n" +
                 "                <div class=\"col\">\n" +
                 "                    <button type=\"submit\" class=\"btn btn-warning\"><i class=\"fa fa-floppy-o\" aria-hidden=\"true\"></i></button>\n" +
@@ -91,15 +83,15 @@
             $e.stopPropagation();
             var $data_json = JSON.stringify($that.serializeArray());
             $.ajax({
-                url: "/ajax/category/new",
-                data: {'category-new': $data_json},
+                url: "/ajax/tag/new",
+                data: {'tag-new': $data_json},
             }).done(function ($result) {
                 setupToastr();
                 if ($result['success']) {
-                    toastr.success('New category created');
+                    toastr.success('New tag created');
                     $that.find("button>i").first().after("<i class=\"fa fa-check\" aria-hidden=\"true\"></i>");
                 } else {
-                    toastr.Warning('Category creation has errors');
+                    toastr.Warning('Tag creation has errors');
                     $that.find("button>i").first().after("<i class=\"fa fa-cross\" aria-hidden=\"true\"></i>");
                 }
             });
@@ -112,8 +104,8 @@
             $e.stopPropagation();
             var $data_json = JSON.stringify($that.serializeArray());
             $.ajax({
-                url: "/ajax/category/update",
-                data: {'category-update': $data_json},
+                url: "/ajax/tag/update",
+                data: {'tag-update': $data_json},
             }).done(function ($result) {
                 setupToastr();
                 if ($result['success']) {
@@ -134,8 +126,8 @@
             var $data_json = JSON.stringify($that.serializeArray());
             console.log($data_json);
             $.ajax({
-                url: "/ajax/category/delete",
-                data: {'category-delete': $data_json},
+                url: "/ajax/tag/delete",
+                data: {'tag-delete': $data_json},
             }).done(function ($result) {
                 setupToastr();
                 if ($result['success']) {
