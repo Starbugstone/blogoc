@@ -32,7 +32,7 @@ class Pagination extends Module
         $offset = ($pageNo - 1) * $rowsPerPage;
         $totalPages = ceil($totalRows / $rowsPerPage);
 
-        if ($pageNo > $totalPages) {
+        if ($pageNo > $totalPages && $totalPages != 0) {
             throw new \Error("Pagination Number not found", "404");
         }
 
