@@ -31,6 +31,19 @@ abstract class Controller
     protected $session;
 
     /**
+     * The request object to handle all gets and posts
+     * @var Dependency\Request
+     *
+     */
+    protected $request;
+
+    /**
+     * The response module to handle response messages
+     * @var Dependency\Response
+     */
+    protected $response;
+
+    /**
      * this will automaticly load all the modules listed and store them as $moduleName in tle class
      * Child classes can call aditional modules by calling $this->
      * @var array List of modules to load
@@ -71,6 +84,9 @@ abstract class Controller
             $this->loadModule($loadModule);
         }
         $this->session = $this->container->getSession();
+
+        $this->request = $container->getRequest(); //adding our request object as it will be needed in the ajax calls
+        $this->response = $container->getResponse();
 
         //Setting up csrf token security for all calls
         $this->data['csrf_token'] = $this->csrf->getCsrfKey(); //storing the security id into the data array to be sent to the view and added in the meta head
