@@ -3,7 +3,6 @@
 namespace Core\Traits;
 
 use Core\Constant;
-use Twig\Error\Error;
 
 /**
  * a trait with some string related helpers
