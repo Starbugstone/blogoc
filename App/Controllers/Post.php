@@ -52,7 +52,7 @@ class Post extends Controller{
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
         $this->data['post'] = $posts;
         $this->data['postTags'] = $tagModel->getTagsOnPost($postId);
-        $this->data['navigation'] = $categoryModel->getMenu();
+        $this->data['navigation'] = $this->siteConfig->getMenu();
 
         $this->renderView('post');
 

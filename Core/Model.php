@@ -101,7 +101,8 @@ abstract class Model
      * fetches the result from an executed query
      * @return array
      */
-    protected function fetchAll(){
+    protected function fetchAll()
+    {
         return $this->stmt->fetchAll();
     }
 
@@ -109,7 +110,8 @@ abstract class Model
      * returns a single line from the executed query
      * @return mixed
      */
-    protected function fetch(){
+    protected function fetch()
+    {
         return $this->stmt->fetch();
     }
 
@@ -140,7 +142,11 @@ abstract class Model
             $table = strtolower($table); //the database names are in lowercase
         }
 
-        $table = $this->getTablePrefix($table);
+        //Check if we have already passed the prefix
+        if (!$this->startsWith($table, Config::TABLE_PREFIX)) {
+            $table = $this->getTablePrefix($table);
+        }
+
 
         //see if table exists
         $sql = "SHOW TABLES LIKE :table";
@@ -176,10 +182,10 @@ abstract class Model
      * @param $table string the table name
      * @return string
      */
-    protected function getTablePrefix($table){
-        if(Config::TABLE_PREFIX != '')
-        {
-            $table = Config::TABLE_PREFIX.'_'.$table;
+    protected function getTablePrefix($table)
+    {
+        if (Config::TABLE_PREFIX != '') {
+            $table = Config::TABLE_PREFIX . '_' . $table;
         }
         return $table;
     }
@@ -269,7 +275,8 @@ abstract class Model
     protected function getRowByColumn(String $columnName, $value, $table = null): array
     {
         $tableName = $this->getTable($table);
-        $columnNameOk = preg_match("/^[a-z0-9_]+$/i", $columnName); //testing if column name only has lower case, numbers and underscore
+        $columnNameOk = preg_match("/^[a-z0-9_]+$/i",
+            $columnName); //testing if column name only has lower case, numbers and underscore
         if (!$columnNameOk) {
             throw new \Exception("Syntax error : Column name \"$columnName\" is not legal");
         }
@@ -291,12 +298,41 @@ abstract class Model
     protected function getRowBySlug(String $slug, $table = null): array
     {
         $tableName = $this->getTable($table);
-        $slugName = $tableName.'_slug';
+        $slugName = $tableName . '_slug';
         $sql = "SELECT * FROM $tableName WHERE $slugName = :slug";
         $this->query($sql);
         $this->bind(':slug', $slug);
         $this->execute();
         $result = $this->stmt->fetch();
         return $this->returnArray($result);
+    }
+
+    /**
+     * count the number of rows in table
+     * @param null $table
+     * @return mixed
+     * @throws \Exception
+     */
+    protected function count(string $table = null)
+    {
+        $table = $this->getTable($table);
+        $sql = "SELECT COUNT(*) FROM $table";
+        $this->query($sql);
+        $this->execute();
+        return $this->stmt->fetchColumn();
+    }
+
+    protected function list(int $offset = 0, int $limit = Constant::POSTS_PER_PAGE, string $table = null)
+    {
+        $table = $this->getTable($table);
+        $sql = "
+            SELECT * FROM $table
+            LIMIT :limit OFFSET :offset
+        ";
+        $this->query($sql);
+        $this->bind(":limit", $limit);
+        $this->bind(":offset", $offset);
+        $this->execute();
+        return $this->fetchAll();
     }
 }

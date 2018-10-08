@@ -48,7 +48,7 @@ class Category extends Controller
         $pagination = $this->pagination->getPagination($page, $totalPosts);
 
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
-        $this->data['navigation'] = $this->categoryModel->getMenu();
+        $this->data['navigation'] = $this->siteConfig->getMenu();
         $this->data['posts'] = $this->postModel->getPostsInCategory($categoryId, $pagination["offset"]);
         $this->data['pagination'] = $pagination;
         $this->data['categorySlug'] = $categorySlug;
@@ -73,7 +73,7 @@ class Category extends Controller
         $pagination = $this->pagination->getPagination($page, $totalPosts);
 
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
-        $this->data['navigation'] = $this->categoryModel->getMenu();
+        $this->data['navigation'] = $this->siteConfig->getMenu();
         $this->data['posts'] = $this->postModel->getPosts($pagination["offset"]);
         $this->data['pagination'] = $pagination;
 

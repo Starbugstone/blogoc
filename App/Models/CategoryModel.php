@@ -28,24 +28,6 @@ class CategoryModel extends Model
     }
 
     /**
-     * get all the menu elements from the database
-     * @return array the categories and access URL
-     * @throws \ReflectionException
-     */
-    public function getMenu(): array
-    {
-        $data = [];
-        //get the categories from database
-        $categories = $this->getCategories();
-        foreach ($categories as $category) {
-            $data += [
-                $category->category_name => '/category/posts/' . $category->categories_slug
-            ];
-        }
-        return $data;
-    }
-
-    /**
      * get all the details from the category table
      * @param int $categoryId
      * @return array
@@ -63,10 +45,7 @@ class CategoryModel extends Model
      */
     public function countCategories(): int
     {
-        $sql = "SELECT COUNT(*) FROM $this->categoryTbl";
-        $this->query($sql);
-        $this->execute();
-        return $this->stmt->fetchColumn();
+        return $this->count('categories');
     }
 
     /**
@@ -78,15 +57,7 @@ class CategoryModel extends Model
      */
     public function getCategoryList(int $offset = 0, int $limit = Constant::POSTS_PER_PAGE)
     {
-        $sql = "
-            SELECT * FROM $this->categoryTbl 
-            LIMIT :limit OFFSET :offset
-        ";
-        $this->query($sql);
-        $this->bind(":limit", $limit);
-        $this->bind(":offset", $offset);
-        $this->execute();
-        return $this->fetchAll();
+        return $this->list($offset, $limit, 'categories');
     }
 
     /**

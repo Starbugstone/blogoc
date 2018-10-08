@@ -25,23 +25,19 @@ class TagModel extends Model
      */
     public function countTags(): int
     {
-        $sql = "SELECT COUNT(*) FROM $this->tagTbl";
-        $this->query($sql);
-        $this->execute();
-        return $this->stmt->fetchColumn();
+        return $this->count();
     }
 
+    /**
+     * get the list of tags with pagination limit and offset
+     * @param int $offset
+     * @param int $limit
+     * @return array
+     * @throws \Exception
+     */
     public function getTagList(int $offset = 0, int $limit = Constant::POSTS_PER_PAGE)
     {
-        $sql = "
-            SELECT * FROM $this->tagTbl 
-            LIMIT :limit OFFSET :offset
-        ";
-        $this->query($sql);
-        $this->bind(":limit", $limit);
-        $this->bind(":offset", $offset);
-        $this->execute();
-        return $this->fetchAll();
+        return $this->list($offset, $limit);
     }
 
     /**

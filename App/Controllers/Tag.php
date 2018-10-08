@@ -22,6 +22,7 @@ class Tag extends Controller{
     /**
      * @param int $tagId
      * @param string $page
+     * @throws \ErrorException
      * @throws \ReflectionException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
@@ -29,7 +30,6 @@ class Tag extends Controller{
      */
     public function posts(int $tagId, string $page = "page-1")
     {
-        $categoryModel = new CategoryModel($this->container);
         $postModel = new PostModel($this->container);
         $tagModel = new TagModel($this->container);
 
@@ -39,7 +39,7 @@ class Tag extends Controller{
         $this->sendSessionVars();
         $this->data['posts'] = $postModel->getPostsWithTag($tagId, $pagination["offset"]);
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
-        $this->data['navigation'] = $categoryModel->getMenu();
+        $this->data['navigation'] = $this->siteConfig->getMenu();
         $this->data['pagination'] = $pagination;
         $this->data['tagId'] = $tagId;
         $this->data['tag'] = $tagModel->getTagDetails($tagId);

@@ -26,13 +26,12 @@ class Home extends \Core\Controller
 
     public function index()
     {
-        $categoryModel = new CategoryModel($this->container);
         $frontPostModel = new PostModel($this->container);
 
         $frontPosts = $frontPostModel->getFrontPosts();
 
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
-        $this->data['navigation'] = $categoryModel->getMenu();
+        $this->data['navigation'] = $this->siteConfig->getMenu();
         $this->data['jumbotron'] = true;
         $this->data['front_posts'] = $frontPosts;
 
