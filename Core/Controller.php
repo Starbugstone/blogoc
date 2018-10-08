@@ -35,7 +35,8 @@ abstract class Controller
      */
     protected $loadModules = [
         'Csrf',
-        'AlertBox'
+        'AlertBox',
+        'Auth'
     ];
 
     /**
@@ -44,6 +45,7 @@ abstract class Controller
      */
     protected $csrf;
     protected $alertBox;
+    protected $auth;
 
     /**
      * Controller constructor.

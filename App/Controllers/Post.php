@@ -35,9 +35,22 @@ class Post extends Controller{
 
         $postId = $slugModel->getIdFromSlug($slug, "posts", "posts_slug", "idposts");
 
+        $posts = $postModel->getSinglePost($postId);
+
+        //only admins can view unpublished posts
+        if(!$posts->published)
+        {
+            if(!$this->auth->isAdmin())
+            {
+                throw new \Exception("File does not exist", "404");
+            }
+            $this->alertBox->setAlert('This post is not yet published', 'warning');
+        }
+
+
         $this->sendSessionVars();
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
-        $this->data['post'] = $postModel->getSinglePost($postId);
+        $this->data['post'] = $posts;
         $this->data['postTags'] = $tagModel->getTagsOnPost($postId);
         $this->data['navigation'] = $categoryModel->getMenu();
 
