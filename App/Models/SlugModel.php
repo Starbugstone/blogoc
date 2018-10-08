@@ -15,17 +15,17 @@ class SlugModel extends Model
      * @param string $table the table to search in
      * @param string $columnName the name of the slug column
      * @return bool
-     * @throws \ErrorException
+     * @throws \Exception
      */
     public function isUnique(string $slug, string $table, string $columnName): bool
     {
 
         if (!$this->isAlphaNum($table)) {
-            throw new \ErrorException("Invalid table name " . $table);
+            throw new \Exception("Invalid table name " . $table);
         }
 
         if (!$this->isAlphaNum($columnName)) {
-            throw new \ErrorException("Invalid Column name " . $columnName);
+            throw new \Exception("Invalid Column name " . $columnName);
         }
 
         $slugTbl = $this->getTablePrefix($table);
@@ -44,20 +44,20 @@ class SlugModel extends Model
      * @param string $columnName the slug column name
      * @param string $idColumn the id column name
      * @return int the id of the row
-     * @throws \ErrorException
+     * @throws \Exception
      */
     public function getIdFromSlug(string $slug, string $table, string $columnName, string $idColumn): int
     {
         if (!$this->isAlphaNum($table)) {
-            throw new \ErrorException("Invalid table name " . $table);
+            throw new \Exception("Invalid table name " . $table);
         }
 
         if (!$this->isAlphaNum($columnName)) {
-            throw new \ErrorException("Invalid Slug Column name " . $columnName);
+            throw new \Exception("Invalid Slug Column name " . $columnName);
         }
 
         if (!$this->isAlphaNum($idColumn)) {
-            throw new \ErrorException("Invalid ID Column name " . $columnName);
+            throw new \Exception("Invalid ID Column name " . $columnName);
         }
 
         $slugTbl = $this->getTablePrefix($table);
@@ -80,20 +80,20 @@ class SlugModel extends Model
      * @param string $columnName
      * @param string $idColumn
      * @return string
-     * @throws \ErrorException
+     * @throws \Exception
      */
     public function getSlugFromId(int $searchId, string $table, string $columnName, string $slugColumn): string
     {
         if (!$this->isAlphaNum($table)) {
-            throw new \ErrorException("Invalid table name " . $table);
+            throw new \Exception("Invalid table name " . $table);
         }
 
         if (!$this->isAlphaNum($columnName)) {
-            throw new \ErrorException("Invalid Slug Column name " . $columnName);
+            throw new \Exception("Invalid Slug Column name " . $columnName);
         }
 
         if (!$this->isAlphaNum($slugColumn)) {
-            throw new \ErrorException("Invalid ID Column name " . $columnName);
+            throw new \Exception("Invalid ID Column name " . $columnName);
         }
 
         $slugTbl = $this->getTablePrefix($table);

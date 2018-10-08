@@ -13,7 +13,7 @@ class SiteConfig extends Module
      * @return array the config ordered and ready to display
      * @throws \ReflectionException
      */
-    public function getSiteConfig()
+    public function getSiteConfig():array
     {
 
         $configs = new ConfigModel($this->container);
@@ -25,7 +25,12 @@ class SiteConfig extends Module
         return $data;
     }
 
-    public function getMenu()
+    /**
+     * create the front end menu object to be sent to twig and add the urls
+     * @return array
+     * @throws \ReflectionException
+     */
+    public function getMenu():array
     {
         $categoryModel = new CategoryModel($this->container);
 
