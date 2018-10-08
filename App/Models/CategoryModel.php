@@ -138,6 +138,38 @@ class CategoryModel extends Model
         return $this->stmt->fetchColumn();
     }
 
+    /**
+     * get the category slug from the ID
+     * @param int $categoryId
+     * @return string
+     * @throws \ReflectionException
+     */
+    public function getCategorySlugFromId(int $categoryId): string
+    {
+        return $this->getSlugFromId($categoryId, "idcategories", "categories_slug", "categories");
+    }
+
+    /**
+     * check if category slug is unique
+     * @param string $categorySlug
+     * @return bool
+     * @throws \Exception
+     */
+    public function isCategorySlugUnique(string $categorySlug)
+    {
+        return $this->isSlugUnique($categorySlug, "categories_slug", "categories");
+    }
+
+    /**
+     * Get the category ID from a slug
+     * @param string $categorySlug
+     * @return int
+     * @throws \Exception
+     */
+    public function getCategoryIdFromSlug(string $categorySlug):int
+    {
+        return $this->getIdFromSlug($categorySlug, "idcategories", "categories_slug", "categories");
+    }
 
 
 }

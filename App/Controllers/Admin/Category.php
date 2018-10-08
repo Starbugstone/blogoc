@@ -3,7 +3,6 @@
 namespace App\Controllers\Admin;
 
 use App\Models\CategoryModel;
-use App\Models\SlugModel;
 use Core\AdminController;
 use Core\Constant;
 use Core\Container;
@@ -14,7 +13,6 @@ class Category extends AdminController{
     protected $pagination;
 
     private $categoryModel;
-    private $slugModel;
 
 
     public function __construct(Container $container)
@@ -24,7 +22,6 @@ class Category extends AdminController{
         parent::__construct($container);
 
         $this->categoryModel = new CategoryModel($this->container);
-        $this->slugModel = new SlugModel($this->container);
 
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
         $this->data['categories'] = $this->categoryModel->getCategories();
@@ -80,7 +77,7 @@ class Category extends AdminController{
             throw new \ErrorException("invalid category ID");
         }
 
-        $originalCategorySlug = $this->slugModel->getSlugFromId($categoryId, "categories", "idcategories","categories_slug");
+        $originalCategorySlug = $this->categoryModel->getCategorySlugFromId($categoryId);
 
         //Error checking
         $error = false;
@@ -94,7 +91,7 @@ class Category extends AdminController{
             $error = true;
             $this->alertBox->setAlert("empty slug not allowed", "error");
         }
-        if (!$this->slugModel->isUnique($categorySlug, "categories", "categories_slug") && $categorySlug !== $originalCategorySlug) {
+        if (!$this->categoryModel->isCategorySlugUnique($categorySlug) && $categorySlug !== $originalCategorySlug) {
             $error = true;
             $this->alertBox->setAlert("Slug not unique", "error");
         }
@@ -162,7 +159,7 @@ class Category extends AdminController{
             $error = true;
             $this->alertBox->setAlert("empty slug not allowed", "error");
         }
-        if (!$this->slugModel->isUnique($categorySlug, "categories", "categories_slug")) {
+        if (!$this->categoryModel->isCategorySlugUnique($categorySlug)) {
             $error = true;
             $this->alertBox->setAlert("Slug not unique", "error");
         }

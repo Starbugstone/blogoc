@@ -1,9 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\CategoryModel;
 use App\Models\PostModel;
-use App\Models\SlugModel;
 use App\Models\TagModel;
 use Core\Controller;
 use Core\Container;
@@ -20,7 +18,7 @@ class Post extends Controller{
 
     /**
      * @param $slug
-     * @throws \ErrorException
+     * @throws \Exception
      * @throws \ReflectionException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
@@ -30,9 +28,8 @@ class Post extends Controller{
 
         $tagModel = new TagModel($this->container);
         $postModel = new PostModel($this->container);
-        $slugModel = new SlugModel($this->container);
 
-        $postId = $slugModel->getIdFromSlug($slug, "posts", "posts_slug", "idposts");
+        $postId = $postModel->getPostIdFromSlug($slug);
 
         $posts = $postModel->getSinglePost($postId);
 

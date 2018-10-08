@@ -4,7 +4,6 @@ namespace App\Controllers;
 
 use App\Models\CategoryModel;
 use App\Models\PostModel;
-use App\Models\SlugModel;
 use Core\Container;
 use Core\Controller;
 
@@ -14,7 +13,6 @@ class Category extends Controller
     protected $siteConfig;
     protected $pagination;
 
-    private $slugModel;
     private $postModel;
     private $categoryModel;
 
@@ -23,7 +21,6 @@ class Category extends Controller
         $this->loadModules[] = 'SiteConfig';
         $this->loadModules[] = 'pagination';
         parent::__construct($container);
-        $this->slugModel = new SlugModel($this->container);
         $this->postModel = new PostModel($this->container);
         $this->categoryModel = new CategoryModel($this->container);
 
@@ -43,7 +40,7 @@ class Category extends Controller
      */
     public function posts(string $categorySlug, string $page = "page-1")
     {
-        $categoryId = $this->slugModel->getIdFromSlug($categorySlug, "categories", "categories_slug", "idcategories");
+        $categoryId = $this->categoryModel->getCategoryIdFromSlug($categorySlug);
         $totalPosts = $this->postModel->totalNumberPostsInCategory($categoryId);
         $pagination = $this->pagination->getPagination($page, $totalPosts);
 

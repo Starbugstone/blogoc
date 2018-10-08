@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Ajax;
 
-use App\Models\SlugModel;
+use App\Models\PostModel;
 use Core\AjaxController;
 use Core\Traits\StringFunctions;
 
@@ -14,7 +14,7 @@ class PostVerification extends AjaxController
      * checks if the slug is unique
      * @return bool is unique
      * @throws \Core\JsonException
-     * @throws \ErrorException
+     * @throws \Exception
      */
     public function isSlugUnique()
     {
@@ -30,25 +30,22 @@ class PostVerification extends AjaxController
         if(!$this->isAlphaNum($postSlug))
         {
             echo json_encode($data);
-            return;
+            return true;
         }
 
-        $slugModel = new SlugModel($this->container);
+        $postModel = new PostModel($this->container);
 
-        $data = $slugModel->isUnique($postSlug, "posts", "posts_slug");
+        $data = $postModel->isPostSlugUnique($postSlug);
 
         if($data == false) //slug is not unique, but could be from the same post
         {
-            $slugOfId = $slugModel->getSlugFromId($postId, "posts", "idposts","posts_slug");
+            $slugOfId = $postModel->getPostSlugFromId($postId);
             if($slugOfId === $postSlug)
             {
                 //it's the same post, return true
                 $data = true;
             }
         }
-
-
-
         echo json_encode($data);
     }
 

@@ -3,6 +3,7 @@
 namespace Core;
 
 use Core\Traits\StringFunctions;
+use Exception;
 use PDO;
 
 /**
@@ -59,12 +60,12 @@ abstract class Model
      * @param $param
      * @param $value
      * @param  $type
-     * @throws \Exception error if no sql query to bind to
+     * @throws Exception error if no sql query to bind to
      */
     protected function bind($param, $value, $type = null): void
     {
         if ($this->stmt == null) {
-            throw new \Exception("No query to bind to");
+            throw new Exception("No query to bind to");
         }
         if (is_null($type)) { //need a bind value, so just check it in code. that way we can just call bind(param,value)
             switch (true) {
@@ -87,12 +88,12 @@ abstract class Model
     /**
      * Execute our constructed SQL statement
      * @return bool
-     * @throws \Exception if the statement is empty
+     * @throws Exception if the statement is empty
      */
     protected function execute()
     {
         if ($this->stmt == null) {
-            throw new \Exception("No statement to execute");
+            throw new Exception("No statement to execute");
         }
         return $this->stmt->execute();
     }
@@ -127,7 +128,7 @@ abstract class Model
      * @param string|null $table the name of the table to get, if none the get the table of the models name
      * @return string the table name (with an s)
      * @throws \ReflectionException the model doesn't exist, should never happen
-     * @throws \Exception table or view doesn't exist
+     * @throws Exception table or view doesn't exist
      * @return string table or view name
      */
     protected function getTable(String $table = null): String
@@ -173,7 +174,7 @@ abstract class Model
 
         //neither table or view exists
         //throw an error
-        throw new \Exception("Table or view $table doesn't exist");
+        throw new Exception("Table or view $table doesn't exist");
     }
 
     /**
@@ -197,7 +198,7 @@ abstract class Model
      * or we just return an empty array
      * @param mixed $result the PDO result of a query
      * @return array the result or empty
-     * @throws \Exception if debugging is on and no result
+     * @throws Exception if debugging is on and no result
      */
     private function returnArray($result)
     {
@@ -205,7 +206,7 @@ abstract class Model
             return $result;
         }
         if (Config::DEV_ENVIRONMENT) {
-            throw new \Exception("No results in database");
+            throw new Exception("No results in database");
         }
         return [];
     }
@@ -270,7 +271,7 @@ abstract class Model
      * @param string $table the table to search, if blank then we get the table or view based on the model name
      * @return array the results or empty
      * @throws \ReflectionException (probably not, but will throw an exception if debugging is on and no results)
-     * @throws \Exception if the column name consists of other characters than lower case, numbers and underscore for security
+     * @throws Exception if the column name consists of other characters than lower case, numbers and underscore for security
      */
     protected function getRowByColumn(String $columnName, $value, $table = null): array
     {
@@ -278,7 +279,7 @@ abstract class Model
         $columnNameOk = preg_match("/^[a-z0-9_]+$/i",
             $columnName); //testing if column name only has lower case, numbers and underscore
         if (!$columnNameOk) {
-            throw new \Exception("Syntax error : Column name \"$columnName\" is not legal");
+            throw new Exception("Syntax error : Column name \"$columnName\" is not legal");
         }
         $sql = "SELECT * FROM $tableName WHERE $columnName = :value";
         $this->query($sql);
@@ -289,29 +290,10 @@ abstract class Model
     }
 
     /**
-     * get's the result of SELECT * FROM table where table_slug=$slug
-     * @param string $slug the slug to look up
-     * @param string $table the table to search, if blank then we get the table or view based on the model name
-     * @return array result or empty array
-     * @throws \ReflectionException (probably not, but will throw an exception if debugging is on and no results)
-     */
-    protected function getRowBySlug(String $slug, $table = null): array
-    {
-        $tableName = $this->getTable($table);
-        $slugName = $tableName . '_slug';
-        $sql = "SELECT * FROM $tableName WHERE $slugName = :slug";
-        $this->query($sql);
-        $this->bind(':slug', $slug);
-        $this->execute();
-        $result = $this->stmt->fetch();
-        return $this->returnArray($result);
-    }
-
-    /**
      * count the number of rows in table
-     * @param null $table
+     * @param string $table
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     protected function count(string $table = null)
     {
@@ -322,6 +304,14 @@ abstract class Model
         return $this->stmt->fetchColumn();
     }
 
+    /**
+     * get list with offset and limit from table
+     * @param int $offset
+     * @param int $limit
+     * @param string|null $table
+     * @return array
+     * @throws \ReflectionException
+     */
     protected function list(int $offset = 0, int $limit = Constant::POSTS_PER_PAGE, string $table = null)
     {
         $table = $this->getTable($table);
@@ -334,5 +324,111 @@ abstract class Model
         $this->bind(":offset", $offset);
         $this->execute();
         return $this->fetchAll();
+    }
+
+    /**
+     * is the slug unique, used when updating the slug
+     * @param string $slug the slug to search for
+     * @param string $table the table to search in
+     * @param string $slugColumn the name of the slug column
+     * @return bool
+     * @throws Exception
+     */
+    protected function isSlugUnique(string $slug, string $slugColumn, string $table = null): bool
+    {
+        if (!$this->isAlphaNum($slugColumn)) {
+            throw new Exception("Invalid Column name");
+        }
+
+        $table = $this->getTable($table);
+
+        $sql = "SELECT * FROM $table WHERE $slugColumn = :slug";
+        $this->query($sql);
+        $this->bind(':slug', $slug);
+        $this->execute();
+        return !$this->stmt->rowCount() > 0;
+    }
+
+    /**
+     * get the ID of the row from the slug
+     * @param string $slug the slug to search
+     * @param string $table the table to search in
+     * @param string $slugColumn the slug column name
+     * @param string $idColumn the id column name
+     * @return int the id of the row
+     * @throws Exception
+     */
+    protected function getIdFromSlug(string $slug, string $idColumn, string $slugColumn, string $table = null): int
+    {
+        if (!$this->isAllAlphaNum([$idColumn, $slugColumn])) {
+            throw new Exception("Invalid Column name");
+        }
+
+        $table = $this->getTable($table);
+
+        $sql = "SELECT $idColumn FROM $table WHERE $slugColumn = :slug";
+        $this->query($sql);
+        $this->bind(":slug", $slug);
+        $this->execute();
+        if (!$this->stmt->rowCount() > 0) {
+            return 0;
+        }
+        return $this->stmt->fetchColumn();
+
+    }
+
+    /**
+     * get the slug from an Id
+     * @param int $searchId
+     * @param string $idColumn
+     * @param string $slugColumn
+     * @param string $table
+     * @return string
+     * @throws \ReflectionException
+     */
+    protected function getSlugFromId(
+        int $searchId,
+        string $idColumn,
+        string $slugColumn,
+        string $table = null
+    ): string {
+
+        if (!$this->isAllAlphaNum([$idColumn, $slugColumn])) {
+            throw new Exception("Invalid Column name");
+        }
+        $table = $this->getTable($table);
+
+        $sql = "SELECT $slugColumn FROM $table WHERE $idColumn = :searchId";
+        $this->query($sql);
+        $this->bind(":searchId", $searchId);
+        $this->execute();
+        if (!$this->stmt->rowCount() > 0) {
+            return 0;
+        }
+        return $this->stmt->fetchColumn();
+    }
+
+    /**
+     * get's the result of SELECT * FROM table where table_slug=$slug
+     * @param string $slug the slug to look up
+     * @param string $slugColumn the name of the slug column
+     * @param string $table the table to search, if blank then we get the table or view based on the model name
+     * @return array result or empty array
+     * @throws \ReflectionException (probably not, but will throw an exception if debugging is on and no results)
+     */
+    protected function getRowBySlug(String $slug, string $slugColumn, $table = null): array
+    {
+        if (!$this->isAlphaNum($slugColumn)) {
+            throw new Exception("Invalid Column name");
+        }
+
+        $table = $this->getTable($table);
+
+        $sql = "SELECT * FROM $table WHERE $slugColumn = :slug";
+        $this->query($sql);
+        $this->bind(':slug', $slug);
+        $this->execute();
+        $result = $this->stmt->fetch();
+        return $this->returnArray($result);
     }
 }
