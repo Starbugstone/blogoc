@@ -166,7 +166,7 @@ class CategoryModel extends Model
      * @return int
      * @throws \Exception
      */
-    public function getCategoryIdFromSlug(string $categorySlug):int
+    public function getCategoryIdFromSlug(string $categorySlug): int
     {
         return $this->getIdFromSlug($categorySlug, "idcategories", "categories_slug", "categories");
     }

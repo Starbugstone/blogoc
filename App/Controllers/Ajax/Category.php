@@ -8,7 +8,10 @@ use Core\AjaxController;
 class Category extends AjaxController
 {
 
-
+    /**
+     * Create a new category via Ajax
+     * @throws \Core\JsonException
+     */
     public function new()
     {
         //security checks

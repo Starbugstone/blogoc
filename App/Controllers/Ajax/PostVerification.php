@@ -27,8 +27,7 @@ class PostVerification extends AjaxController
         $postId = $this->request->getData("postId");
 
         $data = false;
-        if(!$this->isAlphaNum($postSlug))
-        {
+        if (!$this->isAlphaNum($postSlug)) {
             echo json_encode($data);
             return true;
         }
@@ -37,11 +36,10 @@ class PostVerification extends AjaxController
 
         $data = $postModel->isPostSlugUnique($postSlug);
 
-        if($data == false) //slug is not unique, but could be from the same post
+        if ($data == false) //slug is not unique, but could be from the same post
         {
             $slugOfId = $postModel->getPostSlugFromId($postId);
-            if($slugOfId === $postSlug)
-            {
+            if ($slugOfId === $postSlug) {
                 //it's the same post, return true
                 $data = true;
             }

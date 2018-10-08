@@ -7,7 +7,8 @@ use Core\AdminController;
 use Core\Constant;
 use Core\Container;
 
-class Category extends AdminController{
+class Category extends AdminController
+{
 
     protected $siteConfig;
     protected $pagination;
@@ -44,7 +45,7 @@ class Category extends AdminController{
         $totalCategories = $this->categoryModel->countCategories();
         $pagination = $this->pagination->getPagination($page, $totalCategories, $linesPerPage);
 
-        if($linesPerPage !== Constant::LIST_PER_PAGE){
+        if ($linesPerPage !== Constant::LIST_PER_PAGE) {
             $this->data['paginationPostsPerPage'] = $linesPerPage;
         }
 
@@ -56,6 +57,7 @@ class Category extends AdminController{
     /**
      * Post function to update a category
      * @throws \ErrorException
+     * @throws \ReflectionException
      */
     public function update()
     {
@@ -72,8 +74,7 @@ class Category extends AdminController{
         $categorySlug = $category["categories_slug"];
 
         //Sanity check on ID
-        if($categoryId == null )
-        {
+        if ($categoryId == null) {
             throw new \ErrorException("invalid category ID");
         }
 
@@ -81,13 +82,11 @@ class Category extends AdminController{
 
         //Error checking
         $error = false;
-        if($categoryName == "")
-        {
+        if ($categoryName == "") {
             $error = true;
             $this->alertBox->setAlert("empty name not allowed", "error");
         }
-        if($categorySlug == "")
-        {
+        if ($categorySlug == "") {
             $error = true;
             $this->alertBox->setAlert("empty slug not allowed", "error");
         }
@@ -123,9 +122,8 @@ class Category extends AdminController{
 
         $removedCategory = $this->categoryModel->delete($categoryId);
 
-        if($removedCategory)
-        {
-            $this->alertBox->setAlert("Category ".$categoryName." deleted");
+        if ($removedCategory) {
+            $this->alertBox->setAlert("Category " . $categoryName . " deleted");
         }
 
         $this->response->redirect("/admin/category/list/");
@@ -149,13 +147,11 @@ class Category extends AdminController{
 
         //Error checking
         $error = false;
-        if($categoryName == "")
-        {
+        if ($categoryName == "") {
             $error = true;
             $this->alertBox->setAlert("empty name not allowed", "error");
         }
-        if($categorySlug == "")
-        {
+        if ($categorySlug == "") {
             $error = true;
             $this->alertBox->setAlert("empty slug not allowed", "error");
         }

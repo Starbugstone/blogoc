@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controllers;
 
 use App\Models\PostModel;
@@ -6,7 +7,8 @@ use App\Models\TagModel;
 use Core\Controller;
 use Core\Container;
 
-class Post extends Controller{
+class Post extends Controller
+{
 
     protected $siteConfig;
 
@@ -24,7 +26,8 @@ class Post extends Controller{
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function viewPost(string $slug){
+    public function viewPost(string $slug)
+    {
 
         $tagModel = new TagModel($this->container);
         $postModel = new PostModel($this->container);
@@ -34,10 +37,8 @@ class Post extends Controller{
         $posts = $postModel->getSinglePost($postId);
 
         //only admins can view unpublished posts
-        if(!$posts->published)
-        {
-            if(!$this->auth->isAdmin())
-            {
+        if (!$posts->published) {
+            if (!$this->auth->isAdmin()) {
                 throw new \Exception("File does not exist", "404");
             }
             $this->alertBox->setAlert('This post is not yet published', 'warning');

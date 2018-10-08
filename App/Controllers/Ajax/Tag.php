@@ -5,7 +5,8 @@ namespace App\Controllers\Ajax;
 use App\Models\TagModel;
 use Core\AjaxController;
 
-class Tag extends AjaxController{
+class Tag extends AjaxController
+{
 
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controllers;
 
 use App\Models\CategoryModel;
@@ -7,7 +8,8 @@ use App\Models\TagModel;
 use Core\Controller;
 use Core\Container;
 
-class Tag extends Controller{
+class Tag extends Controller
+{
 
     protected $siteConfig;
 

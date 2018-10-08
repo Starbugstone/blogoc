@@ -40,7 +40,7 @@ class Post extends AdminController
      * @param int $postId the post to add tags to
      * @throws \Exception
      */
-    private function addTags(array $tags, int $postId):void
+    private function addTags(array $tags, int $postId): void
     {
         foreach ($tags as $tag) {
             if (isset($tag["id"])) {
@@ -77,7 +77,7 @@ class Post extends AdminController
         $totalPosts = $this->postModel->totalNumberFullPosts();
         $pagination = $this->pagination->getPagination($page, $totalPosts, $postsPerPage);
 
-        if($postsPerPage !== Constant::LIST_PER_PAGE){
+        if ($postsPerPage !== Constant::LIST_PER_PAGE) {
             $this->data['paginationPostsPerPage'] = $postsPerPage;
         }
 
@@ -132,8 +132,7 @@ class Post extends AdminController
         $onFrontPage = $posts["isOnFrontPage"];
         $idUser = $userSessionId;
 
-        if(!is_int($idUser) || $idUser === null)
-        {
+        if (!is_int($idUser) || $idUser === null) {
             throw new \Error("Invalid userID");
         }
 
@@ -156,7 +155,8 @@ class Post extends AdminController
             $this->container->getResponse()->redirect("admin/post/new");
         }
 
-        $postId = $this->postModel->newPost($title, $postImage, $idCategory, $article, $idUser, $published, $onFrontPage,
+        $postId = $this->postModel->newPost($title, $postImage, $idCategory, $article, $idUser, $published,
+            $onFrontPage,
             $postSlug);
 
         //Taking care of tags.
@@ -257,9 +257,8 @@ class Post extends AdminController
         $this->tagModel->removeTagsOnPost($postId);
         $removedPost = $this->postModel->deletePost($postId);
 
-        if($removedPost)
-        {
-            $this->alertBox->setAlert("Post ".$postTitle." deleted");
+        if ($removedPost) {
+            $this->alertBox->setAlert("Post " . $postTitle . " deleted");
         }
 
         $this->response->redirect("admin/post/list/");

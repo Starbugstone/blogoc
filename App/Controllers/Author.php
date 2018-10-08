@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controllers;
 
 use App\Models\PostModel;
@@ -6,7 +7,8 @@ use App\Models\UserModel;
 use Core\Controller;
 use Core\Container;
 
-class Author extends Controller{
+class Author extends Controller
+{
 
 
     protected $siteConfig;

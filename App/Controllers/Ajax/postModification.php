@@ -6,7 +6,8 @@ use App\Models\PostModel;
 use Core\AjaxController;
 use Core\Container;
 
-class postModification extends AjaxController{
+class postModification extends AjaxController
+{
 
 
     private $postModule;
