@@ -10,12 +10,10 @@ use Core\Container;
 class Tag extends Controller{
 
     protected $siteConfig;
-    protected $pagination;
 
     public function __construct(Container $container)
     {
         $this->loadModules[] = 'SiteConfig';
-        $this->loadModules[] = 'pagination';
         parent::__construct($container);
     }
 

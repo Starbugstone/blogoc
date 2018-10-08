@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Modules;
+namespace Core\Modules;
 
 use Core\Constant;
-use Core\Modules\Module;
 use Core\Traits\StringFunctions;
 
 class Pagination extends Module
@@ -26,7 +25,7 @@ class Pagination extends Module
             throw new \Exception("Pagination Error", "404");
         }
         $pageNo = $this->removeFromBeginning($page, "page-");
-        if(!filter_var($pageNo, FILTER_VALIDATE_INT)){
+        if (!filter_var($pageNo, FILTER_VALIDATE_INT)) {
             throw new \Exception("Invalid page number");
         }
         $offset = ($pageNo - 1) * $rowsPerPage;
@@ -41,6 +40,5 @@ class Pagination extends Module
             "offset" => $offset,
             "totalPages" => $totalPages
         );
-
     }
 }
