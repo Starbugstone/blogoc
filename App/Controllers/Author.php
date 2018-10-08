@@ -1,7 +1,6 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\CategoryModel;
 use App\Models\PostModel;
 use App\Models\UserModel;
 use Core\Controller;

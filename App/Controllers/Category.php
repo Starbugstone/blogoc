@@ -35,7 +35,7 @@ class Category extends Controller
      * show all posts in a category
      * @param string $categorySlug the slug passed via url
      * @param string $page
-     * @throws \ErrorException
+     * @throws \Exception
      * @throws \ReflectionException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime

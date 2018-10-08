@@ -2,7 +2,6 @@
 
 namespace App\Controllers\Ajax;
 
-use App\Models\SlugModel;
 use Core\AjaxController;
 use Cocur\Slugify\Slugify;
 use Core\JsonException;

@@ -31,7 +31,6 @@ class Post extends Controller{
         $tagModel = new TagModel($this->container);
         $postModel = new PostModel($this->container);
         $slugModel = new SlugModel($this->container);
-        $categoryModel = new CategoryModel($this->container);
 
         $postId = $slugModel->getIdFromSlug($slug, "posts", "posts_slug", "idposts");
 
