@@ -92,12 +92,17 @@
 
             </div>
         </div>
-        <button type="submit" class="btn btn-primary ml-3 update-config-button">{{ submitButtonText }}</button>
-        <span id="submitResult"></span>
-        {% if post is defined %}
-            <a href="/post/view-post/{{ post.posts_slug }}" class="btn btn-info">View post</a>
-            <a href="/admin/post/delete-post/{{ post.idposts }}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> Delete post</a>
-        {% endif %}
+        <div class="submitButtons ml-3">
+            {% if post is defined %}
+                <a href="/post/view-post/{{ post.posts_slug }}" class="btn btn-info">View post</a>
+            {% endif %}
+            <button type="submit" class="btn btn-primary update-config-button">{{ submitButtonText }}</button>
+            <span id="submitResult"></span>
+            {% if post is defined %}
+                <a href="/admin/post/delete-post/{{ post.idposts }}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> Delete post</a>
+            {% endif %}
+        </div>
+
     </form>
 {% endblock %}
 
