@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Models\CategoryModel;
 use App\Models\PostModel;
 use Core\Container;
 
@@ -24,15 +23,22 @@ class Home extends \Core\Controller
         parent::__construct($container);
     }
 
+    /**
+     * Show the front page
+     * @throws \ErrorException
+     * @throws \ReflectionException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public function index()
     {
-        $categoryModel = new CategoryModel($this->container);
         $frontPostModel = new PostModel($this->container);
 
         $frontPosts = $frontPostModel->getFrontPosts();
 
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
-        $this->data['navigation'] = $categoryModel->getMenu();
+        $this->data['navigation'] = $this->siteConfig->getMenu();
         $this->data['jumbotron'] = true;
         $this->data['front_posts'] = $frontPosts;
 

@@ -3,18 +3,17 @@
 namespace App\Controllers\Admin;
 
 use App\Models\CategoryModel;
-use App\Models\SlugModel;
 use Core\AdminController;
 use Core\Constant;
 use Core\Container;
 
-class Category extends AdminController{
+class Category extends AdminController
+{
 
     protected $siteConfig;
     protected $pagination;
 
     private $categoryModel;
-    private $slugModel;
 
 
     public function __construct(Container $container)
@@ -24,7 +23,6 @@ class Category extends AdminController{
         parent::__construct($container);
 
         $this->categoryModel = new CategoryModel($this->container);
-        $this->slugModel = new SlugModel($this->container);
 
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
         $this->data['categories'] = $this->categoryModel->getCategories();
@@ -47,7 +45,7 @@ class Category extends AdminController{
         $totalCategories = $this->categoryModel->countCategories();
         $pagination = $this->pagination->getPagination($page, $totalCategories, $linesPerPage);
 
-        if($linesPerPage !== Constant::LIST_PER_PAGE){
+        if ($linesPerPage !== Constant::LIST_PER_PAGE) {
             $this->data['paginationPostsPerPage'] = $linesPerPage;
         }
 
@@ -59,6 +57,7 @@ class Category extends AdminController{
     /**
      * Post function to update a category
      * @throws \ErrorException
+     * @throws \ReflectionException
      */
     public function update()
     {
@@ -75,26 +74,23 @@ class Category extends AdminController{
         $categorySlug = $category["categories_slug"];
 
         //Sanity check on ID
-        if($categoryId == null )
-        {
+        if ($categoryId == null) {
             throw new \ErrorException("invalid category ID");
         }
 
-        $originalCategorySlug = $this->slugModel->getSlugFromId($categoryId, "categories", "idcategories","categories_slug");
+        $originalCategorySlug = $this->categoryModel->getCategorySlugFromId($categoryId);
 
         //Error checking
         $error = false;
-        if($categoryName == "")
-        {
+        if ($categoryName == "") {
             $error = true;
             $this->alertBox->setAlert("empty name not allowed", "error");
         }
-        if($categorySlug == "")
-        {
+        if ($categorySlug == "") {
             $error = true;
             $this->alertBox->setAlert("empty slug not allowed", "error");
         }
-        if (!$this->slugModel->isUnique($categorySlug, "categories", "categories_slug") && $categorySlug !== $originalCategorySlug) {
+        if (!$this->categoryModel->isCategorySlugUnique($categorySlug) && $categorySlug !== $originalCategorySlug) {
             $error = true;
             $this->alertBox->setAlert("Slug not unique", "error");
         }
@@ -126,9 +122,8 @@ class Category extends AdminController{
 
         $removedCategory = $this->categoryModel->delete($categoryId);
 
-        if($removedCategory)
-        {
-            $this->alertBox->setAlert("Category ".$categoryName." deleted");
+        if ($removedCategory) {
+            $this->alertBox->setAlert("Category " . $categoryName . " deleted");
         }
 
         $this->response->redirect("/admin/category/list/");
@@ -152,17 +147,15 @@ class Category extends AdminController{
 
         //Error checking
         $error = false;
-        if($categoryName == "")
-        {
+        if ($categoryName == "") {
             $error = true;
             $this->alertBox->setAlert("empty name not allowed", "error");
         }
-        if($categorySlug == "")
-        {
+        if ($categorySlug == "") {
             $error = true;
             $this->alertBox->setAlert("empty slug not allowed", "error");
         }
-        if (!$this->slugModel->isUnique($categorySlug, "categories", "categories_slug")) {
+        if (!$this->categoryModel->isCategorySlugUnique($categorySlug)) {
             $error = true;
             $this->alertBox->setAlert("Slug not unique", "error");
         }

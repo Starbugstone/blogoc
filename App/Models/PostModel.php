@@ -131,14 +131,13 @@ class PostModel extends Model
      * @return int number of posts
      * @throws Exception
      */
-    private function countNumberPosts(array $select = [], $published=true): int
+    private function countNumberPosts(array $select = [], $published = true): int
     {
         $sql = "SELECT COUNT(*) FROM $this->postsTbl";
         if ($this->queryWithTags) {
             $sql .= " LEFT JOIN $this->postTagTbl ON $this->postsTbl.idposts = $this->postTagTbl.post_idposts";
         }
-        if($published)
-        {
+        if ($published) {
             $sql .= " WHERE published = 1";
         }
         if ($select != null) {
@@ -226,13 +225,13 @@ class PostModel extends Model
     }
 
     /**
- * get the list of all the posts.
- * @param int $offset
- * @param array $select array of limiters [$key => $val] will convert to "where $key = $val"
- * @param int $limit
- * @return array
- * @throws \ErrorException
- */
+     * get the list of all the posts.
+     * @param int $offset
+     * @param array $select array of limiters [$key => $val] will convert to "where $key = $val"
+     * @param int $limit
+     * @return array
+     * @throws \ErrorException
+     */
     public function getPosts(int $offset = 0, array $select = [], int $limit = Constant::POSTS_PER_PAGE): array
     {
         return $this->getAllPublishedPosts($offset, $limit, false, $select);
@@ -402,7 +401,7 @@ class PostModel extends Model
      * @return bool
      * @throws Exception
      */
-    public function deletePost(int $postId):bool
+    public function deletePost(int $postId): bool
     {
         $sql = "
         DELETE FROM $this->postsTbl 
@@ -420,7 +419,7 @@ class PostModel extends Model
      * @return string
      * @throws Exception
      */
-    public function getTitleFromId(int $postId):string
+    public function getTitleFromId(int $postId): string
     {
         $sql = "SELECT title from $this->postsTbl WHERE idposts = :postId";
         $this->query($sql);
@@ -476,5 +475,39 @@ class PostModel extends Model
         $this->bind(":onFrontPage", $state);
 
         return $this->execute();
+    }
+
+    /**
+     *
+     * @param string $postSlug
+     * @return bool
+     * @throws Exception
+     */
+    public function isPostSlugUnique(string $postSlug): bool
+    {
+        return $this->isSlugUnique($postSlug, "posts_slug", "posts");
+    }
+
+    /**
+     * Get the post slug from an ID
+     * @param int $postId
+     * @return string
+     * @throws \ReflectionException
+     */
+    public function getPostSlugFromId(int $postId)
+    {
+        return $this->getSlugFromId($postId, "idposts", "posts_slug");
+    }
+
+
+    /**
+     * get the ID from the slug
+     * @param string $postSlug
+     * @return int
+     * @throws Exception
+     */
+    public function getPostIdFromSlug(string $postSlug)
+    {
+        return $this->getIdFromSlug($postSlug, "idposts", "posts_slug");
     }
 }

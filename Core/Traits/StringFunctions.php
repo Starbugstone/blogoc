@@ -148,4 +148,22 @@ trait StringFunctions
         }
         return false;
     }
+
+    /**
+     * check if each string in passed array is valid
+     * @param array $strings
+     * @return bool
+     */
+    public function isAllAlphaNum(array $strings):bool
+    {
+        $result = true;
+        foreach ($strings as $string)
+        {
+            if(!$this->isAlphaNum($string))
+            {
+                $result = false;
+            }
+        }
+        return $result;
+    }
 }

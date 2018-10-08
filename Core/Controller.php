@@ -3,6 +3,7 @@
 namespace Core;
 
 use Twig\Template;
+use Core\Traits\StringFunctions;
 
 /**
  * Class Controller
@@ -12,6 +13,7 @@ use Twig\Template;
  */
 abstract class Controller
 {
+    use StringFunctions;
     /**
      * the data that will be pushed to the view
      * @var array
@@ -35,7 +37,9 @@ abstract class Controller
      */
     protected $loadModules = [
         'Csrf',
-        'AlertBox'
+        'AlertBox',
+        'Auth',
+        'pagination'
     ];
 
     /**
@@ -44,6 +48,8 @@ abstract class Controller
      */
     protected $csrf;
     protected $alertBox;
+    protected $auth;
+    protected $pagination;
 
     /**
      * Controller constructor.
@@ -220,6 +226,9 @@ abstract class Controller
         return $this->container->getSession()->getAllSessionVars();
     }
 
+    /**
+     * Send the session variables to the data variable to enable access in twig
+     */
     protected function sendSessionVars()
     {
         $this->data['session'] = $this->getSessionVars();

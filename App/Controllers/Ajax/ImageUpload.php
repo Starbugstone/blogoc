@@ -19,7 +19,7 @@ class ImageUpload extends AjaxController
      * @return bool if image name is valid
      *
      */
-    private function isImageValid($image):bool
+    private function isImageValid($image): bool
     {
         // Sanitize input
         if (preg_match("/([^\w\s\d\-_~,;:\[\]\(\).])|([\.]{2,})/", $image)) {
@@ -40,19 +40,17 @@ class ImageUpload extends AjaxController
      * @param string $file destination filename
      * @return string the unique file name
      */
-    private function getFilename(string $folder, string $file):string
+    private function getFilename(string $folder, string $file): string
     {
 
         $fileUrl = $folder . $file;
         $docRoot = $this->request->getDocumentRoot();
-        $filePath = $docRoot."/public/".$fileUrl;
-        if(file_exists($filePath) !== 1)
-        {
+        $filePath = $docRoot . "/public/" . $fileUrl;
+        if (file_exists($filePath) !== 1) {
             $fileNum = 0;
-            while(file_exists($filePath))
-            {
-                $fileUrl = $folder.$fileNum."_".$file;
-                $filePath = $docRoot."/public/".$fileUrl;
+            while (file_exists($filePath)) {
+                $fileUrl = $folder . $fileNum . "_" . $file;
+                $filePath = $docRoot . "/public/" . $fileUrl;
                 $fileNum += 1;
             }
         }

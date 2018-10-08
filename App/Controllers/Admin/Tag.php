@@ -7,7 +7,8 @@ use Core\AdminController;
 use Core\Constant;
 use Core\Container;
 
-class Tag extends AdminController{
+class Tag extends AdminController
+{
 
     protected $siteConfig;
     protected $pagination;
@@ -25,6 +26,15 @@ class Tag extends AdminController{
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
     }
 
+    /**
+     * List all the posts with pagination
+     * @param string $page
+     * @param int $linesPerPage
+     * @throws \ReflectionException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public function list(string $page = "page-1", int $linesPerPage = Constant::LIST_PER_PAGE)
     {
         $this->onlyAdmin();
@@ -32,7 +42,7 @@ class Tag extends AdminController{
         $totalCategories = $this->tagModel->countTags();
         $pagination = $this->pagination->getPagination($page, $totalCategories, $linesPerPage);
 
-        if($linesPerPage !== Constant::LIST_PER_PAGE){
+        if ($linesPerPage !== Constant::LIST_PER_PAGE) {
             $this->data['paginationPostsPerPage'] = $linesPerPage;
         }
 
@@ -60,15 +70,13 @@ class Tag extends AdminController{
 
 
         //Sanity check on ID
-        if($tagId == null )
-        {
+        if ($tagId == null) {
             throw new \ErrorException("invalid tag ID");
         }
 
         //Error checking
         $error = false;
-        if($tagName == "")
-        {
+        if ($tagName == "") {
             $error = true;
             $this->alertBox->setAlert("empty name not allowed", "error");
         }
@@ -100,9 +108,8 @@ class Tag extends AdminController{
 
         $removedTag = $this->tagModel->delete($tagId);
 
-        if($removedTag)
-        {
-            $this->alertBox->setAlert("Tag ".$tagName." deleted");
+        if ($removedTag) {
+            $this->alertBox->setAlert("Tag " . $tagName . " deleted");
         }
 
         $this->response->redirect("/admin/tag/list/");
@@ -125,8 +132,7 @@ class Tag extends AdminController{
 
         //Error checking
         $error = false;
-        if($tagName == "")
-        {
+        if ($tagName == "") {
             $error = true;
             $this->alertBox->setAlert("empty name not allowed", "error");
         }

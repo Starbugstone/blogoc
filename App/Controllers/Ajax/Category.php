@@ -4,11 +4,15 @@ namespace App\Controllers\Ajax;
 
 use App\Models\CategoryModel;
 use Core\AjaxController;
+use Core\JsonException;
 
 class Category extends AjaxController
 {
 
-
+    /**
+     * Create a new category via Ajax
+     * @throws \Core\JsonException
+     */
     public function new()
     {
         //security checks

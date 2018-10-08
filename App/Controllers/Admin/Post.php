@@ -4,7 +4,6 @@ namespace App\Controllers\Admin;
 
 use App\Models\CategoryModel;
 use App\Models\PostModel;
-use App\Models\SlugModel;
 use App\Models\TagModel;
 use Core\AdminController;
 use Core\Constant;
@@ -19,7 +18,6 @@ class Post extends AdminController
     private $categoryModel;
     private $tagModel;
     private $postModel;
-    private $slugModel;
 
     public function __construct(Container $container)
     {
@@ -30,7 +28,6 @@ class Post extends AdminController
         $this->categoryModel = new CategoryModel($this->container);
         $this->tagModel = new TagModel($this->container);
         $this->postModel = new PostModel($this->container);
-        $this->slugModel = new SlugModel($this->container);
 
         //adding the necessary default data
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
@@ -43,7 +40,7 @@ class Post extends AdminController
      * @param int $postId the post to add tags to
      * @throws \Exception
      */
-    private function addTags(array $tags, int $postId):void
+    private function addTags(array $tags, int $postId): void
     {
         foreach ($tags as $tag) {
             if (isset($tag["id"])) {
@@ -80,7 +77,7 @@ class Post extends AdminController
         $totalPosts = $this->postModel->totalNumberFullPosts();
         $pagination = $this->pagination->getPagination($page, $totalPosts, $postsPerPage);
 
-        if($postsPerPage !== Constant::LIST_PER_PAGE){
+        if ($postsPerPage !== Constant::LIST_PER_PAGE) {
             $this->data['paginationPostsPerPage'] = $postsPerPage;
         }
 
@@ -101,7 +98,7 @@ class Post extends AdminController
     {
         $this->onlyAdmin();
 
-        $postId = $this->slugModel->getIdFromSlug($slug, "posts", "posts_slug", "idposts");
+        $postId = $this->postModel->getPostIdFromSlug($slug);
 
         $this->data['post'] = $this->postModel->getSinglePost($postId);
         $this->data['postTags'] = $this->tagModel->getTagsOnPost($postId);
@@ -111,7 +108,7 @@ class Post extends AdminController
 
     /**
      * Create a new post
-     * @throws \ErrorException
+     * @throws \Exception
      */
     public function createNewPost()
     {
@@ -132,11 +129,10 @@ class Post extends AdminController
         $article = $posts["postTextArea"];
         $idCategory = $posts["categorySelector"];
         $published = $posts["isPublished"];
-        $onFrontpage = $posts["isOnFrontPage"];
+        $onFrontPage = $posts["isOnFrontPage"];
         $idUser = $userSessionId;
 
-        if(!is_int($idUser) || $idUser === null)
-        {
+        if (!is_int($idUser) || $idUser === null) {
             throw new \Error("Invalid userID");
         }
 
@@ -150,7 +146,7 @@ class Post extends AdminController
             $error = true;
             $this->alertBox->setAlert("empty slug not allowed", "error");
         }
-        if (!$this->slugModel->isUnique($postSlug, "posts", "posts_slug")) {
+        if (!$this->postModel->isPostSlugUnique($postSlug)) {
             $error = true;
             $this->alertBox->setAlert("Slug not unique", "error");
         }
@@ -159,7 +155,8 @@ class Post extends AdminController
             $this->container->getResponse()->redirect("admin/post/new");
         }
 
-        $postId = $this->postModel->newPost($title, $postImage, $idCategory, $article, $idUser, $published, $onFrontpage,
+        $postId = $this->postModel->newPost($title, $postImage, $idCategory, $article, $idUser, $published,
+            $onFrontPage,
             $postSlug);
 
         //Taking care of tags.
@@ -199,11 +196,10 @@ class Post extends AdminController
         $article = $posts["postTextArea"];
         $idCategory = $posts["categorySelector"];
         $published = $posts["isPublished"];
-        $onFrontpage = $posts["isOnFrontPage"];
+        $onFrontPage = $posts["isOnFrontPage"];
 
         //security and error checks
-        $originalPostSlug = $this->slugModel->getSlugFromId($postId, "posts", "idposts",
-            "posts_slug");
+        $originalPostSlug = $this->postModel->getpostSlugFromId($postId);
         $error = false;
         if ($title == "") {
             $error = true;
@@ -217,9 +213,9 @@ class Post extends AdminController
 
         if ($postSlug != $originalPostSlug) //if the slug has been updated
         {
-            if (!$this->slugModel->isUnique($postSlug, "posts", "posts_slug")) {
+            if (!$this->postModel->isPostSlugUnique($postSlug)) {
                 $error = true;
-                $originalPostSlug = $this->slugModel->getSlugFromId($postId, "posts", "idposts", "posts_slug");
+                $originalPostSlug = $this->postModel->getPostSlugFromId($postId);
                 $this->alertBox->setAlert("Slug not unique", "error");
             }
         }
@@ -229,7 +225,7 @@ class Post extends AdminController
 
         //Update the post
         $postUpdate = $this->postModel->modifyPost($postId, $title, $postImage, $idCategory, $article, $published,
-            $onFrontpage, $postSlug);
+            $onFrontPage, $postSlug);
 
         // Tags
         //remove all tags
@@ -261,9 +257,8 @@ class Post extends AdminController
         $this->tagModel->removeTagsOnPost($postId);
         $removedPost = $this->postModel->deletePost($postId);
 
-        if($removedPost)
-        {
-            $this->alertBox->setAlert("Post ".$postTitle." deleted");
+        if ($removedPost) {
+            $this->alertBox->setAlert("Post " . $postTitle . " deleted");
         }
 
         $this->response->redirect("admin/post/list/");
