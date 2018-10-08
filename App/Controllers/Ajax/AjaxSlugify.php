@@ -10,10 +10,10 @@ use Core\Traits\StringFunctions;
 class AjaxSlugify extends AjaxController
 {
     use StringFunctions;
+
     /**
-     * @param string $string the string to slugify
      * @return string slugified string
-     * @throws \Exception Cocur\Slugify\Slugify error
+     * @throws JsonException
      */
     public function slugifyString()
     {
