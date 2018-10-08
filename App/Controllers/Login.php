@@ -10,14 +10,6 @@ use Core\Controller;
 class Login extends Controller
 {
 
-    protected $auth;
-
-    public function __construct(Container $container)
-    {
-        $this->loadModules[] = 'Auth';
-        parent::__construct($container);
-    }
-
     //all the connects will finaly be got in a single function grabbed from the DB / Session.
     //this is just for testing purposes until the core framework is finished
     public function connectAdmin()

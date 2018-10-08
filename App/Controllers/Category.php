@@ -11,7 +11,6 @@ class Category extends Controller
 {
 
     protected $siteConfig;
-    protected $pagination;
 
     private $postModel;
     private $categoryModel;
@@ -19,7 +18,6 @@ class Category extends Controller
     public function __construct(Container $container)
     {
         $this->loadModules[] = 'SiteConfig';
-        $this->loadModules[] = 'pagination';
         parent::__construct($container);
         $this->postModel = new PostModel($this->container);
         $this->categoryModel = new CategoryModel($this->container);
