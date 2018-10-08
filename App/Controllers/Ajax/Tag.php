@@ -4,6 +4,7 @@ namespace App\Controllers\Ajax;
 
 use App\Models\TagModel;
 use Core\AjaxController;
+use Core\JsonException;
 
 class Tag extends AjaxController
 {

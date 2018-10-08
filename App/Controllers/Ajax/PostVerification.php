@@ -36,7 +36,7 @@ class PostVerification extends AjaxController
 
         $data = $postModel->isPostSlugUnique($postSlug);
 
-        if ($data == false) //slug is not unique, but could be from the same post
+        if ($data === false) //slug is not unique, but could be from the same post
         {
             $slugOfId = $postModel->getPostSlugFromId($postId);
             if ($slugOfId === $postSlug) {

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Core\Constant;
 use Core\Container;
 use Core\Model;
 

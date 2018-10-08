@@ -490,11 +490,11 @@ class PostModel extends Model
 
     /**
      * Get the post slug from an ID
-     * @param string $postId
+     * @param int $postId
      * @return string
      * @throws \ReflectionException
      */
-    public function getPostSlugFromId(string $postId)
+    public function getPostSlugFromId(int $postId)
     {
         return $this->getSlugFromId($postId, "idposts", "posts_slug");
     }

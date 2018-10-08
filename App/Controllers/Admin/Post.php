@@ -98,7 +98,7 @@ class Post extends AdminController
     {
         $this->onlyAdmin();
 
-        $postId = $this->postModel->getPostIdFromSlug($slug, "posts", "posts_slug", "idposts");
+        $postId = $this->postModel->getPostIdFromSlug($slug);
 
         $this->data['post'] = $this->postModel->getSinglePost($postId);
         $this->data['postTags'] = $this->tagModel->getTagsOnPost($postId);

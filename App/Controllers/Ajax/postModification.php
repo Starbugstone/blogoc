@@ -31,6 +31,7 @@ class postModification extends AjaxController
         $state = (bool)($this->request->getData("state") === 'true');
         $postId = (int)$this->request->getData("postId");
 
+        $result = array();
         $result["success"] = $this->postModule->setPublished(!$state, $postId);
         $result["state"] = !$state;
         $result["postId"] = $postId;
@@ -50,6 +51,7 @@ class postModification extends AjaxController
         $state = ($this->request->getData("state") === 'true');
         $postId = (int)$this->request->getData("postId");
 
+        $result = array();
         $result["success"] = $this->postModule->setOnFrontPage(!$state, $postId);
         $result["state"] = !$state;
         $result["postId"] = $postId;

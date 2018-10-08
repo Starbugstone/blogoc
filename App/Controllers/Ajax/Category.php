@@ -4,6 +4,7 @@ namespace App\Controllers\Ajax;
 
 use App\Models\CategoryModel;
 use Core\AjaxController;
+use Core\JsonException;
 
 class Category extends AjaxController
 {
