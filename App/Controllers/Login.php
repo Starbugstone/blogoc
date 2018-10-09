@@ -29,23 +29,54 @@ class Login extends Controller
         $this->user = new \stdClass();
     }
 
+    /**
+     * reset the local object user to an empty state
+     */
+    private function resetUser()
+    {
+        foreach (get_class_vars(get_class($this->user)) as $key => $value) {
+            unset($this->user->$key);
+        }
+    }
+
+    /**
+     * add all the elements passed to the user object
+     * @param array $userElements
+     */
     private function populateUser(array $userElements)
     {
+        //reset user info
+        $this->resetUser();
         foreach ($userElements as $key => $element) {
             $this->user->$key = $element;
         }
     }
 
+    /**
+     * get user info from the database and populate the user object
+     * @param int $userId
+     * @throws \Exception
+     */
     private function populateUserFromId(int $userId)
     {
-
+        $result = $this->userModel->getUserDetailsById($userId);
+        $this->populateUser((array)$result);
     }
 
+    /**
+     * get user info from the database and populate the user object
+     * @param string $email
+     * @throws \Exception
+     */
     private function populateUserFromMail(string $email)
     {
-
+        $result = $this->userModel->getUserDetailsByEmail($email);
+        $this->populateUser((array)$result);
     }
 
+    /**
+     * pass the user object to the session for use
+     */
     private function setUserSession()
     {
         $this->session->regenerateSessionId(); //regenerate the ID to avoid session ghosting
@@ -124,6 +155,10 @@ class Login extends Controller
         //Storing the passed information
         $this->populateUser($register);
 
+        //removing the password from the return
+        $register["password"] = "";
+        $register["confirm"] = "";
+
         //Error checking
 
         //if mail already used, go to login
@@ -157,28 +192,18 @@ class Login extends Controller
         }
 
         //checking the password
+        /* commented out for testing. Too fucking annoying to respect the complexity every time
         $passwordError = $this->isPasswordComplex($this->user->password);
         if (!$passwordError["success"]) {
             $error = true;
-            $register["password"] = "";
-            $register["confirm"] = "";
             $registerErrors->password = $passwordError["message"];
-        }
-        if ($this->user->password == "") {
-            $error = true;
-            $register["confirm"] = "";
-        }
-        if ($this->user->confirm == "") {
-            $error = true;
-            $register["password"] = "";
         }
         if ($this->user->confirm !== $this->user->password) {
             $error = true;
-            $register["password"] = "";
-            $register["confirm"] = "";
             $registerErrors->password = "Password and confirmation do not match";
             $registerErrors->confirm = "Password and confirmation do not match";
         }
+        */
 
         //If we found an error, return data to the register form and no create
         if ($error) {
@@ -189,6 +214,9 @@ class Login extends Controller
 
         //From here, all should be good, register the user
         $userId = $this->userModel->registerUser($this->user);
+
+        //repopulate our user with data from the database this will remove the password as we will no longer need it
+        $this->populateUserFromId($userId);
 
         //get the unique hash for email validation
 

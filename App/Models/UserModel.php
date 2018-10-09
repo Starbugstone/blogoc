@@ -9,22 +9,59 @@ class UserModel extends Model
 {
 
     private $userTbl;
+    private $roleTbl;
 
     public function __construct(Container $container)
     {
         parent::__construct($container);
         $this->userTbl = $this->getTablePrefix("users");
+        $this->roleTbl = $this->getTablePrefix("roles");
     }
 
     /**
-     * Get all the data about a user for posts (Author).
-     * @param int $authorId
-     * @return array
-     * @throws \ReflectionException
+     * Get all the useful data about a user from his ID
+     * @param int $userId
+     * @return mixed
+     * @throws \Exception
      */
-    public function getAuthorDetails(int $authorId)
+    public function getUserDetailsById(int $userId)
     {
-        return $this->getRowById($authorId);
+        $sql = "
+            SELECT idusers, username, avatar, email, surname, name, creation_date, last_update, locked_out, role_name, role_level
+            FROM $this->userTbl
+            INNER JOIN $this->roleTbl ON $this->userTbl.roles_idroles = $this->roleTbl.idroles
+            WHERE idusers = :userId
+        ";
+        $this->query($sql);
+        $this->bind(':userId', $userId);
+        $this->execute();
+        return $this->fetch();
+    }
+
+    /**
+     * Get all the useful data about a user from his mail
+     * @param string $email
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getUserDetailsByEmail(string $email)
+    {
+        //check if email is valid for sanity
+        if (!filter_var($this->user->email, FILTER_VALIDATE_EMAIL))
+        {
+            $email = htmlspecialchars($email);
+            throw new \Exception("invalid email ".$email);
+        }
+        $sql = "
+            SELECT idusers, username, avatar, email, surname, name, creation_date, last_update, locked_out, role_name, role_level
+            FROM $this->userTbl
+            INNER JOIN $this->roleTbl ON $this->userTbl.roles_idroles = $this->roleTbl.idroles
+            WHERE email = :email
+        ";
+        $this->query($sql);
+        $this->bind(':email', $email);
+        $this->execute();
+        return $this->fetch();
     }
 
     /**
@@ -45,10 +82,10 @@ class UserModel extends Model
         return $this->stmt->rowCount() > 0;
     }
 
-    public function registerUser(\stdClass $userData) : int
+    public function registerUser(\stdClass $userData): int
     {
 
-        $passwordHash = password_hash($userData->password, PASSWORD_DEFAULT );
+        $passwordHash = password_hash($userData->password, PASSWORD_DEFAULT);
 
         $sql = "
             INSERT INTO $this->userTbl (username, email, password, surname, name, creation_date, last_update, roles_idroles, locked_out, bad_login_tries)

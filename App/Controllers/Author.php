@@ -43,7 +43,7 @@ class Author extends Controller
         $this->data['navigation'] = $this->siteConfig->getMenu();
         $this->data['pagination'] = $pagination;
         $this->data['authorId'] = $authorId;
-        $this->data['user'] = $userModel->getAuthorDetails($authorId);
+        $this->data['user'] = $userModel->getUserDetailsById($authorId);
 
         $this->renderView('Author');
     }

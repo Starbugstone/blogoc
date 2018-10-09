@@ -3,7 +3,7 @@
 {% block title %}{% endblock %}
 
 {% block main %}
-    <h1 class="text-center mb-3">posts by {{ user.pseudo }}</h1>
+    <h1 class="text-center mb-3">posts by {{ user.username }}</h1>
     {% include "Includes/Listing-posts.twig" with {'posts': posts} %}
     {% include "Includes/Pagination.twig" with {'pagination': pagination, 'pageUrl' :'/author/posts/'~authorId} %}
 {% endblock %}
