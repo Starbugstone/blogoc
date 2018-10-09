@@ -44,13 +44,21 @@ class Login extends Controller
      */
     public function register()
     {
-        //check if have prefilled form data
+
         $this->sendSessionVars();
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
         $this->data['navigation'] = $this->siteConfig->getMenu();
-        $this->data["registrationInfo"] = $this->session->get("registrationInfo");
 
+        //check if have prefilled form data and error mesages
+        $this->data["registrationInfo"] = $this->session->get("registrationInfo");
+        $this->data["registrationErrors"] = $this->session->get("registrationErrors");
+
+        //We are on the registration page, deactivate bootstrap modals
         $this->data['onRegistrationPage'] = true;
+
+        //remove the set data as it is now sent to the template
+        $this->session->remove("registrationInfo");
+        $this->session->remove("registrationErrors");
 
         $this->renderView('register');
     }
@@ -65,6 +73,8 @@ class Login extends Controller
             $this->alertBox->setAlert('Only post messages allowed', 'error');
             $this->response->redirect('/');
         }
+
+        //if all is valid, need to get the referer to redirect to same page
     }
 
     /**
@@ -80,71 +90,76 @@ class Login extends Controller
 
         $register = $this->request->getDataFull();
 
+        //Storing the password and confirmation since we will be doing multiple checks
+        $sentPassword = $register["password"];
+        $sentConfirmation = $register["confirm"];
 
         //Error checking
 
         //if mail already used, go to login
-        if($this->userModel->isEmailUnique($register["email"]))
-        {
-            $this->alertBox->setAlert("Email already registered, try logging in. You can always use the forgotten password to reset your account", 'error');
+        if ($this->userModel->isEmailUnique($register["email"])) {
+            $this->alertBox->setAlert("Email already registered, try logging in. You can always use the forgotten password to reset your account",
+                'error');
             $this->response->redirect('/login');
         }
 
         //check all the fields
         $error = false;
+        $registerErrors = new \stdClass();
+
+
         if ($register["name"] == "") {
             $error = true;
-            $this->alertBox->setAlert("name must not be empty", 'error');
+            $registerErrors->name = "name must not be empty";
         }
         if ($register["surname"] == "") {
             $error = true;
-            $this->alertBox->setAlert("surname must not be empty", 'error');
-        }
-        if ($register["email"] == "") {
-            $error = true;
-            $this->alertBox->setAlert("email must not be empty", 'error');
+            $registerErrors->surname = "surname must not be empty";
         }
         if (!filter_var($register["email"], FILTER_VALIDATE_EMAIL)) {
             $error = true;
-            $this->alertBox->setAlert("email is not valid", 'error');
             $register["email"] = "";
+            $registerErrors->email = "email is not valid";
         }
         if ($register["username"] == "") {
             $error = true;
-            $this->alertBox->setAlert("username must not be empty", 'error');
+            $registerErrors->username = "username must not be empty";
         }
 
-        if ($register["password"] == "") {
-            $error = true;
-            $this->alertBox->setAlert("password must not be empty", 'error');
-            $register["confirm"] = "";
-        }
-        if ($register["confirm"] == "") {
-            $error = true;
-            $this->alertBox->setAlert("password confirmation must not be empty", 'error');
-            $register["password"] = "";
-        }
-        if ($register["confirm"] != $register["password"]) {
-            $error = true;
-            $this->alertBox->setAlert("Password and confirmation do not match", 'error');
-            $register["password"] = "";
-            $register["confirm"] = "";
-        }
-        $passwordError = $this->isPasswordComplex($register["password"]);
+        //checking the password
+        $passwordError = $this->isPasswordComplex($sentPassword);
         if (!$passwordError["success"]) {
             $error = true;
-            $this->alertBox->setAlert($passwordError["message"], 'error');
             $register["password"] = "";
             $register["confirm"] = "";
+            $registerErrors->password = $passwordError["message"];
         }
-
-
+        if ($sentPassword == "") {
+            $error = true;
+            $register["confirm"] = "";
+        }
+        if ($sentConfirmation == "") {
+            $error = true;
+            $register["password"] = "";
+        }
+        if ($sentConfirmation !== $sentPassword) {
+            $error = true;
+            $register["password"] = "";
+            $register["confirm"] = "";
+            $registerErrors->password = "Password and confirmation do not match";
+            $registerErrors->confirm = "Password and confirmation do not match";
+        }
 
         //If we found an error, return data to the register form and no create
         if ($error) {
             $this->session->set("registrationInfo", $register);
+            $this->session->set("registrationErrors", $registerErrors);
             $this->response->redirect('/login/register');
         }
+
+        //From here, all should be good, register the user
+
+        //send confirmation mail
 
         echo("registering<br>");
         var_dump($register);
