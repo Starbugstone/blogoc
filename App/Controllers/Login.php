@@ -6,15 +6,19 @@ use App\Models\UserModel;
 use Core\Container;
 use Core\Controller;
 use Core\Traits\PasswordFunctions;
+use Core\Traits\StringFunctions;
 
 //This is just for testing purposes. a real login system shall be set up later
 
 class Login extends Controller
 {
     use PasswordFunctions;
+    use StringFunctions;
 
     protected $siteConfig;
     private $userModel;
+
+    private $user;
 
     public function __construct(Container $container)
     {
@@ -22,8 +26,35 @@ class Login extends Controller
         parent::__construct($container);
 
         $this->userModel = new UserModel($this->container);
+        $this->user = new \stdClass();
     }
 
+    private function populateUser(array $userElements)
+    {
+        foreach ($userElements as $key => $element) {
+            $this->user->$key = $element;
+        }
+    }
+
+    private function populateUserFromId(int $userId)
+    {
+
+    }
+
+    private function populateUserFromMail(string $email)
+    {
+
+    }
+
+    private function setUserSession()
+    {
+        $this->session->regenerateSessionId(); //regenerate the ID to avoid session ghosting
+        $this->session->set("user", $this->user);
+        $userRoleName = $this->user->role_name ?? "";
+        $userRoleLevel = $this->user->role_level ?? 0;
+        $this->session->set('user_role_name', $userRoleName);
+        $this->session->set('user_role_level', $userRoleLevel);
+    }
 
     /**
      * the login form
@@ -74,7 +105,7 @@ class Login extends Controller
             $this->response->redirect('/');
         }
 
-        //if all is valid, need to get the referer to redirect to same page
+        //if all is valid, redirect to user admin page
     }
 
     /**
@@ -90,14 +121,13 @@ class Login extends Controller
 
         $register = $this->request->getDataFull();
 
-        //Storing the password and confirmation since we will be doing multiple checks
-        $sentPassword = $register["password"];
-        $sentConfirmation = $register["confirm"];
+        //Storing the passed information
+        $this->populateUser($register);
 
         //Error checking
 
         //if mail already used, go to login
-        if ($this->userModel->isEmailUnique($register["email"])) {
+        if ($this->userModel->isEmailUsed($this->user->email)) {
             $this->alertBox->setAlert("Email already registered, try logging in. You can always use the forgotten password to reset your account",
                 'error');
             $this->response->redirect('/login');
@@ -108,41 +138,41 @@ class Login extends Controller
         $registerErrors = new \stdClass();
 
 
-        if ($register["name"] == "") {
+        if ($this->user->name == "") {
             $error = true;
             $registerErrors->name = "name must not be empty";
         }
-        if ($register["surname"] == "") {
+        if ($this->user->surname == "") {
             $error = true;
             $registerErrors->surname = "surname must not be empty";
         }
-        if (!filter_var($register["email"], FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var($this->user->email, FILTER_VALIDATE_EMAIL)) {
             $error = true;
             $register["email"] = "";
             $registerErrors->email = "email is not valid";
         }
-        if ($register["username"] == "") {
+        if ($this->user->username == "") {
             $error = true;
             $registerErrors->username = "username must not be empty";
         }
 
         //checking the password
-        $passwordError = $this->isPasswordComplex($sentPassword);
+        $passwordError = $this->isPasswordComplex($this->user->password);
         if (!$passwordError["success"]) {
             $error = true;
             $register["password"] = "";
             $register["confirm"] = "";
             $registerErrors->password = $passwordError["message"];
         }
-        if ($sentPassword == "") {
+        if ($this->user->password == "") {
             $error = true;
             $register["confirm"] = "";
         }
-        if ($sentConfirmation == "") {
+        if ($this->user->confirm == "") {
             $error = true;
             $register["password"] = "";
         }
-        if ($sentConfirmation !== $sentPassword) {
+        if ($this->user->confirm !== $this->user->password) {
             $error = true;
             $register["password"] = "";
             $register["confirm"] = "";
@@ -158,12 +188,21 @@ class Login extends Controller
         }
 
         //From here, all should be good, register the user
+        $userId = $this->userModel->registerUser($this->user);
+
+        //get the unique hash for email validation
+
 
         //send confirmation mail
 
-        echo("registering<br>");
-        var_dump($register);
-        die();
+
+        //all set, redirect and set message
+        $refererUrl = $this->request->getReferer();
+        $baseUrl = $this->request->getBaseUrl();
+        $redirectUrl = $this->removeFromBeginning($refererUrl, $baseUrl);
+
+        $this->alertBox->setAlert('Account created, please check your mail box to activate account');
+        $this->container->getResponse()->redirect($redirectUrl);
     }
 
     /*

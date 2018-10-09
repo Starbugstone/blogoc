@@ -95,4 +95,9 @@ class Session
         return $_SESSION;
     }
 
+    public function regenerateSessionId()
+    {
+        session_regenerate_id();
+    }
+
 }
