@@ -31,6 +31,9 @@ class AlertBox extends Module
         if (!in_array($type, $this->allowedTypes)) {
             throw new \Exception("Invalid toastr alert type " . $type);
         }
+
+        $message = htmlspecialchars($message); //avoid any injection
+
         $message = [
             'type' => $type,
             'message' => $message
