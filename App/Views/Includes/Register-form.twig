@@ -9,7 +9,8 @@
                                                                       aria-hidden="true"></i></span>
                 </div>
                 <input type="text" class="form-control" name="name" id="name"
-                       placeholder="Enter your Name" value="{{ registrationInfo.name }}" aria-describedby="nameHelpBlock" />
+                       placeholder="Enter your Name" value="{{ registrationInfo.name }}"
+                       aria-describedby="nameHelpBlock" required/>
                 <small id="nameHelpBlock" class="form-text text-danger w-100 pl-3">
                     {{ registrationErrors.name }}
                 </small>
@@ -26,7 +27,8 @@
                                                                       aria-hidden="true"></i></span>
                 </div>
                 <input type="text" class="form-control" name="surname" id="surname"
-                       placeholder="Enter your SurName" value="{{ registrationInfo.surname }}" aria-describedby="surnameHelpBlock" />
+                       placeholder="Enter your SurName" value="{{ registrationInfo.surname }}"
+                       aria-describedby="surnameHelpBlock" required/>
                 <small id="surnameHelpBlock" class="form-text text-danger w-100 pl-3">
                     {{ registrationErrors.surname }}
                 </small>
@@ -41,8 +43,9 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
                 </div>
-                <input type="text" class="form-control" name="email" id="email"
-                       placeholder="Enter your Email" value="{{ registrationInfo.email }}" aria-describedby="emailHelpBlock" />
+                <input type="email" class="form-control" name="email" id="email"
+                       placeholder="Enter your Email" value="{{ registrationInfo.email }}"
+                       aria-describedby="emailHelpBlock" required/>
                 <small id="emailHelpBlock" class="form-text text-danger w-100 pl-3">
                     {{ registrationErrors.email }}
                 </small>
@@ -59,7 +62,8 @@
                                                                       aria-hidden="true"></i></span>
                 </div>
                 <input type="text" class="form-control" name="username" id="username"
-                       placeholder="Enter your Username" value="{{ registrationInfo.username }}" aria-describedby="usernameHelpBlock" />
+                       placeholder="Enter your Username" value="{{ registrationInfo.username }}"
+                       aria-describedby="usernameHelpBlock" required/>
                 <small id="usernameHelpBlock" class="form-text text-danger w-100 pl-3">
                     {{ registrationErrors.username }}
                 </small>
@@ -76,7 +80,8 @@
                                                                       aria-hidden="true"></i></span>
                 </div>
                 <input type="password" class="form-control" name="password" id="password"
-                       placeholder="Enter your Password" value="{{ registrationInfo.password }}" aria-describedby="passwordHelpBlock" />
+                       placeholder="Enter your Password" value="{{ registrationInfo.password }}"
+                       aria-describedby="passwordHelpBlock" required/>
                 <small id="passwordHelpBlock" class="form-text text-danger w-100 pl-3">
                     {{ registrationErrors.password }}
                 </small>
@@ -93,7 +98,7 @@
                                                                       aria-hidden="true"></i></span>
                 </div>
                 <input type="password" class="form-control" name="confirm" id="confirm"
-                       placeholder="Confirm your Password" aria-describedby="confirmHelpBlock" />
+                       placeholder="Confirm your Password" aria-describedby="confirmHelpBlock" required/>
                 <small id="confirmHelpBlock" class="form-text text-danger w-100 pl-3">
                     {{ registrationErrors.confirm }}
                 </small>
@@ -102,5 +107,7 @@
     </div>
     <button type="submit" class="btn btn-primary w-100 mt-3">Register</button>
     <br>
-    <a class="btn btn-secondary w-100 mt-3" href="/login" {{  not onRegistrationPage ? "data-dismiss=\"modal\" data-toggle=\"modal\" data-target=\"#connectModal\"" : "" }}>Have an account? Login here</a>
+    <a class="btn btn-secondary w-100 mt-3"
+       href="/login" {{ not onRegistrationPage ? "data-dismiss=\"modal\" data-toggle=\"modal\" data-target=\"#connectModal\"" : "" }}>Have
+        an account? Login here</a>
 </form>
