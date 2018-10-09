@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\UserModel;
 use Core\Container;
 use Core\Controller;
 use Core\Traits\PasswordFunctions;
@@ -13,11 +14,14 @@ class Login extends Controller
     use PasswordFunctions;
 
     protected $siteConfig;
+    private $userModel;
 
     public function __construct(Container $container)
     {
         $this->loadModules[] = 'SiteConfig';
         parent::__construct($container);
+
+        $this->userModel = new UserModel($this->container);
     }
 
 
@@ -29,6 +33,8 @@ class Login extends Controller
         $this->sendSessionVars();
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
         $this->data['navigation'] = $this->siteConfig->getMenu();
+        //Setting a tag to deactivate modules on this page
+        $this->data['onRegistrationPage'] = true;
 
         $this->renderView('logon');
     }
@@ -43,6 +49,8 @@ class Login extends Controller
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
         $this->data['navigation'] = $this->siteConfig->getMenu();
         $this->data["registrationInfo"] = $this->session->get("registrationInfo");
+
+        $this->data['onRegistrationPage'] = true;
 
         $this->renderView('register');
     }
@@ -67,17 +75,30 @@ class Login extends Controller
         //is post
         if (!$this->request->isPost()) {
             $this->alertBox->setAlert('Only post messages allowed', 'error');
-            $this->response->redirect('/login/register');
+            $this->response->redirect('/');
         }
 
         $register = $this->request->getDataFull();
 
 
         //Error checking
+
+        //if mail already used, go to login
+        if($this->userModel->isEmailUnique($register["email"]))
+        {
+            $this->alertBox->setAlert("Email already registered, try logging in. You can always use the forgotten password to reset your account", 'error');
+            $this->response->redirect('/login');
+        }
+
+        //check all the fields
         $error = false;
         if ($register["name"] == "") {
             $error = true;
             $this->alertBox->setAlert("name must not be empty", 'error');
+        }
+        if ($register["surname"] == "") {
+            $error = true;
+            $this->alertBox->setAlert("surname must not be empty", 'error');
         }
         if ($register["email"] == "") {
             $error = true;
@@ -116,6 +137,8 @@ class Login extends Controller
             $register["password"] = "";
             $register["confirm"] = "";
         }
+
+
 
         //If we found an error, return data to the register form and no create
         if ($error) {

@@ -67,7 +67,7 @@
 
     </div>
 </footer>
-{% if navigation is defined %}
+{% if (navigation is defined) and (not onRegistrationPage) %}
     {% include "Includes/Logon-modal.twig" %}
 {% endif %}
 

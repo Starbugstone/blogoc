@@ -15,6 +15,20 @@
     </div>
 
     <div class="form-group">
+        <label for="surname" class="cols-sm-2 control-label">Your SurName</label>
+        <div class="cols-sm-10">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-user fa"
+                                                                      aria-hidden="true"></i></span>
+                </div>
+                <input type="text" class="form-control" name="surname" id="surname"
+                       placeholder="Enter your SurName" value="{{ registrationInfo.surname }}" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
         <label for="email" class="cols-sm-2 control-label">Your Email</label>
         <div class="cols-sm-10">
             <div class="input-group">
@@ -70,6 +84,5 @@
     </div>
     <button type="submit" class="btn btn-primary w-100 mt-3">Register</button>
     <br>
-    <a class="btn btn-secondary w-100 mt-3" href="/login" data-dismiss="modal" data-toggle="modal"
-       data-target="#connectModal">Have an account? Login here</a>
+    <a class="btn btn-secondary w-100 mt-3" href="/login" {{  not onRegistrationPage ? "data-toggle=\"modal\" data-target=\"#connectModal\"" : "" }}>Have an account? Login here</a>
 </form>

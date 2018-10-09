@@ -8,5 +8,7 @@
         <a class="nav-link hvr-underline-from-center" href="/category/all-posts">All Posts</a>
     </li>
 </ul>
-<a href="/login/register" class="btn btn-primary mr-1" data-toggle="modal" data-target="#registerModal">Register</a>
-<a href="/login" class="btn btn-primary" data-toggle="modal" data-target="#connectModal">Connection</a>
+
+<a href="/login/register" class="btn btn-primary mr-1" {{ not onRegistrationPage ? "data-toggle=\"modal\" data-target=\"#registerModal\"" : "" }}>Register</a>
+<a href="/login" class="btn btn-primary" {{  not onRegistrationPage ? "data-toggle=\"modal\" data-target=\"#connectModal\"" : "" }}>Connection</a>
+
