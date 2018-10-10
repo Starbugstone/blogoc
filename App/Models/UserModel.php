@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Core\BlogocException;
 use Core\Container;
 use Core\Model;
 
@@ -22,12 +23,12 @@ class UserModel extends Model
      * get the password from the user email. mainly for login purposes
      * @param string $email
      * @return string
-     * @throws \Exception
+     * @throws BlogocException
      */
     private function getUserPassword(string $email): string
     {
         if (!$this->isEmailUsed($email)) {
-            throw new \Exception("Email not present in Database");
+            throw new BlogocException("Email not present in Database");
         }
         $sql = "SELECT password FROM $this->userTbl WHERE email = :email";
         $this->query($sql);
@@ -60,14 +61,14 @@ class UserModel extends Model
      * Get all the useful data about a user from his mail
      * @param string $email
      * @return mixed
-     * @throws \Exception
+     * @throws BlogocException
      */
     public function getUserDetailsByEmail(string $email)
     {
         //check if email is valid for sanity
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $email = htmlspecialchars($email);
-            throw new \Exception("invalid email " . $email);
+            throw new BlogocException("invalid email " . $email);
         }
         $sql = "
             SELECT idusers, username, avatar, email, surname, name, creation_date, last_update, locked_out, role_name, role_level

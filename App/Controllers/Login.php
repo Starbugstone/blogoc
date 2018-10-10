@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\UserModel;
+use Core\BlogocException;
 use Core\Container;
 use Core\Controller;
 use Core\Traits\PasswordFunctions;
@@ -152,7 +153,7 @@ class Login extends Controller
                 $error = true;
                 $loginErrors->email = "This email is not registerd";
             }
-        } catch (\Exception $e) { //this usually throws if mail isn't valid
+        } catch (BlogocException $e) { //this usually throws if mail isn't valid
             $error = true;
             $loginErrors->email = $e->getMessage();
         }
@@ -218,7 +219,7 @@ class Login extends Controller
                     'error');
                 $this->response->redirect('/login');
             }
-        } catch (\Exception $e) {
+        } catch (BlogocException $e) {
             $error = true;
             $registerErrors->email = $e->getMessage();
         }
