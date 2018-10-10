@@ -20,8 +20,9 @@
             name: "required",
             surname: "required",
             email: {
-              required: true,
-              email: true
+                required: true,
+                email: true,
+                remote: "/ajax/user/is-email-unique/get"
             },
             username: "required",
             password: {
@@ -31,6 +32,11 @@
             },
             confirm:{
                 equalTo: "#password"
+            }
+        },
+        messages:{
+            email: {
+                remote: "Email is already used, do you already have an account ?"
             }
         }
     });
