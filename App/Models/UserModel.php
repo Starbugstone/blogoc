@@ -85,11 +85,12 @@ class UserModel extends Model
     public function registerUser(\stdClass $userData): int
     {
 
+        //TODO need to get the default user role. Config ??
         $passwordHash = password_hash($userData->password, PASSWORD_DEFAULT);
 
         $sql = "
             INSERT INTO $this->userTbl (username, email, password, surname, name, creation_date, last_update, roles_idroles, locked_out, bad_login_tries)
-            VALUES (:username, :email, :password, :surname, :name, NOW(), NOW(), :roles_idroles, 1, 0)
+            VALUES (:username, :email, :password, :surname, :name, NOW(), NOW(), :roles_idroles, 0, 0)
         ";
         $this->query($sql);
         $this->bind(':username', $userData->username);
