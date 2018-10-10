@@ -1,12 +1,12 @@
 <script>
     //adding some Jquery Validation plugin scripts to validate the register form
     $.validator.addMethod("validPassword",
-        function(value, element, param){
-            if(value != ""){
-                if(value.match(/.*[A-Za-z]+.*/i) == null){
+        function (value, element, param) {
+            if (value != "") {
+                if (value.match(/.*[A-Za-z]+.*/i) == null) {
                     return false;
                 }
-                if(value.match(/.*\d+.*/i) == null) {
+                if (value.match(/.*\d+.*/i) == null) {
                     return false;
                 }
             }
@@ -16,7 +16,7 @@
         "Must contain at least one letter and one number"
     );
     $("#register").validate({
-        rules:{
+        rules: {
             name: "required",
             surname: "required",
             email: {
@@ -30,11 +30,11 @@
                 minlength: 8,
                 validPassword: true
             },
-            confirm:{
+            confirm: {
                 equalTo: "#password"
             }
         },
-        messages:{
+        messages: {
             email: {
                 remote: "Email is already used, do you already have an account ?"
             }
@@ -47,6 +47,7 @@
     $("#passwordConfirmShow").click(function () {
         $("#confirm").hideShowPassword('toggle');
     });
+
     $("#loginPasswordConfirmShow").click(function () {
         $("#loginPassword").hideShowPassword('toggle');
     });
