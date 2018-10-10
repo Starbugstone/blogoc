@@ -188,7 +188,7 @@ abstract class Controller
             $this->data['alert_messages'] = $this->alertBox->getAlerts();
         }
         //adding the session vars to the page
-        $this->data["sessionData"] = $this->session->getAllSessionVars();
+        $this->sendSessionVars();
         //adding the dev helper to the page
         if (Config::DEV_ENVIRONMENT) {
             $this->devHelper();
