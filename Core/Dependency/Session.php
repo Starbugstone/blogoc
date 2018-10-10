@@ -89,7 +89,7 @@ class Session
     }
 
     /**
-     * return the entire session superglobal. mainly for debugging purposes
+     * return the entire session superglobal.
      * @return mixed
      */
     public function getAllSessionVars(){
