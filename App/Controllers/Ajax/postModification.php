@@ -48,7 +48,7 @@ class postModification extends AjaxController
         if (!$this->container->getRequest()->isPost()) {
             throw new \Core\JsonException('Call is not post');
         }
-        $state = ($this->request->getData("state") === 'true');
+        $state = (bool)($this->request->getData("state") === 'true'); //TODO test this element
         $postId = (int)$this->request->getData("postId");
 
         $result = array();
