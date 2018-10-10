@@ -64,17 +64,6 @@ class Login extends Controller
     }
 
     /**
-     * get user info from the database and populate the user object
-     * @param string $email
-     * @throws \Exception
-     */
-    private function populateUserFromMail(string $email)
-    {
-        $result = $this->userModel->getUserDetailsByEmail($email);
-        $this->populateUser((array)$result);
-    }
-
-    /**
      * pass the user object to the session for use
      */
     private function setUserSession()
@@ -92,11 +81,22 @@ class Login extends Controller
      */
     public function index()
     {
+
+
         $this->sendSessionVars();
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
         $this->data['navigation'] = $this->siteConfig->getMenu();
+
+        //check if have prefilled form data and error mesages
+        $this->data["loginInfo"] = $this->session->get("loginInfo");
+        $this->data["loginErrors"] = $this->session->get("loginErrors");
+
         //Setting a tag to deactivate modules on this page
         $this->data['onRegistrationPage'] = true;
+
+        //remove the set data as it is now sent to the template
+        $this->session->remove("loginInfo");
+        $this->session->remove("loginErrors");
 
         $this->renderView('logon');
     }
@@ -136,7 +136,53 @@ class Login extends Controller
             $this->response->redirect('/');
         }
 
+        $login = $this->request->getDataFull();
+        $email = $login["loginEmail"];
+        $password = $login["loginPassword"];
+
+        //resetting the password as we don't want to resend it
+        $login["loginPassword"] = "";
+
+        //check all the fields
+        $error = false;
+        $loginErrors = new \stdClass();
+
+        try {
+            if (!$this->userModel->isEmailUsed($email)) {
+                $error = true;
+                $loginErrors->email = "This email is not registerd";
+            }
+        } catch (\Exception $e) { //this usually throws if mail isn't valid
+            $error = true;
+            $loginErrors->email = $e->getMessage();
+        }
+
+        if ($password == "") {
+            $error = true;
+            $loginErrors->password = "password must not be empty";
+        }
+
+        $authUser = $this->userModel->authenticateUser($email, $password);
+        if(!$authUser)
+        {
+            $error = true;
+            $loginErrors->password = "Incorrect Password";
+        }
+
+        if ($error) {
+            $this->session->set("loginInfo", $login);
+            $this->session->set("loginErrors", $loginErrors);
+            $this->response->redirect("/login");
+        }
+
+        //we are authenticated here
+
+        //populate the user object with returned data
+        $this->populateUser((array)$authUser);
+        $this->setUserSession();
+
         //if all is valid, redirect to user admin page
+        $this->response->redirect("/admin");
     }
 
     /**
@@ -161,17 +207,21 @@ class Login extends Controller
 
         //Error checking
 
-        //if mail already used, go to login
-        if ($this->userModel->isEmailUsed($this->user->email)) {
-            $this->alertBox->setAlert("Email already registered, try logging in. You can always use the forgotten password to reset your account",
-                'error');
-            $this->response->redirect('/login');
-        }
-
         //check all the fields
         $error = false;
         $registerErrors = new \stdClass();
 
+        //if mail already used, go to login
+        try {
+            if ($this->userModel->isEmailUsed($this->user->email)) {
+                $this->alertBox->setAlert("Email already registered, try logging in. You can always use the forgotten password to reset your account",
+                    'error');
+                $this->response->redirect('/login');
+            }
+        } catch (\Exception $e) {
+            $error = true;
+            $registerErrors->email = $e->getMessage();
+        }
 
         if ($this->user->name == "") {
             $error = true;
@@ -180,11 +230,6 @@ class Login extends Controller
         if ($this->user->surname == "") {
             $error = true;
             $registerErrors->surname = "surname must not be empty";
-        }
-        if (!filter_var($this->user->email, FILTER_VALIDATE_EMAIL)) {
-            $error = true;
-            $register["email"] = "";
-            $registerErrors->email = "email is not valid";
         }
         if ($this->user->username == "") {
             $error = true;
@@ -227,8 +272,19 @@ class Login extends Controller
         $baseUrl = $this->request->getBaseUrl();
         $redirectUrl = $this->removeFromBeginning($refererUrl, $baseUrl);
 
-        $this->alertBox->setAlert('Account created, please check your mail box to activate account');
+        $this->alertBox->setAlert('Account created, please check your mailbox to activate account');
         $this->container->getResponse()->redirect($redirectUrl);
+    }
+
+    /**
+     * disconnect from the user interface
+     */
+    public function disconnect()
+    {
+        $this->container->getSession()->unsetAll();
+        $this->session->regenerateSessionId();
+        $this->alertBox->setAlert('Disconnected');
+        $this->container->getResponse()->redirect();
     }
 
     /*
@@ -256,12 +312,7 @@ class Login extends Controller
         $this->container->getResponse()->redirect('/admin/');
     }
 
-    public function disconnect()
-    {
-        $this->container->getSession()->unsetAll();
-        $this->alertBox->setAlert('Disconnected');
-        $this->container->getResponse()->redirect();
-    }
+
 
     public function whoami()
     {

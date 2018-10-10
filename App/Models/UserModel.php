@@ -19,6 +19,24 @@ class UserModel extends Model
     }
 
     /**
+     * get the password from the user email. mainly for login purposes
+     * @param string $email
+     * @return string
+     * @throws \Exception
+     */
+    private function getUserPassword(string $email): string
+    {
+        if (!$this->isEmailUsed($email)) {
+            throw new \Exception("Email not present in Database");
+        }
+        $sql = "SELECT password FROM $this->userTbl WHERE email = :email";
+        $this->query($sql);
+        $this->bind(':email', $email);
+        $this->execute();
+        return $this->stmt->fetchColumn();
+    }
+
+    /**
      * Get all the useful data about a user from his ID
      * @param int $userId
      * @return mixed
@@ -47,10 +65,9 @@ class UserModel extends Model
     public function getUserDetailsByEmail(string $email)
     {
         //check if email is valid for sanity
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL))
-        {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $email = htmlspecialchars($email);
-            throw new \Exception("invalid email ".$email);
+            throw new \Exception("invalid email " . $email);
         }
         $sql = "
             SELECT idusers, username, avatar, email, surname, name, creation_date, last_update, locked_out, role_name, role_level
@@ -62,6 +79,18 @@ class UserModel extends Model
         $this->bind(':email', $email);
         $this->execute();
         return $this->fetch();
+    }
+
+    public function authenticateUser(string $email, string $password)
+    {
+        $user = $this->getUserDetailsByEmail($email);
+        if ($user !== false) {
+            if (password_verify($password, $this->getUserPassword($email))) {
+                return $user;
+            }
+        }
+
+        return false;
     }
 
     /**

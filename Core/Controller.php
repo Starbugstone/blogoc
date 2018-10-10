@@ -187,9 +187,13 @@ abstract class Controller
         if ($this->alertBox->alertsPending()) {
             $this->data['alert_messages'] = $this->alertBox->getAlerts();
         }
+        //adding the session vars to the page
+        $this->data["sessionData"] = $this->session->getAllSessionVars();
+        //adding the dev helper to the page
         if (Config::DEV_ENVIRONMENT) {
             $this->devHelper();
         }
+
         $twig = $this->container->getTemplate();
         $twig->display($template . '.twig', $this->data);
     }

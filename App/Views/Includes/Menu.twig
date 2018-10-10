@@ -8,7 +8,10 @@
         <a class="nav-link hvr-underline-from-center" href="/category/all-posts">All Posts</a>
     </li>
 </ul>
-
+{% if sessionData.user.role_level >0 %}
+    <a href="/login/disconnect" class="btn btn-primary" data-toggle="modal" data-target="#logoutModal">Disconnect</a>
+{% else %}
 <a href="/login/register" class="btn btn-primary mr-1" {{ not onRegistrationPage ? "data-toggle=\"modal\" data-target=\"#registerModal\"" : "" }}>Register</a>
 <a href="/login" class="btn btn-primary" {{  not onRegistrationPage ? "data-toggle=\"modal\" data-target=\"#connectModal\"" : "" }}>Connection</a>
+{% endif %}
 
