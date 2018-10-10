@@ -51,17 +51,3 @@ if ($(window).width() > MQL) {
 //---------------------------------------------
 /*global WOW*/
 new WOW().init();
-
-
-//---------------------------------------------
-// Login and registration functions
-//---------------------------------------------
-//called on user registration submit
-function userRegistration(){
-
-}
-
-//Called on user Login submit
-function userLogin(){
-
-}
