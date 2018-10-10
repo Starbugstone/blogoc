@@ -1,5 +1,20 @@
 <script>
     //adding some Jquery Validation plugin scripts to validate the register form
+    $.validator.addMethod("validPassword",
+        function(value, element, param){
+            if(value != ""){
+                if(value.match(/.*[A-Za-z]+.*/i) == null){
+                    return false;
+                }
+                if(value.match(/.*\d+.*/i) == null) {
+                    return false;
+                }
+            }
+
+            return true;
+        },
+        "Must contain at least one letter and one number"
+    );
     $("#register").validate({
         rules:{
             name: "required",
@@ -11,7 +26,8 @@
             username: "required",
             password: {
                 required: true,
-                minlength: 8
+                minlength: 8,
+                validPassword: true
             },
             confirm:{
                 equalTo: "#password"
