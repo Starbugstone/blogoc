@@ -72,6 +72,12 @@ class UserModel extends Model
      */
     public function isEmailUsed(string $email)
     {
+        //check if email is valid for sanity
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL))
+        {
+            $email = htmlspecialchars($email);
+            throw new \Exception("invalid email ".$email);
+        }
         $sql = "
             SELECT * FROM $this->userTbl WHERE email = :email
         ";
