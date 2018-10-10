@@ -237,3 +237,8 @@ article.category-listing {
     cursor: pointer; }
   .chip .closebtn:hover {
     color: #000; }
+
+#register label.error {
+  width: 100%;
+  color: #ffc107;
+  padding-left: 1rem; }

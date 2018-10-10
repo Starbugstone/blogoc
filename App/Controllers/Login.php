@@ -192,7 +192,6 @@ class Login extends Controller
         }
 
         //checking the password
-        /* commented out for testing. Too fucking annoying to respect the complexity every time
         $passwordError = $this->isPasswordComplex($this->user->password);
         if (!$passwordError["success"]) {
             $error = true;
@@ -203,7 +202,6 @@ class Login extends Controller
             $registerErrors->password = "Password and confirmation do not match";
             $registerErrors->confirm = "Password and confirmation do not match";
         }
-        */
 
         //If we found an error, return data to the register form and no create
         if ($error) {

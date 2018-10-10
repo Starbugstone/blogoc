@@ -1,0 +1,21 @@
+<script>
+    //adding some Jquery Validation plugin scripts to validate the register form
+    $("#register").validate({
+        rules:{
+            name: "required",
+            surname: "required",
+            email: {
+              required: true,
+              email: true
+            },
+            username: "required",
+            password: {
+                required: true,
+                minlength: 8
+            },
+            confirm:{
+                equalTo: "#password"
+            }
+        }
+    });
+</script>
