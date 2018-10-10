@@ -84,7 +84,8 @@ class Session
      */
     public function unsetAll()
     {
-        session_unset(); //probably have to do some checking, might want to keep some stuff
+        session_unset(); //remove all session variables
+        $this->regenerateSessionId(); //regenerate the ID
     }
 
     /**
