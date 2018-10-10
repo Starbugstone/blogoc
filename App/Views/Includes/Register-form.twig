@@ -79,9 +79,14 @@
                                     <span class="input-group-text"><i class="fa fa-lock fa-lg"
                                                                       aria-hidden="true"></i></span>
                 </div>
+                <div class="input-group-prepend" id="passwordShow">
+                    <span class="input-group-text text-primary"><i class="fa fa-eye fa-lg"
+                                                  aria-hidden="true"></i></span>
+                </div>
                 <input type="password" class="form-control" name="password" id="password"
                        placeholder="Enter your Password"
                        aria-describedby="passwordHelpBlock" required/>
+
                 <small id="passwordHelpBlock" class="form-text text-danger w-100 pl-3">
                     {{ registrationErrors.password }}
                 </small>
@@ -96,6 +101,10 @@
                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fa fa-lock fa-lg"
                                                                       aria-hidden="true"></i></span>
+                </div>
+                <div class="input-group-prepend" id="passwordConfirmShow">
+                    <span class="input-group-text text-primary"><i class="fa fa-eye fa-lg"
+                                                                   aria-hidden="true"></i></span>
                 </div>
                 <input type="password" class="form-control" name="confirm" id="confirm"
                        placeholder="Confirm your Password" aria-describedby="confirmHelpBlock" required/>
