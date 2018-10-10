@@ -27,16 +27,14 @@ class User  extends AjaxController{
         //for better use and security, we must pass "get" as the parameter
         if(!$this->startsWith(strtolower($get),"get"))
         {
-            throw new \Exception("invalid call");
+            throw new \JsonException("invalid call");
         }
         $email = $this->request->getData("email");
-        //check if email is valid for sanity
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL))
-        {
-            $email = htmlspecialchars($email);
-            throw new JsonException("invalid email ".$email);
+        try {
+            $return = !$this->userModel->isEmailUsed($email);
+        } catch (\Exception $e) {
+            throw new \JsonException($e->getMessage());
         }
-        $return =  !$this->userModel->isEmailUsed($email);
         echo json_encode($return);
 
     }

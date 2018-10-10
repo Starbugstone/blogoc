@@ -47,7 +47,7 @@ class UserModel extends Model
     public function getUserDetailsByEmail(string $email)
     {
         //check if email is valid for sanity
-        if (!filter_var($this->user->email, FILTER_VALIDATE_EMAIL))
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL))
         {
             $email = htmlspecialchars($email);
             throw new \Exception("invalid email ".$email);
@@ -72,20 +72,7 @@ class UserModel extends Model
      */
     public function isEmailUsed(string $email)
     {
-        //check if email is valid for sanity
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL))
-        {
-            $email = htmlspecialchars($email);
-            throw new \Exception("invalid email ".$email);
-        }
-        $sql = "
-            SELECT * FROM $this->userTbl WHERE email = :email
-        ";
-        $this->query($sql);
-        $this->bind(':email', $email);
-        $this->execute();
-
-        return $this->stmt->rowCount() > 0;
+        return $this->getUserDetailsByEmail($email) !== false;
     }
 
     public function registerUser(\stdClass $userData): int
