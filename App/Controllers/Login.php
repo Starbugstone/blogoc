@@ -82,7 +82,11 @@ class Login extends Controller
      */
     public function index()
     {
-
+        if($this->session->isParamSet("user"))
+        {
+            //we are already connected, redirect
+            $this->response->redirect();
+        }
 
         $this->sendSessionVars();
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
@@ -107,6 +111,11 @@ class Login extends Controller
      */
     public function register()
     {
+        if($this->session->isParamSet("user"))
+        {
+            //we are already connected, redirect
+            $this->response->redirect();
+        }
 
         $this->sendSessionVars();
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
