@@ -147,27 +147,28 @@ class Login extends Controller
         //check all the fields
         $error = false;
         $loginErrors = new \stdClass();
-
-        try {
-            if (!$this->userModel->isEmailUsed($email)) {
-                $error = true;
-                $loginErrors->email = "This email is not registerd";
-            }
-        } catch (BlogocException $e) { //this usually throws if mail isn't valid
-            $error = true;
-            $loginErrors->email = $e->getMessage();
-        }
+        $authUser = new \stdClass();
 
         if ($password == "") {
             $error = true;
             $loginErrors->password = "password must not be empty";
         }
 
-        $authUser = $this->userModel->authenticateUser($email, $password);
-        if(!$authUser)
-        {
+        try {
+            if (!$this->userModel->isEmailUsed($email)) {
+                $error = true;
+                $loginErrors->email = "This email is not registerd";
+            }
+
+            $authUser = $this->userModel->authenticateUser($email, $password);
+            if(!$authUser->success)
+            {
+                $error = true;
+                $loginErrors->global = $authUser->message;
+            }
+        } catch (BlogocException $e) { //this usually throws if mail isn't valid
             $error = true;
-            $loginErrors->password = "Incorrect Password";
+            $loginErrors->email = $e->getMessage();
         }
 
         if ($error) {
@@ -179,7 +180,7 @@ class Login extends Controller
         //we are authenticated here
 
         //populate the user object with returned data
-        $this->populateUser((array)$authUser);
+        $this->populateUser((array)$authUser->user);
         $this->setUserSession();
 
         //if all is valid, redirect to user admin page

@@ -24,4 +24,8 @@ class Constant
     const LIST_PER_PAGE = 10;
 
     const EXCERPT_WORD_COUNT =50;
+
+    //login security
+    const NUMBER_OF_BAD_PASSWORD_TRIES = 3;
+    const LOCKOUT_MINUTES = 5;
 }

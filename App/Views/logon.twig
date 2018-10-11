@@ -5,7 +5,13 @@
 {% block main %}
     <div class="row justify-content-lg-center mb-3">
         <div class="col-lg-6">
-            {% include "Includes/logon-form.twig" %}
+        {% if loginErrors.global %}
+            <div class="alert alert-warning" role="alert">
+                {{ loginErrors.global }}
+            </div>
+        {% endif %}
+
+        {% include "Includes/logon-form.twig" %}
         </div>
     </div>
 {% endblock %}

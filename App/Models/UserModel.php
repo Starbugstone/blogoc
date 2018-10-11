@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Core\BlogocException;
+use Core\Constant;
 use Core\Container;
 use Core\Model;
 
@@ -17,6 +18,16 @@ class UserModel extends Model
         parent::__construct($container);
         $this->userTbl = $this->getTablePrefix("users");
         $this->roleTbl = $this->getTablePrefix("roles");
+    }
+
+    private function baseSqlSelect():string
+    {
+        $sql = "
+            SELECT idusers, username, avatar, email, surname, name, creation_date, last_update, locked_out, bad_login_time, bad_login_tries, role_name, role_level
+            FROM $this->userTbl
+            INNER JOIN $this->roleTbl ON $this->userTbl.roles_idroles = $this->roleTbl.idroles 
+        ";
+        return $sql;
     }
 
     /**
@@ -38,6 +49,63 @@ class UserModel extends Model
     }
 
     /**
+     * called when authentication failed
+     * @param $user
+     * @throws \Exception
+     */
+    private function addToBadLoginTries($user):void
+    {
+        $badLoginTries = $user->bad_login_tries +1;
+        $sql ="
+            UPDATE $this->userTbl
+            SET
+              bad_login_time = NOW(),
+              bad_login_tries = :badLoginTries
+            WHERE idusers = :userId
+        ";
+        $this->query($sql);
+        $this->bind(':badLoginTries', $badLoginTries);
+        $this->bind(':userId', $user->idusers);
+        $this->execute();
+    }
+
+    /**
+     * reset the bad login count
+     * @param $user
+     * @throws \Exception
+     */
+    private function resetBadLogin($user):void
+    {
+        $sql="
+            UPDATE $this->userTbl
+            SET
+              bad_login_tries = 0
+            WHERE idusers = :userId
+        ";
+        $this->query($sql);
+        $this->bind(':userId', $user->idusers);
+        $this->execute();
+    }
+
+    private function isAccountPasswordBlocked($user)
+    {
+        if($user->bad_login_tries < Constant::NUMBER_OF_BAD_PASSWORD_TRIES) {
+            //not enough bad tries yet
+            return false;
+        }
+
+        $blockTime = strtotime($user->bad_login_time);
+        $currentTime = time();
+        if($currentTime-$blockTime > Constant::LOCKOUT_MINUTES*60)
+        {
+            //we have outlived the timeout
+            return false;
+        }
+        //the account is timed out
+        return true;
+    }
+
+    /**
      * Get all the useful data about a user from his ID
      * @param int $userId
      * @return mixed
@@ -45,10 +113,8 @@ class UserModel extends Model
      */
     public function getUserDetailsById(int $userId)
     {
-        $sql = "
-            SELECT idusers, username, avatar, email, surname, name, creation_date, last_update, locked_out, role_name, role_level
-            FROM $this->userTbl
-            INNER JOIN $this->roleTbl ON $this->userTbl.roles_idroles = $this->roleTbl.idroles
+        $sql = $this->baseSqlSelect();
+        $sql .= "
             WHERE idusers = :userId
         ";
         $this->query($sql);
@@ -70,28 +136,14 @@ class UserModel extends Model
             $email = htmlspecialchars($email);
             throw new BlogocException("invalid email " . $email);
         }
-        $sql = "
-            SELECT idusers, username, avatar, email, surname, name, creation_date, last_update, locked_out, role_name, role_level
-            FROM $this->userTbl
-            INNER JOIN $this->roleTbl ON $this->userTbl.roles_idroles = $this->roleTbl.idroles
+        $sql = $this->baseSqlSelect();
+        $sql .= "
             WHERE email = :email
         ";
         $this->query($sql);
         $this->bind(':email', $email);
         $this->execute();
         return $this->fetch();
-    }
-
-    public function authenticateUser(string $email, string $password)
-    {
-        $user = $this->getUserDetailsByEmail($email);
-        if ($user !== false) {
-            if (password_verify($password, $this->getUserPassword($email))) {
-                return $user;
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -105,7 +157,7 @@ class UserModel extends Model
         return $this->getUserDetailsByEmail($email) !== false;
     }
 
-    /**
+     /**
      * register a new user
      * @param \stdClass $userData
      * @return int
@@ -131,6 +183,49 @@ class UserModel extends Model
         $this->execute();
 
         return (int)$this->dbh->lastInsertId();
+    }
+
+    /**
+     * verify the user connection mail/password and login if ok
+     * @param string $email
+     * @param string $password
+     * @return bool|mixed
+     * @throws BlogocException
+     */
+    public function authenticateUser(string $email, string $password):\stdClass
+    {
+        $response = new \stdClass();
+        $response->success = false;
+        $response->message = "";
+
+        $user = $this->getUserDetailsByEmail($email);
+
+        if($user === false) //no user exists
+        {
+            $response->message = "email doesn't exist, register a new account?";
+            return $response;
+        }
+
+        if($this->isAccountPasswordBlocked($user))
+        {
+            $response->message = "too many bad passwords, account is blocked for ".Constant::LOCKOUT_MINUTES." minutes";
+            return $response;
+        }
+
+        if (!password_verify($password, $this->getUserPassword($email))) {
+            $response->message = "password is incorrect";
+            $this->addToBadLoginTries($user);
+            return $response;
+        }
+
+
+        //all ok, send user back for login
+        $this->resetBadLogin($user);
+        $response->user = $user;
+        $response->success = true;
+        return $response;
+
+
 
     }
 }
