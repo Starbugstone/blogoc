@@ -105,6 +105,12 @@ class UserModel extends Model
         return $this->getUserDetailsByEmail($email) !== false;
     }
 
+    /**
+     * register a new user
+     * @param \stdClass $userData
+     * @return int
+     * @throws \Exception
+     */
     public function registerUser(\stdClass $userData): int
     {
 
