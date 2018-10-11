@@ -96,6 +96,19 @@ class Session
         return $_SESSION;
     }
 
+    /**
+     * Unsets all the data the destroys the session
+     */
+    public function destroySession()
+    {
+        $this->unsetAll();
+        session_destroy();
+    }
+
+    /**
+     * regenerate the session ID
+     * This avoids session ghosting
+     */
     public function regenerateSessionId()
     {
         session_regenerate_id();

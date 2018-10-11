@@ -274,7 +274,7 @@ class Login extends Controller
         $redirectUrl = $this->removeFromBeginning($refererUrl, $baseUrl);
 
         $this->alertBox->setAlert('Account created, please check your mailbox to activate account');
-        $this->container->getResponse()->redirect($redirectUrl);
+        $this->response->redirect($redirectUrl);
     }
 
     /**
@@ -282,10 +282,9 @@ class Login extends Controller
      */
     public function disconnect()
     {
-        $this->container->getSession()->unsetAll();
-        $this->session->regenerateSessionId();
+        $this->session->destroySession();
         $this->alertBox->setAlert('Disconnected');
-        $this->container->getResponse()->redirect();
+        $this->response->redirect();
     }
 
     /*
