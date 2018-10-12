@@ -98,7 +98,7 @@ class UserModel extends Model
         $currentTime = time();
         if($currentTime-$blockTime > Constant::LOCKOUT_MINUTES*60)
         {
-            //we have outlived the timeout
+            //we have outlived the timeout, connection authorised
             return false;
         }
         //the account is timed out
@@ -203,6 +203,13 @@ class UserModel extends Model
         if($user === false) //no user exists
         {
             $response->message = "email doesn't exist, register a new account?";
+            return $response;
+        }
+
+        //check if the user has validated his email
+        if($user->locked_out)
+        {
+            $response->message = "the email has not been verified, please check your inbox or click on 'reset your password'";
             return $response;
         }
 
