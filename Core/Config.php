@@ -53,15 +53,4 @@ class Config
      */
     const TABLE_PREFIX = '';
 
-    /*
-     * -----------------------------------------------------
-     *                     EMAIL CONFIG
-     * -----------------------------------------------------
-     */
-
-    const SMTP_SERVER = "";
-    const SMTP_PORT = 25;
-    const SMTP_USER = "";
-    const SMTP_PASS = "";
-    const SMTP_FROM = "";
 }

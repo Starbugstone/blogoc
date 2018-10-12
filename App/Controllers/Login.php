@@ -4,10 +4,14 @@ namespace App\Controllers;
 
 use App\Models\UserModel;
 use Core\BlogocException;
+use Core\Config;
 use Core\Container;
 use Core\Controller;
 use Core\Traits\PasswordFunctions;
 use Core\Traits\StringFunctions;
+use Swift_Mailer;
+use Swift_Message;
+use Swift_SmtpTransport;
 
 //This is just for testing purposes. a real login system shall be set up later
 
@@ -21,6 +25,9 @@ class Login extends Controller
 
     private $user;
 
+    private $mailer;
+    private $transport;
+
     public function __construct(Container $container)
     {
         $this->loadModules[] = 'SiteConfig';
@@ -28,6 +35,16 @@ class Login extends Controller
 
         $this->userModel = new UserModel($this->container);
         $this->user = new \stdClass();
+
+        // Create the Transport for mail sending
+        $config = $this->siteConfig->getSiteConfig();
+        $this->transport = (new Swift_SmtpTransport($config["SMTP_server"], (int)$config["SMTP_port"]))
+            ->setUsername($config["SMTP_user"])
+            ->setPassword($config["SMTP_pass"])
+        ;
+
+        // Create the Mailer using your created Transport
+        $this->mailer = new Swift_Mailer($this->transport);
     }
 
     /**
@@ -278,6 +295,7 @@ class Login extends Controller
         //send confirmation mail
 
 
+
         //all set, redirect and set message
         $refererUrl = $this->request->getReferer();
         $baseUrl = $this->request->getBaseUrl();
@@ -332,5 +350,21 @@ class Login extends Controller
         }
         $this->alertBox->setAlert($userType);
         $this->container->getResponse()->redirect();
+    }
+
+    public function testMail()
+    {
+
+        // Create a message
+        $message = (new Swift_Message('Wonderful Subject2'))
+            ->setFrom(['john@doe.com' => 'John Doe'])
+            ->setTo(['receiver@domain.org', 'other@domain.org' => 'A name'])
+            ->setBody('Here is the message itself')
+        ;
+
+        // Send the message
+        $mailResult = $this->mailer->send($message);
+        var_dump($mailResult);
+        die();
     }
 }

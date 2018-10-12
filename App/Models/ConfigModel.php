@@ -25,7 +25,7 @@ class ConfigModel extends Model
         $sql = "SELECT idconfigs, configs_name, configs_type_name, configs_value, class FROM  $configsTbl 
                 INNER JOIN $configsClassTbl ON $configsTbl.configs_class_idconfigsclass = $configsClassTbl.idconfigsclass 
                 INNER JOIN $configTypeTbl ON $configsTbl.configs_type_idconfigs_type = $configTypeTbl.idconfigs_type
-                ORDER BY class, configs_name;";
+                ORDER BY class, $configsTbl.order, configs_name;";
 
         $this->query($sql);
         $this->execute();
