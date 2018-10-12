@@ -9,6 +9,12 @@ namespace Core;
  */
 class Config
 {
+    /*
+     * -----------------------------------------------------
+     *                     DATABASE CONFIG
+     * -----------------------------------------------------
+     */
+
     /**
      * Database host
      * @var string
@@ -46,4 +52,16 @@ class Config
      * @var string
      */
     const TABLE_PREFIX = '';
+
+    /*
+     * -----------------------------------------------------
+     *                     EMAIL CONFIG
+     * -----------------------------------------------------
+     */
+
+    const SMTP_SERVER = "";
+    const SMTP_PORT = 25;
+    const SMTP_USER = "";
+    const SMTP_PASS = "";
+    const SMTP_FROM = "";
 }
