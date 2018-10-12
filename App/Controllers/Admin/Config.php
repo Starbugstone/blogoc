@@ -50,12 +50,12 @@ class Config extends AdminController
     {
         //Security checks
         $this->onlyAdmin();
-        if (!$this->container->getRequest()->isPost()) {
+        if (!$this->request->isPost()) {
             $this->alertBox->setAlert('Only post messages allowed', 'error');
-            $this->container->getResponse()->redirect('admin');
+            $this->response->redirect('admin');
         }
 
-        $posts = $this->container->getRequest()->getDataFull();
+        $posts = $this->request->getDataFull();
         $success = true;
 
         foreach ($posts as $key => $config) {
