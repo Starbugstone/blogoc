@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Ajax;
 
+use Cocur\Slugify\Slugify;
 use Core\AjaxController;
 
 class ImageUpload extends AjaxController
@@ -42,7 +43,17 @@ class ImageUpload extends AjaxController
      */
     private function getFilename(string $folder, string $file): string
     {
-
+        //slugify the file name to avoid security errors or bugs with special characters.
+        $fileName = pathinfo($file, PATHINFO_FILENAME );
+        $fileExtension = pathinfo($file, PATHINFO_EXTENSION );
+        $slugify = new Slugify();
+        $fileName = $slugify->slugify($fileName);
+        //if the filename has only special chars, the slugify will be empty, create a unique ID
+        if($fileName ==="")
+        {
+            $fileName = uniqid();
+        }
+        $file = $fileName.".".$fileExtension;
         $fileUrl = $folder . $file;
         $docRoot = $this->request->getDocumentRoot();
         $filePath = $docRoot . "/public/" . $fileUrl;
