@@ -21,6 +21,7 @@ class Login extends Controller
     use StringFunctions;
 
     protected $siteConfig;
+
     private $userModel;
 
     private $user;
@@ -166,6 +167,7 @@ class Login extends Controller
         $login = $this->request->getDataFull();
         $email = $login["loginEmail"];
         $password = $login["loginPassword"];
+        $rememberMe = isset($login["rememberMe"]);
 
         //resetting the password as we don't want to resend it
         $login["loginPassword"] = "";
@@ -207,9 +209,22 @@ class Login extends Controller
 
         //populate the user object with returned data
         $this->populateUser((array)$authUser->user);
-        $this->setUserSession();
 
-        //if all is valid, redirect to user admin page
+        //if the user wanted to be remembered
+        if($rememberMe)
+        {
+            $this->userModel->setToken(); //generate a new token
+            $rememberMeToken = $this->userModel->rememberMe($this->user->idusers);
+            if($rememberMeToken->success)
+            {
+                //set cookie
+                $this->cookie->setCookie("rememberMe", $rememberMeToken->token, $rememberMeToken->expiry_timestamp);
+
+            }
+        }
+
+        //if all is valid, set the session and redirect to user admin page
+        $this->setUserSession();
         $this->response->redirect("/admin");
     }
 
@@ -310,6 +325,11 @@ class Login extends Controller
      */
     public function disconnect()
     {
+        $user = $this->session->get("user");
+        $userId = $user->idusers;
+        $userHash = $this->userModel->getTokenHashFromId($userId);
+        $this->userModel->deleteToken($userHash);
+        $this->cookie->deleteCookie("rememberMe");
         $this->session->destroySession();
         $this->alertBox->setAlert('Disconnected');
         $this->response->redirect();

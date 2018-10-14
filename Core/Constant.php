@@ -28,4 +28,6 @@ class Constant
     //login security
     const NUMBER_OF_BAD_PASSWORD_TRIES = 3;
     const LOCKOUT_MINUTES = 5;
+
+    const HASH_KEY = "1337blogOcPass159758348ShaQpiss";
 }

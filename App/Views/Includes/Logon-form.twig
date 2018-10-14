@@ -32,12 +32,18 @@
                 <small id="loginPasswordHelpBlock" class="form-text text-danger w-100 pl-3">
                     {{ loginErrors.password }}
                 </small>
+                <div class="form-group mt-3">
+                    <div class="checkbox">
+                        <label><input type="checkbox" name="rememberMe" id="rememberMe" {{ loginInfo.rememberMe ? "checked" : "" }}> Remember me</label>
+                    </div>
+                </div>
+            </div>
+            <div class="forgot">
+                <a href="reset.html">Forgot password?</a>
             </div>
         </div>
     </div>
-    <div class="forgot">
-        <a href="reset.html">Forgot password?</a>
-    </div>
+
     <button type="submit" class="btn btn-primary w-100 mt-3">Login</button>
     <br>
     <a class="btn btn-secondary w-100 mt-3" href="/login/register" {{ not onRegistrationPage ? "data-dismiss=\"modal\" data-toggle=\"modal\" data-target=\"#registerModal\"" : "" }}>No account? Register here</a>

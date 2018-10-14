@@ -3,11 +3,19 @@
 namespace App\Modules;
 
 use App\Models\CategoryModel;
+use App\Models\UserModel;
+use Core\Container;
 use Core\Modules\Module;
 use App\Models\ConfigModel;
 
 class SiteConfig extends Module
 {
+    public function __construct(Container $container)
+    {
+        parent::__construct($container);
+        $this->loginFromRememberMe();
+    }
+
     /**
      * Gets the entire site configuration and arranges it into a displayable list
      * @return array the config ordered and ready to display
@@ -43,5 +51,31 @@ class SiteConfig extends Module
             ];
         }
         return $data;
+    }
+
+    public function loginFromRememberMe()
+    {
+        $cookie = $this->container->getCookie();
+        $userModel = new UserModel($this->container);
+        $session = $this->container->getSession();
+
+        $userToken = $cookie->getCookie("rememberMe");
+        if($userToken)
+        {
+            //we have a rememberMe Hash, login
+            $rememberedLogin = $userModel->findByToken($userToken);
+            if($rememberedLogin){
+                //we have a hash, login
+                $user = $userModel->getUserDetailsById($rememberedLogin->users_idusers);
+                $session->regenerateSessionId(); //regenerate the ID to avoid session ghosting
+                $session->set("user", $user);
+                $userRoleName = $user->role_name ?? "";
+                $userRoleLevel = $user->role_level ?? 0;
+                $session->set('user_role_name', $userRoleName);
+                $session->set('user_role_level', $userRoleLevel);
+            }
+
+        }
+
     }
 }

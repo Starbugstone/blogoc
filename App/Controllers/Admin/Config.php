@@ -16,11 +16,12 @@ class Config extends AdminController
 {
 
     use StringFunctions;
-
+    protected $siteConfig;
     private $configModel;
 
     public function __construct(Container $container)
     {
+        $this->loadModules[] = 'SiteConfig';
         parent::__construct($container);
         $this->configModel = new ConfigModel($this->container);
     }

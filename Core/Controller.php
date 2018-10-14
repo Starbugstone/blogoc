@@ -43,6 +43,8 @@ abstract class Controller
      */
     protected $response;
 
+    protected $cookie;
+
     /**
      * this will automaticly load all the modules listed and store them as $moduleName in tle class
      * Child classes can call aditional modules by calling $this->
@@ -87,6 +89,7 @@ abstract class Controller
 
         $this->request = $container->getRequest(); //adding our request object as it will be needed in the ajax calls
         $this->response = $container->getResponse();
+        $this->cookie = $container->getCookie();
 
         //Setting up csrf token security for all calls
         $this->data['csrf_token'] = $this->csrf->getCsrfKey(); //storing the security id into the data array to be sent to the view and added in the meta head
