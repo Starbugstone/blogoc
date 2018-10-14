@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\Remembered_loginsModel;
 use App\Models\UserModel;
 use Core\BlogocException;
 use Core\Config;
@@ -23,18 +24,26 @@ class Login extends Controller
     protected $siteConfig;
 
     private $userModel;
+    private $rememberedLoginModel;
 
     private $user;
 
     private $mailer;
     private $transport;
 
+    /**
+     * Login constructor.
+     * @param Container $container
+     * @throws \ErrorException
+     * @throws \ReflectionException
+     */
     public function __construct(Container $container)
     {
         $this->loadModules[] = 'SiteConfig';
         parent::__construct($container);
 
         $this->userModel = new UserModel($this->container);
+        $this->rememberedLoginModel = new Remembered_loginsModel($this->container);
         $this->user = new \stdClass();
 
         // Create the Transport for mail sending
@@ -110,7 +119,7 @@ class Login extends Controller
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
         $this->data['navigation'] = $this->siteConfig->getMenu();
 
-        //check if have prefilled form data and error mesages
+        //check if have prefilled form data and error messages
         $this->data["loginInfo"] = $this->session->get("loginInfo");
         $this->data["loginErrors"] = $this->session->get("loginErrors");
 
@@ -213,8 +222,8 @@ class Login extends Controller
         //if the user wanted to be remembered
         if($rememberMe)
         {
-            $this->userModel->setToken(); //generate a new token
-            $rememberMeToken = $this->userModel->rememberMe($this->user->idusers);
+            $this->rememberedLoginModel->setToken(); //generate a new token
+            $rememberMeToken = $this->rememberedLoginModel->rememberMe($this->user->idusers);
             if($rememberMeToken->success)
             {
                 //set cookie
@@ -327,8 +336,8 @@ class Login extends Controller
     {
         $user = $this->session->get("user");
         $userId = $user->idusers;
-        $userHash = $this->userModel->getTokenHashFromId($userId);
-        $this->userModel->deleteToken($userHash);
+        $userHash = $this->rememberedLoginModel->getTokenHashFromId($userId);
+        $this->rememberedLoginModel->deleteToken($userHash);
         $this->cookie->deleteCookie("rememberMe");
         $this->session->destroySession();
         $this->alertBox->setAlert('Disconnected');

@@ -3,6 +3,7 @@
 namespace App\Modules;
 
 use App\Models\CategoryModel;
+use App\Models\Remembered_loginsModel;
 use App\Models\UserModel;
 use Core\Container;
 use Core\Modules\Module;
@@ -53,17 +54,22 @@ class SiteConfig extends Module
         return $data;
     }
 
+    /**
+     * auto login if the remember me cookie is set
+     * @throws \Exception
+     */
     public function loginFromRememberMe()
     {
         $cookie = $this->container->getCookie();
         $userModel = new UserModel($this->container);
+        $rememberedLoginModel = new Remembered_loginsModel($this->container);
         $session = $this->container->getSession();
 
         $userToken = $cookie->getCookie("rememberMe");
         if($userToken)
         {
             //we have a rememberMe Hash, login
-            $rememberedLogin = $userModel->findByToken($userToken);
+            $rememberedLogin = $rememberedLoginModel->findByToken($userToken);
             if($rememberedLogin){
                 //we have a hash, login
                 $user = $userModel->getUserDetailsById($rememberedLogin->users_idusers);
