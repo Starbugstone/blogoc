@@ -44,7 +44,7 @@ class Auth extends Module
      * is the connected user an Admin
      * @return bool
      */
-    public function isAdmin()
+    public function isAdmin():bool
     {
         $userLevel = $this->getUserLevel();
         if ($userLevel >= Constant::ADMIN_LEVEL) {
@@ -57,7 +57,7 @@ class Auth extends Module
      * is the user connected ?
      * @return bool
      */
-    public function isUser()
+    public function isUser():bool
     {
         $userLevel = $this->getUserLevel();
         if ($userLevel >= Constant::USER_LEVEL) {

@@ -10,7 +10,7 @@ class Cookie{
      * @param string $value
      * @param string $expireDate
      */
-    public function setCookie(string $name, string $value, string $expireDate)
+    public function setCookie(string $name, string $value, string $expireDate):void
     {
         setcookie($name, $value, $expireDate, "/");
     }
@@ -19,7 +19,7 @@ class Cookie{
      * delete a named cookie
      * @param string $name
      */
-    public function deleteCookie(string $name)
+    public function deleteCookie(string $name):void
     {
         setcookie($name, "", time()-3600); //expire the cookie
     }
@@ -27,7 +27,7 @@ class Cookie{
     /**
      * get a cookie
      * @param string $name
-     * @return bool
+     * @return mixed
      */
     public function getCookie(string $name)
     {

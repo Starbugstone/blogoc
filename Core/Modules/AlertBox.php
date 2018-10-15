@@ -24,7 +24,7 @@ class AlertBox extends Module
      * @param string $type the type of alert
      * @throws \Exception
      */
-    public function setAlert(string $message, $type = 'success')
+    public function setAlert(string $message, $type = 'success'):void
     {
         //make sure we have the right type or throw an error
 
@@ -55,7 +55,7 @@ class AlertBox extends Module
      * Checks if we have any unsent alerts
      * @return bool
      */
-    public function alertsPending()
+    public function alertsPending():bool
     {
         $session = $this->container->getSession();
 

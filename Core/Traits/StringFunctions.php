@@ -74,7 +74,7 @@ trait StringFunctions
      * @return string the shortend text
      * @throws \ErrorException
      */
-    public function getExcerpt(string $text, int $count = Constant::EXCERPT_WORD_COUNT)
+    public function getExcerpt(string $text, int $count = Constant::EXCERPT_WORD_COUNT):string
     {
         if ($count < 1) {
             throw new \ErrorException('excerpt length too low');
@@ -168,12 +168,17 @@ trait StringFunctions
      * @param string $string
      * @return false|int
      */
-    public function isHexa(string $string)
+    public function isHexa(string $string):bool
     {
         return preg_match("/[\da-f]/",$string);
     }
 
-    public function isInt($int)
+    /**
+     * check if the sent var is an integer
+     * @param $int
+     * @return bool
+     */
+    public function isInt($int):bool
     {
         return filter_var($int, FILTER_VALIDATE_INT);
     }

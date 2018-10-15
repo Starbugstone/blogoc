@@ -44,7 +44,7 @@ class postModification extends AjaxController
     {
         $this->onlyAdmin();
         $this->onlyPost();
-        $state = (bool)($this->request->getData("state") === 'true'); //TODO test this element
+        $state = (bool)($this->request->getData("state") === 'true');
         $postId = (int)$this->request->getData("postId");
 
         $result = array();

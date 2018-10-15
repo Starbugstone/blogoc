@@ -436,7 +436,7 @@ class PostModel extends Model
      * @return bool
      * @throws Exception
      */
-    public function setPublished(bool $state, int $postId)
+    public function setPublished(bool $state, int $postId):bool
     {
         $sql = "
             UPDATE $this->postsTbl 
@@ -460,7 +460,7 @@ class PostModel extends Model
      * @return bool
      * @throws Exception
      */
-    public function setOnFrontPage(bool $state, int $postId)
+    public function setOnFrontPage(bool $state, int $postId):bool
     {
         $sql = "
             UPDATE $this->postsTbl 
