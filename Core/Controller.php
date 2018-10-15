@@ -230,7 +230,7 @@ abstract class Controller
     protected function addToDevHelper($name, $var)
     {
         //only populate if in dev environment
-        if (Config::DEV_ENVIRONMENT){
+        if (Config::DEV_ENVIRONMENT) {
             $classMethods = [];
             $classMethods[$name] = $var;
             if (!isset($this->data['dev_info'])) {
@@ -255,5 +255,17 @@ abstract class Controller
     protected function sendSessionVars()
     {
         $this->data['session'] = $this->getSessionVars();
+    }
+
+    /**
+     * Only allow post messages
+     */
+    protected function onlyPost()
+    {
+        //is post
+        if (!$this->request->isPost()) {
+            $this->alertBox->setAlert('Only post messages allowed', 'error');
+            $this->response->redirect('/');
+        }
     }
 }

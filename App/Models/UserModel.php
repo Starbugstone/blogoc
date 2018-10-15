@@ -28,7 +28,7 @@ class UserModel extends Model
     private function baseSqlSelect(): string
     {
         $sql = "
-            SELECT idusers, username, avatar, email, surname, name, creation_date, last_update, locked_out, bad_login_time, bad_login_tries, role_name, role_level
+            SELECT idusers, username, avatar, email, surname, name, creation_date, last_update, locked_out, bad_login_time, bad_login_tries, role_name, role_level, reset_password_hash, reset_password_hash_generation_datetime
             FROM $this->userTbl
             INNER JOIN $this->roleTbl ON $this->userTbl.roles_idroles = $this->roleTbl.idroles 
         ";
@@ -128,6 +128,34 @@ class UserModel extends Model
     }
 
     /**
+     * get the user details from a password reset token
+     * @param string $token
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getUserDetailsByToken(string $token)
+    {
+        $hash = $this->generateHash($token);
+        $sql = $this->baseSqlSelect();
+        $sql .= "
+            WHERE reset_password_hash = :token
+        ";
+        $this->query($sql);
+        $this->bind(':token', $hash);
+        $this->execute();
+        $user = $this->fetch();
+        $linkValidTime = strtotime($user->reset_password_hash_generation_datetime);
+        $currentTime = time();
+        if($currentTime-$linkValidTime > Constant::PASSWORD_RESET_DURATION*60)
+        {
+            //token is no longer valid
+            return false;
+        }
+        return $user;
+
+    }
+
+    /**
      * Get all the useful data about a user from his mail
      * @param string $email
      * @return mixed
@@ -171,16 +199,16 @@ class UserModel extends Model
     {
 
         //TODO need to get the default user role. Config ??
-        $passwordHash = password_hash($userData->password, PASSWORD_DEFAULT);
+        //$passwordHash = password_hash($userData->password, PASSWORD_DEFAULT);
 
         $sql = "
-            INSERT INTO $this->userTbl (username, email, password, surname, name, creation_date, last_update, roles_idroles, locked_out, bad_login_tries)
-            VALUES (:username, :email, :password, :surname, :name, NOW(), NOW(), :roles_idroles, 0, 0)
+            INSERT INTO $this->userTbl (username, email, surname, name, creation_date, last_update, roles_idroles, locked_out, bad_login_tries)
+            VALUES (:username, :email, :surname, :name, NOW(), NOW(), :roles_idroles, 0, 0)
         ";
         $this->query($sql);
         $this->bind(':username', $userData->username);
         $this->bind(':email', $userData->email);
-        $this->bind(':password', $passwordHash);
+        //$this->bind(':password', $passwordHash);
         $this->bind(':surname', $userData->surname);
         $this->bind(':name', $userData->name);
         $this->bind(':roles_idroles', 1);
@@ -235,6 +263,59 @@ class UserModel extends Model
         return $response;
     }
 
+    /**
+     * generate a password hash for resetting or defining the password
+     * @param int $userId
+     * @return string the generated token
+     * @throws \Exception
+     */
+    public function generatePasswordHash(int $userId): string
+    {
+        $user = $this->getUserDetailsById($userId);
+        if (!$user) {
+            //user Id doesn't exist, bail out
+            throw new \Exception("User not found");
+        }
+        $token = $this->generateToken();
+        $hash = $this->generateHash($token);
+
+        $sql = "
+            UPDATE $this->userTbl
+            SET
+              reset_password_hash = :hash,
+              reset_password_hash_generation_datetime = NOW()
+            WHERE idusers = :userId
+        ";
+        $this->query($sql);
+        $this->bind(':hash', $hash);
+        $this->bind(':userId', $user->idusers);
+        $this->execute();
+
+        return $token;
+    }
+
+    /**
+     * Reset the user password
+     * @param int $userId
+     * @param string $password
+     * @throws \Exception
+     */
+    public function resetPassword(int $userId, string $password)
+    {
+        $hash = password_hash($password, PASSWORD_DEFAULT);
+        $sql = "
+            UPDATE $this->userTbl
+            SET
+              password = :password,
+              locked_out = 0;
+              last_update = NOW()
+            WHERE idusers = :userId
+        ";
+        $this->query($sql);
+        $this->bind(':password', $hash);
+        $this->bind(':userId', $userId);
+        $this->execute();
+    }
 
 
 }

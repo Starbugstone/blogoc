@@ -10,9 +10,6 @@ use Core\Container;
 use Core\Controller;
 use Core\Traits\PasswordFunctions;
 use Core\Traits\StringFunctions;
-use Swift_Mailer;
-use Swift_Message;
-use Swift_SmtpTransport;
 
 //This is just for testing purposes. a real login system shall be set up later
 
@@ -244,9 +241,6 @@ class Login extends Controller
         //Storing the passed information
         $this->populateUser($register);
 
-        //removing the password from the return
-        $register["password"] = "";
-        $register["confirm"] = "";
 
         //Error checking
 
@@ -280,7 +274,7 @@ class Login extends Controller
         }
 
         //checking the password
-        $passwordError = $this->isPasswordComplex($this->user->password);
+        /*$passwordError = $this->isPasswordComplex($this->user->password);
         if (!$passwordError["success"]) {
             $error = true;
             $registerErrors->password = $passwordError["message"];
@@ -289,7 +283,7 @@ class Login extends Controller
             $error = true;
             $registerErrors->password = "Password and confirmation do not match";
             $registerErrors->confirm = "Password and confirmation do not match";
-        }
+        }*/
 
         //If we found an error, return data to the register form and no create
         if ($error) {
@@ -305,10 +299,10 @@ class Login extends Controller
         $this->populateUserFromId($userId);
 
         //get the unique hash for email validation
-
+        $token = $this->userModel->generatePasswordHash($userId);
 
         //send confirmation mail
-
+        $this->sendMail->sendResetPasswordMail($this->user->email, $token);
 
 
         //all set, redirect and set message
@@ -334,11 +328,6 @@ class Login extends Controller
         $this->session->destroySession();
         $this->alertBox->setAlert('Disconnected');
         $this->response->redirect();
-    }
-
-    public function resetPassword(string $userEmail)
-    {
-
     }
 
     /*

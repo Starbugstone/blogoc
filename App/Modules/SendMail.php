@@ -34,7 +34,13 @@ class SendMail extends Module{
 
     }
 
-
+    /**
+     * Send an Email
+     * @param string $to
+     * @param string $subject
+     * @param string $message
+     * @return int
+     */
     public function send(string $to, string $subject, string $message)
     {
         // Create a message
@@ -46,5 +52,21 @@ class SendMail extends Module{
 
         // Send the message
         return $this->mailer->send($message);
+    }
+
+    /**
+     * sent the reset password mail
+     * @param string $to
+     * @param string $token
+     */
+    public function sendResetPasswordMail(string $to, string $token)
+    {
+        $url = $this->container->getRequest()->getBaseUrl();
+        $url .= "password/reset/get?token=".$token;
+
+        $message = "<a href=\"".$url."\">Define new password</a>";
+
+        $this->send($to, "Define Password", $message );
+
     }
 }

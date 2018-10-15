@@ -238,7 +238,7 @@ article.category-listing {
   .chip .closebtn:hover {
     color: #000; }
 
-#register label.error {
+#register label.error, #forgot label.error {
   width: 100%;
   color: #ffc107;
   padding-left: 1rem; }
