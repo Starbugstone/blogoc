@@ -3,7 +3,7 @@
 namespace App\Modules;
 
 use App\Models\CategoryModel;
-use App\Models\Remembered_loginsModel;
+use App\Models\Remembered_loginModel;
 use App\Models\UserModel;
 use Core\Container;
 use Core\Modules\Module;
@@ -62,7 +62,7 @@ class SiteConfig extends Module
     {
         $cookie = $this->container->getCookie();
         $userModel = new UserModel($this->container);
-        $rememberedLoginModel = new Remembered_loginsModel($this->container);
+        $rememberedLoginModel = new Remembered_loginModel($this->container);
         $session = $this->container->getSession();
 
         $userToken = $cookie->getCookie("rememberMe");

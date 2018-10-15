@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Models\Remembered_loginsModel;
+use App\Models\Remembered_loginModel;
 use App\Models\UserModel;
 use Core\BlogocException;
 use Core\Config;
@@ -22,14 +22,13 @@ class Login extends Controller
     use StringFunctions;
 
     protected $siteConfig;
+    protected $sendMail;
 
     private $userModel;
     private $rememberedLoginModel;
 
     private $user;
 
-    private $mailer;
-    private $transport;
 
     /**
      * Login constructor.
@@ -40,21 +39,13 @@ class Login extends Controller
     public function __construct(Container $container)
     {
         $this->loadModules[] = 'SiteConfig';
+        $this->loadModules[] = 'SendMail';
         parent::__construct($container);
 
         $this->userModel = new UserModel($this->container);
-        $this->rememberedLoginModel = new Remembered_loginsModel($this->container);
+        $this->rememberedLoginModel = new Remembered_loginModel($this->container);
         $this->user = new \stdClass();
 
-        // Create the Transport for mail sending
-        $config = $this->siteConfig->getSiteConfig();
-        $this->transport = (new Swift_SmtpTransport($config["SMTP_server"], (int)$config["SMTP_port"]))
-            ->setUsername($config["SMTP_user"])
-            ->setPassword($config["SMTP_pass"])
-        ;
-
-        // Create the Mailer using your created Transport
-        $this->mailer = new Swift_Mailer($this->transport);
     }
 
     /**
@@ -338,10 +329,16 @@ class Login extends Controller
         $userId = $user->idusers;
         $userHash = $this->rememberedLoginModel->getTokenHashFromId($userId);
         $this->rememberedLoginModel->deleteToken($userHash);
+
         $this->cookie->deleteCookie("rememberMe");
         $this->session->destroySession();
         $this->alertBox->setAlert('Disconnected');
         $this->response->redirect();
+    }
+
+    public function resetPassword(string $userEmail)
+    {
+
     }
 
     /*
@@ -383,16 +380,7 @@ class Login extends Controller
 
     public function testMail()
     {
-
-        // Create a message
-        $message = (new Swift_Message('Wonderful Subject2'))
-            ->setFrom(['john@doe.com' => 'John Doe'])
-            ->setTo(['receiver@domain.org', 'other@domain.org' => 'A name'])
-            ->setBody('Here is the message itself')
-        ;
-
-        // Send the message
-        $mailResult = $this->mailer->send($message);
+        $mailResult = $this->sendMail->send("test@gmail.com", "Test", "Our message");
         var_dump($mailResult);
         die();
     }

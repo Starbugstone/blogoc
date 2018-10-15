@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Models;
+
 use Core\Constant;
 use Core\Container;
 use Core\Model;
 
-class Remembered_loginsModel extends Model{
+class Remembered_loginModel extends Model
+{
 
     private $token;
     private $rememberedLoginTbl;
@@ -26,7 +28,7 @@ class Remembered_loginsModel extends Model{
         if ($token_value) {
             $this->token = $token_value;
         } else {
-            $this->token = bin2hex(random_bytes(16));
+            $this->token = $this->generateToken();
         }
     }
 
@@ -63,7 +65,7 @@ class Remembered_loginsModel extends Model{
      */
     public function getHash()
     {
-        return hash_hmac("sha256", $this->token, Constant::HASH_KEY);
+        return $this->generateHash($this->token);
     }
 
     /**
@@ -86,10 +88,8 @@ class Remembered_loginsModel extends Model{
         $this->execute();
         $result = $this->fetch();
 
-        if($result)
-        {
-            if(strtotime($result->expires_at) < time())
-            {
+        if ($result) {
+            if (strtotime($result->expires_at) < time()) {
                 //token has expired
                 $this->deleteToken($hashedToken);
                 return false;
@@ -106,7 +106,7 @@ class Remembered_loginsModel extends Model{
      * @return bool
      * @throws \Exception
      */
-    public function rememberMe(int $userId):\stdClass
+    public function rememberMe(int $userId): \stdClass
     {
         $result = new \stdClass();
         $result->token = $this->getToken();
@@ -148,7 +148,7 @@ class Remembered_loginsModel extends Model{
      */
     public function cleanUpTokens()
     {
-        $sql="
+        $sql = "
             DELETE FROM $this->rememberedLoginTbl
             WHERE expires_at < :time
         ";
