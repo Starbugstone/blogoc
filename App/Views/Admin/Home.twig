@@ -1,5 +1,84 @@
 {% extends "Admin/Base.twig" %}
+{#
+TODO : Add a hidden user id field. This will only be used when admin updates otherwise a security fail
+TODO : Add the last modification date in a paragraph since it will not be modified by the form
+
+ #}
 {% block main %}
+    <form action="/admin/home/update-user" method="post" id="updateUser">
+        <div class="row">
+            <div class="form-group col-lg-8">
 
+                <label for="postTitle">Post Name</label>
+                <input type="text" class="form-control" id="postTitle" name="postTitle" value="{{ post.title }}">
+                <small id="postTitleHelp" class="form-text text-muted  mb-3">{{ postSlugManualText|raw }}</small>
+
+                <label for="postSlug">Post Slug</label>
+                <input type="text" class="form-control" id="postSlug" name="postSlug" data-manual="{{ postSlugManual }}"
+                       data-original="true" value="{{ post.posts_slug }}">
+                <small id="postSlugHelp" class="form-text text-muted  mb-3"></small>
+
+                <textarea id="postTextArea" name="postTextArea">{{ post.article }}</textarea>
+
+            </div>
+            <div class="form-group col-lg-4">
+
+                <label for="userImage">Avatar</label>
+
+                <input type="text" class="form-control" name="userImage" id="userImage" value="{{ user.avatar }}" placeholder="Image URL">
+
+                <p class="text-center mt-3 display-image image-upload-height">
+                    <img src="{{ not user.avatar ? configs.no_image_replacement : user.avatar }}" class="img-thumbnail display-image img-fluid image-upload-height">
+                </p>
+                <input type="file" class="image-upload" id="userImageUpload">
+
+            </div>
+        </div>
+    </form>
 {% endblock %}
+{% block js %}
+    <script>
+        setupAjax();
+        //---------------------------------------
+        // User image upload
+        //---------------------------------------
 
+        //Initialise the file upload
+        var $imageUpload = $("#userImageUpload");
+
+        var $setImage = $imageUpload.siblings("p.display-image").children("img.display-image");
+        var $setUrl = $imageUpload.siblings("input.form-control");
+        var $fileInputOptions = {
+        showPreview: false,
+        uploadUrl: "/ajax/image-upload/file-input-user-upload",
+        maxFileCount: 1,
+        showRemove: false,
+        allowedFileTypes:['image']
+        }
+        $imageUpload.fileinput($fileInputOptions);
+
+        //once the file is uploaded
+        $imageUpload.on('fileuploaded', function (event, data) {
+        var $url = "/" + data.response["location"];
+        $setImage.attr("src", $url);
+        $setUrl.attr("value", $url);
+        setupToastr();
+        toastr.info('image uploaded');
+        $imageUpload.fileinput('clearStack').fileinput('refresh', $fileInputOptions);
+        });
+
+        $imageUpload.on('fileuploaderror', function(event, data, msg) {
+
+        setupToastr();
+        toastr.error(msg);
+        $imageUpload.fileinput('clearStack').fileinput('refresh', $fileInputOptions);
+
+
+        });
+
+        //if we enter a url
+        $("#postImage").keyup(function () {
+        $setImage.attr("src", $(this).val());
+        });
+    </script>
+{% endblock %}

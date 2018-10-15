@@ -150,4 +150,16 @@ class ImageUpload extends AjaxController
         $this->fileInputUpload($tempFile, $this->imageFolder);
     }
 
+    /**
+     * Upload for the file input in the configuration
+     */
+    public function fileInputUserUpload()
+    {
+        //security checks, only admins can upload images to config
+        $this->onlyUser();
+        $this->onlyPost();
+        $tempFile = $this->request->getUploadedFiles();
+        $this->fileInputUpload($tempFile, $this->userFolder);
+    }
+
 }
