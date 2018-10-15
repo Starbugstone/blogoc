@@ -58,10 +58,7 @@ class Tag extends AdminController
     public function update()
     {
         $this->onlyAdmin();
-        if (!$this->request->isPost()) {
-            $this->alertBox->setAlert('Only post messages allowed', 'error');
-            $this->response->redirect('admin');
-        }
+        $this->onlyPost();
 
         $tag = $this->request->getDataFull();
 
@@ -122,10 +119,7 @@ class Tag extends AdminController
     public function new()
     {
         $this->onlyAdmin();
-        if (!$this->request->isPost()) {
-            $this->alertBox->setAlert('Only post messages allowed', 'error');
-            $this->response->redirect('admin');
-        }
+        $this->onlyPost();
 
         $tag = $this->request->getDataFull();
         $tagName = $tag["tag_name"];

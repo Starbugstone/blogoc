@@ -19,9 +19,7 @@ class AjaxSlugify extends AjaxController
     {
         //only admins can update the slug
         $this->onlyAdmin();
-        if (!$this->container->getRequest()->isPost()) {
-            throw new JsonException('Call is not post');
-        }
+        $this->onlyPost();
         $slug = $this->request->getData("slugText-update");
         $result = array();
         $slugify = new Slugify();

@@ -156,10 +156,7 @@ class Login extends Controller
     public function connection()
     {
         //is post
-        if (!$this->request->isPost()) {
-            $this->alertBox->setAlert('Only post messages allowed', 'error');
-            $this->response->redirect('/');
-        }
+        $this->onlyPost();
 
         $login = $this->request->getDataFull();
         $email = $login["loginEmail"];
@@ -231,10 +228,7 @@ class Login extends Controller
     public function registration()
     {
         //is post
-        if (!$this->request->isPost()) {
-            $this->alertBox->setAlert('Only post messages allowed', 'error');
-            $this->response->redirect('/');
-        }
+        $this->onlyPost();
 
         $register = $this->request->getDataFull();
 
@@ -273,18 +267,6 @@ class Login extends Controller
             $registerErrors->username = "username must not be empty";
         }
 
-        //checking the password
-        /*$passwordError = $this->isPasswordComplex($this->user->password);
-        if (!$passwordError["success"]) {
-            $error = true;
-            $registerErrors->password = $passwordError["message"];
-        }
-        if ($this->user->confirm !== $this->user->password) {
-            $error = true;
-            $registerErrors->password = "Password and confirmation do not match";
-            $registerErrors->confirm = "Password and confirmation do not match";
-        }*/
-
         //If we found an error, return data to the register form and no create
         if ($error) {
             $this->session->set("registrationInfo", $register);
@@ -302,13 +284,19 @@ class Login extends Controller
         $token = $this->userModel->generatePasswordHash($userId);
 
         //send confirmation mail
-        $this->sendMail->sendResetPasswordMail($this->user->email, $token);
+        $this->sendMail->sendResetPasswordMail($this->user->email, $token, $userId);
 
 
         //all set, redirect and set message
         $refererUrl = $this->request->getReferer();
         $baseUrl = $this->request->getBaseUrl();
         $redirectUrl = $this->removeFromBeginning($refererUrl, $baseUrl);
+
+        if($redirectUrl === "login/register")
+        {
+            //if we were already on the register page, go to home page
+            $redirectUrl="";
+        }
 
         $this->alertBox->setAlert('Account created, please check your mailbox to activate account');
         $this->response->redirect($redirectUrl);
@@ -365,12 +353,5 @@ class Login extends Controller
         }
         $this->alertBox->setAlert($userType);
         $this->container->getResponse()->redirect();
-    }
-
-    public function testMail()
-    {
-        $mailResult = $this->sendMail->send("test@gmail.com", "Test", "Our message");
-        var_dump($mailResult);
-        die();
     }
 }

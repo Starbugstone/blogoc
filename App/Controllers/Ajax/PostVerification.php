@@ -19,17 +19,15 @@ class PostVerification extends AjaxController
     public function isSlugUnique()
     {
         $this->onlyAdmin();
-        if (!$this->container->getRequest()->isPost()) {
-            throw new \Core\JsonException('Call is not post');
-        }
+        $this->onlyPost();
 
         $postSlug = $this->request->getData("postSlug");
         $postId = $this->request->getData("postId");
 
         $data = false;
-        if (!$this->isAlphaNum($postSlug)) {
+        if (!$this->isAlphaNum($postSlug) || $this->isInt($postId)) {
             echo json_encode($data);
-            return true;
+            die();
         }
 
         $postModel = new PostModel($this->container);

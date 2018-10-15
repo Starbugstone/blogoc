@@ -52,9 +52,15 @@ class Password extends Controller
 
         //grab the token and ID
         $token = $this->request->getData("token");
+        $userId = $this->request->getData("userId");
 
         //verify if token is valid
-        if(!$this->userModel->getUserDetailsByToken($token))
+        if(!$this->isHexa($token)|| !$this->isInt($userId))
+        {
+            $this->alertBox->setAlert('Badly formatted Token', 'error');
+            $this->response->redirect();
+        }
+        if(!$this->userModel->getUserDetailsByToken($token, $userId))
         {
             $this->alertBox->setAlert('Invalid reset token, please request a new password', 'error');
             $this->response->redirect();
@@ -64,6 +70,7 @@ class Password extends Controller
         $this->data['navigation'] = $this->siteConfig->getMenu();
 
         $this->data["token"] = $token;
+        $this->data["userId"] = $userId;
         $this->renderView('resetPassword');
     }
 
@@ -74,6 +81,12 @@ class Password extends Controller
         $password = $request["forgotPassword"];
         $confirm = $request["forgotConfirm"];
         $token = $request["token"];
+        $userId = $request["userId"];
+
+        if(!$this->isHexa($token) || !$this->isInt($userId) )
+        {
+            throw new \Exception("Bad Token or ID request");
+        }
 
         $error = false;
         $registerErrors = new \stdClass();
@@ -95,7 +108,7 @@ class Password extends Controller
             $this->response->redirect('/password/reset/get?token='.$token);
         }
 
-        $user = $this->userModel->getUserDetailsByToken($token);
+        $user = $this->userModel->getUserDetailsByToken($token, $userId);
         if (!$user) {
 
             $this->alertBox->setAlert('Invalid reset token', 'error');
@@ -140,7 +153,7 @@ class Password extends Controller
         }
 
         $token = $this->userModel->generatePasswordHash($user->idusers);
-        $this->sendMail->sendResetPasswordMail($email, $token);
+        $this->sendMail->sendResetPasswordMail($email, $token, $user->idusers);
 
         $this->alertBox->setAlert('Password reset link sent to your mailbox');
         $this->response->redirect();

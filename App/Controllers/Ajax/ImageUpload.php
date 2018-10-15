@@ -101,9 +101,7 @@ class ImageUpload extends AjaxController
     {
         //security checks, only admins can upload images to posts
         $this->onlyAdmin();
-        if (!$this->container->getRequest()->isPost()) {
-            throw new \Core\JsonException('Call is not post');
-        }
+        $this->onlyPost();
 
         $tempFile = $this->request->getUploadedFiles();
 
@@ -133,9 +131,7 @@ class ImageUpload extends AjaxController
     {
         //security checks, only admins can upload images to config
         $this->onlyAdmin();
-        if (!$this->container->getRequest()->isPost()) {
-            throw new \Core\JsonException('Call is not post');
-        }
+        $this->onlyPost();
         $tempFile = $this->request->getUploadedFiles();
 
         $this->fileInputUpload($tempFile, $this->configFolder);
@@ -149,9 +145,7 @@ class ImageUpload extends AjaxController
     {
         //security checks, only admins can upload images to config
         $this->onlyAdmin();
-        if (!$this->container->getRequest()->isPost()) {
-            throw new \Core\JsonException('Call is not post');
-        }
+        $this->onlyPost();
         $tempFile = $this->request->getUploadedFiles();
         $this->fileInputUpload($tempFile, $this->imageFolder);
     }

@@ -2,6 +2,8 @@
 
 namespace Core;
 
+use Core\JsonException;
+
 
 /**
  * Class AjaxController
@@ -122,6 +124,17 @@ abstract class AjaxController extends Controller
             'status' => $code < 300, // success or not?
             'message' => $message
         ));
+    }
+
+    /**
+     * Only allow post messages
+     */
+    protected function onlyPost()
+    {
+        //is post
+        if (!$this->request->isPost()) {
+            throw new JsonException('Call is not post');
+        }
     }
 
 

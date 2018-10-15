@@ -25,6 +25,10 @@ class UserModel extends Model
         $this->roleTbl = $this->getTablePrefix("roles");
     }
 
+    /**
+     * the basic select query. We can add restrictions on after in the functions.
+     * @return string
+     */
     private function baseSqlSelect(): string
     {
         $sql = "
@@ -128,26 +132,27 @@ class UserModel extends Model
     }
 
     /**
-     * get the user details from a password reset token
+     * get the user details from a password reset token and Id (for security)
      * @param string $token
+     * @param int $userId
      * @return mixed
      * @throws \Exception
      */
-    public function getUserDetailsByToken(string $token)
+    public function getUserDetailsByToken(string $token, int $userId)
     {
         $hash = $this->generateHash($token);
         $sql = $this->baseSqlSelect();
         $sql .= "
-            WHERE reset_password_hash = :token
+            WHERE reset_password_hash = :token AND idusers = :userId
         ";
         $this->query($sql);
         $this->bind(':token', $hash);
+        $this->bind(':userId', $userId);
         $this->execute();
         $user = $this->fetch();
         $linkValidTime = strtotime($user->reset_password_hash_generation_datetime);
         $currentTime = time();
-        if($currentTime-$linkValidTime > Constant::PASSWORD_RESET_DURATION*60)
-        {
+        if ($currentTime - $linkValidTime > Constant::PASSWORD_RESET_DURATION * 60) {
             //token is no longer valid
             return false;
         }
@@ -197,10 +202,6 @@ class UserModel extends Model
      */
     public function registerUser(\stdClass $userData): int
     {
-
-        //TODO need to get the default user role. Config ??
-        //$passwordHash = password_hash($userData->password, PASSWORD_DEFAULT);
-
         $sql = "
             INSERT INTO $this->userTbl (username, email, surname, name, creation_date, last_update, roles_idroles, locked_out, bad_login_tries)
             VALUES (:username, :email, :surname, :name, NOW(), NOW(), :roles_idroles, 1, 0)
@@ -208,10 +209,9 @@ class UserModel extends Model
         $this->query($sql);
         $this->bind(':username', $userData->username);
         $this->bind(':email', $userData->email);
-        //$this->bind(':password', $passwordHash);
         $this->bind(':surname', $userData->surname);
         $this->bind(':name', $userData->name);
-        $this->bind(':roles_idroles', 1);
+        $this->bind(':roles_idroles', 1); //we set to one, should probably get from database and config
         $this->execute();
 
         return (int)$this->dbh->lastInsertId();

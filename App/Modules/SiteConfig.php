@@ -8,9 +8,11 @@ use App\Models\UserModel;
 use Core\Container;
 use Core\Modules\Module;
 use App\Models\ConfigModel;
+use Core\Traits\StringFunctions;
 
 class SiteConfig extends Module
 {
+    use StringFunctions;
     public function __construct(Container $container)
     {
         parent::__construct($container);
@@ -66,7 +68,7 @@ class SiteConfig extends Module
         $session = $this->container->getSession();
 
         $userToken = $cookie->getCookie("rememberMe");
-        if($userToken)
+        if($userToken && $this->isHexa($userToken))
         {
             //we have a rememberMe Hash, login
             $rememberedLogin = $rememberedLoginModel->findByToken($userToken);

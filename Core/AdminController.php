@@ -35,5 +35,17 @@ abstract class AdminController extends Controller
         }
     }
 
+    /**
+     * Only allow post messages
+     */
+    protected function onlyPost()
+    {
+        //is post
+        if (!$this->request->isPost()) {
+            $this->alertBox->setAlert('Only post messages allowed', 'error');
+            $this->response->redirect('/admin');
+        }
+    }
+
 
 }

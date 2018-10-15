@@ -17,11 +17,9 @@ class Category extends AjaxController
     {
         //security checks
         $this->onlyAdmin();
-        if (!$this->container->getRequest()->isPost()) {
-            throw new JsonException('Call is not post');
-        }
+        $this->onlyPost();
 
-        //prepating our return results
+        //preparing our return results
         $result = array();
         $categoryUpdateJson = ($this->request->getData('category-new'));
         $categoryUpdate = json_decode($categoryUpdateJson);
@@ -45,11 +43,9 @@ class Category extends AjaxController
     {
         //security checks
         $this->onlyAdmin();
-        if (!$this->container->getRequest()->isPost()) {
-            throw new JsonException('Call is not post');
-        }
+        $this->onlyPost();
 
-        //prepating our return results
+        //preparing our return results
         $result = array();
         $categoryUpdateJson = ($this->request->getData('category-update'));
         $categoryUpdate = json_decode($categoryUpdateJson);
@@ -74,11 +70,9 @@ class Category extends AjaxController
     {
         //security checks
         $this->onlyAdmin();
-        if (!$this->container->getRequest()->isPost()) {
-            throw new JsonException('Call is not post');
-        }
+        $this->onlyPost();
 
-        //prepating our return results
+        //preparing our return results
         $result = array();
         $categoryDeleteJson = ($this->request->getData('category-delete'));
         $categoryDelete = json_decode($categoryDeleteJson);

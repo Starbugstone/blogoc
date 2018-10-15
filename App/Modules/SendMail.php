@@ -58,11 +58,13 @@ class SendMail extends Module{
      * sent the reset password mail
      * @param string $to
      * @param string $token
+     * @param int $userId
      */
-    public function sendResetPasswordMail(string $to, string $token)
+    public function sendResetPasswordMail(string $to, string $token, int $userId)
     {
         $url = $this->container->getRequest()->getBaseUrl();
         $url .= "password/reset/get?token=".$token;
+        $url .= "&userId=".$userId;
 
         $message = "<a href=\"".$url."\">Define new password</a>";
 
