@@ -27,6 +27,9 @@ abstract class AdminController extends Controller
 
     }
 
+    /**
+     * Only allow admin
+     */
     protected function onlyAdmin()
     {
         if (!$this->auth->isAdmin()) {

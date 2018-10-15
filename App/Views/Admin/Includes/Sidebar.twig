@@ -6,19 +6,14 @@
             <span>Return to site</span>
         </a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" href="/admin/user">
+
+    <li class="nav-item active">
+        <a class="nav-link" href="/admin/">
             <i class="fa fa-user-circle"></i>
-            <span>User Profile</span>
+            <span>Dashboard</span>
         </a>
     </li>
     {% if userLevel >= 2 %}
-        <li class="nav-item active">
-            <a class="nav-link" href="/admin/">
-                <i class="fa fa-tachometer"></i>
-                <span>Dashboard</span>
-            </a>
-        </li>
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="postsDropdown" role="button" data-toggle="dropdown"
                aria-haspopup="true" aria-expanded="false">

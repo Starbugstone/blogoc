@@ -268,4 +268,15 @@ abstract class Controller
             $this->response->redirect('/');
         }
     }
+
+    /**
+     * only allow registered users
+     */
+    protected function onlyUser()
+    {
+        if (!$this->auth->isUser()) {
+            $this->alertBox->setAlert("Only registered users can access this", 'error');
+            $this->container->getResponse()->redirect();
+        }
+    }
 }
