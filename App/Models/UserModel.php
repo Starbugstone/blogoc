@@ -203,7 +203,7 @@ class UserModel extends Model
 
         $sql = "
             INSERT INTO $this->userTbl (username, email, surname, name, creation_date, last_update, roles_idroles, locked_out, bad_login_tries)
-            VALUES (:username, :email, :surname, :name, NOW(), NOW(), :roles_idroles, 0, 0)
+            VALUES (:username, :email, :surname, :name, NOW(), NOW(), :roles_idroles, 1, 0)
         ";
         $this->query($sql);
         $this->bind(':username', $userData->username);
