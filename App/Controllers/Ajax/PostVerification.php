@@ -5,10 +5,20 @@ namespace App\Controllers\Ajax;
 use App\Models\PostModel;
 use Core\AjaxController;
 use Core\Traits\StringFunctions;
+use Core\Container;
 
 class PostVerification extends AjaxController
 {
     use StringFunctions;
+
+
+    protected $slug;
+
+    public function __construct(Container $container)
+    {
+        $this->loadModules[] = 'Slug';
+        parent::__construct($container);
+    }
 
     /**
      * checks if the slug is unique
@@ -25,7 +35,7 @@ class PostVerification extends AjaxController
         $postId = $this->request->getData("postId");
 
         $data = false;
-        if (!$this->isAlphaNum($postSlug) || $this->isInt($postId)) {
+        if (!$this->slug->isSlugValid($postSlug) || !$this->isInt($postId)) {
             echo json_encode($data);
             die();
         }
