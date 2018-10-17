@@ -13,7 +13,7 @@
             <span>Dashboard</span>
         </a>
     </li>
-    {% if userLevel >= 2 %}
+    {% if userLevel >= levelConst.adminLevel  %}
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="postsDropdown" role="button" data-toggle="dropdown"
                aria-haspopup="true" aria-expanded="false">

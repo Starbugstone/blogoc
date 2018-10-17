@@ -93,6 +93,7 @@ abstract class Controller
 
         //Setting up csrf token security for all calls
         $this->data['csrf_token'] = $this->csrf->getCsrfKey(); //storing the security id into the data array to be sent to the view and added in the meta head
+        $this->data['levelConst'] = $this->auth->getLevelConst();
     }
 
     /**

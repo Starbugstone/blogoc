@@ -28,7 +28,7 @@
                 </div>
 
             </div>
-            {% if session.user_role_level >= 2 %}
+            {% if session.user_role_level >= levelConst.adminLevel %}
                 <div class="admin float-right mr-3 mt-2">
                     <a href="/admin/post/modify/{{ post.posts_slug }}">Edit <i class="fa fa-pencil" aria-hidden="true"></i></a>
                 </div>

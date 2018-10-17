@@ -34,10 +34,27 @@ class Auth extends Module
         return $session->get('user_role_level') ?? 0;
     }
 
+    /**
+     * Gets the user role name
+     * @return string
+     */
     public function getUserRole():string
     {
         $session = $this->container->getSession();
         return $session->get('user_role_name') ?? '';
+    }
+
+    /**
+     * gets the configured levels defined in the constant file
+     * @return \stdClass
+     */
+    public function getLevelConst():\stdClass
+    {
+        $levels = new \stdClass();
+        $levels->userLevel = Constant::USER_LEVEL;
+        $levels->adminLevel = Constant::ADMIN_LEVEL;
+
+        return $levels;
     }
 
     /**
