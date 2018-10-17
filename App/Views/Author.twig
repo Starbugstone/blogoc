@@ -3,7 +3,10 @@
 {% block title %}{% endblock %}
 
 {% block main %}
-    <h1 class="text-center mb-3">posts by {{ user.username }}</h1>
+    <div class="row text-center">
+        <img class="img-fluid rounded-circle float-left ml-2" src="{{ not user.avatar ? configs.no_image_replacement : user.avatar }}">
+        <h1 class="text-center mb-3">posts by {{ user.username }}</h1>
+    </div>
     {% include "Includes/Listing-posts.twig" with {'posts': posts} %}
     {% include "Includes/Pagination.twig" with {'pagination': pagination, 'pageUrl' :'/author/posts/'~authorId} %}
 {% endblock %}

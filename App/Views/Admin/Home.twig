@@ -9,13 +9,22 @@
                 <input type="hidden" name="userId" id="userid" value="{{ user.idusers }}">
 
                 <label for="userName" class="mt-3">Name</label>
-                <input type="text" class="form-control" id="userName" name="userName" value="{{ user.name }}">
+                <input type="text" class="form-control" id="userName" name="userName" value="{{ user.name }}" aria-describedby="userNameHelpBlock">
+                <small id="userNameHelpBlock" class="form-text text-danger w-100 pl-3">
+                    {{ registrationErrors.userName }}
+                </small>
 
                 <label for="userSurname" class="mt-3">SurName</label>
-                <input type="text" class="form-control" id="userSurname" name="userSurname" value="{{ user.surname }}">
+                <input type="text" class="form-control" id="userSurname" name="userSurname" value="{{ user.surname }}" aria-describedby="userSurnameHelpBlock">
+                <small id="userSurnameHelpBlock" class="form-text text-danger w-100 pl-3">
+                    {{ registrationErrors.userSurname }}
+                </small>
 
                 <label for="userUsername" class="mt-3">Username</label>
-                <input type="text" class="form-control" id="userUsername" name="userUsername" value="{{ user.username }}">
+                <input type="text" class="form-control" id="userUsername" name="userUsername" value="{{ user.username }}" aria-describedby="userUsernameHelpBlock">
+                <small id="userUsernameHelpBlock" class="form-text text-danger w-100 pl-3">
+                    {{ registrationErrors.userUsername }}
+                </small>
 
                 {% if userLevel >= levelConst.adminLevel  %}
                     {# Admin only modifiable elements #}
@@ -84,7 +93,6 @@
                 userSurname: "required",
                 userUsername: "required",
                 forgotPassword: {
-                    required: true,
                     minlength: 8,
                     validPassword: true
                 },

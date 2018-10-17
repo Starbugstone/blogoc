@@ -44,6 +44,7 @@ abstract class Controller
     protected $response;
 
     protected $cookie;
+    protected $debug;
 
     /**
      * this will automaticly load all the modules listed and store them as $moduleName in tle class
@@ -54,7 +55,8 @@ abstract class Controller
         'Csrf',
         'AlertBox',
         'Auth',
-        'pagination'
+        'Pagination',
+        'Debug'
     ];
 
     /**

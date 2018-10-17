@@ -218,6 +218,35 @@ class UserModel extends Model
     }
 
     /**
+     * update an existing user
+     * @param \stdClass $user
+     * @throws \Exception
+     */
+    public function updateUser(\stdClass $user)
+    {
+        $sql="
+            UPDATE $this->userTbl
+            SET
+              name=:name,
+              surname=:surname,
+              username=:username,
+              avatar=:avatar,
+              roles_idroles=:userRoleId,
+              last_update = NOW()
+            WHERE idusers = :userId
+        ";
+
+        $this->query($sql);
+        $this->bind(':name', $user->userName);
+        $this->bind(':surname', $user->userSurname);
+        $this->bind(':username', $user->userUsername);
+        $this->bind(':avatar', $user->userImage);
+        $this->bind(':userRoleId', $user->userRoleSelector);
+        $this->bind(':userId', $user->userId);
+        $this->execute();
+    }
+
+    /**
      * verify the user connection mail/password and login if ok
      * @param string $email
      * @param string $password
@@ -307,7 +336,7 @@ class UserModel extends Model
             UPDATE $this->userTbl
             SET
               password = :password,
-              locked_out = 0;
+              locked_out = 0,
               last_update = NOW()
             WHERE idusers = :userId
         ";
