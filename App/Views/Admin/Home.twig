@@ -1,29 +1,47 @@
 {% extends "Admin/Base.twig" %}
-{#
-TODO : Add a hidden user id field. This will only be used when admin updates otherwise a security fail
-TODO : Add the last modification date in a paragraph since it will not be modified by the form
-
- #}
 {% block main %}
+
     <form action="/admin/home/update-user" method="post" id="updateUser">
         <div class="row">
             <div class="form-group col-lg-8">
+                <h1>Profile of {{ user.name }} {{ user.surname }}</h1>
+                <p><strong>Registered Email :</strong> {{ user.email }}</p>
+                <input type="hidden" name="userId" id="userid" value="{{ user.idusers }}">
 
-                <label for="postTitle">Post Name</label>
-                <input type="text" class="form-control" id="postTitle" name="postTitle" value="{{ post.title }}">
-                <small id="postTitleHelp" class="form-text text-muted  mb-3">{{ postSlugManualText|raw }}</small>
+                <label for="userName" class="mt-3">Name</label>
+                <input type="text" class="form-control" id="userName" name="userName" value="{{ user.name }}">
 
-                <label for="postSlug">Post Slug</label>
-                <input type="text" class="form-control" id="postSlug" name="postSlug" data-manual="{{ postSlugManual }}"
-                       data-original="true" value="{{ post.posts_slug }}">
-                <small id="postSlugHelp" class="form-text text-muted  mb-3"></small>
+                <label for="userSurname" class="mt-3">SurName</label>
+                <input type="text" class="form-control" id="userSurname" name="userSurname" value="{{ user.surname }}">
 
-                <textarea id="postTextArea" name="postTextArea">{{ post.article }}</textarea>
+                <label for="userUsername" class="mt-3">Username</label>
+                <input type="text" class="form-control" id="userUsername" name="userUsername" value="{{ user.username }}">
 
+                {% if userLevel >= levelConst.adminLevel  %}
+                    {# Admin only modifiable elements #}
+                    <label for="userRoleSelector" class="mt-3">User Role</label>
+                    <select name="userRoleSelector" id="userRoleSelector" class="form-control">
+                        {% for role in roles %}
+                            <option value="{{ role.idroles }}" {{ role.idroles == user.roles_idroles ? "selected" }}>{{ role.role_name }}</option>
+                        {% endfor %}
+                    </select>
+                {% else %}
+                    {# User only elements #}
+                    <div class="border border-danger rounded mt-3 p-3">
+                        <p>Change your password</p>
+                        {% include "Includes/ResetPassword-form.twig" %}
+                    </div>
+
+                    <p class="mt-3"><strong>User level :</strong> {{ user.role_name }}</p>
+                {% endif %}
             </div>
             <div class="form-group col-lg-4">
 
-                <label for="userImage">Avatar</label>
+                <!-- Unmodifiable info -->
+                <p class="mt-3"><strong>Account creation :</strong> {{ user.creation_date }}</p>
+                <p class="mt-3"><strong>Last modification :</strong> {{ user.last_update }}</p>
+
+                <label for="userImage" class="mt-3">Avatar</label>
 
                 <input type="text" class="form-control" name="userImage" id="userImage" value="{{ user.avatar }}" placeholder="Image URL">
 
@@ -33,12 +51,56 @@ TODO : Add the last modification date in a paragraph since it will not be modifi
                 <input type="file" class="image-upload" id="userImageUpload">
 
             </div>
+            <button type="submit" class="btn btn-primary ml-3">Update Profile</button>
         </div>
     </form>
 {% endblock %}
 {% block js %}
     <script>
         setupAjax();
+
+        //---------------------------------------
+        // Form validation
+        //---------------------------------------
+        $.validator.addMethod("validPassword",
+            function (value, element, param) {
+                if (value != "") {
+                    if (value.match(/.*[A-Za-z]+.*/i) == null) {
+                        return false;
+                    }
+                    if (value.match(/.*\d+.*/i) == null) {
+                        return false;
+                    }
+                }
+
+                return true;
+            },
+            "Must contain at least one letter and one number"
+        );
+
+        $("#updateUser").validate({
+            rules: {
+                userName: "required",
+                userSurname: "required",
+                userUsername: "required",
+                forgotPassword: {
+                    required: true,
+                    minlength: 8,
+                    validPassword: true
+                },
+                forgotConfirm: {
+                    equalTo: "#forgotPassword"
+                }
+            }
+        });
+        $("#forgotPasswordShow").click(function () {
+            $("#forgotPassword").hideShowPassword('toggle');
+        });
+
+        $("#forgotPasswordConfirmShow").click(function () {
+            $("#forgotConfirm").hideShowPassword('toggle');
+        });
+
         //---------------------------------------
         // User image upload
         //---------------------------------------
@@ -72,7 +134,6 @@ TODO : Add the last modification date in a paragraph since it will not be modifi
         setupToastr();
         toastr.error(msg);
         $imageUpload.fileinput('clearStack').fileinput('refresh', $fileInputOptions);
-
 
         });
 

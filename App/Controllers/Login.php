@@ -307,10 +307,13 @@ class Login extends Controller
      */
     public function disconnect()
     {
-        $user = $this->session->get("user");
-        $userId = $user->idusers;
-        $userHash = $this->rememberedLoginModel->getTokenHashFromId($userId);
-        $this->rememberedLoginModel->deleteToken($userHash);
+        $userId = $this->session->get("userId");
+        if($userId)
+        {
+            $userHash = $this->rememberedLoginModel->getTokenHashFromId($userId);
+            $this->rememberedLoginModel->deleteToken($userHash);
+        }
+
 
         $this->cookie->deleteCookie("rememberMe");
         $this->session->destroySession();

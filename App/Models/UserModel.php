@@ -32,7 +32,7 @@ class UserModel extends Model
     private function baseSqlSelect(): string
     {
         $sql = "
-            SELECT idusers, username, avatar, email, surname, name, creation_date, last_update, locked_out, bad_login_time, bad_login_tries, role_name, role_level, reset_password_hash, reset_password_hash_generation_datetime
+            SELECT idusers, username, avatar, email, surname, name, creation_date, last_update, locked_out, bad_login_time, bad_login_tries, roles_idroles, role_name, role_level, reset_password_hash, reset_password_hash_generation_datetime
             FROM $this->userTbl
             INNER JOIN $this->roleTbl ON $this->userTbl.roles_idroles = $this->roleTbl.idroles 
         ";

@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 
 
+use App\Models\RoleModel;
 use App\Models\UserModel;
 use Core\Container;
 use Core\Traits\StringFunctions;
@@ -14,12 +15,14 @@ class Home extends \Core\AdminController
     protected $siteConfig;
 
     private $userModel;
+    private $roleModel;
 
     public function __construct(Container $container)
     {
         $this->loadModules[] = 'SiteConfig';
         parent::__construct($container);
         $this->userModel = new UserModel($this->container);
+        $this->roleModel = new RoleModel($this->container);
 
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
     }
@@ -35,10 +38,10 @@ class Home extends \Core\AdminController
     {
         $this->onlyUser();
 
-        var_dump($this->session->getAllSessionVars());
-        die();
-        $userId = $this->session->get("userid");
+        $userId = $this->session->get("userId");
         $this->data["user"] = $this->userModel->getUserDetailsById($userId);
+
+        $this->data["roles"] = $this->roleModel->getRoleList();
 
         $this->renderView('Admin/Home');
 
@@ -61,6 +64,9 @@ class Home extends \Core\AdminController
         }
 
         $this->data["user"] = $this->userModel->getUserDetailsById($userId);
+
+        $this->data["roles"] = $this->roleModel->getRoleList();
+
         $this->renderView('Admin/Home');
     }
 
