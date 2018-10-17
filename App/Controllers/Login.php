@@ -85,7 +85,7 @@ class Login extends Controller
     private function setUserSession()
     {
         $this->session->regenerateSessionId(); //regenerate the ID to avoid session ghosting
-        $this->session->set("user", $this->user);
+        $this->session->set("userId", $this->user->idusers);
         $userRoleName = $this->user->role_name ?? "";
         $userRoleLevel = $this->user->role_level ?? 0;
         $this->session->set('user_role_name', $userRoleName);
@@ -330,7 +330,7 @@ class Login extends Controller
     {
         $this->session->set('user_role_name', 'Admin');
         $this->session->set('user_role_level', 2);
-        $this->session->set('user_id', 1);
+        $this->session->set('userId', 1);
         $this->alertBox->setAlert('Connected as admin');
         $this->container->getResponse()->redirect('/admin/');
     }

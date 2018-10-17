@@ -35,7 +35,9 @@ class Home extends \Core\AdminController
     {
         $this->onlyUser();
 
-        $userId = $this->session->get("user_id");
+        var_dump($this->session->getAllSessionVars());
+        die();
+        $userId = $this->session->get("userid");
         $this->data["user"] = $this->userModel->getUserDetailsById($userId);
 
         $this->renderView('Admin/Home');
