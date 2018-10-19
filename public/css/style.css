@@ -210,6 +210,10 @@ article.category-listing {
     background-position: center;
     background-size: cover; }
 
+img.author-image {
+  max-width: 150px;
+  max-height: 150px; }
+
 .pagination p {
   width: 100%; }
 
