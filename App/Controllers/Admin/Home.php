@@ -90,6 +90,7 @@ class Home extends \Core\AdminController
 
     /**
      * Update the user info via post
+     * @throws \Exception
      */
     public function updateUser()
     {
@@ -175,6 +176,12 @@ class Home extends \Core\AdminController
 
     /**
      * List all the users
+     * @param string $page
+     * @param int $linesPerPage
+     * @throws \ReflectionException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function listUsers(string $page = "page-1", int $linesPerPage = Constant::LIST_PER_PAGE)
     {
