@@ -29,6 +29,8 @@ class Post extends Controller
     public function viewPost(string $slug)
     {
 
+        //TODO Implement comment pagination
+
         $tagModel = new TagModel($this->container);
         $postModel = new PostModel($this->container);
 
