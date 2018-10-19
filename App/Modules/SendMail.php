@@ -39,17 +39,25 @@ class SendMail extends Module{
      * @param string $to
      * @param string $subject
      * @param string $message
+     * @param string|null $from
      * @return int
      */
-    public function send(string $to, string $subject, string $message)
+    public function send(string $to, string $subject, string $message, string $from = null)
     {
         // Create a message
         $message = (new Swift_Message($subject))
-            ->setFrom([$this->siteConfig["SMTP_from"]])
+            //->setFrom([$this->siteConfig["SMTP_from"]])
             ->setTo([$to])
             ->setBody($message, 'text/html')
         ;
 
+        if($from === null)
+        {
+            //if we haven't set a from, get the config value
+            $from = $this->siteConfig["SMTP_from"];
+        }
+
+        $message->setFrom([$from]);
         // Send the message
         return $this->mailer->send($message);
     }
