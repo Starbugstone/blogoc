@@ -282,7 +282,7 @@ class Login extends Controller
         $token = $this->userModel->generatePasswordHash($userId);
 
         //send confirmation mail
-        $this->sendMail->sendResetPasswordMail($this->user->email, $token, $userId);
+        $this->sendMail->sendNewPasswordMail($this->user->email, $token, $userId);
 
 
         //all set, redirect and set message

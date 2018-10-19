@@ -47,7 +47,7 @@ class SendMail extends Module{
         $message = (new Swift_Message($subject))
             ->setFrom([$this->siteConfig["SMTP_from"]])
             ->setTo([$to])
-            ->setBody($message)
+            ->setBody($message, 'text/html')
         ;
 
         // Send the message
@@ -66,9 +66,30 @@ class SendMail extends Module{
         $url .= "password/reset/get?token=".$token;
         $url .= "&userId=".$userId;
 
-        $message = "<a href=\"".$url."\">Define new password</a>";
+        $message = "<h1>Message from <a href='".$this->container->getRequest()->getBaseUrl()."'>".$this->siteConfig["site_name"]."</a></h1>";
+        $message .= "<p>You have asked to reset your password, please click <a href=\"".$url."\">Here</a> to define a new password</p>";
 
-        $this->send($to, "Define Password", $message );
+        $this->send($to, "Define New Password", $message );
+
+    }
+
+    /**
+     * sent the reset password mail
+     * @param string $to
+     * @param string $token
+     * @param int $userId
+     */
+    public function sendNewPasswordMail(string $to, string $token, int $userId)
+    {
+        $url = $this->container->getRequest()->getBaseUrl();
+        $url .= "password/reset/get?token=".$token;
+        $url .= "&userId=".$userId;
+        $message = "<h1>Message from <a href='".$this->container->getRequest()->getBaseUrl()."'>".$this->siteConfig["site_name"]."</a></h1>";
+        $message .= "<h2>Welcome to the site</h2>";
+        $message .= "<p>You have sucsessfuly created an account, now all you need to do is <a href=\"".$url."\">Create your new password</a></p>";
+        $message .= "<p>Have fun</p>";
+
+        $this->send($to, "Define Password at ".$this->siteConfig["site_name"], $message );
 
     }
 }
