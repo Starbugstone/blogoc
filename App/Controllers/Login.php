@@ -5,13 +5,11 @@ namespace App\Controllers;
 use App\Models\Remembered_loginModel;
 use App\Models\UserModel;
 use Core\BlogocException;
-use Core\Config;
 use Core\Container;
 use Core\Controller;
 use Core\Traits\PasswordFunctions;
 use Core\Traits\StringFunctions;
 
-//This is just for testing purposes. a real login system shall be set up later
 
 class Login extends Controller
 {
@@ -179,7 +177,7 @@ class Login extends Controller
         try {
             if (!$this->userModel->isEmailUsed($email)) {
                 $error = true;
-                $loginErrors->email = "This email is not registerd";
+                $loginErrors->email = "This email is not registered";
             }
 
             $authUser = $this->userModel->authenticateUser($email, $password);
