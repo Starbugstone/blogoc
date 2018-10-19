@@ -29,10 +29,16 @@
                 {% if userLevel >= levelConst.adminLevel  %}
                     {# Admin only modifiable elements #}
                     <label for="userRoleSelector" class="mt-3">User Role</label>
-                    <select name="userRoleSelector" id="userRoleSelector" class="form-control">
+                    <select name="userRoleSelector" id="userRoleSelector" class="form-control" {{ user.idusers == 1 ? "disabled" : "" }}>
                         {% for role in roles %}
                             <option value="{{ role.idroles }}" {{ role.idroles == user.roles_idroles ? "selected" }}>{{ role.role_name }}</option>
                         {% endfor %}
+                    </select>
+
+                    <label class="mt-3" for="userLockedOut">User Locked Out</label>
+                    <select name="userLockedOut" id="userLockedOut" class="form-control" {{ user.idusers == 1 ? "disabled" : "" }}>
+                        <option value="1" {{ user.locked_out == 1 ? "selected" }}>True</option>
+                        <option value="0" {{ user.locked_out == 0 ? "selected" }}>False</option>
                     </select>
                 {% else %}
                     {# User only elements #}

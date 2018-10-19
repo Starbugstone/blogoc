@@ -38,4 +38,30 @@ class User  extends AjaxController{
         echo json_encode($return);
 
     }
+
+    /**
+     * @throws JsonException
+     */
+    public function toggleActivation()
+    {
+        $this->onlyAdmin();
+        $this->onlyPost();
+        $state = (bool)($this->request->getData("state") === 'true');
+        $userId = (int)$this->request->getData("userId");
+
+        $result = array();
+        $result["success"] = false;
+        $result["state"] = $state;
+        $result["userId"] = $userId;
+
+        // we can not update the Original Admin activation state
+        if($userId !== 1)
+        {
+            $result["success"] = $this->userModel->activateUser(!$state, $userId);
+            $result["state"] = !$state;
+            $result["userId"] = $userId;
+        }
+
+        echo json_encode($result);
+    }
 }

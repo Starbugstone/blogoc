@@ -5,6 +5,7 @@ namespace App\Controllers\Admin;
 
 use App\Models\RoleModel;
 use App\Models\UserModel;
+use Core\Constant;
 use Core\Container;
 use Core\Traits\PasswordFunctions;
 use Core\Traits\StringFunctions;
@@ -14,6 +15,7 @@ class Home extends \Core\AdminController
     use StringFunctions;
     use PasswordFunctions;
     protected $siteConfig;
+    protected $pagination;
 
     private $userModel;
     private $roleModel;
@@ -21,6 +23,7 @@ class Home extends \Core\AdminController
     public function __construct(Container $container)
     {
         $this->loadModules[] = 'SiteConfig';
+        $this->loadModules[] = 'pagination';
         parent::__construct($container);
         $this->userModel = new UserModel($this->container);
         $this->roleModel = new RoleModel($this->container);
@@ -96,7 +99,7 @@ class Home extends \Core\AdminController
         $user = (object)$this->request->getDataFull();
         $redirectUrl = "/admin";
 
-        if ($user->userId !== $this->session->get("userId") || isset($user->userRoleSelector)) {
+        if ($user->userId !== $this->session->get("userId") || isset($user->userRoleSelector) || isset($user->locked_out)) {
             //an admin is trying to update a user or form tampered with
             $this->onlyAdmin();
             $redirectUrl = "/admin/home/view-user/" . $user->userId;
@@ -104,6 +107,7 @@ class Home extends \Core\AdminController
             //set the role to the original state for update
             $beforeUser = $this->userModel->getUserDetailsById($user->userId);
             $user->userRoleSelector = $beforeUser->roles_idroles;
+            $user->userLockedOut = $beforeUser->locked_out;
         }
 
         $userId = $user->userId;
@@ -112,6 +116,18 @@ class Home extends \Core\AdminController
         $resetPassword = false;
         $error = false;
         $registerErrors = new \stdClass();
+
+        if($userId == 1 && $user->userLockedOut == 1)
+        {
+            $error = true;
+            $this->alertBox->setAlert("Original admin may not be deactivated", "error");
+        }
+
+        if($userId == 1 && $user->userRoleSelector != 2)
+        {
+            $error = true;
+            $this->alertBox->setAlert("Original admin must stay admin", "error");
+        }
 
         if ($password !== "" || $confirm !== "") {
             //we are resetting the password
@@ -155,5 +171,47 @@ class Home extends \Core\AdminController
 
         $this->alertBox->setAlert('User details updated');
         $this->response->redirect($redirectUrl);
+    }
+
+    /**
+     * List all the users
+     */
+    public function listUsers(string $page = "page-1", int $linesPerPage = Constant::LIST_PER_PAGE)
+    {
+        $this->onlyAdmin();
+
+        $totalUsers = $this->userModel->countUsers();
+        $pagination = $this->pagination->getPagination($page, $totalUsers, $linesPerPage);
+
+        if ($linesPerPage !== Constant::LIST_PER_PAGE) {
+            $this->data['paginationPostsPerPage'] = $linesPerPage;
+        }
+
+        $this->data["posts"] = $this->userModel->getUserList($pagination["offset"], $linesPerPage);
+        $this->data['pagination'] = $pagination;
+        $this->renderView("Admin/ListUser");
+    }
+
+    /**
+     * permanantly delete a user
+     * @param int $userId
+     * @throws \Exception
+     */
+    public function deleteUser(int $userId)
+    {
+        $this->onlyAdmin();
+        if (!$this->isInt($userId)) {
+            throw new \Exception("Error in passed ID");
+        }
+
+        if($userId === 1)
+        {
+            $this->alertBox->setAlert('Original Admin can not be deleted', "error");
+            $this->response->redirect("/admin/home/list-users");
+        }
+
+        $this->userModel->deleteUser($userId);
+        $this->alertBox->setAlert('User deleted');
+        $this->response->redirect("/admin/home/list-users");
     }
 }

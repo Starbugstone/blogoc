@@ -114,6 +114,23 @@ class UserModel extends Model
     }
 
     /**
+     * set the last update time to now for a user
+     * @param $user
+     * @throws \Exception
+     */
+    private function setLastUpdateTime($user):void
+    {
+        $sql = "
+            UPDATE $this->userTbl
+            SET last_update = NOW();
+            WHERE idusers = :userId
+        ";
+        $this->query($sql);
+        $this->bind(':userId', $user->idusers);
+        $this->execute();
+    }
+
+    /**
      * Get all the useful data about a user from his ID
      * @param int $userId
      * @return mixed
@@ -232,16 +249,17 @@ class UserModel extends Model
               username=:username,
               avatar=:avatar,
               roles_idroles=:userRoleId,
+              locked_out=:userLockedOut,
               last_update = NOW()
             WHERE idusers = :userId
         ";
-
         $this->query($sql);
         $this->bind(':name', $user->userName);
         $this->bind(':surname', $user->userSurname);
         $this->bind(':username', $user->userUsername);
         $this->bind(':avatar', $user->userImage);
         $this->bind(':userRoleId', $user->userRoleSelector);
+        $this->bind(':userLockedOut', $user->userLockedOut);
         $this->bind(':userId', $user->userId);
         $this->execute();
     }
@@ -287,6 +305,7 @@ class UserModel extends Model
 
         //all ok, send user back for login
         $this->resetBadLogin($user);
+        $this->setLastUpdateTime($user);
         $response->user = $user;
         $response->success = true;
         return $response;
@@ -346,5 +365,68 @@ class UserModel extends Model
         $this->execute();
     }
 
+    /**
+     * counts all the users
+     * @return int
+     * @throws \Exception
+     */
+    public function countUsers(): int
+    {
+        return $this->count($this->userTbl);
+    }
+
+
+    /**
+     * get the list of all users
+     * @param int $offset
+     * @param int $limit
+     * @return array
+     * @throws \ReflectionException
+     */
+    public function getUserList(int $offset = 0, int $limit = Constant::LIST_PER_PAGE)
+    {
+        //return $this->list($offset, $limit, $this->userTbl);
+        $sql = $this->baseSqlSelect();
+        $sql .= "
+            LIMIT :limit OFFSET :offset
+        ";
+        $this->query($sql);
+        $this->bind(":limit", $limit);
+        $this->bind(":offset", $offset);
+        $this->execute();
+        return $this->fetchAll();
+    }
+
+    public function activateUser(bool $activation, int $userId)
+    {
+        $sql = "
+          UPDATE $this->userTbl
+            SET
+              locked_out = :activation
+            WHERE idusers = :userId
+        ";
+        $this->query($sql);
+        $this->bind(':activation', $activation);
+        $this->bind(':userId', $userId);
+        return $this->execute();
+    }
+
+    /**
+     * delete a user from the dataBase
+     * @param $userId
+     * @return bool
+     * @throws \Exception
+     */
+    public function deleteUser(int $userId)
+    {
+        $sql = "
+          DELETE FROM $this->userTbl 
+          WHERE idusers = :userId
+        ";
+
+        $this->query($sql);
+        $this->bind(':userId', $userId);
+        return $this->execute();
+    }
 
 }
