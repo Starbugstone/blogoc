@@ -31,8 +31,9 @@ class Post extends Controller
     }
 
     /**
-     * @param $slug
-     * @throws \Exception
+     * @param string $slug
+     * @param string $page
+     * @param int $linesPerPage
      * @throws \ReflectionException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
@@ -40,8 +41,6 @@ class Post extends Controller
      */
     public function viewPost(string $slug, string $page = "page-1", int $linesPerPage = Constant::COMMENTS_PER_PAGE)
     {
-
-        //TODO Implement comment pagination
 
         $postId = $this->postModel->getPostIdFromSlug($slug);
 
@@ -54,7 +53,6 @@ class Post extends Controller
             $this->alertBox->setAlert('This post is not yet published', 'warning');
         }
 
-
         $totalComments = $this->commentModel->countCommentsOnPost($postId);
         $pagination = $this->pagination->getPagination($page, $totalComments, $linesPerPage);
 
@@ -62,13 +60,13 @@ class Post extends Controller
             $this->data['paginationPostsPerPage'] = $linesPerPage;
         }
 
-
         $this->sendSessionVars();
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
         $this->data['post'] = $posts;
         $this->data['postTags'] = $this->tagModel->getTagsOnPost($postId);
         $this->data['navigation'] = $this->siteConfig->getMenu();
-        $this->data["comments"] = $this->commentModel->getCommentsListOnPost($postId, $pagination["offset"], $linesPerPage);
+        $this->data["comments"] = $this->commentModel->getCommentsListOnPost($postId, $pagination["offset"],
+            $linesPerPage);
         $this->data['pagination'] = $pagination;
 
         $this->renderView('post');

@@ -9,15 +9,18 @@
             <aside class="col-md-4 post-info">
                 {% if session.user_role_level >= 2 %}
                     <div class="admin float-right mr-3 mt-2">
-                        <a href="/admin/post/modify/{{ post.posts_slug }}">Edit <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                        <a href="/admin/post/modify/{{ post.posts_slug }}">Edit <i class="fa fa-pencil"
+                                                                                   aria-hidden="true"></i></a>
                     </div>
                 {% endif %}
                 <h2 class="text-center">Info</h2>
                 <div class="image">
-                    <img src="{{ not post.post_image ? configs.no_image_replacement : post.post_image }}" alt="logo {{ post.title }}" class="img-fluid img-thumbnail">
+                    <img src="{{ not post.post_image ? configs.no_image_replacement : post.post_image }}"
+                         alt="logo {{ post.title }}" class="img-fluid img-thumbnail">
                 </div>
                 <div class="category">
-                    <p><b>Category : </b><a href="/category/posts/{{ post.category_name }}">{{ post.category_name }}</a></p>
+                    <p><b>Category : </b><a href="/category/posts/{{ post.category_name }}">{{ post.category_name }}</a>
+                    </p>
                 </div>
                 <div class="author">
                     <p><b>Author : </b><a href="/author/posts/{{ post.idusers }}">{{ post.author }}</a></p>
@@ -28,7 +31,7 @@
                 <h2 class="text-center">Tags</h2>
                 <div class="tags">
                     {% for tag in postTags %}
-                    <span class="tagChip">
+                        <span class="tagChip">
                         <div class="chip mx-1 mt-2">
                             <a href="/tag/posts/{{ tag.idtags }}">{{ tag.tag_name }}</a>
                         </div>
@@ -46,29 +49,32 @@
         <div class="row justify-content-lg-center" id="comments">
             <div class="col-lg-8">
                 {# TODO Implement comments #}
-                    {% if comments %}
-                        <h1>Comments</h1>
-                        {% for comment in comments %}
-                            <div class="row align-items-center">
-                                <div class="col-md-4">
-                                    <h3>{{ comment.username }}</h3>
-                                    <p><img src="{{ not comment.avatar ? configs.no_image_replacement : comment.avatar }}" class="img-thumbnail display-image img-fluid" style="max-height: 150px;"></p>
-                                </div>
-                                <div class="col-md-8">
-                                    {{ comment.comment|raw }}
-                                </div>
+                {% if comments %}
+                    <h1>Comments</h1>
+                    {% for comment in comments %}
+                        <div class="row align-items-center">
+                            <div class="col-md-4">
+                                <h3>{{ comment.username }}</h3>
+                                <p><img src="{{ not comment.avatar ? configs.no_image_replacement : comment.avatar }}"
+                                        class="img-thumbnail display-image img-fluid" style="max-height: 150px;"></p>
                             </div>
-                        {% endfor %}
-                        {% include "Includes/Pagination.twig" with {'pagination': pagination, 'pageUrl' :'/post/view-post/'~post.posts_slug, paginationPostsPerPage: paginationPostsPerPage} %}
-                    {% else %}
-                        <h1>No comments yet</h1>
-                    {% endif %}
+                            <div class="col-md-8">
+                                {{ comment.comment|raw }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    {% include "Includes/Pagination.twig" with {'pagination': pagination, 'pageUrl' :'/post/view-post/'~post.posts_slug, paginationPostsPerPage: paginationPostsPerPage} %}
+                {% else %}
+                    <h1>No comments yet</h1>
+                {% endif %}
 
                 {% if session.userId is defined %}
                     <form id="comment" action="/post/add-comment" method="post">
                         <input type="hidden" value="{{ post.idposts }}" name="postId">
                         <textarea id="newComment" name="newComment"></textarea>
-                        <button type="submit" class="btn btn-primary update-config-button float-right mr-3 my-3">Add comment</button>
+                        <button type="submit" class="btn btn-primary update-config-button float-right mr-3 my-3">Add
+                            comment
+                        </button>
                     </form>
                 {% endif %}
             </div>
