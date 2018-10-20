@@ -51,3 +51,40 @@ if ($(window).width() > MQL) {
 //---------------------------------------------
 /*global WOW*/
 new WOW().init();
+
+
+//---------------------------------------------
+// Setup TinyMce for comments
+//---------------------------------------------
+function setupTinymce($selector) {
+    //getting our base URL
+    var url = window.location.origin;
+    tinymce.init({
+        selector: $selector,
+
+        /* display statusbar */
+        statubar: false,
+        branding: false,
+
+        /* theme of the editor */
+        theme: "modern",
+        skin: "lightgray",
+
+        /* width and height of the editor */
+        min_height: 450,
+
+        /* plugin */
+        plugins: [
+            "lists textcolor emoticons"
+        ],
+
+        /* toolbar */
+        menubar: false,
+        toolbar: [
+            "bold italic underline strikethrough | bullist numlist emoticons | alignleft aligncenter alignright alignjustify | undo redo | alignnone removeformat"
+        ],
+
+
+
+    });
+}

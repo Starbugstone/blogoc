@@ -9,12 +9,14 @@ use Core\Constant;
 class CommentModel extends Model{
 
     private $commentTbl;
+    private $userTbl;
 
     public function __construct(Container $container)
     {
         parent::__construct($container);
 
         $this->commentTbl = $this->getTablePrefix("comments");
+        $this->userTbl = $this->getTablePrefix("users");
     }
 
     /**
@@ -43,7 +45,8 @@ class CommentModel extends Model{
     public function getCommentsListOnPost(int $postId, int $offset = 0, int $limit = Constant::COMMENTS_PER_PAGE)
     {
         $sql = "
-            SELECT * FROM $this->commentTbl
+            SELECT idcomments, users_idusers, posts_idposts, comment, approved, username, avatar
+            FROM $this->commentTbl LEFT JOIN $this->userTbl ON $this->commentTbl.users_idusers = $this->userTbl.idusers
             WHERE approved = 1
             AND posts_idposts = :postId
             LIMIT :limit OFFSET :offset
@@ -53,7 +56,8 @@ class CommentModel extends Model{
         $this->bind(":limit", $limit);
         $this->bind(":offset", $offset);
         $this->bind(":postId", $postId);
-        return $this->execute();
+        $this->execute();
+        return $this->fetchAll();
     }
 
     /**
@@ -87,6 +91,29 @@ class CommentModel extends Model{
         $this->bind(":limit", $limit);
         $this->bind(":offset", $offset);
         return $this->execute();
+    }
+
+    /**
+     * Add a comment to a post
+     * @param int $postId
+     * @param int $userId
+     * @param string $message
+     * @return int
+     * @throws \Exception
+     */
+    public function addComment(int $postId, int $userId, string $message):int
+    {
+        $sql="
+            INSERT INTO $this->commentTbl (users_idusers, posts_idposts, comment, approved)
+            VALUES (:userId, :postId, :comment, 0)
+        ";
+        $this->query($sql);
+        $this->bind(':userId', $userId);
+        $this->bind(':postId', $postId);
+        $this->bind(':comment', $message);
+
+        $this->execute();
+        return (int)$this->dbh->lastInsertId();
     }
 
 }

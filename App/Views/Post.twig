@@ -14,7 +14,7 @@
                 {% endif %}
                 <h2 class="text-center">Info</h2>
                 <div class="image">
-                    <img src="{{ post.post_image }}" alt="logo {{ post.title }}" class="img-responsive img-thumbnail">
+                    <img src="{{ not post.post_image ? configs.no_image_replacement : post.post_image }}" alt="logo {{ post.title }}" class="img-fluid img-thumbnail">
                 </div>
                 <div class="category">
                     <p><b>Category : </b><a href="/category/posts/{{ post.category_name }}">{{ post.category_name }}</a></p>
@@ -40,14 +40,37 @@
                 </div>
             </aside>
             <div class="col-md-8">
-                {{ post.article|raw  }}
+                {{ post.article|raw }}
             </div>
         </div>
-        <div class="row" id="comments">
-            <div class="col-12">
+        <div class="row justify-content-lg-center" id="comments">
+            <div class="col-lg-8">
                 {# TODO Implement comments #}
-                {# TODO Implement new comment if logged in #}
-                <p>COMMENTS TO IMPLEMENT</p>
+                    {% if comments %}
+                        <h1>Comments</h1>
+                        {% for comment in comments %}
+                            <div class="row align-items-center">
+                                <div class="col-md-4">
+                                    <h3>{{ comment.username }}</h3>
+                                    <p><img src="{{ not comment.avatar ? configs.no_image_replacement : comment.avatar }}" class="img-thumbnail display-image img-fluid" style="max-height: 150px;"></p>
+                                </div>
+                                <div class="col-md-8">
+                                    {{ comment.comment|raw }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% include "Includes/Pagination.twig" with {'pagination': pagination, 'pageUrl' :'/post/view-post/'~post.posts_slug, paginationPostsPerPage: paginationPostsPerPage} %}
+                    {% else %}
+                        <h1>No comments yet</h1>
+                    {% endif %}
+
+                {% if session.userId is defined %}
+                    <form id="comment" action="/post/add-comment" method="post">
+                        <input type="hidden" value="{{ post.idposts }}" name="postId">
+                        <textarea id="newComment" name="newComment"></textarea>
+                        <button type="submit" class="btn btn-primary update-config-button float-right mr-3 my-3">Add comment</button>
+                    </form>
+                {% endif %}
             </div>
 
         </div>
@@ -56,5 +79,7 @@
 {% endblock %}
 
 {% block js %}
-    {# TODO Add TinyMCE on add and edit comment #}
+    <script>
+        setupTinymce("#newComment");
+    </script>
 {% endblock %}
