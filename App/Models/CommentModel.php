@@ -90,7 +90,20 @@ class CommentModel extends Model{
         $this->query($sql);
         $this->bind(":limit", $limit);
         $this->bind(":offset", $offset);
-        return $this->execute();
+        $this->execute();
+
+        return $this->fetchAll();
+    }
+
+    public function countComments(): int
+    {
+        return $this->count($this->commentTbl);
+    }
+
+
+    public function getCommentsList(int $offset = 0, int $limit = Constant::POSTS_PER_PAGE)
+    {
+        return $this->list($offset, $limit, $this->commentTbl);
     }
 
     /**

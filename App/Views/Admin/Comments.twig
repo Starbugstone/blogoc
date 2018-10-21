@@ -1,0 +1,17 @@
+{% extends "Admin/Base.twig" %}
+{% block main %}
+
+
+    {% set pageUrl = "/admin/comments/view-comments" %}
+    {%  if pendingView is defined %}
+        {% set pageUrl = "/admin/comments/pending-comments" %}
+    {% endif %}
+    {% include "Includes/Pagination.twig" with {'pagination': pagination, 'pageUrl' :pageUrl, paginationPostsPerPage: paginationPostsPerPage} %}
+
+{% endblock %}
+
+{% block js %}
+    <script>
+
+    </script>
+{% endblock %}
