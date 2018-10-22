@@ -101,17 +101,17 @@ trait StringFunctions
         if (count($string) <= $count) {
             return $text;
         }
-        $trimed = '';
+        $trimmed = '';
         for ($wordCounter = 0; $wordCounter < $count; $wordCounter++) {
-            $trimed .= $string[$wordCounter];
+            $trimmed .= $string[$wordCounter];
             if ($wordCounter < $count - 1) {
-                $trimed .= " ";
+                $trimmed .= " ";
             } else {
-                $trimed .= "[...]";
+                $trimmed .= "[...]";
             }
         }
 
-        return $this->completeDom($trimed);
+        return $this->completeDom($trimmed);
     }
 
     /**
