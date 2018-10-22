@@ -13,7 +13,7 @@ class Post extends Controller
 {
 
     protected $siteConfig;
-    protected $pagination;
+    protected $sendMail;
 
     private $commentModel;
     private $tagModel;
@@ -22,7 +22,7 @@ class Post extends Controller
     public function __construct(Container $container)
     {
         $this->loadModules[] = 'SiteConfig';
-        $this->loadModules[] = 'pagination';
+        $this->loadModules[] = 'SendMail';
         parent::__construct($container);
         $this->commentModel = new CommentModel($this->container);
         $this->tagModel = new TagModel($this->container);
@@ -83,20 +83,31 @@ class Post extends Controller
         $this->onlyUser();
 
         //get the session userId
-        $userId = $this->session->get("userId");
+        $userId = (int)$this->session->get("userId");
         $comment = $this->request->getData("newComment");
-        $postId = $this->request->getData("postId");
+        $postId = (int)$this->request->getData("postId");
 
         //check if we are admin, Admins do not need moderation
-        $admin = $this->session->get('user_role_level')>= Constant::ADMIN_LEVEL;
+        $admin = $this->session->get('user_role_level') >= Constant::ADMIN_LEVEL;
 
-        $this->commentModel->addComment($postId, $userId, $comment, $admin);
+        $commentId = $this->commentModel->addComment($postId, $userId, $comment, $admin);
 
         $refererUrl = $this->request->getReferer();
         $baseUrl = $this->request->getBaseUrl();
         $redirectUrl = $this->removeFromBeginning($refererUrl, $baseUrl);
 
-        $this->alertBox->setAlert("Your post will be published after moderation.");
+        if (!$admin) //if we are not an admin, send an email to alert and add an alertBox
+        {
+            $siteConfig = $this->siteConfig->getSiteConfig();
+            $post = $this->postModel->getSinglePost($postId);
+
+            $emailMessage = "<h1>New comment on post " . $post->title . "</a></h1>";
+            $emailMessage .= "<p>Check it out <a href='" . $baseUrl . "admin/comments/moderate-comment/" . $commentId . "'>here</a> </p>";
+
+            $this->sendMail->send($siteConfig["admin_email_address"], "New comment added", $emailMessage);
+
+            $this->alertBox->setAlert("Your post will be published after moderation.");
+        }
 
         $this->response->redirect($redirectUrl);
     }
