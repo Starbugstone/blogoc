@@ -1,0 +1,12 @@
+{% for comment in comments %}
+    <div class="row align-items-center animated fadeInUp comment-listing shadow-sm border-dark mb-3">
+        <div class="col-md-4">
+            <h3>{{ comment.username }}</h3>
+            <p><img src="{{ not comment.avatar ? configs.no_image_replacement : comment.avatar }}"
+                    class="img-thumbnail display-image img-fluid" style="max-height: 150px;"></p>
+        </div>
+        <div class="col-md-8">
+            {{ comment.comment|raw }}
+        </div>
+    </div>
+{% endfor %}

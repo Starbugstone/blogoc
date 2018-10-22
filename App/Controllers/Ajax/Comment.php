@@ -34,4 +34,27 @@ class Comment extends AjaxController
         echo json_encode($result);
     }
 
+    public function loadComments()
+    {
+        $commentOffset = (int)$this->request->getData("commentOffset");
+        $postId = (int)$this->request->getData("postId");
+
+        $result = array();
+        $result["success"]=false;
+
+        $data["comments"] = $this->commentModel->getCommentsListOnPost($postId, $commentOffset);
+        if($data["comments"])
+        {
+            $result["success"]=true;
+            $twig = $this->container->getTemplate();
+            $html = $twig->render('Includes/LoadComments.twig', $data);
+
+            $result["html"] = $html;
+            $result["commentOffset"] = $commentOffset + count($data["comments"]);
+        }
+
+
+        echo json_encode($result);
+    }
+
 }
