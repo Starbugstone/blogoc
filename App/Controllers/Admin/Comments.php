@@ -28,7 +28,15 @@ class Comments extends AdminController{
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
     }
 
-
+    /**
+     * View all the comments with pagination
+     * @param string $page
+     * @param int $linesPerPage
+     * @throws \ReflectionException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public function viewComments(string $page = "page-1", int $linesPerPage = Constant::LIST_PER_PAGE)
     {
         $this->onlyAdmin();
@@ -47,6 +55,15 @@ class Comments extends AdminController{
         $this->renderView('Admin/Comments');
     }
 
+    /**
+     * View all the pending comments with pagination
+     * @param string $page
+     * @param int $linesPerPage
+     * @throws \ReflectionException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public function pendingComments(string $page = "page-1", int $linesPerPage = Constant::LIST_PER_PAGE)
     {
         $this->onlyAdmin();
@@ -66,6 +83,14 @@ class Comments extends AdminController{
 
     }
 
+    /**
+     * View the moderate comment page with a specific comment
+     * @param int $commentId
+     * @throws \ReflectionException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public function moderateComment(int $commentId)
     {
         $this->onlyAdmin();
@@ -81,6 +106,11 @@ class Comments extends AdminController{
         $this->renderView('Admin/ViewComment');
     }
 
+    /**
+     * Delete a comment
+     * @param int $commentId
+     * @throws \Exception
+     */
     public function delete(int $commentId)
     {
         $this->onlyAdmin();
@@ -98,6 +128,10 @@ class Comments extends AdminController{
 
     }
 
+    /**
+     * Update a comment via post
+     * @throws \ErrorException
+     */
     public function update()
     {
         $this->onlyAdmin();
