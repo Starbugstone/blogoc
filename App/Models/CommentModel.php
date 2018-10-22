@@ -132,19 +132,21 @@ class CommentModel extends Model{
      * @param int $postId
      * @param int $userId
      * @param string $message
+     * @param bool $admin
      * @return int
      * @throws \Exception
      */
-    public function addComment(int $postId, int $userId, string $message):int
+    public function addComment(int $postId, int $userId, string $message, bool $admin=false):int
     {
         $sql="
             INSERT INTO $this->commentTbl (users_idusers, posts_idposts, comment, approved)
-            VALUES (:userId, :postId, :comment, 0)
+            VALUES (:userId, :postId, :comment, :approved)
         ";
         $this->query($sql);
         $this->bind(':userId', $userId);
         $this->bind(':postId', $postId);
         $this->bind(':comment', $message);
+        $this->bind(':approved', $admin);
 
         $this->execute();
         return (int)$this->dbh->lastInsertId();

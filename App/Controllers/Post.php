@@ -87,8 +87,10 @@ class Post extends Controller
         $comment = $this->request->getData("newComment");
         $postId = $this->request->getData("postId");
 
+        //check if we are admin, Admins do not need moderation
+        $admin = $this->session->get('user_role_level')>= Constant::ADMIN_LEVEL;
 
-        $this->commentModel->addComment($postId, $userId, $comment);
+        $this->commentModel->addComment($postId, $userId, $comment, $admin);
 
         $refererUrl = $this->request->getReferer();
         $baseUrl = $this->request->getBaseUrl();
