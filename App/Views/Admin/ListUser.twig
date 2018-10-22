@@ -25,7 +25,7 @@
                 <td>{{ user.name }}</td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.creation_date|date("d/m/Y") }}</td>
-                <td>{{ user.last_update|date("d/m/Y H:i") }}</td>
+                <td>{{ user.last_update|date("d/m/Y g:i a") }}</td>
                 <td><i class="btn fa {{ user.locked_out ? "fa-check" : "fa-times" }}" aria-hidden="true"
                        data-isactive="{{ user.locked_out ? "true" : "false" }}" data-userid="{{ user.idusers }}">
                     </i>

@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Models\CommentModel;
+use App\Models\UserModel;
 use Core\AdminController;
 use Core\Constant;
 use Core\Container;
@@ -23,6 +24,8 @@ class Comments extends AdminController{
         $this->loadModules[] = 'pagination';
         parent::__construct($container);
         $this->commentModel = new CommentModel($this->container);
+
+        $this->data['configs'] = $this->siteConfig->getSiteConfig();
     }
 
 
@@ -38,7 +41,6 @@ class Comments extends AdminController{
         }
 
         $this->data['pagination'] = $pagination;
-        $this->data['configs'] = $this->siteConfig->getSiteConfig();
         $this->data["comments"] = $this->commentModel->getCommentsList($pagination["offset"], $linesPerPage);
 
 
@@ -57,7 +59,6 @@ class Comments extends AdminController{
         }
 
         $this->data['pagination'] = $pagination;
-        $this->data['configs'] = $this->siteConfig->getSiteConfig();
         $this->data["comments"] = $this->commentModel->getPendingCommentsList($pagination["offset"], $linesPerPage);
         $this->data['pendingView'] = true;
 
@@ -69,7 +70,13 @@ class Comments extends AdminController{
     {
         $this->onlyAdmin();
 
-        $this->data["comment"] = $this->commentModel->getCommentById($commentId);
+        $comment = $this->commentModel->getCommentById($commentId);
+
+        $userModel = new UserModel($this->container);
+        $user = $userModel->getUserDetailsById($comment->idusers);
+
+        $this->data["comment"] = $comment;
+        $this->data["commenter"] = $user;
 
         $this->renderView('Admin/ViewComment');
     }
@@ -89,5 +96,29 @@ class Comments extends AdminController{
 
         $this->response->redirect($redirectUrl);
 
+    }
+
+    public function update()
+    {
+        $this->onlyAdmin();
+        $this->onlyPost();
+
+        $comment = $this->container->getRequest()->getDataFull();
+
+        //$this->debug->dump($comment);
+
+        $commentId = $comment["idcomments"];
+        //Sanity check on ID
+        if (!$this->isInt($commentId)) {
+            throw new \ErrorException("invalid comment ID");
+        }
+
+        //update comment
+        if($this->commentModel->update($commentId, $comment["commentTextArea"], $comment["commentApproved"]))
+        {
+            $this->alertBox->setAlert("Comment updated");
+        }
+
+        $this->response->redirect("/admin/comments/moderate-comment/".$commentId);
     }
 }

@@ -170,6 +170,33 @@ class CommentModel extends Model{
     }
 
     /**
+     * Update an existing comment
+     * @param int $commentId
+     * @param string $comment
+     * @param bool $approved
+     * @return bool
+     * @throws \Exception
+     */
+    public function update(int $commentId, string $comment, bool $approved)
+    {
+
+        $sql="
+            UPDATE $this->commentTbl 
+            SET
+              comment = :comment,
+              approved = :state
+            WHERE
+              idcomments = :commentId
+        ";
+
+        $this->query($sql);
+        $this->bind(":commentId", $commentId);
+        $this->bind(":comment", $comment);
+        $this->bind(":state", $approved);
+        return $this->execute();
+    }
+
+    /**
      * get a comment from it's ID
      * @param int $commentId
      * @return mixed
@@ -209,5 +236,7 @@ class CommentModel extends Model{
         $this->bind(":state", $state);
         return $this->execute();
     }
+
+
 
 }
