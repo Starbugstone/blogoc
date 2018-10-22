@@ -3,6 +3,8 @@
 namespace Core\Traits;
 
 use Core\Constant;
+use HTMLPurifier;
+use HTMLPurifier_Config;
 
 /**
  * a trait with some string related helpers
@@ -119,20 +121,9 @@ trait StringFunctions
      */
     private function completeDom(string $text): string
     {
-        //grabbed from https://gist.github.com/JayWood/348752b568ecd63ae5ce#gistcomment-2310550
-        libxml_use_internal_errors(true);
-
-        $dom = new \DOMDocument;
-        $dom->loadHTML($text);
-
-        // Strip wrapping <html> and <body> tags
-        $mock = new \DOMDocument;
-        $body = $dom->getElementsByTagName('body')->item(0);
-        foreach ($body->childNodes as $child) {
-            $mock->appendChild($mock->importNode($child, true));
-        }
-
-        return trim($mock->saveHTML());
+        $config = HTMLPurifier_Config::createDefault();
+        $purifier = new HTMLPurifier($config);
+        return $purifier->purify($text);
     }
 
     /**
