@@ -5,6 +5,8 @@ namespace App\Models;
 use Core\Model;
 use Core\Container;
 use Core\Constant;
+use HTMLPurifier;
+use HTMLPurifier_Config;
 
 class CommentModel extends Model{
 
@@ -21,6 +23,10 @@ class CommentModel extends Model{
         $this->postTbl = $this->getTablePrefix("posts");
     }
 
+    /**
+     * the base Select SQl
+     * @return string
+     */
     private function baseSql()
     {
         $sql = "
@@ -30,6 +36,18 @@ class CommentModel extends Model{
             LEFT JOIN $this->userTbl ON $this->commentTbl.users_idusers = $this->userTbl.idusers
         ";
         return $sql;
+    }
+
+    /**
+     * secure the HTML thanks to HTML Purifier
+     * @param $dirtyHtml
+     * @return string
+     */
+    private function purifyHtml($dirtyHtml)
+    {
+        $config = HTMLPurifier_Config::createDefault();
+        $purifier = new HTMLPurifier($config);
+        return $purifier->purify($dirtyHtml);
     }
 
     /**
@@ -131,13 +149,14 @@ class CommentModel extends Model{
      * Add a comment to a post
      * @param int $postId
      * @param int $userId
-     * @param string $message
+     * @param string $comment
      * @param bool $admin
      * @return int
      * @throws \Exception
      */
-    public function addComment(int $postId, int $userId, string $message, bool $admin=false):int
+    public function addComment(int $postId, int $userId, string $comment, bool $admin=false):int
     {
+        $comment = $this->purifyHtml($comment);
         $sql="
             INSERT INTO $this->commentTbl (users_idusers, posts_idposts, comment, approved)
             VALUES (:userId, :postId, :comment, :approved)
@@ -145,7 +164,7 @@ class CommentModel extends Model{
         $this->query($sql);
         $this->bind(':userId', $userId);
         $this->bind(':postId', $postId);
-        $this->bind(':comment', $message);
+        $this->bind(':comment', $comment);
         $this->bind(':approved', $admin);
 
         $this->execute();
@@ -179,6 +198,8 @@ class CommentModel extends Model{
      */
     public function update(int $commentId, string $comment, bool $approved)
     {
+
+        $comment = $this->purifyHtml($comment);
 
         $sql="
             UPDATE $this->commentTbl 
