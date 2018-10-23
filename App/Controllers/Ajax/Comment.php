@@ -40,20 +40,20 @@ class Comment extends AjaxController
         $postId = (int)$this->request->getData("postId");
 
         $result = array();
-        $result["success"]=false;
+        $result["success"] = false;
         $data = array();
 
         $data["comments"] = $this->commentModel->getCommentsListOnPost($postId, $commentOffset);
-        if($data["comments"] !== false)
-        {
-            $result["success"]=true;
+
+        if ($data["comments"] !== false) {
+            $result["success"] = true;
             $twig = $this->container->getTemplate();
             $html = $twig->render('Includes/LoadComments.twig', $data);
 
             $result["html"] = $html;
-            $result["commentOffset"] = $commentOffset + count($data["comments"]);
+            $result["commentOffset"] = $commentOffset + count(/** @scrutinizer ignore-type */$data["comments"]);
+            //Scrutinizer thinks this can be of type true. which is impossible since PDO returns and array (empty or not) or false on error, we have checked for false.
         }
-
 
         echo json_encode($result);
     }

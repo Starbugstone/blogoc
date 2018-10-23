@@ -225,6 +225,11 @@ class Login extends Controller
 
         $register = $this->request->getDataFull();
 
+        if($register === null)
+        {
+            throw new \Exception("Error no data passed");
+        }
+
         //Storing the passed information
         $this->populateUser($register);
 

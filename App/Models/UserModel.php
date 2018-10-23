@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Modules\Token;
 use Core\BlogocException;
 use Core\Constant;
 use Core\Container;
@@ -96,7 +95,12 @@ class UserModel extends Model
         $this->execute();
     }
 
-    private function isAccountPasswordBlocked($user)
+    /**
+     * Check if an account is blocked by bas password count
+     * @param $user
+     * @return bool
+     */
+    private function isAccountPasswordBlocked($user):bool
     {
         if ($user->bad_login_tries < Constant::NUMBER_OF_BAD_PASSWORD_TRIES) {
             //not enough bad tries yet
@@ -206,7 +210,7 @@ class UserModel extends Model
      * @return bool
      * @throws \Exception
      */
-    public function isEmailUsed(string $email)
+    public function isEmailUsed(string $email):bool
     {
         return $this->getUserDetailsByEmail($email) !== false;
     }
@@ -239,7 +243,7 @@ class UserModel extends Model
      * @param \stdClass $user
      * @throws \Exception
      */
-    public function updateUser(\stdClass $user)
+    public function updateUser(\stdClass $user):void
     {
         $sql="
             UPDATE $this->userTbl
@@ -348,7 +352,7 @@ class UserModel extends Model
      * @param string $password
      * @throws \Exception
      */
-    public function resetPassword(int $userId, string $password)
+    public function resetPassword(int $userId, string $password):void
     {
         $hash = password_hash($password, PASSWORD_DEFAULT);
         $sql = "
@@ -381,9 +385,9 @@ class UserModel extends Model
      * @param int $offset
      * @param int $limit
      * @return array
-     * @throws \ReflectionException
+     * @throws \Exception
      */
-    public function getUserList(int $offset = 0, int $limit = Constant::LIST_PER_PAGE)
+    public function getUserList(int $offset = 0, int $limit = Constant::LIST_PER_PAGE):array
     {
         //return $this->list($offset, $limit, $this->userTbl);
         $sql = $this->baseSqlSelect();
@@ -397,7 +401,14 @@ class UserModel extends Model
         return $this->fetchAll();
     }
 
-    public function activateUser(bool $activation, int $userId)
+    /**
+     * set the activation state of a user with it's ID
+     * @param bool $activation
+     * @param int $userId
+     * @return bool
+     * @throws \Exception
+     */
+    public function activateUser(bool $activation, int $userId):bool
     {
         $sql = "
           UPDATE $this->userTbl

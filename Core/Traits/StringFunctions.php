@@ -133,7 +133,7 @@ trait StringFunctions
      */
     public function isAlphaNum(string $string): bool
     {
-        return preg_match("/^[A-Za-z0-9_-]+$/", $string);
+        return preg_match("/^[A-Za-z0-9_-]+$/", $string) === 1;
     }
 
     /**
@@ -157,11 +157,11 @@ trait StringFunctions
     /**
      * check is a string is hexadecimal
      * @param string $string
-     * @return false|int
+     * @return bool
      */
     public function isHexa(string $string):bool
     {
-        return preg_match("/[\da-f]/",$string);
+        return preg_match("/[\da-f]/",$string) === 1;
     }
 
     /**

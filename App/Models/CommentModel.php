@@ -27,7 +27,7 @@ class CommentModel extends Model{
      * the base Select SQl
      * @return string
      */
-    private function baseSql()
+    private function baseSql():string
     {
         $sql = "
             SELECT idcomments, users_idusers, posts_idposts, comment, approved, comment_date, idposts, title, posts_slug, idusers, username, avatar
@@ -43,7 +43,7 @@ class CommentModel extends Model{
      * @param $dirtyHtml
      * @return string
      */
-    private function purifyHtml($dirtyHtml)
+    private function purifyHtml($dirtyHtml):string
     {
         $config = HTMLPurifier_Config::createDefault();
         $purifier = new HTMLPurifier($config);
@@ -70,10 +70,10 @@ class CommentModel extends Model{
      * @param int $postId
      * @param int $offset
      * @param int $limit
-     * @return bool
+     * @return array
      * @throws \Exception
      */
-    public function getCommentsListOnPost(int $postId, int $offset = 0, int $limit = Constant::COMMENTS_PER_PAGE)
+    public function getCommentsListOnPost(int $postId, int $offset = 0, int $limit = Constant::COMMENTS_PER_PAGE):array
     {
         $sql = $this->baseSql();
         $sql .= "
@@ -95,7 +95,7 @@ class CommentModel extends Model{
      * @return mixed
      * @throws \Exception
      */
-    public function countPendingComments()
+    public function countPendingComments():int
     {
         $sql = "SELECT COUNT(*) FROM $this->commentTbl WHERE approved = 0";
         $this->query($sql);
@@ -107,10 +107,10 @@ class CommentModel extends Model{
      * get the list of pending comments with limit and offset
      * @param int $offset
      * @param int $limit
-     * @return bool
+     * @return array
      * @throws \Exception
      */
-    public function getPendingCommentsList(int $offset = 0, int $limit = Constant::COMMENTS_PER_PAGE)
+    public function getPendingCommentsList(int $offset = 0, int $limit = Constant::COMMENTS_PER_PAGE):array
     {
         $sql = $this->baseSql();
         $sql .= "
@@ -125,13 +125,25 @@ class CommentModel extends Model{
         return $this->fetchAll();
     }
 
+    /**
+     * counts all the comments
+     * @return int
+     * @throws \Exception
+     */
     public function countComments(): int
     {
         return $this->count($this->commentTbl);
     }
 
 
-    public function getCommentsList(int $offset = 0, int $limit = Constant::POSTS_PER_PAGE)
+    /**
+     * get the list of all the comments
+     * @param int $offset
+     * @param int $limit
+     * @return array
+     * @throws \Exception
+     */
+    public function getCommentsList(int $offset = 0, int $limit = Constant::POSTS_PER_PAGE):array
     {
         $sql = $this->baseSql();
         $sql .= "
@@ -177,7 +189,7 @@ class CommentModel extends Model{
      * @return bool
      * @throws \Exception
      */
-    public function delete(int $commentId)
+    public function delete(int $commentId):bool
     {
         $sql = "
         DELETE FROM $this->commentTbl 
@@ -196,7 +208,7 @@ class CommentModel extends Model{
      * @return bool
      * @throws \Exception
      */
-    public function update(int $commentId, string $comment, bool $approved)
+    public function update(int $commentId, string $comment, bool $approved):bool
     {
 
         $comment = $this->purifyHtml($comment);

@@ -8,9 +8,9 @@ class Cookie{
      * set a cookie
      * @param string $name
      * @param string $value
-     * @param string $expireDate
+     * @param int $expireDate
      */
-    public function setCookie(string $name, string $value, string $expireDate):void
+    public function setCookie(string $name, string $value, int $expireDate):void
     {
         setcookie($name, $value, $expireDate, "/");
     }
