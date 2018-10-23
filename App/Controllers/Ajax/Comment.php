@@ -44,7 +44,7 @@ class Comment extends AjaxController
         $data = array();
 
         $data["comments"] = $this->commentModel->getCommentsListOnPost($postId, $commentOffset);
-        if($data["comments"])
+        if($data["comments"] != false)
         {
             $result["success"]=true;
             $twig = $this->container->getTemplate();

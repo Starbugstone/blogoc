@@ -52,7 +52,12 @@ class Password extends Controller
 
         //grab the token and ID
         $token = $this->request->getData("token");
-        $userId = $this->request->getData("userId");
+        $userId = (int)$this->request->getData("userId");
+
+        if($token === null)
+        {
+            throw new \Exception("Null Token");
+        }
 
         //verify if token is valid
         if(!$this->isHexa($token)|| !$this->isInt($userId))
@@ -133,7 +138,6 @@ class Password extends Controller
 
         $error = false;
         $registerErrors = new \stdClass();
-        $user = false;
 
         try {
             $user = $this->userModel->getUserDetailsByEmail($email);

@@ -84,17 +84,13 @@ class Post extends Controller
 
         //get the session userId
         $userId = (int)$this->session->get("userId");
-        $comment = $this->request->getData("newComment");
+        $comment = (string)$this->request->getData("newComment");
         $postId = (int)$this->request->getData("postId");
 
         //check if we are admin, Admins do not need moderation
         $admin = $this->session->get('user_role_level') >= Constant::ADMIN_LEVEL;
-
         $commentId = $this->commentModel->addComment($postId, $userId, $comment, $admin);
 
-        $refererUrl = $this->request->getReferer();
-        $baseUrl = $this->request->getBaseUrl();
-        $redirectUrl = $this->removeFromBeginning($refererUrl, $baseUrl);
 
         if (!$admin) //if we are not an admin, send an email to alert and add an alertBox
         {
@@ -109,6 +105,8 @@ class Post extends Controller
             $this->alertBox->setAlert("Your post will be published after moderation.");
         }
 
-        $this->response->redirect($redirectUrl);
+        $postSlug = $this->postModel->getPostSlugFromId($postId);
+
+        $this->response->redirect("/post/view-post/".$postSlug);
     }
 }

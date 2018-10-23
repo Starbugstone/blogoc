@@ -95,8 +95,7 @@ class Login extends Controller
      */
     public function index()
     {
-        if($this->session->isParamSet("user"))
-        {
+        if ($this->session->isParamSet("user")) {
             //we are already connected, redirect
             $this->response->redirect();
         }
@@ -124,8 +123,7 @@ class Login extends Controller
      */
     public function register()
     {
-        if($this->session->isParamSet("user"))
-        {
+        if ($this->session->isParamSet("user")) {
             //we are already connected, redirect
             $this->response->redirect();
         }
@@ -181,8 +179,7 @@ class Login extends Controller
             }
 
             $authUser = $this->userModel->authenticateUser($email, $password);
-            if(!$authUser->success)
-            {
+            if (!$authUser->success) {
                 $error = true;
                 $loginErrors->global = $authUser->message;
             }
@@ -203,12 +200,10 @@ class Login extends Controller
         $this->populateUser((array)$authUser->user);
 
         //if the user wanted to be remembered
-        if($rememberMe)
-        {
+        if ($rememberMe) {
             $this->rememberedLoginModel->setToken(); //generate a new token
             $rememberMeToken = $this->rememberedLoginModel->rememberMe($this->user->idusers);
-            if($rememberMeToken->success)
-            {
+            if ($rememberMeToken->success) {
                 //set cookie
                 $this->cookie->setCookie("rememberMe", $rememberMeToken->token, $rememberMeToken->expiry_timestamp);
 
@@ -232,7 +227,6 @@ class Login extends Controller
 
         //Storing the passed information
         $this->populateUser($register);
-
 
         //Error checking
 
@@ -286,14 +280,18 @@ class Login extends Controller
 
 
         //all set, redirect and set message
+        $redirectUrl = "";
         $refererUrl = $this->request->getReferer();
-        $baseUrl = $this->request->getBaseUrl();
-        $redirectUrl = $this->removeFromBeginning($refererUrl, $baseUrl);
-
-        if($redirectUrl === "login/register")
+        if ($refererUrl != "")//getReferer can return null if client isn't configured
         {
+            $baseUrl = $this->request->getBaseUrl();
+            $redirectUrl = $this->removeFromBeginning($refererUrl, $baseUrl);
+        }
+
+
+        if ($redirectUrl === "login/register") {
             //if we were already on the register page, go to home page
-            $redirectUrl="";
+            $redirectUrl = "";
         }
 
         $this->alertBox->setAlert('Account created, please check your mailbox to activate account');
@@ -306,8 +304,7 @@ class Login extends Controller
     public function disconnect()
     {
         $userId = $this->session->get("userId");
-        if($userId)
-        {
+        if ($userId) {
             $userHash = $this->rememberedLoginModel->getTokenHashFromId($userId);
             $this->rememberedLoginModel->deleteToken($userHash);
         }
@@ -343,7 +340,6 @@ class Login extends Controller
         $this->alertBox->setAlert('Connected as User');
         $this->container->getResponse()->redirect('/admin/');
     }
-
 
 
     public function whoami()

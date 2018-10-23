@@ -88,9 +88,9 @@ class Request
      * gets the referer of the request
      * @return string|null
      */
-    public function getReferer()
+    public function getReferer():string
     {
-        return $_SERVER['HTTP_REFERER'] ?? null;
+        return $_SERVER['HTTP_REFERER'] ?? "";
     }
 
     /**

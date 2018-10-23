@@ -32,7 +32,7 @@ class PostVerification extends AjaxController
         $this->onlyPost();
 
         $postSlug = $this->request->getData("postSlug");
-        $postId = $this->request->getData("postId");
+        $postId = (int)$this->request->getData("postId");
 
         $data = false;
         if (!$this->slug->isSlugValid($postSlug) || !$this->isInt($postId)) {
