@@ -41,6 +41,7 @@ class Comment extends AjaxController
 
         $result = array();
         $result["success"]=false;
+        $data = array();
 
         $data["comments"] = $this->commentModel->getCommentsListOnPost($postId, $commentOffset);
         if($data["comments"])

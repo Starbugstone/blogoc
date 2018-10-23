@@ -121,6 +121,10 @@ class Comments extends AdminController{
         }
 
         $refererUrl = $this->request->getReferer();
+        if($refererUrl === null) //referer can return null, set default
+        {
+            $refererUrl = "admin/comments/view-comments";
+        }
         $baseUrl = $this->request->getBaseUrl();
         $redirectUrl = $this->removeFromBeginning($refererUrl, $baseUrl);
 

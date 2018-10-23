@@ -42,7 +42,7 @@ class PostVerification extends AjaxController
 
         $postModel = new PostModel($this->container);
 
-        $data = $postModel->isPostSlugUnique($postSlug);
+        $data = $postModel->isPostSlugUnique(/** @scrutinizer ignore-type */$postSlug); //we have checked that slug is valid so no type error
 
         if ($data === false) //slug is not unique, but could be from the same post
         {

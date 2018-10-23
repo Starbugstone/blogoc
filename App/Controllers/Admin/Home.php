@@ -51,6 +51,11 @@ class Home extends \Core\AdminController
         $this->session->remove("registrationErrors");
 
         $userId = $this->session->get("userId");
+        if($userId === null)
+        {
+            //this should never happen but scrutinizer thows an alert
+            throw new \Exception("Session error, no ID");
+        }
         $this->data["user"] = $this->userModel->getUserDetailsById($userId);
 
         $this->data["roles"] = $this->roleModel->getRoleList();
