@@ -4,6 +4,7 @@
             <h3>{{ comment.username }}</h3>
             <p><img src="{{ not comment.avatar ? configs.no_image_replacement : comment.avatar }}"
                     class="img-thumbnail display-image img-fluid" style="max-height: 150px;"></p>
+            <p><strong>Posted : </strong>{{ comment.comment_date|date("d/m/Y g:i a") }}</p>
         </div>
         <div class="col-md-8">
             {{ comment.comment|raw }}

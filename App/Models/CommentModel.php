@@ -30,7 +30,7 @@ class CommentModel extends Model{
     private function baseSql()
     {
         $sql = "
-            SELECT idcomments, users_idusers, posts_idposts, comment, approved, idposts, title, posts_slug, idusers, username, avatar
+            SELECT idcomments, users_idusers, posts_idposts, comment, approved, comment_date, idposts, title, posts_slug, idusers, username, avatar
             FROM $this->commentTbl 
             LEFT JOIN $this->postTbl ON $this->commentTbl.posts_idposts = $this->postTbl.idposts
             LEFT JOIN $this->userTbl ON $this->commentTbl.users_idusers = $this->userTbl.idusers
