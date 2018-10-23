@@ -86,7 +86,7 @@ abstract class AjaxController extends Controller
         $baseUrl = $this->request->getBaseUrl();
         $inUrl = strpos($referer, $baseUrl);
         if ($inUrl === false || $inUrl > 0) { //not at start of referer
-            if ($referer !== null) {//the referer can be null with certain navigators, so don't block on that
+            if ($referer !== "") {//the referer can be null with certain navigators, so don't block on that
                 throw new JsonException('Illegal referer.');
 
             }

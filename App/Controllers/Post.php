@@ -91,11 +91,11 @@ class Post extends Controller
         $admin = $this->session->get('user_role_level') >= Constant::ADMIN_LEVEL;
         $commentId = $this->commentModel->addComment($postId, $userId, $comment, $admin);
 
-
         if (!$admin) //if we are not an admin, send an email to alert and add an alertBox
         {
             $siteConfig = $this->siteConfig->getSiteConfig();
             $post = $this->postModel->getSinglePost($postId);
+            $baseUrl = $this->request->getBaseUrl();
 
             $emailMessage = "<h1>New comment on post " . $post->title . "</a></h1>";
             $emailMessage .= "<p>Check it out <a href='" . $baseUrl . "admin/comments/moderate-comment/" . $commentId . "'>here</a> </p>";
@@ -107,6 +107,6 @@ class Post extends Controller
 
         $postSlug = $this->postModel->getPostSlugFromId($postId);
 
-        $this->response->redirect("/post/view-post/".$postSlug);
+        $this->response->redirect("/post/view-post/" . $postSlug);
     }
 }
