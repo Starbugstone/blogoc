@@ -119,6 +119,7 @@
                 },
             }).done(function ($result) {
                 if ($result['success']) {
+                    $("#load-comments").data("commentoffset",$result['commentOffset'] );
                     $("#comments-loader-img").hide();
                     $loadedPages += 1;
                     if ($loadedPages >= {{ pagination.totalPages }})
