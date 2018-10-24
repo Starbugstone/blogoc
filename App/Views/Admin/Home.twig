@@ -1,4 +1,7 @@
 {% extends "Admin/Base.twig" %}
+
+{% block title %}Admin page of {{ user.surname }}{% endblock %}
+
 {% block main %}
 
     <form action="/admin/home/update-user" method="post" id="updateUser">

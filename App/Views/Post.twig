@@ -1,6 +1,6 @@
 {% extends "Base.twig" %}
 
-{% block title %}{% endblock %}
+{% block title %}{{ post.title }}{% endblock %}
 
 {% block main %}
     <article id="{{ post.slug }}" class="single-post">
