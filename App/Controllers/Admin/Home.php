@@ -56,7 +56,19 @@ class Home extends \Core\AdminController
             //this should never happen but scrutinizer thows an alert
             throw new \Exception("Session error, no ID");
         }
-        $this->data["user"] = $this->userModel->getUserDetailsById($userId);
+
+        $userDetails = $this->userModel->getUserDetailsById($userId);
+
+        if($userDetails === false)
+        {
+            //the user is still logged in his session but deleted from the DB.
+            $this->cookie->deleteCookie("rememberMe");
+            $this->session->destroySession();
+            $this->alertBox->setAlert('your user no longer exists, please contact the admin');
+            $this->response->redirect();
+        }
+
+        $this->data["user"] = $userDetails;
 
         $this->data["roles"] = $this->roleModel->getRoleList();
 
