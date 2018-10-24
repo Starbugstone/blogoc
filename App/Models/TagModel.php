@@ -109,7 +109,7 @@ class TagModel extends Model
         ";
         $this->query($sql);
         $this->bind(":tagId", $tagId);
-        return $this->execute();
+        return $this->finalExecute();
     }
 
     /**
@@ -138,7 +138,7 @@ class TagModel extends Model
         $this->query($sql);
         $this->bind(':postId', $postId);
         $this->bind(':tagId', $tagId);
-        $this->execute();
+        $this->finalExecute();
     }
 
     /**
@@ -174,7 +174,7 @@ class TagModel extends Model
         $this->query($sql);
         $this->bind(':postId', $postId);
         $this->bind(':tagId', $tagId);
-        $this->execute();
+        $this->finalExecute();
     }
 
     /**
@@ -210,7 +210,7 @@ class TagModel extends Model
         ;";
         $this->query($sql);
         $this->bind(":postId", $postId);
-        $this->execute();
+        $this->finalExecute();
     }
 
     /**
@@ -255,7 +255,7 @@ class TagModel extends Model
         $this->query($sql);
         $this->bind(":tagName", $tagName);
         $this->bind(":tagId", $tagId);
-        return $this->execute();
+        return $this->finalExecute();
     }
 
     /**
@@ -274,7 +274,7 @@ class TagModel extends Model
         ";
         $this->query($sql);
         $this->bind(":tagId", $tagId);
-        return $this->execute();
+        return $this->finalExecute();
     }
 
     /**

@@ -121,7 +121,7 @@ class Remembered_loginModel extends Model
         $this->bind(':hashedToken', $tokenHash);
         $this->bind(':userId', $userId);
         $this->bind(':expiresAt', date('Y-m-d H:i:s', $result->expiry_timestamp));
-        $result->success = $this->execute();
+        $result->success = $this->finalExecute();
         return $result;
 
     }
@@ -139,7 +139,7 @@ class Remembered_loginModel extends Model
         ";
         $this->query($sql);
         $this->bind(':hashedToken', $tokenHash);
-        $this->execute();
+        $this->finalExecute();
     }
 
     /**
@@ -154,6 +154,6 @@ class Remembered_loginModel extends Model
         ";
         $this->query($sql);
         $this->bind(':time', time());
-        $this->execute();
+        $this->finalExecute();
     }
 }

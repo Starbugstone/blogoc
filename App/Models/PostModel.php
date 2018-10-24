@@ -392,7 +392,7 @@ class PostModel extends Model
         $this->bind(":postSlug", $postSlug);
         $this->bind(":postId", $postId);
 
-        return $this->execute();
+        return $this->finalExecute();
     }
 
     /**
@@ -409,7 +409,7 @@ class PostModel extends Model
         ";
         $this->query($sql);
         $this->bind(":postId", $postId);
-        return $this->execute();
+        return $this->finalExecute();
     }
 
 
@@ -450,7 +450,7 @@ class PostModel extends Model
         $this->bind(":postId", $postId);
         $this->bind(":published", $state);
 
-        return $this->execute();
+        return $this->finalExecute();
     }
 
     /**
@@ -474,7 +474,7 @@ class PostModel extends Model
         $this->bind(":postId", $postId);
         $this->bind(":onFrontPage", $state);
 
-        return $this->execute();
+        return $this->finalExecute();
     }
 
     /**

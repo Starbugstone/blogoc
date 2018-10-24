@@ -197,7 +197,7 @@ class CommentModel extends Model{
         ";
         $this->query($sql);
         $this->bind(":commentId", $commentId);
-        return $this->execute();
+        return $this->finalExecute();
     }
 
     /**
@@ -226,7 +226,7 @@ class CommentModel extends Model{
         $this->bind(":commentId", $commentId);
         $this->bind(":comment", $comment);
         $this->bind(":state", $approved);
-        return $this->execute();
+        return $this->finalExecute();
     }
 
     /**
@@ -267,7 +267,7 @@ class CommentModel extends Model{
         $this->query($sql);
         $this->bind(":commentId", $commentId);
         $this->bind(":state", $state);
-        return $this->execute();
+        return $this->finalExecute();
     }
 
 

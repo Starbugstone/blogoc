@@ -83,7 +83,7 @@ class CategoryModel extends Model
         $this->bind(":categoryName", $categoryName);
         $this->bind(":categorySlug", $categorySlug);
         $this->bind(":categoryId", $categoryId);
-        return $this->execute();
+        return $this->finalExecute();
     }
 
     /**
@@ -103,7 +103,7 @@ class CategoryModel extends Model
         $this->query($sql);
         $this->bind(":categoryName", $categoryName);
         $this->bind(":categorySlug", $categorySlug);
-        return $this->execute();
+        return $this->finalExecute();
     }
 
     /**
@@ -120,7 +120,7 @@ class CategoryModel extends Model
         ";
         $this->query($sql);
         $this->bind(":categoryId", $categoryId);
-        return $this->execute();
+        return $this->finalExecute();
     }
 
 

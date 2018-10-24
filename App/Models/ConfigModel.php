@@ -66,7 +66,7 @@ class ConfigModel extends Model
         $this->query($sql);
         $this->bind(':param', $param);
         $this->bind(':id', $idTable);
-        return $this->execute();
+        return $this->finalExecute();
 
     }
 }

@@ -99,6 +99,26 @@ abstract class Model
     }
 
     /**
+     * close the connection
+     */
+    protected function closeCursor()
+    {
+        $this->stmt->closeCursor();
+    }
+
+    /**
+     * execute request then close
+     * @return bool
+     * @throws Exception
+     */
+    protected function finalExecute()
+    {
+        $result = $this->execute();
+        $this->closeCursor();
+        return $result;
+    }
+
+    /**
      * fetches the result from an executed query
      * @return array
      */
