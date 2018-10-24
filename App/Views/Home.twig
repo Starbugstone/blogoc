@@ -62,14 +62,17 @@
             {% for post in front_posts %}
                 <div class="row no-gutters wow lightSpeedIn">
 
-                    <div class="col-lg-6 {% if loop.index is odd %}order-lg-2{% endif %} text-white showcase-img "
-                         style="background-image: url('{{ not post.post_image ? configs.no_image_replacement : post.post_image }}');"></div>
+                    <div class="col-lg-6 {% if loop.index is odd %}order-lg-2{% endif %} text-white showcase-img d-flex justify-content-center align-items-center border-top border-bottom">
+                        <img src="{{ not post.post_image ? configs.no_image_replacement : post.post_image }}" class="img-fluid w-100">
+                    </div>
                     <div class="col-lg-6 {% if loop.index is odd %}order-lg-1{% endif %} my-auto showcase-text">
                         <h2><a href="/post/view-post/{{ post.posts_slug }}">{{ post.title }}</a></h2>
                         <p class="lead mb-0">{{ post.excerpt|raw }}</p>
                         <p><a href="/post/view-post/{{ post.posts_slug }}">Read more</a></p>
-                        <p>Category: <a href="/category/posts/{{ post.categories_slug }}">{{ post.category_name }}</a> -
-                            Author: <a href="/author/posts/{{ post.idusers }}">{{ post.author }}</a></p>
+                        <p>
+                            Category: <a href="/category/posts/{{ post.categories_slug }}">{{ post.category_name }}</a>
+                            - Author: <a href="/author/posts/{{ post.idusers }}">{{ post.author }}</a>
+                        </p>
                     </div>
                 </div>
             {% endfor %}
