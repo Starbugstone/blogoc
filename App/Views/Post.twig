@@ -23,7 +23,14 @@
                     </p>
                 </div>
                 <div class="author">
-                    <p><b>Author : </b><a href="/author/posts/{{ post.idusers }}">{{ post.author }}</a></p>
+                    <p>
+                        <b>Author : </b>
+                        {% if not post.author %}
+                            Deleted !
+                        {% else %}
+                            <a href="/author/posts/{{ post.idusers }}">{{ post.author }}</a>
+                        {% endif %}
+                    </p>
                 </div>
                 <div class="last-update">
                     <p><b>Last update : </b>{{ post.last_update|date("l d/m/Y \\a\\t G:i") }}</p>

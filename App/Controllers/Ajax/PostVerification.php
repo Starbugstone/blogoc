@@ -35,7 +35,7 @@ class PostVerification extends AjaxController
         $postId = (int)$this->request->getData("postId");
 
         $data = false;
-        if (!$this->slug->isSlugValid($postSlug) || !$this->isInt($postId)) {
+        if (!$this->slug->isSlugValid($postSlug)) {
             echo json_encode($data);
             die();
         }

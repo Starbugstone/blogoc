@@ -42,9 +42,15 @@ class Post extends Controller
     public function viewPost(string $slug, string $page = "page-1", int $linesPerPage = Constant::COMMENTS_PER_PAGE)
     {
 
-        $postId = $this->postModel->getPostIdFromSlug($slug);
+        $postId = (int)$this->postModel->getPostIdFromSlug($slug);
 
         $posts = $this->postModel->getSinglePost($postId);
+
+        if($posts === false)
+        {
+            throw new \Exception("Page no longer exists", "404");
+        }
+
         //only admins can view unpublished posts
         if (!$posts->published) {
             if (!$this->auth->isAdmin()) {

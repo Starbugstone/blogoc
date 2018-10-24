@@ -116,8 +116,8 @@ class Post extends AdminController
         $this->onlyAdmin();
         $this->onlyPost();
 
-        $posts = $this->container->getRequest()->getDataFull();
-        $userSessionId = $this->container->getSession()->get("user_id");
+        $posts = $this->request->getDataFull();
+        $userSessionId = (int)$this->session->get("userId");
 
 
         $title = trim($posts["postTitle"]);
