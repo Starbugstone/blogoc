@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\PostModel;
+use App\Models\UserModel;
 use Core\Container;
 use Core\Traits\StringFunctions;
 
@@ -22,6 +23,7 @@ class Home extends \Core\Controller
     protected $sendMail;
 
     private $config;
+    private $userModel;
 
     public function __construct(Container $container)
     {
@@ -30,6 +32,11 @@ class Home extends \Core\Controller
         parent::__construct($container);
 
         $this->config = $this->siteConfig->getSiteConfig();
+        $this->userModel = new UserModel($this->container);
+        if($this->auth->isuser())
+        {
+            $this->data["user"] = $this->userModel->getUserDetailsById($this->session->get("userId"));
+        }
     }
 
     /**
@@ -62,6 +69,23 @@ class Home extends \Core\Controller
 
 
         $this->renderView('Home');
+    }
+
+    public function contact()
+    {
+
+        $this->data['configs'] = $this->config;
+        $this->data['navigation'] = $this->siteConfig->getMenu();
+
+        //check if have prefilled form data and error messages
+        $this->data["contactInfo"] = $this->session->get("contactInfo");
+        $this->data["contactErrors"] = $this->session->get("contactErrors");
+
+        //remove the set data as it is now sent to the template
+        $this->session->remove("contactInfo");
+        $this->session->remove("contactErrors");
+
+        $this->renderView('Contact');
     }
 
 
@@ -108,7 +132,7 @@ class Home extends \Core\Controller
         if ($error) {
             $this->session->set("contactInfo", $message);
             $this->session->set("contactErrors", $contactErrors);
-            $this->response->redirect();
+            $this->response->redirect("/home/contact");
         }
 
         $config = $this->siteConfig->getSiteConfig();
