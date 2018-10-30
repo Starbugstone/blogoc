@@ -3,6 +3,8 @@
 {% block title %}Internal Error{% endblock %}
 
 {% block main %}
-    <h1>Oups something went wrong, Internal error</h1>
+    <h1 class="text-center">Oups, looks like you crashed !!</h1>
+    <p><img src="/img/500.jpg" class="img-fluid rounded mx-auto d-block mt-3"></p>
     {% include "ErrorPages/Includes/Error-message.twig" %}
+    <p class="text-center"><a href="/" class="btn btn-primary">Return to main page</a> </p>
 {% endblock %}

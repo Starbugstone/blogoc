@@ -3,6 +3,9 @@
 {% block title %}Error 404{% endblock %}
 
 {% block main %}
-    <h1>Oups something went wrong, Page not found</h1>
+    <h1 class="text-center">Oh, you appear to be lost</h1>
+    <p><img src="/img/404.jpg" class="img-fluid rounded mx-auto d-block mt-3"></p>
     {% include "ErrorPages/Includes/Error-message.twig" %}
+    <p class="text-center"><a href="/" class="btn btn-primary">Return to main page</a> </p>
+
 {% endblock %}
