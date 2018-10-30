@@ -53,4 +53,12 @@ class Config
      */
     const TABLE_PREFIX = '';
 
+    /**
+     * Image upload folders
+     * These folders must be set to read / write on the server
+     */
+    const UPLOADED_IMAGES = "uploaded_images/";
+    const CONFIG_IMAGES = "config_images/";
+    const USER_IMAGES = "user_images/";
+
 }

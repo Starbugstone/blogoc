@@ -13,10 +13,14 @@ class Category extends AjaxController
 
     protected $slug;
 
+    private $categoryModel;
+
     public function __construct(Container $container)
     {
         $this->loadModules[] = 'Slug';
         parent::__construct($container);
+
+        $this->categoryModel = new CategoryModel($this->container);
     }
 
     /**
@@ -40,16 +44,15 @@ class Category extends AjaxController
             $send[$item->name] = $item->value;
         }
 
-        if(!$this->slug->isSlugValid($send["categories_slug"]))
-        {
+        if (!$this->slug->isSlugValid($send["categories_slug"])) {
             $result["success"] = false;
             $result["errorMessage"] = "Invalid Slug";
             echo json_encode($result);
             die();
         }
 
-        $categoryModel = new CategoryModel($this->container);
-        $result["success"] = $categoryModel->new($send["category_name"], $send["categories_slug"]);
+
+        $result["success"] = $this->categoryModel->new($send["category_name"], $send["categories_slug"]);
         echo json_encode($result);
     }
 
@@ -73,25 +76,21 @@ class Category extends AjaxController
         foreach ($categoryUpdate as $item) {
             $send[$item->name] = $item->value;
         }
-        if(!$this->slug->isSlugValid($send["categories_slug"]))
-        {
+        if (!$this->slug->isSlugValid($send["categories_slug"])) {
             $result["success"] = false;
             $result["errorMessage"] = "Invalid Slug";
             echo json_encode($result);
             die();
         }
 
-        if(!$this->isInt($send["idcategories"])){
+        if (!$this->isInt($send["idcategories"])) {
             $result["success"] = false;
             $result["errorMessage"] = "Invalid ID";
             echo json_encode($result);
             die();
         }
 
-
-        $categoryModel = new CategoryModel($this->container);
-
-        $result['success'] = $categoryModel->update($send["idcategories"], $send["category_name"],
+        $result['success'] = $this->categoryModel->update($send["idcategories"], $send["category_name"],
             $send["categories_slug"]);
         echo json_encode($result);
     }
@@ -117,15 +116,14 @@ class Category extends AjaxController
             $send[$item->name] = $item->value;
         }
 
-        if(!$this->isInt($send["idcategories"])){
+        if (!$this->isInt($send["idcategories"])) {
             $result["success"] = false;
             $result["errorMessage"] = "Invalid ID";
             echo json_encode($result);
             die();
         }
 
-        $categoryModel = new CategoryModel($this->container);
-        $result['success'] = $categoryModel->delete($send["idcategories"]);
+        $result['success'] = $this->categoryModel->delete($send["idcategories"]);
         echo json_encode($result);
     }
 }

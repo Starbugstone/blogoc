@@ -85,7 +85,6 @@ class PostModel extends Model
      * @param int $limit the number of posts
      * @param bool $isFrontPage extract only front page posts
      * @param array $select list of select limiters
-     * @param bool $withTags
      * @return array list of posts
      * @throws \ErrorException
      */
@@ -127,7 +126,7 @@ class PostModel extends Model
     /**
      * Count the number of published posts
      * @param array $select list of select limiters
-     * @param bool $withTags
+     * @param bool $published
      * @return int number of posts
      * @throws Exception
      */
@@ -239,6 +238,9 @@ class PostModel extends Model
 
     /**
      *gets all the posts
+     * @param int $offset
+     * @param int $limit
+     * @return array
      */
     public function getFullPosts(int $offset = 0, int $limit = Constant::POSTS_PER_PAGE): array
     {
@@ -288,16 +290,16 @@ class PostModel extends Model
 
     /**
      * get a single post from it's ID
-     * @param int $postid the post ID to get
+     * @param int $postId the post ID to get
      * @return array the single post details
      * @throws Exception
      */
-    public function getSinglePost(int $postid)
+    public function getSinglePost(int $postId)
     {
         $sql = $this->basePostSelect();
         $sql .= " WHERE idposts = :postId;";
         $this->query($sql);
-        $this->bind(":postId", $postid, \PDO::PARAM_INT);
+        $this->bind(":postId", $postId, \PDO::PARAM_INT);
         $this->execute();
 
         return $this->fetch();

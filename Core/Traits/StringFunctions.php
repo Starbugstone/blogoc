@@ -171,17 +171,17 @@ trait StringFunctions
      */
     public function isInt($int):bool
     {
-        return filter_var($int, FILTER_VALIDATE_INT);
+        return filter_var($int, FILTER_VALIDATE_INT) !== false;
     }
 
     /**
      * Verify if a string is a valid email
      * @param string $email
-     * @return mixed
+     * @return bool
      */
-    public function isEmail(string $email)
+    public function isEmail(string $email):bool
     {
-        return filter_var($email, FILTER_VALIDATE_EMAIL);
+        return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
     }
 
 }

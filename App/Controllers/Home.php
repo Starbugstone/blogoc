@@ -24,6 +24,7 @@ class Home extends \Core\Controller
 
     private $config;
     private $userModel;
+    private $postModel;
 
     public function __construct(Container $container)
     {
@@ -33,6 +34,7 @@ class Home extends \Core\Controller
 
         $this->config = $this->siteConfig->getSiteConfig();
         $this->userModel = new UserModel($this->container);
+        $this->postModel = new PostModel($this->container);
         if($this->auth->isuser())
         {
             $this->data["user"] = $this->userModel->getUserDetailsById($this->session->get("userId"));
@@ -49,9 +51,7 @@ class Home extends \Core\Controller
      */
     public function index()
     {
-        $frontPostModel = new PostModel($this->container);
-
-        $frontPosts = $frontPostModel->getFrontPosts();
+        $frontPosts = $this->postModel->getFrontPosts();
 
         $this->data['configs'] = $this->config;
         $this->data['navigation'] = $this->siteConfig->getMenu();

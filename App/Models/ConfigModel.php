@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Core\Container;
 use Core\Model;
 
 /**
@@ -10,6 +11,20 @@ use Core\Model;
  */
 class ConfigModel extends Model
 {
+
+    private $configsTbl;
+    private $configsClassTbl;
+    private $configTypeTbl;
+
+    public function __construct(Container $container)
+    {
+        parent::__construct($container);
+
+        $this->configsTbl = $this->getTablePrefix('configs');
+        $this->configsClassTbl = $this->getTablePrefix('configs_class');
+        $this->configTypeTbl = $this->getTablePrefix('configs_type');
+    }
+
     /**
      * Returns all the configs orderd with their class names
      * @return array
@@ -19,13 +34,11 @@ class ConfigModel extends Model
     {
         $returnData = [];
         //getting our tables
-        $configsTbl = $this->getTablePrefix('configs');
-        $configsClassTbl = $this->getTablePrefix('configs_class');
-        $configTypeTbl = $this->getTablePrefix('configs_type');
-        $sql = "SELECT idconfigs, configs_name, configs_type_name, configs_value, class FROM  $configsTbl 
-                INNER JOIN $configsClassTbl ON $configsTbl.configs_class_idconfigsclass = $configsClassTbl.idconfigsclass 
-                INNER JOIN $configTypeTbl ON $configsTbl.configs_type_idconfigs_type = $configTypeTbl.idconfigs_type
-                ORDER BY class, $configsTbl.order, configs_name;";
+
+        $sql = "SELECT idconfigs, configs_name, configs_type_name, configs_value, class FROM  $this->configsTbl 
+                INNER JOIN $this->configsClassTbl ON $this->configsTbl.configs_class_idconfigsclass = $this->configsClassTbl.idconfigsclass 
+                INNER JOIN $this->configTypeTbl ON $this->configsTbl.configs_type_idconfigs_type = $this->configTypeTbl.idconfigs_type
+                ORDER BY class, $this->configsTbl.order, configs_name;";
 
         $this->query($sql);
         $this->execute();
@@ -61,8 +74,7 @@ class ConfigModel extends Model
      */
     public function updateConfig(int $idTable, string $param): bool
     {
-        $configsTbl = $this->getTablePrefix('configs');
-        $sql = "UPDATE $configsTbl SET configs_value = :param WHERE idconfigs = :id";
+        $sql = "UPDATE $this->configsTbl SET configs_value = :param WHERE idconfigs = :id";
         $this->query($sql);
         $this->bind(':param', $param);
         $this->bind(':id', $idTable);

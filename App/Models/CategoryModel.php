@@ -36,7 +36,7 @@ class CategoryModel extends Model
      */
     public function getCategoryDetails(int $categoryId)
     {
-        return $this->getRowById($categoryId, "categories");
+        return $this->getRowById($categoryId, $this->categoryTbl);
     }
 
     /**
@@ -46,7 +46,7 @@ class CategoryModel extends Model
      */
     public function countCategories(): int
     {
-        return $this->count('categories');
+        return $this->count($this->categoryTbl);
     }
 
     /**
@@ -58,7 +58,7 @@ class CategoryModel extends Model
      */
     public function getCategoryList(int $offset = 0, int $limit = Constant::POSTS_PER_PAGE)
     {
-        return $this->list($offset, $limit, 'categories');
+        return $this->list($offset, $limit, $this->categoryTbl);
     }
 
     /**
@@ -147,7 +147,7 @@ class CategoryModel extends Model
      */
     public function getCategorySlugFromId(int $categoryId): string
     {
-        return $this->getSlugFromId($categoryId, "idcategories", "categories_slug", "categories");
+        return $this->getSlugFromId($categoryId, "idcategories", "categories_slug", $this->categoryTbl);
     }
 
     /**
@@ -158,7 +158,7 @@ class CategoryModel extends Model
      */
     public function isCategorySlugUnique(string $categorySlug):bool
     {
-        return $this->isSlugUnique($categorySlug, "categories_slug", "categories");
+        return $this->isSlugUnique($categorySlug, "categories_slug", $this->categoryTbl);
     }
 
     /**
@@ -169,7 +169,7 @@ class CategoryModel extends Model
      */
     public function getCategoryIdFromSlug(string $categorySlug): int
     {
-        return $this->getIdFromSlug($categorySlug, "idcategories", "categories_slug", "categories");
+        return $this->getIdFromSlug($categorySlug, "idcategories", "categories_slug", $this->categoryTbl);
     }
 
 

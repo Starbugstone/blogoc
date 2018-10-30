@@ -113,14 +113,14 @@ class Home extends \Core\AdminController
 
         $userId = $this->session->get("userId");
         if ($userId === null) {
-            //this should never happen but scrutinizer thows an alert
+            //this should never happen but scrutinizer throws an alert
             throw new \Exception("Session error, no ID");
         }
 
         $userDetails = $this->userModel->getUserDetailsById($userId);
 
         if ($userDetails === false) {
-            //the user is still logged in his session but deleted from the DB.
+            //the user is still logged in to his session but deleted from the DB.
             $this->cookie->deleteCookie("rememberMe");
             $this->session->destroySession();
             $this->alertBox->setAlert('your user no longer exists, please contact the admin');

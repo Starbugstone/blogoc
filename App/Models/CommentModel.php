@@ -210,7 +210,6 @@ class CommentModel extends Model{
      */
     public function update(int $commentId, string $comment, bool $approved):bool
     {
-
         $comment = $this->purifyHtml($comment);
 
         $sql="

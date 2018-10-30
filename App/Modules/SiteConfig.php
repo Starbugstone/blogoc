@@ -13,9 +13,21 @@ use Core\Traits\StringFunctions;
 class SiteConfig extends Module
 {
     use StringFunctions;
+
+    private $configs;
+    private $categoryModel;
+    private $userModel;
+    private $rememberedLoginModel;
+
     public function __construct(Container $container)
     {
         parent::__construct($container);
+
+        $this->configs = new ConfigModel($this->container);
+        $this->categoryModel = new CategoryModel($this->container);
+        $this->userModel = new UserModel($this->container);
+        $this->rememberedLoginModel = new Remembered_loginModel($this->container);
+
         $this->loginFromRememberMe();
     }
 
@@ -27,8 +39,8 @@ class SiteConfig extends Module
     public function getSiteConfig():array
     {
 
-        $configs = new ConfigModel($this->container);
-        $siteConfig = $configs->getAllConfig();
+
+        $siteConfig = $this->configs->getAllConfig();
         $data = [];
         foreach ($siteConfig as $config) {
             $data[$config->configs_name] = $config->configs_value;
@@ -43,11 +55,9 @@ class SiteConfig extends Module
      */
     public function getMenu():array
     {
-        $categoryModel = new CategoryModel($this->container);
-
         $data = [];
         //get the categories from database
-        $categories = $categoryModel->getCategories();
+        $categories = $this->categoryModel->getCategories();
         foreach ($categories as $category) {
             $data += [
                 $category->category_name => '/category/posts/' . $category->categories_slug
@@ -63,18 +73,16 @@ class SiteConfig extends Module
     public function loginFromRememberMe()
     {
         $cookie = $this->container->getCookie();
-        $userModel = new UserModel($this->container);
-        $rememberedLoginModel = new Remembered_loginModel($this->container);
         $session = $this->container->getSession();
-
         $userToken = $cookie->getCookie("rememberMe");
+
         if($userToken && $this->isHexa($userToken))
         {
             //we have a rememberMe Hash, login
-            $rememberedLogin = $rememberedLoginModel->findByToken($userToken);
+            $rememberedLogin = $this->rememberedLoginModel->findByToken($userToken);
             if($rememberedLogin){
                 //we have a hash, login
-                $user = $userModel->getUserDetailsById($rememberedLogin->users_idusers);
+                $user = $this->userModel->getUserDetailsById($rememberedLogin->users_idusers);
                 $session->regenerateSessionId(); //regenerate the ID to avoid session ghosting
                 $session->set("user", $user);
                 $userRoleName = $user->role_name ?? "";
