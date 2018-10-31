@@ -25,7 +25,7 @@ class CategoryModel extends Model
      */
     public function getCategories()
     {
-        return $this->getResultSet('categories');
+        return $this->getResultSet($this->categoryTbl);
     }
 
     /**
