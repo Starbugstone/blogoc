@@ -49,12 +49,12 @@ class Home extends \Core\AdminController
         $userRoleSelector = $this->user->userRoleSelector ?? 2;
         $error = false;
         //doing a quick check to send back error message
-        if ($userId === 1 && $userLockedOut === 1) {
+        if ($userId === 1 && $userLockedOut == 1) {
             $error = true;
             $this->alertBox->setAlert("Original admin may not be deactivated", "error");
         }
 
-        if ($userId === 1 && $userRoleSelector !== 2) {
+        if ($userId === 1 && $userRoleSelector != 2) {
             $error = true;
             $this->alertBox->setAlert("Original admin must stay admin", "error");
         }
