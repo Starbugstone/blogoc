@@ -7,15 +7,19 @@ use Core\AjaxController;
 use Core\Container;
 use Core\JsonException;
 use Core\Traits\StringFunctions;
+use Swift_TransportException;
 
 class Config extends AjaxController
 {
     use StringFunctions;
 
+    protected $sendMail;
+
     private $configModel;
 
     public function __construct(Container $container)
     {
+        $this->loadModules[] = 'SendMail';
         parent::__construct($container);
         $this->configModel = new ConfigModel($this->container);
     }
@@ -46,6 +50,25 @@ class Config extends AjaxController
             } else {
                 $result['successId'][] = $update->name;
             }
+        }
+
+        echo json_encode($result);
+    }
+
+    /**
+     * Send a test mail
+     * @throws JsonException
+     */
+    public function testMail(){
+        $this->onlyAdmin();
+        $this->onlyPost();
+        $result = array();
+        $result['success'] = false;
+        try{
+            $this->sendMail->sendTestMail();
+            $result['success'] = true;
+        }catch (Swift_TransportException $e) {
+            $result['success'] = false;
         }
 
         echo json_encode($result);

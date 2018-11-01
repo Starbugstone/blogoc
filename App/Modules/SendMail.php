@@ -95,4 +95,17 @@ class SendMail extends Module
 
         $this->send($to, "Define Password at " . $this->siteConfig["site_name"], $message);
     }
+
+    /**
+     * Send a test mail
+     * @return int
+     */
+    public function sendTestMail()
+    {
+        $to = $this->siteConfig["SMTP_from"];
+        $subject = "Test mail";
+        $message = "this is a test mail to confirm the SMPT is configured correctly";
+
+        return $this->send($to, $subject, $message);
+    }
 }
