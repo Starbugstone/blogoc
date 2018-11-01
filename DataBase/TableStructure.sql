@@ -28,7 +28,7 @@ CREATE TABLE `boc_categories` (
   `categories_slug` varchar(255) NOT NULL,
   PRIMARY KEY (`idcategories`),
   UNIQUE KEY `categories_slug_UNIQUE` (`categories_slug`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +37,7 @@ CREATE TABLE `boc_categories` (
 
 LOCK TABLES `boc_categories` WRITE;
 /*!40000 ALTER TABLE `boc_categories` DISABLE KEYS */;
-INSERT INTO `boc_categories` VALUES (3,'Dev','dev'),(4,'Stories','stories');
+INSERT INTO `boc_categories` VALUES (1,'Dev','dev'),(2,'Stories','stories');
 /*!40000 ALTER TABLE `boc_categories` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -54,13 +54,13 @@ CREATE TABLE `boc_comments` (
   `posts_idposts` int(11) NOT NULL,
   `comment` text,
   `approved` tinyint(4) NOT NULL DEFAULT '0',
-  `comment_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `comment_date` datetime,
   PRIMARY KEY (`idcomments`),
   KEY `fk_comment_post1_idx` (`posts_idposts`),
   KEY `fk_comments_users1_idx` (`users_idusers`),
-  CONSTRAINT `fk_comment_post1` FOREIGN KEY (`posts_idposts`) REFERENCES `posts` (`idposts`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  CONSTRAINT `fk_comments_users1` FOREIGN KEY (`users_idusers`) REFERENCES `users` (`idusers`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+  CONSTRAINT `fk_comment_post1` FOREIGN KEY (`posts_idposts`) REFERENCES `boc_posts` (`idposts`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_comments_users1` FOREIGN KEY (`users_idusers`) REFERENCES `boc_users` (`idusers`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -91,8 +91,8 @@ CREATE TABLE `boc_configs` (
   UNIQUE KEY `idconfigs_UNIQUE` (`idconfigs`),
   KEY `fk_config_config_class1_idx` (`configs_class_idconfigsclass`),
   KEY `fk_configs_configs_type1_idx` (`configs_type_idconfigs_type`),
-  CONSTRAINT `fk_config_config_class1` FOREIGN KEY (`configs_class_idconfigsclass`) REFERENCES `configs_class` (`idconfigsclass`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_configs_configs_type1` FOREIGN KEY (`configs_type_idconfigs_type`) REFERENCES `configs_type` (`idconfigs_type`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_config_config_class1` FOREIGN KEY (`configs_class_idconfigsclass`) REFERENCES `boc_configs_class` (`idconfigsclass`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_configs_configs_type1` FOREIGN KEY (`configs_type_idconfigs_type`) REFERENCES `boc_configs_type` (`idconfigs_type`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -178,9 +178,9 @@ CREATE TABLE `boc_posts` (
   UNIQUE KEY `posts_slug_UNIQUE` (`posts_slug`),
   KEY `fk_post_category1_idx` (`categories_idcategories`),
   KEY `fk_posts_users1_idx` (`author_iduser`),
-  CONSTRAINT `fk_post_category1` FOREIGN KEY (`categories_idcategories`) REFERENCES `categories` (`idcategories`) ON DELETE SET NULL ON UPDATE NO ACTION,
-  CONSTRAINT `fk_posts_users1` FOREIGN KEY (`author_iduser`) REFERENCES `users` (`idusers`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
+  CONSTRAINT `fk_post_category1` FOREIGN KEY (`categories_idcategories`) REFERENCES `boc_categories` (`idcategories`) ON DELETE SET NULL ON UPDATE NO ACTION,
+  CONSTRAINT `fk_posts_users1` FOREIGN KEY (`author_iduser`) REFERENCES `boc_users` (`idusers`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -205,8 +205,8 @@ CREATE TABLE `boc_posts_has_tags` (
   PRIMARY KEY (`post_idposts`,`tag_idtags`),
   KEY `fk_post_has_tag_tag1_idx` (`tag_idtags`),
   KEY `fk_post_has_tag_post1_idx` (`post_idposts`),
-  CONSTRAINT `fk_post_has_tag_post1` FOREIGN KEY (`post_idposts`) REFERENCES `posts` (`idposts`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  CONSTRAINT `fk_post_has_tag_tag1` FOREIGN KEY (`tag_idtags`) REFERENCES `tags` (`idtags`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_post_has_tag_post1` FOREIGN KEY (`post_idposts`) REFERENCES `boc_posts` (`idposts`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `fk_post_has_tag_tag1` FOREIGN KEY (`tag_idtags`) REFERENCES `boc_tags` (`idtags`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -232,7 +232,7 @@ CREATE TABLE `boc_remembered_logins` (
   `expires_at` datetime NOT NULL,
   PRIMARY KEY (`token_hash`),
   KEY `fk_remembered_logins_users1_idx` (`users_idusers`),
-  CONSTRAINT `fk_remembered_logins_users1` FOREIGN KEY (`users_idusers`) REFERENCES `users` (`idusers`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_remembered_logins_users1` FOREIGN KEY (`users_idusers`) REFERENCES `boc_users` (`idusers`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -281,7 +281,7 @@ CREATE TABLE `boc_tags` (
   `idtags` int(11) NOT NULL AUTO_INCREMENT,
   `tag_name` varchar(255) NOT NULL,
   PRIMARY KEY (`idtags`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -320,8 +320,8 @@ CREATE TABLE `boc_users` (
   UNIQUE KEY `email_UNIQUE` (`email`),
   UNIQUE KEY `reset_password_hash_UNIQUE` (`reset_password_hash`),
   KEY `fk_user_role_idx` (`roles_idroles`),
-  CONSTRAINT `fk_user_role` FOREIGN KEY (`roles_idroles`) REFERENCES `roles` (`idroles`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+  CONSTRAINT `fk_user_role` FOREIGN KEY (`roles_idroles`) REFERENCES `boc_roles` (`idroles`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
