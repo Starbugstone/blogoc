@@ -6,7 +6,7 @@ $.ajaxSetup({
     type: "POST",
     //adding our csrf token security
     headers : {
-        "csrf_token": $("meta[name=\"csrf_token\"]").attr("content")
+        "Csrftoken": $("meta[name=\"csrf_token\"]").attr("content")
     }
 });
 
@@ -16,7 +16,7 @@ function setupAjax() {
         type: "POST",
         //adding our csrf token security
         headers : {
-            "csrf_token": $("meta[name=\"csrf_token\"]").attr("content")
+            "csrftoken": $("meta[name=\"csrf_token\"]").attr("content")
         }
     });
 }
