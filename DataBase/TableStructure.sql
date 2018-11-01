@@ -102,7 +102,7 @@ CREATE TABLE `boc_configs` (
 
 LOCK TABLES `boc_configs` WRITE;
 /*!40000 ALTER TABLE `boc_configs` DISABLE KEYS */;
-INSERT INTO `boc_configs` VALUES (1,'front_text_1','',1,1,1),(2,'front_text_2','',1,1,10),(3,'front_text_3','',1,1,20),(4,'social_icons_linkedin','',2,2,10),(5,'social_icons_github','',2,2,20),(6,'social_icons_twitter','',2,2,30),(7,'social_icons_facebook','',2,2,40),(8,'social_icons_website','',2,2,50),(9,'site_name','Blog OC',4,1,10),(10,'about_me_image','/config_images/camera-no-image-1.jpg',3,3,10),(11,'front_text_1_subtext','',1,1,2),(12,'front_text_2_subtext','',1,1,11),(13,'front_text_3_subtext','',1,1,21),(14,'no_image_replacement','',4,3,20),(15,'SMTP_server','smtp.mailtrap.io',5,1,1),(16,'SMTP_port','465',5,1,2),(17,'SMTP_user','6f39ae281f4565',5,1,3),(18,'SMTP_pass','77ac508b1b88fe',5,1,4),(19,'SMTP_from','noreply@localhost.com',5,1,5),(20,'admin_email_address','admin@me.com',4,1,30);
+INSERT INTO `boc_configs` VALUES (1,'front_text_1','',1,1,1),(2,'front_text_2','',1,1,10),(3,'front_text_3','',1,1,20),(4,'social_icons_linkedin','',2,2,10),(5,'social_icons_github','',2,2,20),(6,'social_icons_twitter','',2,2,30),(7,'social_icons_facebook','',2,2,40),(8,'social_icons_website','',2,2,50),(9,'site_name','Blog OC',4,1,10),(10,'about_me_image','/config_images/camera-no-image-1.jpg',3,3,10),(11,'front_text_1_subtext','',1,1,2),(12,'front_text_2_subtext','',1,1,11),(13,'front_text_3_subtext','',1,1,21),(14,'no_image_replacement','',4,3,20),(15,'SMTP_server','smtp.mailtrap.io',5,1,1),(16,'SMTP_port','465',5,1,2),(17,'SMTP_user','6f39ae281f4565',5,1,3),(18,'SMTP_pass','77ac508b1b88fe',5,4,4),(19,'SMTP_from','noreply@localhost.com',5,1,5),(20,'admin_email_address','admin@me.com',4,1,30);
 /*!40000 ALTER TABLE `boc_configs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -151,7 +151,7 @@ CREATE TABLE `boc_configs_type` (
 
 LOCK TABLES `boc_configs_type` WRITE;
 /*!40000 ALTER TABLE `boc_configs_type` DISABLE KEYS */;
-INSERT INTO `boc_configs_type` VALUES (1,'text'),(2,'url'),(3,'image');
+INSERT INTO `boc_configs_type` VALUES (1,'text'),(2,'url'),(3,'image'),(4,'password');
 /*!40000 ALTER TABLE `boc_configs_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
