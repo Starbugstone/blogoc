@@ -85,6 +85,7 @@ class SiteConfig extends Module
                 $user = $this->userModel->getUserDetailsById($rememberedLogin->users_idusers);
                 $session->regenerateSessionId(); //regenerate the ID to avoid session ghosting
                 $session->set("user", $user);
+                $session->set("userId", $user->idusers);
                 $userRoleName = $user->role_name ?? "";
                 $userRoleLevel = $user->role_level ?? 0;
                 $session->set('user_role_name', $userRoleName);
