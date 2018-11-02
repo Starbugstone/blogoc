@@ -68,7 +68,7 @@ class SendMail extends Module
     public function sendResetPasswordMail(string $to, string $token, int $userId)
     {
         $url = $this->container->getRequest()->getBaseUrl();
-        $url .= "password/reset/get?token=" . $token;
+        $url .= "password/reset/get&token=" . $token;
         $url .= "&userId=" . $userId;
 
         $message = "<h1>Message from <a href='" . $this->container->getRequest()->getBaseUrl() . "'>" . $this->siteConfig["site_name"] . "</a></h1>";
@@ -86,7 +86,7 @@ class SendMail extends Module
     public function sendNewPasswordMail(string $to, string $token, int $userId)
     {
         $url = $this->container->getRequest()->getBaseUrl();
-        $url .= "password/reset/get?token=" . $token;
+        $url .= "password/reset/get&token=" . $token;
         $url .= "&userId=" . $userId;
         $message = "<h1>Message from <a href='" . $this->container->getRequest()->getBaseUrl() . "'>" . $this->siteConfig["site_name"] . "</a></h1>";
         $message .= "<h2>Welcome to the site</h2>";
