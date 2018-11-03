@@ -51,6 +51,14 @@ class Category extends AjaxController
             die();
         }
 
+        if(!$this->categoryModel->isCategorySlugUnique($send["categories_slug"]))
+        {
+            $result["success"] = false;
+            $result["errorMessage"] = "Slug is not unique";
+            echo json_encode($result);
+            die();
+        }
+
 
         $result["success"] = $this->categoryModel->new($send["category_name"], $send["categories_slug"]);
         echo json_encode($result);
