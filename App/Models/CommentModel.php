@@ -171,7 +171,7 @@ class CommentModel extends Model{
         $comment = $this->purifyHtml($comment);
         $sql="
             INSERT INTO $this->commentTbl (users_idusers, posts_idposts, comment, approved, comment_date)
-            VALUES (:userId, :postId, :comment, :approved, NOW();)
+            VALUES (:userId, :postId, :comment, :approved, NOW())
         ";
         $this->query($sql);
         $this->bind(':userId', $userId);
