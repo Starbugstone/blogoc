@@ -71,7 +71,7 @@ class Category extends Controller
     public function allPosts(string $page = "page-1", int $linesPerPage = Constant::POSTS_PER_PAGE)
     {
         $totalPosts = $this->postModel->totalNumberPosts();
-        $pagination = $this->pagination->getPagination($page, $totalPosts);
+        $pagination = $this->pagination->getPagination($page, $totalPosts, $linesPerPage);
 
         if ($linesPerPage !== Constant::POSTS_PER_PAGE) {
             $this->data['paginationPostsPerPage'] = $linesPerPage;

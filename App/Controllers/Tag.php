@@ -28,7 +28,7 @@ class Tag extends Controller
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function posts(int $tagId, string $page = "page-1")
+    public function posts(int $tagId, string $page = "page-1", int $linesPerPage = Constant::POSTS_PER_PAGE)
     {
         $postModel = new PostModel($this->container);
         $tagModel = new TagModel($this->container);
@@ -37,7 +37,11 @@ class Tag extends Controller
         if ($totalPosts < 1) {
             throw new \Exception("Tag has no posts", 404);
         }
-        $pagination = $this->pagination->getPagination($page, $totalPosts);
+        $pagination = $this->pagination->getPagination($page, $totalPosts, $linesPerPage);
+
+        if ($linesPerPage !== Constant::POSTS_PER_PAGE) {
+            $this->data['paginationPostsPerPage'] = $linesPerPage;
+        }
 
         $this->sendSessionVars();
         $this->data['posts'] = $postModel->getPostsWithTag($tagId, $pagination["offset"]);

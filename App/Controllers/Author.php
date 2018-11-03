@@ -40,7 +40,7 @@ class Author extends Controller
     public function posts(int $authorId, string $page = "page-1", int $linesPerPage = Constant::POSTS_PER_PAGE)
     {
         $totalPosts = $this->postModel->totalNumberPostsByAuthor($authorId);
-        $pagination = $this->pagination->getPagination($page, $totalPosts);
+        $pagination = $this->pagination->getPagination($page, $totalPosts, $linesPerPage);
 
         if ($linesPerPage !== Constant::POSTS_PER_PAGE) {
             $this->data['paginationPostsPerPage'] = $linesPerPage;
