@@ -55,7 +55,7 @@ function setupTinymce($selector) {
             xhr.withCredentials = false;
 
             xhr.open("POST", "/ajax/image-upload/tinymce-upload");
-            xhr.setRequestHeader("csrf_token", $("meta[name=\"csrf_token\"]").attr("content")); //seneding our csrf token.
+            xhr.setRequestHeader("Csrftoken", $("meta[name=\"csrf_token\"]").attr("content")); //seneding our csrf token.
             xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest"); //seneding our XML header.
 
             xhr.onload = function () {
