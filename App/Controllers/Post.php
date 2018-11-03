@@ -57,6 +57,7 @@ class Post extends Controller
                 throw new \Exception("File does not exist", "404");
             }
             $this->alertBox->setAlert('This post is not yet published', 'warning');
+            $this->data["postwarning"] = "This post is unpublished, only admins can see this page";
         }
 
         $totalComments = $this->commentModel->countCommentsOnPost($postId);

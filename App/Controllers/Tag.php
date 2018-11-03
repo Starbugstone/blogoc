@@ -34,6 +34,9 @@ class Tag extends Controller
         $tagModel = new TagModel($this->container);
 
         $totalPosts = $postModel->totalNumberPostsByTag($tagId);
+        if ($totalPosts < 1) {
+            throw new \Exception("Tag has no posts", 404);
+        }
         $pagination = $this->pagination->getPagination($page, $totalPosts);
 
         $this->sendSessionVars();
