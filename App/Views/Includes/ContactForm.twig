@@ -48,4 +48,7 @@
         <input type="submit" value="Send message" class="btn btn-info btn-block rounded-0 py-2">
     </div>
 
+    {% if recapchaPublicKey is defined %}
+    <div class="g-recaptcha mt-2" data-sitekey="{{ recapchaPublicKey }}"></div>
+    {% endif %}
 </form>

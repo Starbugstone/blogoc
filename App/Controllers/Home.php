@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\PostModel;
 use App\Models\UserModel;
+use Core\Config;
 use Core\Container;
 use Core\Traits\StringFunctions;
 
@@ -128,6 +129,25 @@ class Home extends \Core\Controller
             $contactErrors->contactEmail = "email is not valid";
         }
 
+
+        if(Config::GOOGLE_RECAPCHA_PUBLIC_KEY !== "" && Config::GOOGLE_RECAPCHA_SECRET_KEY !== "")
+        {
+            if(empty($message["g-recaptcha-response"]))
+            {
+                $error = true;
+                $this->alertBox->setAlert('Capcha not set', 'error');
+            }
+            //check the capcha
+            $grequest = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.Config::GOOGLE_RECAPCHA_SECRET_KEY.'&response='.$message["g-recaptcha-response"]);
+            // The result is in a JSON format. Decoding..
+            $gresponse = json_decode($grequest);
+            if(!$gresponse->success)
+            {
+                $error = true;
+                $this->alertBox->setAlert('Capcha Error', 'error');
+            }
+        }
+
         //If we found an error, return data to the register form and no create
         if ($error) {
             $this->session->set("contactInfo", $message);
@@ -142,8 +162,9 @@ class Home extends \Core\Controller
         $subject = "Contact from ".$config["site_name"]." : ";
         $subject .= htmlspecialchars($message["contactSubject"]);
         $textMessage = "<h1>message sent by ".$userName."</h1>";
+        $textMessage .= "<p>from : <a href='mailto:".$message["contactEmail"]."'>".$message["contactEmail"]."</a></p>";
         $textMessage .= htmlspecialchars($message["contactMessage"]);
-        $from = $message["contactEmail"];
+        $from = $config["SMTP_from"];
 
         $this->sendMail->send($to, $subject, $textMessage, $from);
 

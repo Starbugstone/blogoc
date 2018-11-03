@@ -25,7 +25,7 @@ class Config
      * Database name
      * @var string
      */
-    const DB_NAME = 'blogoc2';
+    const DB_NAME = 'blogoc';
 
     /**
      * Database user
@@ -51,7 +51,7 @@ class Config
      * the tables will then be accessed via prefix_table.
      * @var string
      */
-    const TABLE_PREFIX = 'boc';
+    const TABLE_PREFIX = '';
 
     /**
      * Image upload folders
@@ -61,4 +61,9 @@ class Config
     const CONFIG_IMAGES = "config_images/";
     const USER_IMAGES = "user_images/";
 
+    /**
+     * Google reCapcha keys for the contact form
+     */
+    const GOOGLE_RECAPCHA_SECRET_KEY = "";
+    const GOOGLE_RECAPCHA_PUBLIC_KEY = "";
 }
