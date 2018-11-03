@@ -75,7 +75,7 @@ class Post extends Controller
             $linesPerPage);
         $this->data['pagination'] = $pagination;
 
-        $this->renderView('post');
+        $this->renderView('Post');
 
     }
 
