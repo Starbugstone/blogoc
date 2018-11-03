@@ -43,6 +43,34 @@ class Home extends \Core\Controller
     }
 
     /**
+     * test the capcha
+     * @param string $gCapchaResponse
+     * @return bool
+     */
+    private function testCapcha(string $gCapchaResponse):bool
+    {
+        $error = false;
+        if(Config::GOOGLE_RECAPCHA_PUBLIC_KEY !== "" && Config::GOOGLE_RECAPCHA_SECRET_KEY !== "")
+        {
+            if(empty($gCapchaResponse))
+            {
+                $error = true;
+                $this->alertBox->setAlert('Capcha not set', 'error');
+            }
+            //check the capcha
+            $grequest = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.Config::GOOGLE_RECAPCHA_SECRET_KEY.'&response='.$gCapchaResponse);
+            // The result is in a JSON format. Decoding..
+            $gresponse = json_decode($grequest);
+            if(!$gresponse->success)
+            {
+                $error = true;
+                $this->alertBox->setAlert('Capcha Error', 'error');
+            }
+        }
+        return $error;
+    }
+
+    /**
      * Show the front page
      * @throws \ErrorException
      * @throws \ReflectionException
@@ -129,23 +157,11 @@ class Home extends \Core\Controller
             $contactErrors->contactEmail = "email is not valid";
         }
 
+        $capchaError = $this->testCapcha($message["g-recaptcha-response"]);
 
-        if(Config::GOOGLE_RECAPCHA_PUBLIC_KEY !== "" && Config::GOOGLE_RECAPCHA_SECRET_KEY !== "")
+        if($capchaError === true)
         {
-            if(empty($message["g-recaptcha-response"]))
-            {
-                $error = true;
-                $this->alertBox->setAlert('Capcha not set', 'error');
-            }
-            //check the capcha
-            $grequest = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.Config::GOOGLE_RECAPCHA_SECRET_KEY.'&response='.$message["g-recaptcha-response"]);
-            // The result is in a JSON format. Decoding..
-            $gresponse = json_decode($grequest);
-            if(!$gresponse->success)
-            {
-                $error = true;
-                $this->alertBox->setAlert('Capcha Error', 'error');
-            }
+            $error = true;
         }
 
         //If we found an error, return data to the register form and no create
