@@ -35,11 +35,14 @@
                aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-comments"></i>
                 <span>Comments</span>
+                {% if pendingCommentsCount > 0 %}
+                <span class="badge badge-danger">{{ pendingCommentsCount }}</span>
+                {% endif %}
             </a>
             <div class="dropdown-menu" aria-labelledby="commentsDropdown">
                 <h6 class="dropdown-header">Comments</h6>
-                <a class="dropdown-item" href="/admin/comments/pending-comments">View pending comments</a>
-                <a class="dropdown-item" href="/admin/comments/view-comments">View all comments</a>
+                <a class="dropdown-item" href="/admin/comments/pending-comments">Pending comments{% if pendingCommentsCount > 0 %}<span class="badge badge-danger">{{ pendingCommentsCount }}</span>{% endif %}</a>
+                <a class="dropdown-item" href="/admin/comments/view-comments">All comments</a>
             </div>
         </li>
 

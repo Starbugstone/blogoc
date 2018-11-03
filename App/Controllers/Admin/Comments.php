@@ -26,6 +26,7 @@ class Comments extends AdminController{
         $this->commentModel = new CommentModel($this->container);
 
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
+        $this->data["pendingCommentsCount"] = $this->commentModel->countPendingComments();
     }
 
     /**

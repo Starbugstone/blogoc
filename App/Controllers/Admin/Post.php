@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Models\CategoryModel;
+use App\Models\CommentModel;
 use App\Models\PostModel;
 use App\Models\TagModel;
 use Core\AdminController;
@@ -18,6 +19,7 @@ class Post extends AdminController
     private $categoryModel;
     private $tagModel;
     private $postModel;
+    private $commentModel;
 
     public function __construct(Container $container)
     {
@@ -28,10 +30,12 @@ class Post extends AdminController
         $this->categoryModel = new CategoryModel($this->container);
         $this->tagModel = new TagModel($this->container);
         $this->postModel = new PostModel($this->container);
+        $this->commentModel = new CommentModel($container);
 
         //adding the necessary default data
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
         $this->data['categories'] = $this->categoryModel->getCategories();
+        $this->data["pendingCommentsCount"] = $this->commentModel->countPendingComments();
     }
 
     /**

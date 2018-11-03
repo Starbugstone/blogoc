@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Admin;
 
+use App\Models\CommentModel;
 use App\Models\ConfigModel;
 use Core\AdminController;
 use Core\Traits\StringFunctions;
@@ -18,12 +19,15 @@ class Config extends AdminController
     use StringFunctions;
     protected $siteConfig;
     private $configModel;
+    private $commentModel;
 
     public function __construct(Container $container)
     {
         $this->loadModules[] = 'SiteConfig';
         parent::__construct($container);
         $this->configModel = new ConfigModel($this->container);
+        $this->commentModel = new CommentModel($container);
+        $this->data["pendingCommentsCount"] = $this->commentModel->countPendingComments();
     }
 
     /**

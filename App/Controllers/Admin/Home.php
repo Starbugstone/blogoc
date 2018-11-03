@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 
+use App\Models\CommentModel;
 use App\Models\RoleModel;
 use App\Models\UserModel;
 use Core\Constant;
@@ -19,6 +20,7 @@ class Home extends \Core\AdminController
 
     private $userModel;
     private $roleModel;
+    private $commentModel;
 
     private $user;
     private $registerErrors;
@@ -30,11 +32,13 @@ class Home extends \Core\AdminController
         parent::__construct($container);
         $this->userModel = new UserModel($this->container);
         $this->roleModel = new RoleModel($this->container);
+        $this->commentModel = new CommentModel($container);
 
         $this->registerErrors = new \stdClass();
         $this->user = new \stdClass();
 
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
+        $this->data["pendingCommentsCount"] = $this->commentModel->countPendingComments();
     }
 
     /**
