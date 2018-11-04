@@ -38,7 +38,7 @@ class Home extends \Core\Controller
         $this->postModel = new PostModel($this->container);
         if($this->auth->isuser())
         {
-            $this->data["user"] = $this->userModel->getUserDetailsById($this->session->get("userId"));
+            $this->data["user"] = $this->userModel->getUserDetailsById((int)$this->session->get("userId"));
         }
     }
 
