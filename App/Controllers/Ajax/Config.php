@@ -19,10 +19,8 @@ class Config extends AjaxController
     {
         //security checks
         $this->onlyAdmin();
-        if (!$this->container->getRequest()->isPost()) {
-            throw new JsonException('Call is not post');
-        }
-        //prepating our return results
+        $this->onlyPost();
+        //preparing our return results
         $result = array();
         $result['successId'] = [];
         $result['errorId'] = [];

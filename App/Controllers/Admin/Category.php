@@ -62,10 +62,7 @@ class Category extends AdminController
     public function update()
     {
         $this->onlyAdmin();
-        if (!$this->request->isPost()) {
-            $this->alertBox->setAlert('Only post messages allowed', 'error');
-            $this->response->redirect('admin');
-        }
+        $this->onlyPost();
 
         $category = $this->container->getRequest()->getDataFull();
 
@@ -136,10 +133,7 @@ class Category extends AdminController
     public function new()
     {
         $this->onlyAdmin();
-        if (!$this->request->isPost()) {
-            $this->alertBox->setAlert('Only post messages allowed', 'error');
-            $this->response->redirect('admin');
-        }
+        $this->onlyPost();
 
         $category = $this->container->getRequest()->getDataFull();
         $categoryName = $category["category_name"];

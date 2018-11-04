@@ -9,6 +9,12 @@ namespace Core;
  */
 class Config
 {
+    /*
+     * -----------------------------------------------------
+     *                     DATABASE CONFIG
+     * -----------------------------------------------------
+     */
+
     /**
      * Database host
      * @var string
@@ -46,4 +52,5 @@ class Config
      * @var string
      */
     const TABLE_PREFIX = '';
+
 }

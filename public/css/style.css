@@ -210,6 +210,10 @@ article.category-listing {
     background-position: center;
     background-size: cover; }
 
+img.author-image {
+  max-width: 150px;
+  max-height: 150px; }
+
 .pagination p {
   width: 100%; }
 
@@ -237,3 +241,8 @@ article.category-listing {
     cursor: pointer; }
   .chip .closebtn:hover {
     color: #000; }
+
+#register label.error, #forgot label.error, #updateUser label.error {
+  width: 100%;
+  color: #ffc107;
+  padding-left: 1rem; }

@@ -5,10 +5,20 @@ namespace App\Controllers\Ajax;
 use App\Models\PostModel;
 use Core\AjaxController;
 use Core\Traits\StringFunctions;
+use Core\Container;
 
 class PostVerification extends AjaxController
 {
     use StringFunctions;
+
+
+    protected $slug;
+
+    public function __construct(Container $container)
+    {
+        $this->loadModules[] = 'Slug';
+        parent::__construct($container);
+    }
 
     /**
      * checks if the slug is unique
@@ -19,17 +29,15 @@ class PostVerification extends AjaxController
     public function isSlugUnique()
     {
         $this->onlyAdmin();
-        if (!$this->container->getRequest()->isPost()) {
-            throw new \Core\JsonException('Call is not post');
-        }
+        $this->onlyPost();
 
         $postSlug = $this->request->getData("postSlug");
         $postId = $this->request->getData("postId");
 
         $data = false;
-        if (!$this->isAlphaNum($postSlug)) {
+        if (!$this->slug->isSlugValid($postSlug) || !$this->isInt($postId)) {
             echo json_encode($data);
-            return true;
+            die();
         }
 
         $postModel = new PostModel($this->container);

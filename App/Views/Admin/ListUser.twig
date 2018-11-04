@@ -1,0 +1,85 @@
+{% extends "Admin/Base.twig" %}
+{% block main %}
+    <h1>Post list</h1>
+    <p><a href="/admin/post/new" class="btn btn-success"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add new
+            post</a></p>
+    <table class="w-100">
+        <tr>
+            <th>Image</th>
+            <th>Username</th>
+            <th>Surname</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Creation date</th>
+            <th>last update</th>
+            <th>Locked Out</th>
+            <th>Role</th>
+            <th>Links</th>
+        </tr>
+        {% for user in posts %}
+            <tr>
+                <td><img src="{{ not user.avatar ? configs.no_image_replacement : user.avatar }}"
+                         style="max-height: 100px; max-width: 100px;"></td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.surname }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.creation_date|date("d/m/Y") }}</td>
+                <td>{{ user.last_update|date("d/m/Y H:i") }}</td>
+                <td><i class="btn fa {{ user.locked_out ? "fa-check" : "fa-times" }}" aria-hidden="true"
+                       data-isactive="{{ user.locked_out ? "true" : "false" }}" data-userid="{{ user.idusers }}">
+                    </i>
+
+                </td>
+                <td>{{ user.role_name }}</td>
+                <td>
+                    <a href="/admin/home/view-user/{{ user.idusers }}" class="btn btn-success"><i class="fa fa-eye"
+                                                                                               aria-hidden="true"></i></a>
+                    <a href="/admin/home/delete-user/{{ user.idusers }}" class="btn btn-danger"><i class="fa fa-trash"
+                                                                                                   aria-hidden="true"></i></a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    {% include "Includes/Pagination.twig" with {'pagination': pagination, 'pageUrl' :'/admin/home/list-users', paginationPostsPerPage: paginationPostsPerPage} %}
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        setupAjax();
+        //ajax change the on front page
+        $("td>i[data-isactive]").each(function () {
+            $(this).on("click", function () {
+                var $that = $(this);
+                if($that.data("userid") == 1)
+                {
+                    //we do not want to deactivate the original Admin
+                    return;
+                }
+                $that.html("<i class=\"fa fa-spinner fa-spin\" aria-hidden=\"true\"></i>");
+                $.ajax({
+                    url: "/ajax/user/toggleActivation",
+                    data: {
+                        'state': $that.data("isactive"),
+                        'userId': $that.data("userid")
+                    },
+                }).done(function ($result) {
+                    $that.html("");
+                    if ($result.state == false) {
+                        $that.removeClass("fa-check");
+                        $that.addClass("fa-times");
+                        $that.data("isactive", "false");
+                    }
+                    else{
+                        $that.removeClass("fa-times");
+                        $that.addClass("fa-check");
+                        $that.data("isactive", "true");
+                    }
+                });
+            });
+        });
+    </script>
+
+{% endblock %}

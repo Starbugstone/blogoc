@@ -431,4 +431,24 @@ abstract class Model
         $result = $this->stmt->fetch();
         return $this->returnArray($result);
     }
+
+    /**
+     * generates a token to use
+     * @return string
+     * @throws \Exception
+     */
+    protected function generateToken():string
+    {
+        return bin2hex(random_bytes(16));
+    }
+
+    /**
+     * generate a hash from a token
+     * @param string $token
+     * @return string
+     */
+    protected function generateHash(string $token):string
+    {
+        return hash_hmac("sha256", $token, Constant::HASH_KEY);
+    }
 }

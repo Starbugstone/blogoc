@@ -36,7 +36,7 @@ class PostModel extends Model
      */
     private function basePostSelect(): string
     {
-        $sql = "SELECT idposts, title, post_image,article,$this->postsTbl.last_update, posts_slug, categories_idcategories, category_name, published, on_front_page, categories_slug, pseudo as author, idusers
+        $sql = "SELECT idposts, title, post_image,article,$this->postsTbl.last_update, posts_slug, categories_idcategories, category_name, published, on_front_page, categories_slug, username as author, idusers
                 FROM $this->postsTbl 
                 INNER JOIN $this->categoriesTbl ON $this->postsTbl.categories_idcategories = $this->categoriesTbl.idcategories 
                 INNER JOIN $this->usersTbl ON $this->postsTbl.author_iduser = $this->usersTbl.idusers";
@@ -436,7 +436,7 @@ class PostModel extends Model
      * @return bool
      * @throws Exception
      */
-    public function setPublished(bool $state, int $postId)
+    public function setPublished(bool $state, int $postId):bool
     {
         $sql = "
             UPDATE $this->postsTbl 
@@ -460,7 +460,7 @@ class PostModel extends Model
      * @return bool
      * @throws Exception
      */
-    public function setOnFrontPage(bool $state, int $postId)
+    public function setOnFrontPage(bool $state, int $postId):bool
     {
         $sql = "
             UPDATE $this->postsTbl 

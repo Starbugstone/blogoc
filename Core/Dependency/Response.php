@@ -14,7 +14,7 @@ class Response
      * Setting the header type. useful for Json returns
      * @param string $type
      */
-    public function setHeaderContentType(string $type)
+    public function setHeaderContentType(string $type):void
     {
         switch ($type) {
             case 'json':

@@ -114,10 +114,7 @@ class Post extends AdminController
     {
         //Security checks
         $this->onlyAdmin();
-        if (!$this->request->isPost()) {
-            $this->alertBox->setAlert('Only post messages allowed', 'error');
-            $this->response->redirect('admin');
-        }
+        $this->onlyPost();
 
         $posts = $this->container->getRequest()->getDataFull();
         $userSessionId = $this->container->getSession()->get("user_id");
@@ -182,10 +179,7 @@ class Post extends AdminController
     {
         //Security checks
         $this->onlyAdmin();
-        if (!$this->request->isPost()) {
-            $this->alertBox->setAlert('Only post messages allowed', 'error');
-            $this->response->redirect('admin');
-        }
+        $this->onlyPost();
 
         $posts = $this->container->getRequest()->getDataFull();
 

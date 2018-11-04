@@ -70,24 +70,7 @@
 <!-- /#wrapper -->
 
 <!-- Logout Modal-->
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="/login/disconnect">Logout</a>
-            </div>
-        </div>
-    </div>
-</div>
+{% include "Includes/Logout-Modal.twig" %}
 
 {% if dev is defined %}
     {% include "Includes/Dev-info.twig" %}
@@ -119,6 +102,8 @@ wish to resize images before upload. This must be loaded before fileinput.min.js
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.9/js/fileinput.min.js"></script>
 <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.9/themes/fa/theme.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hideshowpassword/2.1.1/hideShowPassword.min.js"></script>
 
 <script type="text/javascript" src="/js/admin-ajax-script.js"></script>
 <script type="text/javascript" src="/js/admin-script.js"></script>

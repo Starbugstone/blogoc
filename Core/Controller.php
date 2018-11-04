@@ -31,6 +31,22 @@ abstract class Controller
     protected $session;
 
     /**
+     * The request object to handle all gets and posts
+     * @var Dependency\Request
+     *
+     */
+    protected $request;
+
+    /**
+     * The response module to handle response messages
+     * @var Dependency\Response
+     */
+    protected $response;
+
+    protected $cookie;
+    protected $debug;
+
+    /**
      * this will automaticly load all the modules listed and store them as $moduleName in tle class
      * Child classes can call aditional modules by calling $this->
      * @var array List of modules to load
@@ -39,7 +55,8 @@ abstract class Controller
         'Csrf',
         'AlertBox',
         'Auth',
-        'pagination'
+        'Pagination',
+        'Debug'
     ];
 
     /**
@@ -72,8 +89,13 @@ abstract class Controller
         }
         $this->session = $this->container->getSession();
 
+        $this->request = $container->getRequest(); //adding our request object as it will be needed in the ajax calls
+        $this->response = $container->getResponse();
+        $this->cookie = $container->getCookie();
+
         //Setting up csrf token security for all calls
         $this->data['csrf_token'] = $this->csrf->getCsrfKey(); //storing the security id into the data array to be sent to the view and added in the meta head
+        $this->data['levelConst'] = $this->auth->getLevelConst();
     }
 
     /**
@@ -171,9 +193,13 @@ abstract class Controller
         if ($this->alertBox->alertsPending()) {
             $this->data['alert_messages'] = $this->alertBox->getAlerts();
         }
+        //adding the session vars to the page
+        $this->sendSessionVars();
+        //adding the dev helper to the page
         if (Config::DEV_ENVIRONMENT) {
             $this->devHelper();
         }
+
         $twig = $this->container->getTemplate();
         $twig->display($template . '.twig', $this->data);
     }
@@ -207,7 +233,7 @@ abstract class Controller
     protected function addToDevHelper($name, $var)
     {
         //only populate if in dev environment
-        if (Config::DEV_ENVIRONMENT){
+        if (Config::DEV_ENVIRONMENT) {
             $classMethods = [];
             $classMethods[$name] = $var;
             if (!isset($this->data['dev_info'])) {
@@ -232,5 +258,28 @@ abstract class Controller
     protected function sendSessionVars()
     {
         $this->data['session'] = $this->getSessionVars();
+    }
+
+    /**
+     * Only allow post messages
+     */
+    protected function onlyPost()
+    {
+        //is post
+        if (!$this->request->isPost()) {
+            $this->alertBox->setAlert('Only post messages allowed', 'error');
+            $this->response->redirect('/');
+        }
+    }
+
+    /**
+     * only allow registered users
+     */
+    protected function onlyUser()
+    {
+        if (!$this->auth->isUser()) {
+            $this->alertBox->setAlert("Only registered users can access this", 'error');
+            $this->container->getResponse()->redirect();
+        }
     }
 }

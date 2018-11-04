@@ -16,11 +16,12 @@ class Config extends AdminController
 {
 
     use StringFunctions;
-
+    protected $siteConfig;
     private $configModel;
 
     public function __construct(Container $container)
     {
+        $this->loadModules[] = 'SiteConfig';
         parent::__construct($container);
         $this->configModel = new ConfigModel($this->container);
     }
@@ -50,12 +51,9 @@ class Config extends AdminController
     {
         //Security checks
         $this->onlyAdmin();
-        if (!$this->container->getRequest()->isPost()) {
-            $this->alertBox->setAlert('Only post messages allowed', 'error');
-            $this->container->getResponse()->redirect('admin');
-        }
+        $this->onlyPost();
 
-        $posts = $this->container->getRequest()->getDataFull();
+        $posts = $this->request->getDataFull();
         $success = true;
 
         foreach ($posts as $key => $config) {

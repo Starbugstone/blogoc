@@ -69,7 +69,7 @@ class CategoryModel extends Model
      * @return bool
      * @throws \Exception
      */
-    public function update(int $categoryId, string $categoryName, string $categorySlug)
+    public function update(int $categoryId, string $categoryName, string $categorySlug):bool
     {
         $sql = "
             UPDATE $this->categoryTbl
@@ -93,7 +93,7 @@ class CategoryModel extends Model
      * @return bool
      * @throws \Exception
      */
-    public function new(string $categoryName, string $categorySlug)
+    public function new(string $categoryName, string $categorySlug):bool
     {
         $sql = "
             INSERT INTO $this->categoryTbl (category_name, categories_slug)
@@ -112,7 +112,7 @@ class CategoryModel extends Model
      * @return bool
      * @throws \Exception
      */
-    public function delete(int $categoryId)
+    public function delete(int $categoryId):bool
     {
         $sql = "
         DELETE FROM $this->categoryTbl 
@@ -156,7 +156,7 @@ class CategoryModel extends Model
      * @return bool
      * @throws \Exception
      */
-    public function isCategorySlugUnique(string $categorySlug)
+    public function isCategorySlugUnique(string $categorySlug):bool
     {
         return $this->isSlugUnique($categorySlug, "categories_slug", "categories");
     }

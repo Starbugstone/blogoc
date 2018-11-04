@@ -1,0 +1,79 @@
+{#need to get prefilled form details#}
+<form id="register" action="/login/registration" method="post">
+    <div class="form-group">
+        <label for="name" class="cols-sm-2 control-label">Your Name</label>
+        <div class="cols-sm-10">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-user fa"
+                                                                      aria-hidden="true"></i></span>
+                </div>
+                <input type="text" class="form-control" name="name" id="name"
+                       placeholder="Enter your Name" value="{{ registrationInfo.name }}"
+                       aria-describedby="nameHelpBlock" required/>
+                <small id="nameHelpBlock" class="form-text text-danger w-100 pl-3">
+                    {{ registrationErrors.name }}
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="surname" class="cols-sm-2 control-label">Your SurName</label>
+        <div class="cols-sm-10">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-user fa"
+                                                                      aria-hidden="true"></i></span>
+                </div>
+                <input type="text" class="form-control" name="surname" id="surname"
+                       placeholder="Enter your SurName" value="{{ registrationInfo.surname }}"
+                       aria-describedby="surnameHelpBlock" required/>
+                <small id="surnameHelpBlock" class="form-text text-danger w-100 pl-3">
+                    {{ registrationErrors.surname }}
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="email" class="cols-sm-2 control-label">Your Email</label>
+        <div class="cols-sm-10">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
+                </div>
+                <input type="email" class="form-control" name="email" id="email"
+                       placeholder="Enter your Email" value="{{ registrationInfo.email }}"
+                       aria-describedby="emailHelpBlock" required/>
+                <small id="emailHelpBlock" class="form-text text-danger w-100 pl-3">
+                    {{ registrationErrors.email }}
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="username" class="cols-sm-2 control-label">Username</label>
+        <div class="cols-sm-10">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-users fa"
+                                                                      aria-hidden="true"></i></span>
+                </div>
+                <input type="text" class="form-control" name="username" id="username"
+                       placeholder="Enter your Username" value="{{ registrationInfo.username }}"
+                       aria-describedby="usernameHelpBlock" required/>
+                <small id="usernameHelpBlock" class="form-text text-danger w-100 pl-3">
+                    {{ registrationErrors.username }}
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100 mt-3">Register</button>
+    <br>
+    <a class="btn btn-secondary w-100 mt-3"
+       href="/login" {{ not onRegistrationPage ? "data-dismiss=\"modal\" data-toggle=\"modal\" data-target=\"#connectModal\"" : "" }}>Have
+        an account? Login here</a>
+</form>

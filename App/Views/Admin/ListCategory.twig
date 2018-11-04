@@ -99,7 +99,7 @@
                     toastr.success('New category created');
                     $that.find("button>i").first().after("<i class=\"fa fa-check\" aria-hidden=\"true\"></i>");
                 } else {
-                    toastr.Warning('Category creation has errors');
+                    toastr.warning('Category creation has errors '+$result["errorMessage"]);
                     $that.find("button>i").first().after("<i class=\"fa fa-cross\" aria-hidden=\"true\"></i>");
                 }
             });
@@ -120,7 +120,7 @@
                     toastr.success('update Ok');
                     $that.find("button>i").first().after("<i class=\"fa fa-check\" aria-hidden=\"true\"></i>");
                 } else {
-                    toastr.Warning('Update has errors');
+                    toastr.warning('Update has errors '+$result["errorMessage"]);
                     $that.find("button>i").first().after("<i class=\"fa fa-cross\" aria-hidden=\"true\"></i>");
                 }
             });
@@ -142,7 +142,7 @@
                     toastr.success('Delete Ok');
                     $that.fadeOut("slow");
                 } else {
-                    toastr.Warning('Error deleting');
+                    toastr.warning('Error deleting category '+$result["errorMessage"]);
                 }
             });
         }

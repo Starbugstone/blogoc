@@ -18,11 +18,9 @@ class Tag extends AjaxController
     {
         //security checks
         $this->onlyAdmin();
-        if (!$this->request->isPost()) {
-            throw new JsonException('Call is not post');
-        }
+        $this->onlyPost();
 
-        //prepating our return results
+        //preparing our return results
         $result = array();
         $tagUpdateJson = ($this->request->getData('tag-update'));
         $tagUpdate = json_decode($tagUpdateJson);
@@ -46,11 +44,9 @@ class Tag extends AjaxController
     {
         //security checks
         $this->onlyAdmin();
-        if (!$this->request->isPost()) {
-            throw new JsonException('Call is not post');
-        }
+        $this->onlyPost();
 
-        //prepating our return results
+        //preparing our return results
         $result = array();
         $DeleteJson = ($this->request->getData('tag-delete'));
         $Delete = json_decode($DeleteJson);

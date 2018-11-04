@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Ajax;
 
+use Cocur\Slugify\Slugify;
 use Core\AjaxController;
 
 class ImageUpload extends AjaxController
@@ -42,7 +43,17 @@ class ImageUpload extends AjaxController
      */
     private function getFilename(string $folder, string $file): string
     {
-
+        //slugify the file name to avoid security errors or bugs with special characters.
+        $fileName = pathinfo($file, PATHINFO_FILENAME );
+        $fileExtension = pathinfo($file, PATHINFO_EXTENSION );
+        $slugify = new Slugify();
+        $fileName = $slugify->slugify($fileName);
+        //if the filename has only special chars, the slugify will be empty, create a unique ID
+        if($fileName ==="")
+        {
+            $fileName = uniqid();
+        }
+        $file = $fileName.".".$fileExtension;
         $fileUrl = $folder . $file;
         $docRoot = $this->request->getDocumentRoot();
         $filePath = $docRoot . "/public/" . $fileUrl;
@@ -90,9 +101,7 @@ class ImageUpload extends AjaxController
     {
         //security checks, only admins can upload images to posts
         $this->onlyAdmin();
-        if (!$this->container->getRequest()->isPost()) {
-            throw new \Core\JsonException('Call is not post');
-        }
+        $this->onlyPost();
 
         $tempFile = $this->request->getUploadedFiles();
 
@@ -122,9 +131,7 @@ class ImageUpload extends AjaxController
     {
         //security checks, only admins can upload images to config
         $this->onlyAdmin();
-        if (!$this->container->getRequest()->isPost()) {
-            throw new \Core\JsonException('Call is not post');
-        }
+        $this->onlyPost();
         $tempFile = $this->request->getUploadedFiles();
 
         $this->fileInputUpload($tempFile, $this->configFolder);
@@ -138,11 +145,21 @@ class ImageUpload extends AjaxController
     {
         //security checks, only admins can upload images to config
         $this->onlyAdmin();
-        if (!$this->container->getRequest()->isPost()) {
-            throw new \Core\JsonException('Call is not post');
-        }
+        $this->onlyPost();
         $tempFile = $this->request->getUploadedFiles();
         $this->fileInputUpload($tempFile, $this->imageFolder);
+    }
+
+    /**
+     * Upload for the file input in the configuration
+     */
+    public function fileInputUserUpload()
+    {
+        //security checks, only admins can upload images to config
+        $this->onlyUser();
+        $this->onlyPost();
+        $tempFile = $this->request->getUploadedFiles();
+        $this->fileInputUpload($tempFile, $this->userFolder);
     }
 
 }

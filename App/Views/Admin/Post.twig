@@ -17,7 +17,7 @@
                 <input type="hidden" class="form-control" id="postId" name="postId" value="{{ post.idposts }}">
 
                 <label for="postTitle">Post Name</label>
-                <input type="text" class="form-control" id="postTitle" name="postTitle" value="{{ post.title }}">
+                <input type="text" class="form-control" id="postTitle" name="postTitle" value="{{ post.title }}" placeholder="The post title">
                 <small id="postTitleHelp" class="form-text text-muted  mb-3">{{ postSlugManualText|raw }}</small>
 
                 <label for="postSlug">Post Slug</label>
@@ -32,7 +32,7 @@
 
                 <label for="postImage">Post Image</label>
 
-                <input type="text" class="form-control" name="postImage" id="postImage" value="{{ post.post_image }}">
+                <input type="text" class="form-control" name="postImage" id="postImage" value="{{ post.post_image }}" placeholder="Image URL">
 
                 <p class="text-center mt-3 display-image image-upload-height">
                     <img src="{{ not post.post_image ? configs.no_image_replacement : post.post_image }}" class="img-thumbnail display-image img-fluid image-upload-height">
@@ -59,12 +59,12 @@
                     <option value="1" {{ post.on_front_page == "1" ? "selected" }}>Yes</option>
                 </select>
 
-                <label for="tagSelector">add tags</label>
+                <label for="tagSelector">add tags.</label>
 
                 <div class="input-group">
 
                     <input list="tags" type="text" class="form-control" id="tagSelector" name="tagSelector"
-                           data-idtags="" autocomplete="off">
+                           data-idtags="" autocomplete="off" placeholder="Add a tag">
                     <span class="input-group-btn">
                     <button class="btn btn-default" type="button" id="addTag">Add</button>
                </span>

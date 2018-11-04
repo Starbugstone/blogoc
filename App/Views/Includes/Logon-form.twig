@@ -1,0 +1,52 @@
+<form id="login" action="login/connection" method="post">
+    <div class="form-group">
+        <label for="login-email" class="cols-sm-2 control-label">Your Email</label>
+        <div class="cols-sm-10">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
+                </div>
+                <input type="text" class="form-control" name="loginEmail" id="loginEmail"
+                       placeholder="Enter your Email" value="{{ loginInfo.loginEmail }}" aria-describedby="loginEmailHelpBlock"/>
+                <small id="loginEmailHelpBlock" class="form-text text-danger w-100 pl-3">
+                    {{ loginErrors.email }}
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="login-password" class="cols-sm-2 control-label">Password</label>
+        <div class="cols-sm-10">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-lock fa-lg"
+                                                                      aria-hidden="true"></i></span>
+                </div>
+                <div class="input-group-prepend" id="loginPasswordConfirmShow">
+                    <span class="input-group-text text-primary"><i class="fa fa-eye fa-lg"
+                                                                   aria-hidden="true"></i></span>
+                </div>
+                <input type="password" class="form-control" name="loginPassword" id="loginPassword"
+                       placeholder="Enter your Password" aria-describedby="loginPasswordHelpBlock"/>
+                <small id="loginPasswordHelpBlock" class="form-text text-danger w-100 pl-3">
+                    {{ loginErrors.password }}
+                </small>
+                <div class="form-group mt-3">
+                    <div class="checkbox">
+                        <label><input type="checkbox" name="rememberMe" id="rememberMe" {{ loginInfo.rememberMe ? "checked" : "" }}> Remember me</label>
+                    </div>
+                </div>
+            </div>
+            <div class="forgot">
+                <a href="/password">Forgot password?</a>
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100 mt-3">Login</button>
+    <br>
+    <a class="btn btn-secondary w-100 mt-3" href="/login/register" {{ not onRegistrationPage ? "data-dismiss=\"modal\" data-toggle=\"modal\" data-target=\"#registerModal\"" : "" }}>No account? Register here</a>
+
+
+</form>

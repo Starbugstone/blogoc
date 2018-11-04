@@ -62,7 +62,7 @@
                     },
                 }).done(function ($result) {
                     $that.html("");
-                    if ($that.data("onfrontpage") == "true") {
+                    if ($result.state == false) {
                         $that.removeClass("fa-check");
                         $that.addClass("fa-times");
                         $that.data("onfrontpage", "false");
@@ -89,7 +89,7 @@
                     },
                 }).done(function ($result) {
                     $that.html("");
-                    if ($that.data("ispublished") == "true") {
+                    if ($result.state == false) {
                         $that.removeClass("fa-check");
                         $that.addClass("fa-times");
                         $that.data("ispublished", "false");

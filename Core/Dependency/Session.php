@@ -42,7 +42,7 @@ class Session
      * @param $param
      * @return bool
      */
-    public function isParamSet($param)
+    public function isParamSet($param): bool
     {
         return isset($_SESSION[$param]);
     }
@@ -82,17 +82,37 @@ class Session
     /**
      * Remove all the session variables.
      */
-    public function unsetAll()
+    public function unsetAll(): void
     {
-        session_unset(); //probably have to do some checking, might want to keep some stuff
+        session_unset(); //remove all session variables
+        $this->regenerateSessionId(); //regenerate the ID
     }
 
     /**
-     * return the entire session superglobal. mainly for debugging purposes
+     * return the entire session superglobal.
      * @return mixed
      */
-    public function getAllSessionVars(){
+    public function getAllSessionVars()
+    {
         return $_SESSION;
+    }
+
+    /**
+     * Unsets all the data the destroys the session
+     */
+    public function destroySession():void
+    {
+        $this->unsetAll();
+        session_destroy();
+    }
+
+    /**
+     * regenerate the session ID
+     * This avoids session ghosting
+     */
+    public function regenerateSessionId():void
+    {
+        session_regenerate_id();
     }
 
 }

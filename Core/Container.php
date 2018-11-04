@@ -2,6 +2,7 @@
 
 namespace Core;
 
+use Core\Dependency\Cookie;
 use Core\Dependency\Request;
 use Core\Dependency\Response;
 use Core\Dependency\Session;
@@ -37,6 +38,8 @@ class Container
 
 
     private $response;
+
+    private $cookie;
 
     /**
      * gets the twig template environment
@@ -110,6 +113,17 @@ class Container
             $this->session = new Session();
         }
         return $this->session;
+    }
+
+    /**
+     * @return Cookie
+     */
+    public function getCookie(): Dependency\Cookie
+    {
+        if(!$this->cookie){
+            $this->cookie = new Cookie();
+        }
+        return $this->cookie;
     }
 
 }

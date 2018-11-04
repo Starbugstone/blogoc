@@ -34,6 +34,10 @@ class Auth extends Module
         return $session->get('user_role_level') ?? 0;
     }
 
+    /**
+     * Gets the user role name
+     * @return string
+     */
     public function getUserRole():string
     {
         $session = $this->container->getSession();
@@ -41,10 +45,23 @@ class Auth extends Module
     }
 
     /**
+     * gets the configured levels defined in the constant file
+     * @return \stdClass
+     */
+    public function getLevelConst():\stdClass
+    {
+        $levels = new \stdClass();
+        $levels->userLevel = Constant::USER_LEVEL;
+        $levels->adminLevel = Constant::ADMIN_LEVEL;
+
+        return $levels;
+    }
+
+    /**
      * is the connected user an Admin
      * @return bool
      */
-    public function isAdmin()
+    public function isAdmin():bool
     {
         $userLevel = $this->getUserLevel();
         if ($userLevel >= Constant::ADMIN_LEVEL) {
@@ -57,7 +74,7 @@ class Auth extends Module
      * is the user connected ?
      * @return bool
      */
-    public function isUser()
+    public function isUser():bool
     {
         $userLevel = $this->getUserLevel();
         if ($userLevel >= Constant::USER_LEVEL) {

@@ -76,7 +76,7 @@ class Request
      * checks if the request is a XML HTTP REQUEST
      * @return bool
      */
-    public function isXmlRequest()
+    public function isXmlRequest():bool
     {
         if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
             return true;
@@ -126,7 +126,7 @@ class Request
     /**
      * getting the server document root
      */
-    public function getDocumentRoot()
+    public function getDocumentRoot():string
     {
         return $_SERVER['DOCUMENT_ROOT'];
     }

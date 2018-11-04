@@ -3,7 +3,6 @@
 namespace Core\Traits;
 
 use Core\Constant;
-use Twig\Error\Error;
 
 /**
  * a trait with some string related helpers
@@ -75,7 +74,7 @@ trait StringFunctions
      * @return string the shortend text
      * @throws \ErrorException
      */
-    public function getExcerpt(string $text, int $count = Constant::EXCERPT_WORD_COUNT)
+    public function getExcerpt(string $text, int $count = Constant::EXCERPT_WORD_COUNT):string
     {
         if ($count < 1) {
             throw new \ErrorException('excerpt length too low');
@@ -143,10 +142,7 @@ trait StringFunctions
      */
     public function isAlphaNum(string $string): bool
     {
-        if (preg_match("/^[A-Za-z0-9_-]+$/", $string)) {
-            return true;
-        }
-        return false;
+        return preg_match("/^[A-Za-z0-9_-]+$/", $string);
     }
 
     /**
@@ -166,4 +162,25 @@ trait StringFunctions
         }
         return $result;
     }
+
+    /**
+     * check is a string is hexadecimal
+     * @param string $string
+     * @return false|int
+     */
+    public function isHexa(string $string):bool
+    {
+        return preg_match("/[\da-f]/",$string);
+    }
+
+    /**
+     * check if the sent var is an integer
+     * @param $int
+     * @return bool
+     */
+    public function isInt($int):bool
+    {
+        return filter_var($int, FILTER_VALIDATE_INT);
+    }
+
 }
