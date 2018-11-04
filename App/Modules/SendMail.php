@@ -8,7 +8,8 @@ use Swift_Mailer;
 use Swift_Message;
 use Swift_SmtpTransport;
 
-class SendMail extends Module{
+class SendMail extends Module
+{
 
     private $siteConfig;
 
@@ -24,14 +25,13 @@ class SendMail extends Module{
 
         // Create the Transport for mail sending
         //$config = $this->siteConfig->getSiteConfig();
-        $this->transport = (new Swift_SmtpTransport($this->siteConfig["SMTP_server"], (int)$this->siteConfig["SMTP_port"]))
+        $this->transport = (new Swift_SmtpTransport($this->siteConfig["SMTP_server"],
+            (int)$this->siteConfig["SMTP_port"]))
             ->setUsername($this->siteConfig["SMTP_user"])
-            ->setPassword($this->siteConfig["SMTP_pass"])
-        ;
+            ->setPassword($this->siteConfig["SMTP_pass"]);
 
         // Create the Mailer using your created Transport
         $this->mailer = new Swift_Mailer($this->transport);
-
     }
 
     /**
@@ -46,13 +46,10 @@ class SendMail extends Module{
     {
         // Create a message
         $message = (new Swift_Message($subject))
-            //->setFrom([$this->siteConfig["SMTP_from"]])
             ->setTo([$to])
-            ->setBody($message, 'text/html')
-        ;
+            ->setBody($message, 'text/html');
 
-        if($from === null)
-        {
+        if ($from === null) {
             //if we haven't set a from, get the config value
             $from = $this->siteConfig["SMTP_from"];
         }
@@ -71,14 +68,13 @@ class SendMail extends Module{
     public function sendResetPasswordMail(string $to, string $token, int $userId)
     {
         $url = $this->container->getRequest()->getBaseUrl();
-        $url .= "password/reset/get?token=".$token;
-        $url .= "&userId=".$userId;
+        $url .= "password/reset/get&token=" . $token;
+        $url .= "&userId=" . $userId;
 
-        $message = "<h1>Message from <a href='".$this->container->getRequest()->getBaseUrl()."'>".$this->siteConfig["site_name"]."</a></h1>";
-        $message .= "<p>You have asked to reset your password, please click <a href=\"".$url."\">Here</a> to define a new password</p>";
+        $message = "<h1>Message from <a href='" . $this->container->getRequest()->getBaseUrl() . "'>" . $this->siteConfig["site_name"] . "</a></h1>";
+        $message .= "<p>You have asked to reset your password, please click <a href=\"" . $url . "\">Here</a> to define a new password</p>";
 
-        $this->send($to, "Define New Password", $message );
-
+        $this->send($to, "Define New Password", $message);
     }
 
     /**
@@ -90,14 +86,26 @@ class SendMail extends Module{
     public function sendNewPasswordMail(string $to, string $token, int $userId)
     {
         $url = $this->container->getRequest()->getBaseUrl();
-        $url .= "password/reset/get?token=".$token;
-        $url .= "&userId=".$userId;
-        $message = "<h1>Message from <a href='".$this->container->getRequest()->getBaseUrl()."'>".$this->siteConfig["site_name"]."</a></h1>";
+        $url .= "password/reset/get&token=" . $token;
+        $url .= "&userId=" . $userId;
+        $message = "<h1>Message from <a href='" . $this->container->getRequest()->getBaseUrl() . "'>" . $this->siteConfig["site_name"] . "</a></h1>";
         $message .= "<h2>Welcome to the site</h2>";
-        $message .= "<p>You have sucsessfuly created an account, now all you need to do is <a href=\"".$url."\">Create your new password</a></p>";
+        $message .= "<p>You have sucsessfuly created an account, now all you need to do is <a href=\"" . $url . "\">Create your new password</a></p>";
         $message .= "<p>Have fun</p>";
 
-        $this->send($to, "Define Password at ".$this->siteConfig["site_name"], $message );
+        $this->send($to, "Define Password at " . $this->siteConfig["site_name"], $message);
+    }
 
+    /**
+     * Send a test mail
+     * @return int
+     */
+    public function sendTestMail()
+    {
+        $to = $this->siteConfig["SMTP_from"];
+        $subject = "Test mail";
+        $message = "this is a test mail to confirm the SMPT is configured correctly";
+
+        return $this->send($to, $subject, $message);
     }
 }

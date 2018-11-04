@@ -14,10 +14,13 @@ class PostVerification extends AjaxController
 
     protected $slug;
 
+    private $postModel;
+
     public function __construct(Container $container)
     {
         $this->loadModules[] = 'Slug';
         parent::__construct($container);
+        $this->postModel = new PostModel($container);
     }
 
     /**
@@ -40,13 +43,11 @@ class PostVerification extends AjaxController
             die();
         }
 
-        $postModel = new PostModel($this->container);
-
-        $data = $postModel->isPostSlugUnique(/** @scrutinizer ignore-type */$postSlug); //we have checked that slug is valid so no type error
+        $data = $this->postModel->isPostSlugUnique(/** @scrutinizer ignore-type */$postSlug); //we have checked that slug is valid so no type error
 
         if ($data === false) //slug is not unique, but could be from the same post
         {
-            $slugOfId = $postModel->getPostSlugFromId($postId);
+            $slugOfId = $this->postModel->getPostSlugFromId($postId);
             if ($slugOfId === $postSlug) {
                 //it's the same post, return true
                 $data = true;

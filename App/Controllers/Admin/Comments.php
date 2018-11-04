@@ -26,6 +26,7 @@ class Comments extends AdminController{
         $this->commentModel = new CommentModel($this->container);
 
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
+        $this->data["pendingCommentsCount"] = $this->commentModel->countPendingComments();
     }
 
     /**
@@ -119,17 +120,7 @@ class Comments extends AdminController{
         if ($removedComment) {
             $this->alertBox->setAlert("Comment  deleted");
         }
-
-        $refererUrl = $this->request->getReferer();
-        if($refererUrl === "") //referer can return null, set default
-        {
-            $refererUrl = "admin/comments/view-comments";
-        }
-        $baseUrl = $this->request->getBaseUrl();
-        $redirectUrl = $this->removeFromBeginning($refererUrl, $baseUrl);
-
-        $this->response->redirect($redirectUrl);
-
+        $this->response->redirect("/admin/comments/view-comments");
     }
 
     /**

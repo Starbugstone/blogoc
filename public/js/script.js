@@ -88,3 +88,17 @@ function setupTinymce($selector) {
 
     });
 }
+
+$("#next").mouseover(function() {
+    $( this ).addClass("jello");
+})
+.mouseout(function() {
+    $( this ).removeClass("jello");
+});
+
+$("#previous").mouseover(function() {
+    $( this ).addClass("jello");
+})
+    .mouseout(function() {
+        $( this ).removeClass("jello");
+    });

@@ -10,8 +10,12 @@ body {
   #wrapper #content-wrapper {
     overflow-x: hidden;
     width: 100%;
-    padding-top: 1rem;
-    padding-bottom: 80px; }
+    padding-top: 1rem; }
+  #wrapper .main-content {
+    margin-bottom: 80px;
+    min-height: 80%; }
+  #wrapper .sticky-footer {
+    height: 80px; }
 
 body.fixed-nav #content-wrapper {
   margin-top: 56px;
@@ -34,6 +38,10 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
 .image-upload-height {
   height: 7rem; }
+
+.copyright {
+  border-radius: 50px;
+  background-color: #868e96; }
 
 .navbar-nav .form-inline .input-group {
   width: 100%; }
@@ -150,6 +158,17 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 
 .pagination p {
   width: 100%; }
+  .pagination p a {
+    text-decoration: none;
+    color: #fff;
+    background-color: #868e96;
+    padding: 10px; }
+    .pagination p a#previous {
+      border-radius: 50px 0 0 50px;
+      padding-left: 25px; }
+    .pagination p a#next {
+      border-radius: 0 50px 50px 0;
+      padding-right: 25px; }
 
 .chip {
   display: inline-block;

@@ -74,7 +74,7 @@ class UserModel extends Model
         $this->query($sql);
         $this->bind(':badLoginTries', $badLoginTries);
         $this->bind(':userId', $user->idusers);
-        $this->execute();
+        $this->finalExecute();
     }
 
     /**
@@ -92,7 +92,7 @@ class UserModel extends Model
         ";
         $this->query($sql);
         $this->bind(':userId', $user->idusers);
-        $this->execute();
+        $this->finalExecute();
     }
 
     /**
@@ -131,7 +131,7 @@ class UserModel extends Model
         ";
         $this->query($sql);
         $this->bind(':userId', $user->idusers);
-        $this->execute();
+        $this->finalExecute();
     }
 
     /**
@@ -265,7 +265,7 @@ class UserModel extends Model
         $this->bind(':userRoleId', $user->userRoleSelector);
         $this->bind(':userLockedOut', $user->userLockedOut);
         $this->bind(':userId', $user->userId);
-        $this->execute();
+        $this->finalExecute();
     }
 
     /**
@@ -341,7 +341,7 @@ class UserModel extends Model
         $this->query($sql);
         $this->bind(':hash', $hash);
         $this->bind(':userId', $user->idusers);
-        $this->execute();
+        $this->finalExecute();
 
         return $token;
     }
@@ -366,7 +366,7 @@ class UserModel extends Model
         $this->query($sql);
         $this->bind(':password', $hash);
         $this->bind(':userId', $userId);
-        $this->execute();
+        $this->finalExecute();
     }
 
     /**
@@ -419,7 +419,7 @@ class UserModel extends Model
         $this->query($sql);
         $this->bind(':activation', $activation);
         $this->bind(':userId', $userId);
-        return $this->execute();
+        return $this->finalExecute();
     }
 
     /**
@@ -437,7 +437,7 @@ class UserModel extends Model
 
         $this->query($sql);
         $this->bind(':userId', $userId);
-        return $this->execute();
+        return $this->finalExecute();
     }
 
 }

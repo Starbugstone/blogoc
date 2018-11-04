@@ -18,7 +18,8 @@
                     <div class="index_article_post_image ml-1">
                         <a class="index_article_post_image_link hoverImage rounded"
                            href="/post/view-post/{{ post.posts_slug }}">
-                            <div class="postThumbnail rounded border-dark shadow-sm" style="background-image : url({{ not post.post_image ? configs.no_image_replacement : post.post_image }})">
+                            <div class="">
+                                <img src="{{ not post.post_image ? configs.no_image_replacement : post.post_image }}" class="img-fluid w-100 rounded border-dark shadow-sm">
                             </div>
                         </a>
                     </div>
@@ -30,7 +31,7 @@
             </div>
             {% if session.user_role_level >= levelConst.adminLevel %}
                 <div class="admin float-right mr-3 mt-2">
-                    <a href="/admin/post/modify/{{ post.posts_slug }}">Edit <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                    <a href="/admin/post/modify/{{ post.posts_slug }}" class="btn btn-primary">Edit <i class="fa fa-pencil" aria-hidden="true"></i></a>
                 </div>
             {% endif %}
 

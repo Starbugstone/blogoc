@@ -9,6 +9,7 @@
     </li>
 </ul>
 {% if session.userId >0 %}
+    <a href="/admin" class="btn btn-primary mr-2">Admin</a>
     <a href="/login/disconnect" class="btn btn-primary" data-toggle="modal" data-target="#logoutModal">Disconnect</a>
 {% else %}
 <a href="/login/register" class="btn btn-primary mr-1" {{ not onRegistrationPage ? "data-toggle=\"modal\" data-target=\"#registerModal\"" : "" }}>Register</a>

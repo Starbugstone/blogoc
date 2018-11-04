@@ -1,6 +1,6 @@
 {% extends "Base.twig" %}
 
-{% block title %}{% endblock %}
+{% block title %}posts by {{ not user.username ? "Deleted user" : user.username }}{% endblock %}
 
 {% block main %}
     <div class="row">

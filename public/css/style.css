@@ -108,8 +108,8 @@ div.masthead {
   margin-top: 4rem; }
 
 .features-icons {
-  padding-top: 7rem;
-  padding-bottom: 7rem; }
+  padding-top: 4rem;
+  padding-bottom: 5rem; }
   .features-icons h3 {
     font-family: "Merienda", cursive; }
   .features-icons p {
@@ -215,6 +215,17 @@ img.author-image {
 
 .pagination p {
   width: 100%; }
+  .pagination p a {
+    text-decoration: none;
+    color: #fff;
+    background-color: #868e96;
+    padding: 10px; }
+    .pagination p a#previous {
+      border-radius: 50px 0 0 50px;
+      padding-left: 25px; }
+    .pagination p a#next {
+      border-radius: 0 50px 50px 0;
+      padding-right: 25px; }
 
 .single-post h1, .single-post h2 {
   color: #495057; }

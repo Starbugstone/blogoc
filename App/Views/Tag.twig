@@ -1,6 +1,6 @@
 {% extends "Base.twig" %}
 
-{% block title %}{% endblock %}
+{% block title %} Posts with tag {{ tag.tag_name }}{% endblock %}
 
 {% block main %}
     <h1 class="text-center mb-3">Posts tagged with {{ tag.tag_name }}</h1>

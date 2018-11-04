@@ -13,7 +13,15 @@ body {
     overflow-x: hidden;
     width: 100%;
     padding-top: 1rem;
-    padding-bottom: $sticky-footer-height;
+  }
+
+  .main-content{
+    margin-bottom: $sticky-footer-height;
+    min-height: 80%;
+  }
+
+  .sticky-footer{
+    height: $sticky-footer-height;
   }
 }
 // Fixed Nav Option
@@ -49,3 +57,10 @@ body.fixed-nav {
 .image-upload-height{
   height: $image-upload-height;
 }
+
+.copyright{
+  border-radius: 50px;
+  background-color: $gray-600;
+}
+
+

@@ -1,4 +1,7 @@
 {% extends "Admin/Base.twig" %}
+
+{% block title %}List comments{% endblock %}
+
 {% block main %}
     <h1>
     {%  if pendingView is defined %}
@@ -13,6 +16,7 @@
         <tr>
             <th>Post Title</th>
             <th>commenter</th>
+            <th>Date</th>
             <th>Approved</th>
             <th>Comment</th>
             <th>Links</th>
@@ -21,6 +25,7 @@
             <tr>
                 <td><a href="/post/view-post/{{ comment.posts_slug }}">{{ comment.title }}</a></td>
                 <td><a href="/admin/home/view-user/{{ comment.users_idusers }}">{{ comment.username }}</a></td>
+                <td>{{ comment.comment_date|date("d/m/Y g:i a") }}</td>
                 <td><i class="btn fa {{ comment.approved ? "fa-check" : "fa-times" }}" aria-hidden="true"
                        data-approved="{{ comment.approved ? "true" : "false" }}"
                        data-commentid="{{ comment.idcomments }}"></i>

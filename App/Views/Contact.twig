@@ -1,0 +1,33 @@
+{% extends "Base.twig" %}
+
+{% block title %}Contact the Admin{% endblock %}
+
+{% block main %}
+    <div class="row justify-content-lg-center mb-3">
+        <div class="col-lg-6">
+
+            {% include "Includes/ContactForm.twig" %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        //---------------------------------------------
+        // Contact Form verification
+        //---------------------------------------------
+
+        $("#contactForm").validate({
+            rules: {
+                contactName: "required",
+                contactSubject: "required",
+                contactEmail: {
+                    required: true,
+                    email: true,
+                },
+                contactMessage: "required",
+            }
+        });
+
+    </script>
+{% endblock %}

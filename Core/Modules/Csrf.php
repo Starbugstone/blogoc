@@ -71,11 +71,11 @@ class Csrf extends Module
 
         $headers = $this->container->getRequest()->getHeaders();
 
-        if (!isset($headers['csrf_token'])) {
+        if (!isset($headers['Csrftoken'])) {
             throw new JsonException('No CSRF token.');
         }
 
-        if ($headers['csrf_token'] !== $this->getCsrfKey()) {
+        if ($headers['Csrftoken'] !== $this->getCsrfKey()) {
             throw new JsonException('Wrong CSRF token.');
         }
     }

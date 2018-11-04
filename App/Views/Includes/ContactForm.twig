@@ -1,0 +1,54 @@
+<form id="contactForm" action="/home/send-contact-form" method="post" class="update-config">
+    <div class="form-group">
+        <div class="input-group mb-2">
+            <div class="input-group-prepend">
+                <div class="input-group-text"><i class="fa fa-user text-info"></i></div>
+            </div>
+            <input type="text" class="form-control" id="contactName" name="contactName" placeholder="Your name" required value="{{ not user.username ? contactInfo.contactName : user.username }}" aria-describedby="contactNameHelpBlock">
+            <small id="contactNameHelpBlock" class="form-text text-danger w-100 pl-3">
+                {{ contactErrors.contactName }}
+            </small>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="input-group mb-2">
+            <div class="input-group-prepend">
+                <div class="input-group-text"><i class="fa fa-envelope text-info"></i></div>
+            </div>
+            <input type="email" class="form-control" id="contactEmail" name="contactEmail" placeholder="address@email.com" required value="{{ not user.email ? contactInfo.contactEmail : user.email }}" aria-describedby="contactEmailHelpBlock">
+            <small id="contactEmailHelpBlock" class="form-text text-danger w-100 pl-3">
+                {{ contactErrors.contactEmail }}
+            </small>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="input-group mb-2">
+            <div class="input-group-prepend">
+                <div class="input-group-text"><i class="fa fa-user text-info"></i></div>
+            </div>
+            <input type="text" class="form-control" id="contactSubject" name="contactSubject" placeholder="Subject of your mail" required value="{{ contactInfo.contactSubject }}" aria-describedby="contactSubjectHelpBlock">
+            <small id="contactSubjectHelpBlock" class="form-text text-danger w-100 pl-3">
+                {{ contactErrors.contactSubject }}
+            </small>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="input-group mb-2">
+            <div class="input-group-prepend">
+                <div class="input-group-text"><i class="fa fa-comment text-info"></i></div>
+            </div>
+            <textarea class="form-control" id="contactMessage" name="contactMessage" placeholder="your message" required aria-describedby="contactMessageHelpBlock">{{ contactInfo.contactMessage }}</textarea>
+            <small id="contactMessageHelpBlock" class="form-text text-danger w-100 pl-3">
+                {{ contactErrors.contactMessage }}
+            </small>
+        </div>
+    </div>
+
+    <div class="text-center">
+        <input type="submit" value="Send message" class="btn btn-info btn-block rounded-0 py-2">
+    </div>
+
+    {% if recapchaPublicKey is defined %}
+    <div class="g-recaptcha mt-2" data-sitekey="{{ recapchaPublicKey }}"></div>
+    {% endif %}
+</form>

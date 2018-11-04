@@ -26,7 +26,7 @@ class TagModel extends Model
      */
     public function countTags(): int
     {
-        return $this->count();
+        return $this->count($this->tagTbl);
     }
 
     /**
@@ -109,7 +109,7 @@ class TagModel extends Model
         ";
         $this->query($sql);
         $this->bind(":tagId", $tagId);
-        return $this->execute();
+        return $this->finalExecute();
     }
 
     /**
@@ -118,7 +118,11 @@ class TagModel extends Model
      */
     public function getTags(): array
     {
-        return $this->getResultSet('tags');
+        if($this->countTags() > 0)
+        {
+            return $this->getResultSet($this->tagTbl);
+        }
+        return [];
     }
 
     /**
@@ -138,7 +142,7 @@ class TagModel extends Model
         $this->query($sql);
         $this->bind(':postId', $postId);
         $this->bind(':tagId', $tagId);
-        $this->execute();
+        $this->finalExecute();
     }
 
     /**
@@ -174,7 +178,7 @@ class TagModel extends Model
         $this->query($sql);
         $this->bind(':postId', $postId);
         $this->bind(':tagId', $tagId);
-        $this->execute();
+        $this->finalExecute();
     }
 
     /**
@@ -210,7 +214,7 @@ class TagModel extends Model
         ;";
         $this->query($sql);
         $this->bind(":postId", $postId);
-        $this->execute();
+        $this->finalExecute();
     }
 
     /**
@@ -255,7 +259,7 @@ class TagModel extends Model
         $this->query($sql);
         $this->bind(":tagName", $tagName);
         $this->bind(":tagId", $tagId);
-        return $this->execute();
+        return $this->finalExecute();
     }
 
     /**
@@ -274,7 +278,7 @@ class TagModel extends Model
         ";
         $this->query($sql);
         $this->bind(":tagId", $tagId);
-        return $this->execute();
+        return $this->finalExecute();
     }
 
     /**

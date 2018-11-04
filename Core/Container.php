@@ -72,7 +72,8 @@ class Container
         $opt = [
             PDO::ATTR_PERSISTENT => true,
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
+            PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true
         ];
         $this->dbh = new PDO($dsn, Config::DB_USER, Config::DB_PASSWORD, $opt);;
         return $this->dbh;

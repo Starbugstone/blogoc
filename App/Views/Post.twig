@@ -1,8 +1,13 @@
 {% extends "Base.twig" %}
 
-{% block title %}{% endblock %}
+{% block title %}{{ post.title }}{% endblock %}
 
 {% block main %}
+    {% if postwarning is defined %}
+    <div class="alert alert-primary" role="alert">
+        {{ postwarning }}
+    </div>
+    {% endif %}
     <article id="{{ post.slug }}" class="single-post">
         <h1 class="text-center">{{ post.title }}</h1>
         <div class="row">
@@ -119,6 +124,7 @@
                 },
             }).done(function ($result) {
                 if ($result['success']) {
+                    $("#load-comments").data("commentoffset",$result['commentOffset'] );
                     $("#comments-loader-img").hide();
                     $loadedPages += 1;
                     if ($loadedPages >= {{ pagination.totalPages }})

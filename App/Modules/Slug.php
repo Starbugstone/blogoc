@@ -12,6 +12,5 @@ class Slug extends Module{
         $validSlug = $slugify->slugify($slug);
 
         return $slug === $validSlug;
-
     }
 }

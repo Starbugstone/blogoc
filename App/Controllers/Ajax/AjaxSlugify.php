@@ -6,10 +6,19 @@ use Core\AjaxController;
 use Cocur\Slugify\Slugify;
 use Core\JsonException;
 use Core\Traits\StringFunctions;
+use Core\Container;
 
 class AjaxSlugify extends AjaxController
 {
     use StringFunctions;
+
+    private $slugify;
+
+    public function __construct(Container $container)
+    {
+        parent::__construct($container);
+        $this->slugify = new Slugify();
+    }
 
     /**
      * @return string slugified string
@@ -22,8 +31,7 @@ class AjaxSlugify extends AjaxController
         $this->onlyPost();
         $slug = $this->request->getData("slugText-update");
         $result = array();
-        $slugify = new Slugify();
-        $result['slug'] = $slugify->slugify($slug);
+        $result['slug'] = $this->slugify->slugify($slug);
         echo json_encode($result);
     }
 }
