@@ -77,3 +77,32 @@
         </div>
     </section>
 {% endblock %}
+
+
+{% block js %}
+<script>
+    //---------------------------------------------
+    // Contact Form verification
+    //---------------------------------------------
+
+    //if we have errors, then contact form sent and has errors, so show the modal
+    {%  if contactErrors is not null %}
+    $(window).on('load',function(){
+        $('#contactformModal').modal('show');
+    })
+    {% endif %}
+
+    $("#contactForm").validate({
+        rules: {
+            contactName: "required",
+            contactSubject: "required",
+            contactEmail: {
+                required: true,
+                email: true,
+            },
+            contactMessage: "required",
+        }
+    });
+
+</script>
+{% endblock %}

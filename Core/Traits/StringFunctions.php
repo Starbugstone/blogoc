@@ -183,4 +183,14 @@ trait StringFunctions
         return filter_var($int, FILTER_VALIDATE_INT);
     }
 
+    /**
+     * Verify if a string is a valid email
+     * @param string $email
+     * @return mixed
+     */
+    public function isEmail(string $email)
+    {
+        return filter_var($email, FILTER_VALIDATE_EMAIL);
+    }
+
 }
