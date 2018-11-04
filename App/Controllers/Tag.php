@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\CategoryModel;
 use App\Models\PostModel;
 use App\Models\TagModel;
+use Core\Constant;
 use Core\Controller;
 use Core\Container;
 
@@ -22,6 +23,7 @@ class Tag extends Controller
     /**
      * @param int $tagId
      * @param string $page
+     * @param int $linesPerPage
      * @throws \ErrorException
      * @throws \ReflectionException
      * @throws \Twig_Error_Loader
