@@ -6,17 +6,17 @@ namespace App\Controllers\Admin;
 
 class Home extends \Core\AdminController
 {
+    /**
+     * The front page of the admin section
+     * @throws \ReflectionException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public function index()
     {
-        //testing auth
-        if ($this->auth->isAdmin()) {
-            $this->data['userRole'] = 'Admin';
-            $this->data['userLevel'] = $this->auth->getUserLevel();
-        } elseif ($this->auth->isUser()) {
-            $this->data['userRole'] = 'User';
-            $this->data['userLevel'] = $this->auth->getUserLevel();
-        }else {
-            $this->alertBox->setAlert("You must be connected to acces the admin interface", 'warning');
+        if(!$this->auth->isUser()){
+            $this->alertBox->setAlert("You must be connected to access the admin interface", 'warning');
             $this->container->getResponse()->redirect();
         }
 

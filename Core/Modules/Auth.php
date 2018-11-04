@@ -2,6 +2,7 @@
 
 namespace Core\Modules;
 
+use Core\Constant;
 use \Core\Container;
 
 /**
@@ -33,6 +34,12 @@ class Auth extends Module
         return $session->get('user_role_level') ?? 0;
     }
 
+    public function getUserRole():string
+    {
+        $session = $this->container->getSession();
+        return $session->get('user_role_name') ?? '';
+    }
+
     /**
      * is the connected user an Admin
      * @return bool
@@ -40,7 +47,7 @@ class Auth extends Module
     public function isAdmin()
     {
         $userLevel = $this->getUserLevel();
-        if ($userLevel > 1) {
+        if ($userLevel >= Constant::ADMIN_LEVEL) {
             return true;
         }
         return false;
@@ -53,7 +60,7 @@ class Auth extends Module
     public function isUser()
     {
         $userLevel = $this->getUserLevel();
-        if ($userLevel > 0) {
+        if ($userLevel >= Constant::USER_LEVEL) {
             return true;
         }
         return false;

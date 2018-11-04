@@ -1,0 +1,55 @@
+<!-- Masthead -->
+<div class="masthead text-white text-center">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div id="jumboCarousel" class="carousel slide" data-ride="carousel">
+
+
+                <!-- The slideshow -->
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="col-xl-9 mx-auto">
+                            <h1 class="mb-5 animated fadeInDown"
+                                style="animation-delay: 0.3s">{{ configs.front_text_1 }}</h1>
+                            <h2 class="animated fadeInUp"
+                                style="animation-delay: 0.5s">{{ configs.front_text_1_subtext }}</h2>
+                        </div>
+                    </div>
+                    {% if configs.front_text_2 != '' %}
+                        <div class="carousel-item">
+                            <div class="col-xl-9 mx-auto">
+                                <h1 class="mb-5 animated zoomIn"
+                                    style="animation-delay: 0.3s">{{ configs.front_text_2 }}</h1>
+                                <h2 class="animated flipInY"
+                                    style="animation-delay: 0.5s">{{ configs.front_text_2_subtext }}</h2>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if configs.front_text_3 != '' %}
+                        <div class="carousel-item">
+                            <div class="col-xl-9 mx-auto">
+                                <h1 class="mb-5 animated flipInX"
+                                    style="animation-delay: 0.3s">{{ configs.front_text_3 }}</h1>
+                                <h2 class="animated jackInTheBox"
+                                    style="animation-delay: 0.5s">{{ configs.front_text_3_subtext }}</h2>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Left and right controls -->
+                <a class="carousel-control-prev" href="#jumboCarousel" data-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </a>
+                <a class="carousel-control-next" href="#jumboCarousel" data-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </a>
+
+            </div>
+            <!--<div class="col-xl-9 mx-auto">
+                <h1 class="mb-5">Testing some text with a background image</h1>
+            </div>-->
+        </div>
+    </div>
+</div>

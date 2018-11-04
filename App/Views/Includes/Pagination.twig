@@ -1,0 +1,12 @@
+<div class="pagination">
+    {# Taking care of the pagination #}
+    <p>
+        {# Creating previous and next page links #}
+        {% if pagination.pageNo > "1" %}
+            <a href="{{ pageUrl }}/page-{{ pagination.pageNo-1 }}{{ not paginationPostsPerPage ? "" : "/"~paginationPostsPerPage }}" class="float-left">Previous page</a>
+        {% endif %}
+        {% if pagination.pageNo  < pagination.totalPages %}
+            <a href="{{ pageUrl }}/page-{{ pagination.pageNo+1 }}{{ not paginationPostsPerPage ? "" : "/"~paginationPostsPerPage }}" class="float-right">Next page</a>
+        {% endif %}
+    </p>
+</div>

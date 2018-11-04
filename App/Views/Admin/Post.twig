@@ -1,0 +1,320 @@
+{% extends "Admin/Base.twig" %}
+
+{% block main %}
+    {% set postUrl = "/admin/post/create-new-post" %}
+    {% set postSlugManual = "false" %}
+    {% set submitButtonText = "Create new post" %}
+    {% if post is defined %}
+        {% set postUrl = "/admin/post/modify-post" %}
+        {% set postSlugManual = "true" %}
+        {% set postSlugManualText = "Slug manual input <i class=\"fa fa-times-circle-o\" onclick=\"removeManualSlug()\" aria-hidden=\"true\"></i>" %}
+        {% set submitButtonText = "Update post" %}
+    {% endif %}
+    <form action="{{ postUrl }}" method="post" id="Post">
+        <div class="row">
+            <div class="form-group col-lg-8">
+
+                <input type="hidden" class="form-control" id="postId" name="postId" value="{{ post.idposts }}">
+
+                <label for="postTitle">Post Name</label>
+                <input type="text" class="form-control" id="postTitle" name="postTitle" value="{{ post.title }}">
+                <small id="postTitleHelp" class="form-text text-muted  mb-3">{{ postSlugManualText|raw }}</small>
+
+                <label for="postSlug">Post Slug</label>
+                <input type="text" class="form-control" id="postSlug" name="postSlug" data-manual="{{ postSlugManual }}"
+                       data-original="true" value="{{ post.posts_slug }}">
+                <small id="postSlugHelp" class="form-text text-muted  mb-3"></small>
+
+                <textarea id="postTextArea" name="postTextArea">{{ post.article }}</textarea>
+
+            </div>
+            <div class="form-group col-lg-4">
+
+                <label for="postImage">Post Image</label>
+
+                <input type="text" class="form-control" name="postImage" id="postImage" value="{{ post.post_image }}">
+
+                <p class="text-center mt-3 display-image image-upload-height">
+                    <img src="{{ not post.post_image ? configs.no_image_replacement : post.post_image }}" class="img-thumbnail display-image img-fluid image-upload-height">
+                </p>
+                <input type="file" class="image-upload" id="postImageUpload">
+
+
+                <label for="categorySelector">Select a category</label>
+                <select name="categorySelector" id="categorySelector" class="form-control">
+                    {% for category in categories %}
+                        <option value="{{ category.idcategories }}" {{ category.idcategories == post.categories_idcategories ? "selected" }}>{{ category.category_name }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="isPublished">Published</label>
+                <select name="isPublished" id="isPublished" class="form-control">
+                    <option value="0" {{ post.published == "0" ? "selected" }}>No</option>
+                    <option value="1" {{ post.published == "1" ? "selected" }}>Yes</option>
+                </select>
+
+                <label for="isOnFrontPage">On Front Page</label>
+                <select name="isOnFrontPage" id="isOnFrontPage" class="form-control">
+                    <option value="0" {{ post.on_front_page == "0" ? "selected" }}>No</option>
+                    <option value="1" {{ post.on_front_page == "1" ? "selected" }}>Yes</option>
+                </select>
+
+                <label for="tagSelector">add tags</label>
+
+                <div class="input-group">
+
+                    <input list="tags" type="text" class="form-control" id="tagSelector" name="tagSelector"
+                           data-idtags="" autocomplete="off">
+                    <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" id="addTag">Add</button>
+               </span>
+                    <datalist id="tags">
+                        {% for tag in tags %}
+                            <option id="tags-{{ tag.tag_name }}" value="{{ tag.tag_name }}"
+                                    data-idtags="{{ tag.idtags }}"></option>
+                        {% endfor %}
+                    </datalist>
+                </div>
+                <span id="selectedTags">
+                    {% for postTag in postTags %}
+                        <span class="tagChip">
+                            <div class="chip mx-1 mt-2">
+                                {{ postTag.tag_name }}
+                                <i class="fa fa-times-circle-o closebtn" aria-hidden="true" onclick="closeMe(this)"></i>
+                            </div>
+                            <input name="tags[{{ loop.index }}][name]" class="selected-tags" type="hidden"
+                                   value="{{ postTag.tag_name }}">
+                            <input name="tags[{{ loop.index }}][id]" class="selected-tags" type="hidden"
+                                   value="{{ postTag.idtags }}">
+                        </span>
+                    {% endfor %}
+                </span>
+
+            </div>
+        </div>
+        <div class="submitButtons ml-3">
+            {% if post is defined %}
+                <a href="/post/view-post/{{ post.posts_slug }}" class="btn btn-info">View post</a>
+            {% endif %}
+            <button type="submit" class="btn btn-primary update-config-button">{{ submitButtonText }}</button>
+            <span id="submitResult"></span>
+            {% if post is defined %}
+                <a href="/admin/post/delete-post/{{ post.idposts }}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> Delete post</a>
+            {% endif %}
+        </div>
+
+    </form>
+{% endblock %}
+
+{% block js %}
+    <script>
+        setupAjax();
+        setupTinymce("#postTextArea");
+
+        //---------------------------------------
+        // Slug automation
+        //---------------------------------------
+
+        //Slugify the title on key up
+        var $slugRequest = null;
+        $("#postTitle").keyup(function () {
+            //if we have manually set the slug, do not update
+            if ($("#postSlug").data("manual") == true) {
+                return;
+            }
+            $title = $("#postTitle").val();
+            //if ajax call is pending, cut and restart
+            if ($slugRequest !== null) {
+                $slugRequest.abort();
+            }
+
+            $slugRequest = $.ajax({
+                url: "/ajax/ajaxSlugify/slugify-string",
+                data: {'slugText-update': $title}
+            }).done(function ($result) {
+                //set the resluting slug and trigger change to see if unique
+                $("#postSlug").val($result.slug).change();
+            });
+        });
+
+        //function to reset the slug and get the slug from the title. this is used if we have manually modified the slug
+        function removeManualSlug() {
+            $("#postSlug").data("manual", "false");
+            $("#postTitleHelp").html("");
+            $("#postTitle").keyup();
+        }
+
+        //check if slug is unique
+        $("#postSlug").keyup(function () {
+            //we are manualy updating the slug since we are modifying the field directly. Block auto updates from the title and set a revert option
+            $(this).data("manual", true);
+            $("#postTitleHelp").html("Slug manual input <i class=\"fa fa-times-circle-o\" onclick=\"removeManualSlug()\" aria-hidden=\"true\"></i>");
+            $(this).change();
+        });
+
+        //if the slug has changed
+        var $slugUniqueRequest = null;
+        $("#postSlug").change(function () {
+            $slug = $(this).val();
+            //if ajax call is pending, cut and restart
+            if ($slugUniqueRequest !== null) {
+                $slugUniqueRequest.abort();
+            }
+            $(this).data("original", "false");//we have updated the slug, setting tag for check
+            $("#postSlugHelp").html("<i class=\"fa fa-spinner fa-spin\" aria-hidden=\"true\"></i>");
+            $slugUniqueRequest = $.ajax({
+                url: "/ajax/post-verification/is-slug-unique/",
+                data: {
+                    'postSlug': $slug,
+                    'postId': {{ post.idposts ? post.idposts : 0 }}
+                }
+            }).done(function ($result) {
+                if (!$result) {
+                    $("#postSlugHelp").html("<i class=\"fa fa-times\" aria-hidden=\"true\"></i>Slug not unique or invalid");
+                    return;
+                }
+                $("#postSlugHelp").html("<i class=\"fa fa-check\" aria-hidden=\"true\"></i>Slug is valid");
+            });
+
+        });
+
+
+        //---------------------------------------
+        // Tags
+        //---------------------------------------
+
+        //Add tag
+        var $tagNumber = 0;
+        $("#addTag").on("click", function ($e) {
+            var $value = $("#tagSelector").val().trim();
+            if ($value !== "") { //only do action if we have a tag
+                var $option = $("#tags").find("[value=\"" + $value + "\"]");
+
+                var $tagHtml = "<span class=\"tagChip\">";
+
+                $tagHtml += "<div class=\"chip mx-1 mt-2\">" + $value + "<i class=\"fa fa-times-circle-o closebtn\" aria-hidden=\"true\" onclick=\"closeMe(this)\"></i>" + "</div>";
+
+                //the tag value
+                $tagHtml += "<input name=\"tags[" + $tagNumber + "][name]\" class=\"selected-tags\" type=\"hidden\" value=\"" + $value + "\" readonly>";
+
+                if ($option.length > 0) { //if the tag already exists, add the id
+                    $tagHtml += "<input name=\"tags[" + $tagNumber + "][id]\" class=\"selected-tags\" type=\"hidden\" value=\"" + $option.data("idtags") + "\" readonly>";
+                }
+                $tagHtml += "</span>";
+                $("#selectedTags").append($tagHtml);
+                $("#tagSelector").val("");
+                $tagNumber += 1;
+            }
+        });
+
+        //remove tag
+        function closeMe($element) {
+            $($element).parents("span.tagChip").remove();
+        }
+
+        //---------------------------------------
+        // Ajax testing before submit
+        //---------------------------------------
+
+        //setting a submit toggle to prevent send and only execute after ajax verification
+        var $submitting = false;
+        $("#Post").on("submit", function ($e) {
+            //over-ride the submit button if we are adding tags. Just add tag instead
+            if ($("#tagSelector").is(":focus")) {
+                $e.preventDefault();
+                $("#addTag").click();
+                return;
+            }
+
+            if (!$submitting) {
+                setupToastr();
+                $e.preventDefault(); //stop the send while ajax verification
+
+                //Basic input verification
+                if ($("#postTitle").val().trim() == "") {
+                    toastr.error("title is empty");
+                    return
+                }
+                if ($("#postSlug").val().trim() == "") {
+                    toastr.error("Slug is empty");
+                    return
+                }
+
+                //setting the wait spinner if the basic verification has passed, we will be doing Ajax checks
+                $("#submitResult").html("<i class=\"fa fa-spinner fa-spin\" aria-hidden=\"true\"></i>");
+
+                //if the slug has been modified, check unique. We have an extra check via PHP for security but better usability if doing it here
+                if ($("#postSlug").data("original") == "false") {
+                    $slugValue = $("#postSlug").val();
+                    $.ajax({
+                        url: "/ajax/post-verification/is-slug-unique/",
+                        data: {
+                            'postSlug': $slugValue,
+                            'postId': {{ post.idposts ? post.idposts : 0 }}
+                        }
+                    }).done(function ($result) {
+                        if ($result) {
+                            //ok all valid, submit
+                            $submitting = true;
+                            $("#Post").submit();
+                            return;
+                        }
+                        //error, reset spinner and send error message
+                        $("#submitResult").html("");
+                        toastr.error('Slug not unique or invalid');
+                    });
+                } else {
+                    //No slug update, we can send. We still have PHP error checking so no security problems
+                    $submitting = true;
+                    $("#Post").submit();
+                }
+
+            }
+
+        });
+
+        //---------------------------------------
+        // Post image upload
+        //---------------------------------------
+
+        //Initialise the file upload
+        var $postImageUpload = $("#postImageUpload");
+
+        var $setImage = $postImageUpload.siblings("p.display-image").children("img.display-image");
+        var $setUrl = $postImageUpload.siblings("input.form-control");
+        var $fileInputOptions = {
+            showPreview: false,
+            uploadUrl: "/ajax/image-upload/file-input-post-upload",
+            maxFileCount: 1,
+            showRemove: false,
+            allowedFileTypes:['image']
+        }
+        $postImageUpload.fileinput($fileInputOptions);
+
+        //once the file is uploaded
+        $postImageUpload.on('fileuploaded', function (event, data) {
+            var $url = "/" + data.response["location"];
+            $setImage.attr("src", $url);
+            $setUrl.attr("value", $url);
+            setupToastr();
+            toastr.info('image uploaded');
+            $postImageUpload.fileinput('clearStack').fileinput('refresh', $fileInputOptions);
+        });
+
+        $postImageUpload.on('fileuploaderror', function(event, data, msg) {
+
+            setupToastr();
+            toastr.error(msg);
+            $postImageUpload.fileinput('clearStack').fileinput('refresh', $fileInputOptions);
+
+
+        });
+
+        //if we enter a url
+        $("#postImage").keyup(function () {
+            $setImage.attr("src", $(this).val());
+        });
+
+    </script>
+
+{% endblock %}

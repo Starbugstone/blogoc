@@ -26,6 +26,8 @@ abstract class AjaxController extends Controller
      */
     protected $response;
 
+    protected $auth;
+
     /**
      * On construction, we imediatly check for security and bail out on the first sign of fraude
      * Only allow XmlHTTPRequests or throw an exception
@@ -37,6 +39,7 @@ abstract class AjaxController extends Controller
      */
     public function __construct(Container $container)
     {
+        $this->loadModules[] = 'Auth';
         parent::__construct($container);
 
         $this->request = $container->getRequest(); //adding our request object as it will be needed in the ajax calls
@@ -46,6 +49,17 @@ abstract class AjaxController extends Controller
         $this->checkXlmRequest();
         $this->checkReferer();
         $this->csrf->checkJsonCsrf();
+    }
+
+    /**
+     * checks if the call is made by an admin and throws an error if not.
+     * @throws JsonException
+     */
+    protected function onlyAdmin()
+    {
+        if (!$this->auth->isAdmin()) {
+            throw new JsonException('You do not have the rights to perform this action');
+        }
     }
 
     /**

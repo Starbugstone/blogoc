@@ -1,0 +1,12 @@
+{% extends "Base.twig" %}
+
+{% block title %}{% endblock %}
+
+{% block main %}
+    <h1 class="text-center mb-3">Posts tagged with {{ tag.tag_name }}</h1>
+    {% include "Includes/Listing-posts.twig" with {'posts': posts} %}
+    {% include "Includes/Pagination.twig" with {'pagination': pagination, 'pageUrl' :'/tag/posts/'~tagId } %}
+{% endblock %}
+
+{% block js %}
+{% endblock %}

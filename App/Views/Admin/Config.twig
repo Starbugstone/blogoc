@@ -1,0 +1,104 @@
+{% extends "Admin/Base.twig" %}
+
+{% block title %}Site configuration{% endblock %}
+
+{% block main %}
+
+    {% for key, val in configList %}
+        <h1>{{ key |replace({'_':' '}) }}</h1>
+        <form action="/admin/config/update-config" method="post" class="update-config">
+            {% for config in val %}
+                {% set inputType = config.configs_type_name %}
+                {% if config.configs_type_name == 'image' %}
+                    {% set inputType = 'text' %}
+                {% endif %}
+                <div class="form-group col-8">
+                    <label for="{{ config.idconfigs }}">{{ config.configs_name|replace({'_':' '}) }}</label>
+                    <span id="{{ config.idconfigs }}-icon"></span>
+
+                    <input type="{{ inputType }}" class="form-control" name="{{ config.idconfigs }}"
+                           id="{{ config.idconfigs }}" data-configId="{{ config.idconfigs }}"
+                           data-configType="{{ config.configs_type }}"
+                           value="{{ config.configs_value }}">
+                    {% if config.configs_type_name == 'image' %}
+                        <p class="text-center mt-3 display-image image-upload-height">
+                            <img src="{{ config.configs_value }}" class="img-thumbnail display-image img-fluid image-upload-height">
+                        </p>
+                        <input type="file" class="image-upload">
+                    {% endif %}
+
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary ml-3 update-config-button">Update</button>
+        </form>
+    {% endfor %}
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        //init our headers for ajax calls
+        setupAjax();
+
+        //The form submit ajax call
+        $(".update-config").each(function () {
+
+            $(this).on("submit", function ($e) {
+                $e.preventDefault();
+
+                var $data_json = JSON.stringify($(this).serializeArray());
+
+                $.ajax({
+                    url: "/ajax/config/update",
+                    data: {'config-update': $data_json},
+                }).done(function ($result) {
+                    $.each($result['successId'], function ($key, $id) {
+                        $("#" + $id + "-icon").html("<i class=\" fa fa-check\"></i>");
+                    });
+                    $.each($result['errorId'], function ($key, $id) {
+                        $("#" + $id + "-icon").html("<i class=\" fa fa-times\"></i>");
+                    });
+                    setupToastr();
+                    if ($result['success']) {
+                        toastr.success('update Ok');
+                    } else {
+                        toastr.Warning('Update has errors');
+                    }
+                });
+            });
+
+
+        });
+
+        //---------------------------------------
+        // Config image upload
+        //---------------------------------------
+
+        //Initialise the file upload
+        $("input.image-upload").each(function () {
+            var $setImage = $(this).siblings("p.display-image").children("img.display-image");
+            var $setUrl = $(this).siblings("input.form-control");
+            $(this).fileinput({
+                showPreview: false,
+                uploadUrl: "/ajax/image-upload/file-input-config-upload",
+                maxFileCount: 1,
+                showRemove: false
+            });
+
+            //once the file is uploaded
+            $(this).on('fileuploaded', function (event, data) {
+                var $url = "/" + data.response["location"];
+                $setImage.attr("src", $url);
+                $setUrl.attr("value", $url);
+                setupToastr();
+                toastr.info('image uploaded, update to save');
+            });
+
+            //if we enter a url
+            $setUrl.keyup(function(){
+                $setImage.attr("src", $(this).val());
+            });
+        });
+    </script>
+
+{% endblock %}

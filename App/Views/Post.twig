@@ -1,0 +1,57 @@
+{% extends "Base.twig" %}
+
+{% block title %}{% endblock %}
+
+{% block main %}
+    <article id="{{ post.slug }}" class="single-post">
+        <h1 class="text-center">{{ post.title }}</h1>
+        <div class="row">
+            <aside class="col-md-4 post-info">
+                {% if session.user_role_level >= 2 %}
+                    <div class="admin float-right mr-3 mt-2">
+                        <a href="/admin/post/modify/{{ post.posts_slug }}">Edit <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                    </div>
+                {% endif %}
+                <h2 class="text-center">Info</h2>
+                <div class="image">
+                    <img src="{{ post.post_image }}" alt="logo {{ post.title }}" class="img-responsive img-thumbnail">
+                </div>
+                <div class="category">
+                    <p><b>Category : </b><a href="/category/posts/{{ post.category_name }}">{{ post.category_name }}</a></p>
+                </div>
+                <div class="author">
+                    <p><b>Author : </b><a href="/author/posts/{{ post.idusers }}">{{ post.author }}</a></p>
+                </div>
+                <div class="last-update">
+                    <p><b>Last update : </b>{{ post.last_update|date("l d/m/Y \\a\\t G:i") }}</p>
+                </div>
+                <h2 class="text-center">Tags</h2>
+                <div class="tags">
+                    {% for tag in postTags %}
+                    <span class="tagChip">
+                        <div class="chip mx-1 mt-2">
+                            <a href="/tag/posts/{{ tag.idtags }}">{{ tag.tag_name }}</a>
+                        </div>
+                    </span>
+                    {% endfor %}
+                </div>
+                <div class="jump-to-comments mt-3">
+                    <p class="text-center"><a href="#comments">jump to comments</a></p>
+                </div>
+            </aside>
+            <div class="col-md-8">
+                {{ post.article|raw  }}
+            </div>
+        </div>
+        <div class="row" id="comments">
+            <div class="col-12">
+                <p>COMMENTS TO IMPLEMENT</p>
+            </div>
+
+        </div>
+    </article>
+
+{% endblock %}
+
+{% block js %}
+{% endblock %}

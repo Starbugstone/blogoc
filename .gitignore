@@ -9,3 +9,6 @@ composer.phar
 /.idea
 /Cache/**/
 !/Cache/index.php
+public/uploaded_images/tournesol.jpg
+public/uploaded_images/Scotty Rock 1.jpg
+public/uploaded_images/haddock.jpg

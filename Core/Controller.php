@@ -3,6 +3,7 @@
 namespace Core;
 
 use Twig\Template;
+use Core\Traits\StringFunctions;
 
 /**
  * Class Controller
@@ -12,6 +13,7 @@ use Twig\Template;
  */
 abstract class Controller
 {
+    use StringFunctions;
     /**
      * the data that will be pushed to the view
      * @var array
@@ -35,7 +37,9 @@ abstract class Controller
      */
     protected $loadModules = [
         'Csrf',
-        'AlertBox'
+        'AlertBox',
+        'Auth',
+        'pagination'
     ];
 
     /**
@@ -44,12 +48,16 @@ abstract class Controller
      */
     protected $csrf;
     protected $alertBox;
+    protected $auth;
+    protected $pagination;
 
     /**
      * Controller constructor.
+     * We get the module list and construct it. We can also over wright the module in app but sill has to inherit from core module
      * @param Container $container
      *
-     * @throws \ErrorException
+     * @throws \ErrorException on module loading error
+     * @throws \ReflectionException should never be thrown since only child classes call this
      */
     public function __construct(Container $container)
     {
@@ -60,25 +68,68 @@ abstract class Controller
 
         //We load all our module objects into our object
         foreach ($this->loadModules as $loadModule) {
-            $loadModuleObj = 'Core\\Modules\\' . $loadModule;
-
-            $loadModuleName = lcfirst($loadModule);
-            $loadedModule = new $loadModuleObj($this->container);
-            //Modules must be children of the Module template
-            if (!is_subclass_of($loadedModule, 'Core\Modules\Module')) {
-                throw new \ErrorException('Modules musit be a sub class of module');
-            }
-
-            //we are not allowed to create public modules, they must be a placeholder ready
-            if (!property_exists($this, $loadModuleName)) {
-                throw new \ErrorException('class var ' . $loadModuleName . ' not present');
-            }
-            $this->$loadModuleName = $loadedModule;
+            $this->loadModule($loadModule);
         }
         $this->session = $this->container->getSession();
 
         //Setting up csrf token security for all calls
         $this->data['csrf_token'] = $this->csrf->getCsrfKey(); //storing the security id into the data array to be sent to the view and added in the meta head
+    }
+
+    /**
+     * load the module to the object
+     * We look for module in the namespace, then in app and finally in the core.
+     * This enables us to over-ride the core or app module with a custom module for the namespace.
+     * @param $loadModule string the module to search for and load
+     * @throws \ErrorException if module doesn't exits
+     * @throws \ReflectionException
+     */
+    private function loadModule($loadModule)
+    {
+        $loadModuleName = lcfirst($loadModule);
+        $loadModuleObj = $this->getModuleNamespace($loadModule);
+        //Modules must be children of the Module template
+        if (!is_subclass_of($loadModuleObj, 'Core\Modules\Module')) {
+            throw new \ErrorException('Module ' . $loadModuleName . ' must be a sub class of module');
+        }
+        $loadedModule = new $loadModuleObj($this->container);
+        //we are not allowed to create public modules, they must be a placeholder ready
+        if (!property_exists($this, $loadModuleName)) {
+            throw new \ErrorException('the protected or private variable of ' . $loadModuleName . ' is not present');
+        }
+        $this->$loadModuleName = $loadedModule;
+    }
+
+    /**
+     * takes a module to load and verifies if exists in the current namespace modules, app modules or core modules
+     * @param $loadModule string Module to look for
+     * @return string the full module namespace
+     * @throws \ErrorException if no module is found
+     * @throws \ReflectionException Should never happen since we are calling on $this
+     */
+    private function getModuleNamespace($loadModule)
+    {
+        $childClass = new \ReflectionClass(get_class($this));
+        $childClassNamespace = $childClass->getNamespaceName();
+        //check in classNameSpace
+        if (class_exists($childClassNamespace . '\\Modules\\' . $loadModule)) {
+            $this->addToDevHelper('module ' . $loadModule . ' loaded', $childClassNamespace . '\\' . $loadModule);
+            return $childClassNamespace . '\\' . $loadModule;
+        }
+        //check in app
+        if (class_exists('App\\Modules\\' . $loadModule)) {
+            $this->addToDevHelper('module ' . $loadModule . ' loaded', 'App\\Modules\\' . $loadModule);
+            return 'App\\Modules\\' . $loadModule;
+        }
+        //check in core, send error popup if overcharged
+        if (class_exists('Core\\Modules\\' . $loadModule)) {
+            $this->addToDevHelper('module ' . $loadModule . ' loaded', 'Core\\Modules\\' . $loadModule);
+            return 'Core\\Modules\\' . $loadModule;
+        }
+
+        //if we are here then no module found
+        throw new \ErrorException('module ' . $loadModule . ' does not exist or not loaded');
+
     }
 
     public function index()
@@ -112,6 +163,7 @@ abstract class Controller
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
+     * @throws \ReflectionException
      */
     public function renderView($template): void
     {
@@ -119,9 +171,66 @@ abstract class Controller
         if ($this->alertBox->alertsPending()) {
             $this->data['alert_messages'] = $this->alertBox->getAlerts();
         }
-
+        if (Config::DEV_ENVIRONMENT) {
+            $this->devHelper();
+        }
         $twig = $this->container->getTemplate();
         $twig->display($template . '.twig', $this->data);
     }
 
+    /**
+     * construct a dev helper panel
+     * @throws \ReflectionException
+     */
+    protected function devHelper()
+    {
+        $this->data['dev'] = true;
+
+        $this->addToDevHelper('Class Methods', get_class_methods(get_class($this)));
+        $this->addToDevHelper('Session Vars', $this->session->getAllSessionVars());
+        $this->addToDevHelper('uri', $this->container->getRequest()->getUri());
+        $childClassNamespace = new \ReflectionClass(get_class($this));
+        $childClassNamespace = $childClassNamespace->getNamespaceName();
+        $this->addToDevHelper('Child Namespace', $childClassNamespace);
+
+        //for our object variables, we don't want the devinfo
+        $objVars = get_object_vars($this);
+        unset($objVars['data']['dev_info']);
+        $this->addToDevHelper('Object Variables', $objVars);
+    }
+
+    /**
+     * add info to our dev helper panel
+     * @param $name
+     * @param $var
+     */
+    protected function addToDevHelper($name, $var)
+    {
+        //only populate if in dev environment
+        if (Config::DEV_ENVIRONMENT){
+            $classMethods = [];
+            $classMethods[$name] = $var;
+            if (!isset($this->data['dev_info'])) {
+                $this->data['dev_info'] = [];
+            }
+            $this->data['dev_info'] += $classMethods;
+        }
+    }
+
+    /**
+     * get all the session variables
+     * @return mixed
+     */
+    protected function getSessionVars()
+    {
+        return $this->container->getSession()->getAllSessionVars();
+    }
+
+    /**
+     * Send the session variables to the data variable to enable access in twig
+     */
+    protected function sendSessionVars()
+    {
+        $this->data['session'] = $this->getSessionVars();
+    }
 }

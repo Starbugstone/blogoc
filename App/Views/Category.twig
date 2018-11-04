@@ -1,0 +1,22 @@
+{% extends "Base.twig" %}
+
+{% block title %}Category Page{% endblock %}
+
+{% block main %}
+
+    {# Checking if actualy in a category or in global #}
+    {% set categorySlugUrl = "all-posts" %}
+    {% set pageTitle = "Posts in all categories" %}
+    {% if categorySlug is defined %}
+        {% set categorySlugUrl = "posts/"~categorySlug %}
+        {% set pageTitle = "Posts in category "~category.category_name %}
+    {% endif %}
+
+    <h1 class="text-center mb-3">{{ pageTitle }}</h1>
+
+    {% include "Includes/Listing-posts.twig" with {'posts': posts} %}
+    {% include "Includes/Pagination.twig" with {'pagination': pagination, 'pageUrl' :'/category/'~categorySlugUrl} %}
+{% endblock %}
+
+{% block js %}
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends "Admin/Base.twig" %}
+{% block main %}
+    <h1>Post list</h1>
+    <p><a href="/admin/post/new" class="btn btn-success"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add new
+            post</a></p>
+    <table class="w-100">
+        <tr>
+            <th>Image</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>last Update</th>
+            <th>On front page</th>
+            <th>Published</th>
+            <th>Links</th>
+        </tr>
+        {% for post in posts %}
+            <tr>
+                <td><img src="{{ not post.post_image ? configs.no_image_replacement : post.post_image }}"
+                         style="max-height: 100px; max-width: 100px;"></td>
+                <td>{{ post.title }}</td>
+                <td>{{ post.author }}</td>
+                <td>{{ post.last_update }}</td>
+                <td><i class="btn fa {{ post.on_front_page ? "fa-check" : "fa-times" }}" aria-hidden="true"
+                       data-onfrontpage="{{ post.on_front_page ? "true" : "false" }}"
+                       data-postid="{{ post.idposts }}"></i>
+
+                </td>
+                <td><i class="btn fa {{ post.published ? "fa-check" : "fa-times" }}" aria-hidden="true"
+                       data-ispublished="{{ post.published ? "true" : "false" }}" data-postid="{{ post.idposts }}"></i>
+
+                </td>
+                <td>
+                    <a href="/post/view-post/{{ post.posts_slug }}" class="btn btn-success"><i class="fa fa-eye"
+                                                                                               aria-hidden="true"></i></a>
+                    <a href="/admin/post/modify/{{ post.posts_slug }}" class="btn btn-warning"><i class="fa fa-pencil"
+                                                                                                  aria-hidden="true"></i></a>
+                    <a href="/admin/post/delete-post/{{ post.idposts }}" class="btn btn-danger"><i class="fa fa-trash"
+                                                                                                   aria-hidden="true"></i></a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    {% include "Includes/Pagination.twig" with {'pagination': pagination, 'pageUrl' :'/admin/post/list', paginationPostsPerPage: paginationPostsPerPage} %}
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        setupAjax();
+        //ajax change the on front page
+        $("td>i[data-onfrontpage]").each(function () {
+            $(this).on("click", function () {
+
+                var $that = $(this);
+                $that.html("<i class=\"fa fa-spinner fa-spin\" aria-hidden=\"true\"></i>");
+                $.ajax({
+                    url: "/ajax/post-modification/modify-on-front-page",
+                    data: {
+                        'state': $that.data("onfrontpage"),
+                        'postId': $that.data("postid")
+                    },
+                }).done(function ($result) {
+                    $that.html("");
+                    if ($that.data("onfrontpage") == "true") {
+                        $that.removeClass("fa-check");
+                        $that.addClass("fa-times");
+                        $that.data("onfrontpage", "false");
+                    }
+                    else{
+                        $that.removeClass("fa-times");
+                        $that.addClass("fa-check");
+                        $that.data("onfrontpage", "true");
+                    }
+                });
+            });
+        });
+
+        //ajax change the published
+        $("td>i[data-ispublished]").each(function () {
+            $(this).on("click", function () {
+                var $that = $(this);
+                $that.html("<i class=\"fa fa-spinner fa-spin\" aria-hidden=\"true\"></i>");
+                $.ajax({
+                    url: "/ajax/post-modification/modify-published",
+                    data: {
+                        'state': $that.data("ispublished"),
+                        'postId': $that.data("postid")
+                    },
+                }).done(function ($result) {
+                    $that.html("");
+                    if ($that.data("ispublished") == "true") {
+                        $that.removeClass("fa-check");
+                        $that.addClass("fa-times");
+                        $that.data("ispublished", "false");
+                    } else {
+                        $that.removeClass("fa-times");
+                        $that.addClass("fa-check");
+                        $that.data("ispublished", "true");
+                    }
+                });
+            });
+        });
+    </script>
+
+{% endblock %}

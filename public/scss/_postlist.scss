@@ -1,0 +1,24 @@
+article.category-listing {
+  border: 1px solid #eee;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .1);
+  border-radius: 5px;
+  background-color: $gray-200;
+  height: 100%;
+  overflow: hidden;
+  padding-bottom: 15px;
+  .entry-title {
+    color: $gray-600;
+    a, a:hover, a:visited {
+      color: $gray-600;
+      text-decoration: none;
+    }
+  }
+  .postThumbnail {
+    width: 100%;
+    height: 300px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+
+}
