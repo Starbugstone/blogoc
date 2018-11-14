@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3fe54d588f2c4a592bae80cf0b269f86",
+    "content-hash": "1500d4e5dbb5884a8ee1c97f06a73787",
     "packages": [
         {
             "name": "cocur/slugify",
@@ -183,17 +183,64 @@
             "time": "2018-09-25T20:47:26+00:00"
         },
         {
+            "name": "ezyang/htmlpurifier",
+            "version": "v4.10.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ezyang/htmlpurifier.git",
+                "reference": "d85d39da4576a6934b72480be6978fb10c860021"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/d85d39da4576a6934b72480be6978fb10c860021",
+                "reference": "d85d39da4576a6934b72480be6978fb10c860021",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2"
+            },
+            "require-dev": {
+                "simpletest/simpletest": "^1.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "HTMLPurifier": "library/"
+                },
+                "files": [
+                    "library/HTMLPurifier.composer.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL"
+            ],
+            "authors": [
+                {
+                    "name": "Edward Z. Yang",
+                    "email": "admin@htmlpurifier.org",
+                    "homepage": "http://ezyang.com"
+                }
+            ],
+            "description": "Standards compliant HTML filter written in PHP",
+            "homepage": "http://htmlpurifier.org/",
+            "keywords": [
+                "html"
+            ],
+            "time": "2018-02-23T01:58:20+00:00"
+        },
+        {
             "name": "kartik-v/bootstrap-fileinput",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/bootstrap-fileinput.git",
-                "reference": "86010b4468a2915c9414524df528aa1b361af1b3"
+                "reference": "36b68bdc20651a430ab0bb4024e6065a4092914f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/86010b4468a2915c9414524df528aa1b361af1b3",
-                "reference": "86010b4468a2915c9414524df528aa1b361af1b3",
+                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/36b68bdc20651a430ab0bb4024e6065a4092914f",
+                "reference": "36b68bdc20651a430ab0bb4024e6065a4092914f",
                 "shasum": ""
             },
             "type": "library",
@@ -233,7 +280,7 @@
                 "progress",
                 "upload"
             ],
-            "time": "2018-10-06T16:31:55+00:00"
+            "time": "2018-10-20T15:40:54+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",

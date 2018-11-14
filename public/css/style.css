@@ -108,8 +108,8 @@ div.masthead {
   margin-top: 4rem; }
 
 .features-icons {
-  padding-top: 7rem;
-  padding-bottom: 7rem; }
+  padding-top: 4rem;
+  padding-bottom: 5rem; }
   .features-icons h3 {
     font-family: "Merienda", cursive; }
   .features-icons p {
@@ -190,20 +190,19 @@ div.masthead {
   -webkit-transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36);
   transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36); }
 
-article.category-listing {
+article.category-listing, .comment-listing {
   border: 1px solid #eee;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   background-color: #e9ecef;
-  height: 100%;
   overflow: hidden;
   padding-bottom: 15px; }
-  article.category-listing .entry-title {
+  article.category-listing .entry-title, .comment-listing .entry-title {
     color: #868e96; }
-    article.category-listing .entry-title a, article.category-listing .entry-title a:hover, article.category-listing .entry-title a:visited {
+    article.category-listing .entry-title a, article.category-listing .entry-title a:hover, article.category-listing .entry-title a:visited, .comment-listing .entry-title a, .comment-listing .entry-title a:hover, .comment-listing .entry-title a:visited {
       color: #868e96;
       text-decoration: none; }
-  article.category-listing .postThumbnail {
+  article.category-listing .postThumbnail, .comment-listing .postThumbnail {
     width: 100%;
     height: 300px;
     background-repeat: no-repeat;
@@ -216,6 +215,17 @@ img.author-image {
 
 .pagination p {
   width: 100%; }
+  .pagination p a {
+    text-decoration: none;
+    color: #fff;
+    background-color: #868e96;
+    padding: 10px; }
+    .pagination p a#previous {
+      border-radius: 50px 0 0 50px;
+      padding-left: 25px; }
+    .pagination p a#next {
+      border-radius: 0 50px 50px 0;
+      padding-right: 25px; }
 
 .single-post h1, .single-post h2 {
   color: #495057; }

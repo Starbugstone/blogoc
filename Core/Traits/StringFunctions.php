@@ -3,6 +3,8 @@
 namespace Core\Traits;
 
 use Core\Constant;
+use HTMLPurifier;
+use HTMLPurifier_Config;
 
 /**
  * a trait with some string related helpers
@@ -99,17 +101,17 @@ trait StringFunctions
         if (count($string) <= $count) {
             return $text;
         }
-        $trimed = '';
+        $trimmed = '';
         for ($wordCounter = 0; $wordCounter < $count; $wordCounter++) {
-            $trimed .= $string[$wordCounter];
+            $trimmed .= $string[$wordCounter];
             if ($wordCounter < $count - 1) {
-                $trimed .= " ";
+                $trimmed .= " ";
             } else {
-                $trimed .= "[...]";
+                $trimmed .= "[...]";
             }
         }
 
-        return $this->completeDom($trimed);
+        return $this->completeDom($trimmed);
     }
 
     /**
@@ -119,20 +121,9 @@ trait StringFunctions
      */
     private function completeDom(string $text): string
     {
-        //grabbed from https://gist.github.com/JayWood/348752b568ecd63ae5ce#gistcomment-2310550
-        libxml_use_internal_errors(true);
-
-        $dom = new \DOMDocument;
-        $dom->loadHTML($text);
-
-        // Strip wrapping <html> and <body> tags
-        $mock = new \DOMDocument;
-        $body = $dom->getElementsByTagName('body')->item(0);
-        foreach ($body->childNodes as $child) {
-            $mock->appendChild($mock->importNode($child, true));
-        }
-
-        return trim($mock->saveHTML());
+        $config = HTMLPurifier_Config::createDefault();
+        $purifier = new HTMLPurifier($config);
+        return $purifier->purify($text);
     }
 
     /**
@@ -142,7 +133,7 @@ trait StringFunctions
      */
     public function isAlphaNum(string $string): bool
     {
-        return preg_match("/^[A-Za-z0-9_-]+$/", $string);
+        return preg_match("/^[A-Za-z0-9_-]+$/", $string) === 1;
     }
 
     /**
@@ -166,11 +157,11 @@ trait StringFunctions
     /**
      * check is a string is hexadecimal
      * @param string $string
-     * @return false|int
+     * @return bool
      */
     public function isHexa(string $string):bool
     {
-        return preg_match("/[\da-f]/",$string);
+        return preg_match("/[\da-f]/",$string) === 1;
     }
 
     /**
@@ -180,17 +171,17 @@ trait StringFunctions
      */
     public function isInt($int):bool
     {
-        return filter_var($int, FILTER_VALIDATE_INT);
+        return filter_var($int, FILTER_VALIDATE_INT) !== false;
     }
 
     /**
      * Verify if a string is a valid email
      * @param string $email
-     * @return mixed
+     * @return bool
      */
-    public function isEmail(string $email)
+    public function isEmail(string $email):bool
     {
-        return filter_var($email, FILTER_VALIDATE_EMAIL);
+        return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
     }
 
 }

@@ -1,9 +1,8 @@
-article.category-listing {
+article.category-listing, .comment-listing {
   border: 1px solid #eee;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .1);
   border-radius: 5px;
   background-color: $gray-200;
-  height: 100%;
   overflow: hidden;
   padding-bottom: 15px;
   .entry-title {

@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Models\PostModel;
+use App\Models\UserModel;
+use Core\Config;
 use Core\Container;
 use Core\Traits\StringFunctions;
 
@@ -22,6 +24,8 @@ class Home extends \Core\Controller
     protected $sendMail;
 
     private $config;
+    private $userModel;
+    private $postModel;
 
     public function __construct(Container $container)
     {
@@ -30,6 +34,40 @@ class Home extends \Core\Controller
         parent::__construct($container);
 
         $this->config = $this->siteConfig->getSiteConfig();
+        $this->userModel = new UserModel($this->container);
+        $this->postModel = new PostModel($this->container);
+        if($this->auth->isuser())
+        {
+            $this->data["user"] = $this->userModel->getUserDetailsById((int)$this->session->get("userId"));
+        }
+    }
+
+    /**
+     * test the capcha
+     * @param string $gCapchaResponse
+     * @return bool
+     */
+    private function testCapcha(string $gCapchaResponse):bool
+    {
+        $error = false;
+        if(Config::GOOGLE_RECAPCHA_PUBLIC_KEY !== "" && Config::GOOGLE_RECAPCHA_SECRET_KEY !== "")
+        {
+            if(empty($gCapchaResponse))
+            {
+                $error = true;
+                $this->alertBox->setAlert('Capcha not set', 'error');
+            }
+            //check the capcha
+            $grequest = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.Config::GOOGLE_RECAPCHA_SECRET_KEY.'&response='.$gCapchaResponse);
+            // The result is in a JSON format. Decoding..
+            $gresponse = json_decode($grequest);
+            if(!$gresponse->success)
+            {
+                $error = true;
+                $this->alertBox->setAlert('Capcha Error', 'error');
+            }
+        }
+        return $error;
     }
 
     /**
@@ -42,9 +80,7 @@ class Home extends \Core\Controller
      */
     public function index()
     {
-        $frontPostModel = new PostModel($this->container);
-
-        $frontPosts = $frontPostModel->getFrontPosts();
+        $frontPosts = $this->postModel->getFrontPosts();
 
         $this->data['configs'] = $this->config;
         $this->data['navigation'] = $this->siteConfig->getMenu();
@@ -62,6 +98,23 @@ class Home extends \Core\Controller
 
 
         $this->renderView('Home');
+    }
+
+    public function contact()
+    {
+
+        $this->data['configs'] = $this->config;
+        $this->data['navigation'] = $this->siteConfig->getMenu();
+
+        //check if have prefilled form data and error messages
+        $this->data["contactInfo"] = $this->session->get("contactInfo");
+        $this->data["contactErrors"] = $this->session->get("contactErrors");
+
+        //remove the set data as it is now sent to the template
+        $this->session->remove("contactInfo");
+        $this->session->remove("contactErrors");
+
+        $this->renderView('Contact');
     }
 
 
@@ -104,11 +157,18 @@ class Home extends \Core\Controller
             $contactErrors->contactEmail = "email is not valid";
         }
 
+        $capchaError = $this->testCapcha($message["g-recaptcha-response"]);
+
+        if($capchaError === true)
+        {
+            $error = true;
+        }
+
         //If we found an error, return data to the register form and no create
         if ($error) {
             $this->session->set("contactInfo", $message);
             $this->session->set("contactErrors", $contactErrors);
-            $this->response->redirect();
+            $this->response->redirect("/home/contact");
         }
 
         $config = $this->siteConfig->getSiteConfig();
@@ -118,8 +178,9 @@ class Home extends \Core\Controller
         $subject = "Contact from ".$config["site_name"]." : ";
         $subject .= htmlspecialchars($message["contactSubject"]);
         $textMessage = "<h1>message sent by ".$userName."</h1>";
+        $textMessage .= "<p>from : <a href='mailto:".$message["contactEmail"]."'>".$message["contactEmail"]."</a></p>";
         $textMessage .= htmlspecialchars($message["contactMessage"]);
-        $from = $message["contactEmail"];
+        $from = $config["SMTP_from"];
 
         $this->sendMail->send($to, $subject, $textMessage, $from);
 

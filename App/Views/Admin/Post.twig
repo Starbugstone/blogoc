@@ -1,5 +1,7 @@
 {% extends "Admin/Base.twig" %}
 
+{% block title %}Admin single post{% endblock %}
+
 {% block main %}
     {% set postUrl = "/admin/post/create-new-post" %}
     {% set postSlugManual = "false" %}
@@ -129,7 +131,7 @@
             }
 
             $slugRequest = $.ajax({
-                url: "/ajax/ajaxSlugify/slugify-string",
+                url: "/ajax/ajax-slugify/slugify-string",
                 data: {'slugText-update': $title}
             }).done(function ($result) {
                 //set the resluting slug and trigger change to see if unique

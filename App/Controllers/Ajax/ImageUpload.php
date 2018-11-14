@@ -4,15 +4,24 @@ namespace App\Controllers\Ajax;
 
 use Cocur\Slugify\Slugify;
 use Core\AjaxController;
+use Core\Container;
 
 class ImageUpload extends AjaxController
 {
     /**
      * @var string the image upload folder, must be writable
      */
-    private $imageFolder = "uploaded_images/";
-    private $configFolder = "config_images/";
-    private $userFolder = "user_images/";
+    private $imageFolder;
+    private $configFolder;
+    private $userFolder;
+
+    public function __construct(Container $container)
+    {
+        parent::__construct($container);
+        $this->imageFolder = \Core\Config::UPLOADED_IMAGES;
+        $this->configFolder = \Core\Config::CONFIG_IMAGES;
+        $this->userFolder = \Core\Config::USER_IMAGES;
+    }
 
     /**
      * check if the image name is valid

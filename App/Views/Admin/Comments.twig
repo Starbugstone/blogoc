@@ -1,0 +1,85 @@
+{% extends "Admin/Base.twig" %}
+
+{% block title %}List comments{% endblock %}
+
+{% block main %}
+    <h1>
+    {%  if pendingView is defined %}
+        Unauthorised Comments
+    {% else %}
+        All comments
+    {% endif %}
+    </h1>
+
+
+    <table class="w-100">
+        <tr>
+            <th>Post Title</th>
+            <th>commenter</th>
+            <th>Date</th>
+            <th>Approved</th>
+            <th>Comment</th>
+            <th>Links</th>
+        </tr>
+        {% for comment in comments %}
+            <tr>
+                <td><a href="/post/view-post/{{ comment.posts_slug }}">{{ comment.title }}</a></td>
+                <td><a href="/admin/home/view-user/{{ comment.users_idusers }}">{{ comment.username }}</a></td>
+                <td>{{ comment.comment_date|date("d/m/Y g:i a") }}</td>
+                <td><i class="btn fa {{ comment.approved ? "fa-check" : "fa-times" }}" aria-hidden="true"
+                       data-approved="{{ comment.approved ? "true" : "false" }}"
+                       data-commentid="{{ comment.idcomments }}"></i>
+
+                </td>
+                <td>{{ comment.comment|raw }}</td>
+
+                <td>
+                    <a href="/admin/comments/moderate-comment/{{ comment.idcomments }}" class="btn btn-warning"><i class="fa fa-pencil"
+                                                                                                  aria-hidden="true"></i></a>
+                    <a href="/admin/comments/delete/{{ comment.idcomments }}" class="btn btn-danger"><i class="fa fa-trash"
+                                                                                                   aria-hidden="true"></i></a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    {% set pageUrl = "/admin/comments/view-comments" %}
+    {%  if pendingView is defined %}
+        {% set pageUrl = "/admin/comments/pending-comments" %}
+    {% endif %}
+    {% include "Includes/Pagination.twig" with {'pagination': pagination, 'pageUrl' :pageUrl, paginationPostsPerPage: paginationPostsPerPage} %}
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        setupAjax();
+        //ajax change the on front page
+        $("td>i[data-approved]").each(function () {
+            $(this).on("click", function () {
+
+                var $that = $(this);
+                $that.html("<i class=\"fa fa-spinner fa-spin\" aria-hidden=\"true\"></i>");
+                $.ajax({
+                    url: "/ajax/comment/modify-approved",
+                    data: {
+                        'state': $that.data("approved"),
+                        'commentId': $that.data("commentid")
+                    },
+                }).done(function ($result) {
+                    $that.html("");
+                    if ($result.state == false) {
+                        $that.removeClass("fa-check");
+                        $that.addClass("fa-times");
+                        $that.data("approved", "false");
+                    }
+                    else{
+                        $that.removeClass("fa-times");
+                        $that.addClass("fa-check");
+                        $that.data("approved", "true");
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

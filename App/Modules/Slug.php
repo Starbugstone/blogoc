@@ -10,11 +10,7 @@ class Slug extends Module{
     {
         $slugify = new Slugify();
         $validSlug = $slugify->slugify($slug);
-        if($slug !== $validSlug)
-        {
-            return false;
-        }
 
-        return true;
+        return $slug === $validSlug;
     }
 }

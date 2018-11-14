@@ -44,7 +44,6 @@ abstract class Controller
     protected $response;
 
     protected $cookie;
-    protected $debug;
 
     /**
      * this will automaticly load all the modules listed and store them as $moduleName in tle class
@@ -55,8 +54,7 @@ abstract class Controller
         'Csrf',
         'AlertBox',
         'Auth',
-        'Pagination',
-        'Debug'
+        'Pagination'
     ];
 
     /**
@@ -96,6 +94,7 @@ abstract class Controller
         //Setting up csrf token security for all calls
         $this->data['csrf_token'] = $this->csrf->getCsrfKey(); //storing the security id into the data array to be sent to the view and added in the meta head
         $this->data['levelConst'] = $this->auth->getLevelConst();
+        $this->data['recapchaPublicKey'] = Config::GOOGLE_RECAPCHA_PUBLIC_KEY;
     }
 
     /**

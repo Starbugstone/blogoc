@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Models\CategoryModel;
+use App\Models\CommentModel;
 use Core\AdminController;
 use Core\Constant;
 use Core\Container;
@@ -14,6 +15,7 @@ class Category extends AdminController
     protected $pagination;
 
     private $categoryModel;
+    private $commentModel;
 
 
     public function __construct(Container $container)
@@ -23,9 +25,11 @@ class Category extends AdminController
         parent::__construct($container);
 
         $this->categoryModel = new CategoryModel($this->container);
+        $this->commentModel = new CommentModel($container);
 
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
         $this->data['categories'] = $this->categoryModel->getCategories();
+        $this->data["pendingCommentsCount"] = $this->commentModel->countPendingComments();
     }
 
     /**

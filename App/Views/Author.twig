@@ -1,12 +1,15 @@
 {% extends "Base.twig" %}
 
-{% block title %}{% endblock %}
+{% block title %}posts by {{ not user.username ? "Deleted user" : user.username }}{% endblock %}
 
 {% block main %}
     <div class="row">
         <div class="col-12 text-center">
 
-            <h1 class="text-center mb-3"><img class="img-fluid rounded-circle mr-2 author-image" src="{{ not user.avatar ? configs.no_image_replacement : user.avatar }}">posts by {{ user.username }}</h1>
+            <h1 class="text-center mb-3">
+                <img class="img-fluid rounded-circle mr-2 author-image" src="{{ not user.avatar ? configs.no_image_replacement : user.avatar }}">
+                posts by {{ not user.username ? "Deleted user" : user.username }}
+            </h1>
         </div>
 
     </div>

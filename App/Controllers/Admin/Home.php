@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 
+use App\Models\CommentModel;
 use App\Models\RoleModel;
 use App\Models\UserModel;
 use Core\Constant;
@@ -19,6 +20,10 @@ class Home extends \Core\AdminController
 
     private $userModel;
     private $roleModel;
+    private $commentModel;
+
+    private $user;
+    private $registerErrors;
 
     public function __construct(Container $container)
     {
@@ -27,8 +32,68 @@ class Home extends \Core\AdminController
         parent::__construct($container);
         $this->userModel = new UserModel($this->container);
         $this->roleModel = new RoleModel($this->container);
+        $this->commentModel = new CommentModel($container);
+
+        $this->registerErrors = new \stdClass();
+        $this->user = new \stdClass();
 
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
+        $this->data["pendingCommentsCount"] = $this->commentModel->countPendingComments();
+    }
+
+    /**
+     * check if the set user is the original admin
+     * @return bool
+     */
+    private function checkOriginalAdmin(): bool
+    {
+        $userId = (int)$this->user->userId;
+        //The admin selector should be disables and not sent so forcing default role
+        $userLockedOut = $this->user->userLockedOut ?? 0;
+        $userRoleSelector = $this->user->userRoleSelector ?? 2;
+        $error = false;
+        //doing a quick check to send back error message
+        if ($userId === 1 && $userLockedOut == 1) {
+            $error = true;
+            $this->alertBox->setAlert("Original admin may not be deactivated", "error");
+        }
+
+        if ($userId === 1 && $userRoleSelector != 2) {
+            $error = true;
+            $this->alertBox->setAlert("Original admin must stay admin", "error");
+        }
+
+        //forcing the default values
+        if($userId === 1){
+            $this->user->userRoleSelector = 2;
+            $this->user->userLockedOut = 0;
+        }
+
+        return $error;
+    }
+
+    /**
+     * check if the set data is valid
+     * @return bool
+     */
+    private function checkForm(): bool
+    {
+        $error = false;
+
+        if ($this->user->userName == "") {
+            $error = true;
+            $this->registerErrors->userName = "name must not be empty";
+        }
+        if ($this->user->userSurname == "") {
+            $error = true;
+            $this->registerErrors->userSurname = "surname must not be empty";
+        }
+        if ($this->user->userUsername == "") {
+            $error = true;
+            $this->registerErrors->userUsername = "username must not be empty";
+        }
+
+        return $error;
     }
 
     /**
@@ -51,7 +116,22 @@ class Home extends \Core\AdminController
         $this->session->remove("registrationErrors");
 
         $userId = $this->session->get("userId");
-        $this->data["user"] = $this->userModel->getUserDetailsById($userId);
+        if ($userId === null) {
+            //this should never happen but scrutinizer throws an alert
+            throw new \Exception("Session error, no ID");
+        }
+
+        $userDetails = $this->userModel->getUserDetailsById($userId);
+
+        if ($userDetails === false) {
+            //the user is still logged in to his session but deleted from the DB.
+            $this->cookie->deleteCookie("rememberMe");
+            $this->session->destroySession();
+            $this->alertBox->setAlert('your user no longer exists, please contact the admin');
+            $this->response->redirect();
+        }
+
+        $this->data["user"] = $userDetails;
 
         $this->data["roles"] = $this->roleModel->getRoleList();
 
@@ -73,7 +153,7 @@ class Home extends \Core\AdminController
             throw new \Exception("Error in passed ID");
         }
 
-        //check if have prefilled form data and error mesages
+        //check if have prefilled form data and error messages
         $this->data["registrationInfo"] = $this->session->get("registrationInfo");
         $this->data["registrationErrors"] = $this->session->get("registrationErrors");
 
@@ -97,37 +177,30 @@ class Home extends \Core\AdminController
         $this->onlyUser();
         $this->onlyPost();
 
-        $user = (object)$this->request->getDataFull();
+        $this->user = (object)$this->request->getDataFull();
         $redirectUrl = "/admin";
 
-        if ($user->userId !== $this->session->get("userId") || isset($user->userRoleSelector) || isset($user->locked_out)) {
+        if ($this->user->userId !== $this->session->get("userId") || isset($this->user->userRoleSelector) || isset($this->user->locked_out)) {
             //an admin is trying to update a user or form tampered with
             $this->onlyAdmin();
-            $redirectUrl = "/admin/home/view-user/" . $user->userId;
+            $redirectUrl = "/admin/home/view-user/" . $this->user->userId;
         } else {
             //set the role to the original state for update
-            $beforeUser = $this->userModel->getUserDetailsById($user->userId);
-            $user->userRoleSelector = $beforeUser->roles_idroles;
-            $user->userLockedOut = $beforeUser->locked_out;
+            $beforeUser = $this->userModel->getUserDetailsById($this->user->userId);
+            $this->user->userRoleSelector = $beforeUser->roles_idroles;
+            $this->user->userLockedOut = $beforeUser->locked_out;
         }
 
-        $userId = $user->userId;
-        $password = $user->forgotPassword ?? "";
-        $confirm = $user->forgotConfirm ?? "";
+        $userId = $this->user->userId;
+        $password = $this->user->forgotPassword ?? "";
+        $confirm = $this->user->forgotConfirm ?? "";
         $resetPassword = false;
         $error = false;
-        $registerErrors = new \stdClass();
 
-        if($userId == 1 && $user->userLockedOut == 1)
-        {
-            $error = true;
-            $this->alertBox->setAlert("Original admin may not be deactivated", "error");
-        }
 
-        if($userId == 1 && $user->userRoleSelector != 2)
-        {
+
+        if ($this->checkOriginalAdmin()) {
             $error = true;
-            $this->alertBox->setAlert("Original admin must stay admin", "error");
         }
 
         if ($password !== "" || $confirm !== "") {
@@ -135,32 +208,23 @@ class Home extends \Core\AdminController
             $resetPassword = true;
             if ($password !== $confirm) {
                 $error = true;
-                $registerErrors->forgotPassword = "password and confirmation do not match";
-                $registerErrors->forgotConfirm = "password and confirmation do not match";
+                $this->registerErrors->forgotPassword = "password and confirmation do not match";
+                $this->registerErrors->forgotConfirm = "password and confirmation do not match";
             }
 
             $passwordError = $this->isPasswordComplex($password);
             if (!$passwordError["success"]) {
                 $error = true;
-                $registerErrors->forgotPassword = $passwordError["message"];
+                $this->registerErrors->forgotPassword = $passwordError["message"];
             }
         }
 
-        if ($user->userName == "") {
+        if ($this->checkForm()) {
             $error = true;
-            $registerErrors->userName = "name must not be empty";
-        }
-        if ($user->userSurname == "") {
-            $error = true;
-            $registerErrors->userSurname = "surname must not be empty";
-        }
-        if ($user->userUsername == "") {
-            $error = true;
-            $registerErrors->userUsername = "username must not be empty";
         }
 
         if ($error) {
-            $this->session->set("registrationErrors", $registerErrors);
+            $this->session->set("registrationErrors", $this->registerErrors);
             $this->response->redirect($redirectUrl);
         }
 
@@ -168,7 +232,7 @@ class Home extends \Core\AdminController
             $this->userModel->resetPassword($userId, $password);
         }
 
-        $this->userModel->updateUser($user);
+        $this->userModel->updateUser($this->user);
 
         $this->alertBox->setAlert('User details updated');
         $this->response->redirect($redirectUrl);
@@ -211,8 +275,7 @@ class Home extends \Core\AdminController
             throw new \Exception("Error in passed ID");
         }
 
-        if($userId === 1)
-        {
+        if ($userId === 1) {
             $this->alertBox->setAlert('Original Admin can not be deleted', "error");
             $this->response->redirect("/admin/home/list-users");
         }

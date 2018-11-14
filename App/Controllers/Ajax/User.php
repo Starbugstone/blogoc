@@ -30,6 +30,11 @@ class User  extends AjaxController{
             throw new JsonException("invalid call");
         }
         $email = $this->request->getData("email");
+        if($email === null)
+        {
+            throw new JsonException("Empty email");
+        }
+
         try {
             $return = !$this->userModel->isEmailUsed($email);
         } catch (\Exception $e) {

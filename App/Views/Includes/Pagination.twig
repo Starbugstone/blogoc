@@ -3,10 +3,10 @@
     <p>
         {# Creating previous and next page links #}
         {% if pagination.pageNo > "1" %}
-            <a href="{{ pageUrl }}/page-{{ pagination.pageNo-1 }}{{ not paginationPostsPerPage ? "" : "/"~paginationPostsPerPage }}" class="float-left">Previous page</a>
+            <a href="{{ pageUrl }}/page-{{ pagination.pageNo-1 }}{{ not paginationPostsPerPage ? "" : "/"~paginationPostsPerPage }}" class="float-left animated " id="previous"><i class="fa fa-chevron-left mr-1" aria-hidden="true"></i>Previous page</a>
         {% endif %}
         {% if pagination.pageNo  < pagination.totalPages %}
-            <a href="{{ pageUrl }}/page-{{ pagination.pageNo+1 }}{{ not paginationPostsPerPage ? "" : "/"~paginationPostsPerPage }}" class="float-right">Next page</a>
+            <a href="{{ pageUrl }}/page-{{ pagination.pageNo+1 }}{{ not paginationPostsPerPage ? "" : "/"~paginationPostsPerPage }}" class="float-right animated " id="next">Next page<i class="fa fa-chevron-right ml-1" aria-hidden="true"></i></a>
         {% endif %}
     </p>
 </div>

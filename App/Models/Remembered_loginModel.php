@@ -23,7 +23,7 @@ class Remembered_loginModel extends Model
      * @param string|null $token_value
      * @throws \Exception
      */
-    public function setToken(string $token_value = null)
+    public function setToken(string $token_value = null):void
     {
         if ($token_value) {
             $this->token = $token_value;
@@ -36,7 +36,7 @@ class Remembered_loginModel extends Model
      * get the generated token
      * @return string
      */
-    public function getToken()
+    public function getToken():string
     {
         return $this->token;
     }
@@ -63,7 +63,7 @@ class Remembered_loginModel extends Model
      * get the hash of the token
      * @return string
      */
-    public function getHash()
+    public function getHash():string
     {
         return $this->generateHash($this->token);
     }
@@ -103,7 +103,7 @@ class Remembered_loginModel extends Model
     /**
      * Add a remember me token we store the token and use the hash in the database
      * @param int $userId
-     * @return bool
+     * @return \stdClass
      * @throws \Exception
      */
     public function rememberMe(int $userId): \stdClass
@@ -121,7 +121,7 @@ class Remembered_loginModel extends Model
         $this->bind(':hashedToken', $tokenHash);
         $this->bind(':userId', $userId);
         $this->bind(':expiresAt', date('Y-m-d H:i:s', $result->expiry_timestamp));
-        $result->success = $this->execute();
+        $result->success = $this->finalExecute();
         return $result;
 
     }
@@ -131,7 +131,7 @@ class Remembered_loginModel extends Model
      * @param $tokenHash
      * @throws \Exception
      */
-    public function deleteToken($tokenHash)
+    public function deleteToken($tokenHash):void
     {
         $sql = "
             DELETE FROM $this->rememberedLoginTbl
@@ -139,14 +139,14 @@ class Remembered_loginModel extends Model
         ";
         $this->query($sql);
         $this->bind(':hashedToken', $tokenHash);
-        $this->execute();
+        $this->finalExecute();
     }
 
     /**
      * removes old tokens from database
      * @throws \Exception
      */
-    public function cleanUpTokens()
+    public function cleanUpTokens():void
     {
         $sql = "
             DELETE FROM $this->rememberedLoginTbl
@@ -154,6 +154,6 @@ class Remembered_loginModel extends Model
         ";
         $this->query($sql);
         $this->bind(':time', time());
-        $this->execute();
+        $this->finalExecute();
     }
 }

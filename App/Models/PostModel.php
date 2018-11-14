@@ -38,8 +38,8 @@ class PostModel extends Model
     {
         $sql = "SELECT idposts, title, post_image,article,$this->postsTbl.last_update, posts_slug, categories_idcategories, category_name, published, on_front_page, categories_slug, username as author, idusers
                 FROM $this->postsTbl 
-                INNER JOIN $this->categoriesTbl ON $this->postsTbl.categories_idcategories = $this->categoriesTbl.idcategories 
-                INNER JOIN $this->usersTbl ON $this->postsTbl.author_iduser = $this->usersTbl.idusers";
+                LEFT JOIN $this->categoriesTbl ON $this->postsTbl.categories_idcategories = $this->categoriesTbl.idcategories 
+                LEFT JOIN $this->usersTbl ON $this->postsTbl.author_iduser = $this->usersTbl.idusers";
         if ($this->queryWithTags) {
             $sql .= " LEFT JOIN $this->postTagTbl ON $this->postsTbl.idposts = $this->postTagTbl.post_idposts";
         }
@@ -85,7 +85,6 @@ class PostModel extends Model
      * @param int $limit the number of posts
      * @param bool $isFrontPage extract only front page posts
      * @param array $select list of select limiters
-     * @param bool $withTags
      * @return array list of posts
      * @throws \ErrorException
      */
@@ -127,7 +126,7 @@ class PostModel extends Model
     /**
      * Count the number of published posts
      * @param array $select list of select limiters
-     * @param bool $withTags
+     * @param bool $published
      * @return int number of posts
      * @throws Exception
      */
@@ -239,6 +238,9 @@ class PostModel extends Model
 
     /**
      *gets all the posts
+     * @param int $offset
+     * @param int $limit
+     * @return array
      */
     public function getFullPosts(int $offset = 0, int $limit = Constant::POSTS_PER_PAGE): array
     {
@@ -288,16 +290,16 @@ class PostModel extends Model
 
     /**
      * get a single post from it's ID
-     * @param int $postid the post ID to get
+     * @param int $postId the post ID to get
      * @return array the single post details
      * @throws Exception
      */
-    public function getSinglePost(int $postid)
+    public function getSinglePost(int $postId)
     {
         $sql = $this->basePostSelect();
         $sql .= " WHERE idposts = :postId;";
         $this->query($sql);
-        $this->bind(":postId", $postid, \PDO::PARAM_INT);
+        $this->bind(":postId", $postId, \PDO::PARAM_INT);
         $this->execute();
 
         return $this->fetch();
@@ -392,7 +394,7 @@ class PostModel extends Model
         $this->bind(":postSlug", $postSlug);
         $this->bind(":postId", $postId);
 
-        return $this->execute();
+        return $this->finalExecute();
     }
 
     /**
@@ -409,7 +411,7 @@ class PostModel extends Model
         ";
         $this->query($sql);
         $this->bind(":postId", $postId);
-        return $this->execute();
+        return $this->finalExecute();
     }
 
 
@@ -450,7 +452,7 @@ class PostModel extends Model
         $this->bind(":postId", $postId);
         $this->bind(":published", $state);
 
-        return $this->execute();
+        return $this->finalExecute();
     }
 
     /**
@@ -474,7 +476,7 @@ class PostModel extends Model
         $this->bind(":postId", $postId);
         $this->bind(":onFrontPage", $state);
 
-        return $this->execute();
+        return $this->finalExecute();
     }
 
     /**

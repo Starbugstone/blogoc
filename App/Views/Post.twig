@@ -1,26 +1,41 @@
 {% extends "Base.twig" %}
 
-{% block title %}{% endblock %}
+{% block title %}{{ post.title }}{% endblock %}
 
 {% block main %}
+    {% if postwarning is defined %}
+    <div class="alert alert-primary" role="alert">
+        {{ postwarning }}
+    </div>
+    {% endif %}
     <article id="{{ post.slug }}" class="single-post">
         <h1 class="text-center">{{ post.title }}</h1>
         <div class="row">
             <aside class="col-md-4 post-info">
                 {% if session.user_role_level >= 2 %}
                     <div class="admin float-right mr-3 mt-2">
-                        <a href="/admin/post/modify/{{ post.posts_slug }}">Edit <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                        <a href="/admin/post/modify/{{ post.posts_slug }}">Edit <i class="fa fa-pencil"
+                                                                                   aria-hidden="true"></i></a>
                     </div>
                 {% endif %}
                 <h2 class="text-center">Info</h2>
                 <div class="image">
-                    <img src="{{ post.post_image }}" alt="logo {{ post.title }}" class="img-responsive img-thumbnail">
+                    <img src="{{ not post.post_image ? configs.no_image_replacement : post.post_image }}"
+                         alt="logo {{ post.title }}" class="img-fluid img-thumbnail">
                 </div>
                 <div class="category">
-                    <p><b>Category : </b><a href="/category/posts/{{ post.category_name }}">{{ post.category_name }}</a></p>
+                    <p><b>Category : </b><a href="/category/posts/{{ post.category_name }}">{{ post.category_name }}</a>
+                    </p>
                 </div>
                 <div class="author">
-                    <p><b>Author : </b><a href="/author/posts/{{ post.idusers }}">{{ post.author }}</a></p>
+                    <p>
+                        <b>Author : </b>
+                        {% if not post.author %}
+                            Deleted !
+                        {% else %}
+                            <a href="/author/posts/{{ post.idusers }}">{{ post.author }}</a>
+                        {% endif %}
+                    </p>
                 </div>
                 <div class="last-update">
                     <p><b>Last update : </b>{{ post.last_update|date("l d/m/Y \\a\\t G:i") }}</p>
@@ -28,7 +43,7 @@
                 <h2 class="text-center">Tags</h2>
                 <div class="tags">
                     {% for tag in postTags %}
-                    <span class="tagChip">
+                        <span class="tagChip">
                         <div class="chip mx-1 mt-2">
                             <a href="/tag/posts/{{ tag.idtags }}">{{ tag.tag_name }}</a>
                         </div>
@@ -40,12 +55,43 @@
                 </div>
             </aside>
             <div class="col-md-8">
-                {{ post.article|raw  }}
+                {{ post.article|raw }}
             </div>
         </div>
-        <div class="row" id="comments">
-            <div class="col-12">
-                <p>COMMENTS TO IMPLEMENT</p>
+        <div class="row justify-content-lg-center" id="comments">
+            <div class="col-lg-8">
+                {% if comments %}
+                    <h1>Comments</h1>
+                    {% include "Includes/LoadComments.twig" with {'comments': comments} %}
+
+                    {% if pagination.pageNo < pagination.totalPages %}
+                        <div id="load-comments" data-commentoffset="{{ pagination.offset + comments|length }}">
+                            <p style="display: none" id="comments-loader-img" class="text-center"><img src="/img/ajax_loader.gif"></p>
+                        </div>
+                        <p class="text-center"><button class="btn btn-primary ml-3 my-3 w-75" onclick="load_comments()" id="load-comments-button">Load more comments</button></p>
+                    {% endif %}
+                    <div id="commentPagination">
+                        {% include "Includes/Pagination.twig" with {'pagination': pagination, 'pageUrl' :'/post/view-post/'~post.posts_slug, paginationPostsPerPage: paginationPostsPerPage} %}
+                    </div>
+                {% else %}
+                    <h1>No comments yet</h1>
+                {% endif %}
+
+                {% if session.userId is defined %}
+                    <div id="add-comment" style="display: none">
+                        <form id="comment" action="/post/add-comment" method="post">
+                            <input type="hidden" value="{{ post.idposts }}" name="postId">
+                            <textarea id="newComment" name="newComment"></textarea>
+                            <button type="submit" class="btn btn-primary update-config-button float-right mr-3 my-3">
+                                Send comment
+                            </button>
+                        </form>
+                    </div>
+                    <p><button class="btn btn-primary ml-3" onclick="showAddCommentForm()" id="show-add-comment-btn">
+                        Add a comment
+                    </button></p>
+                {% endif %}
+
             </div>
 
         </div>
@@ -54,4 +100,49 @@
 {% endblock %}
 
 {% block js %}
+    <script>
+        setupTinymce("#newComment");
+        setupAjax();
+
+        //we have Js, no need for manual pagination
+        $("#commentPagination").hide();
+
+        var $loadedPages = {{ pagination.pageNo }};
+        function load_comments()
+        {
+            $("#comments-loader-img").show();
+            if ($loadedPages >= {{ pagination.totalPages }})
+            {
+                //no more pages to load. This should never fire unless tampering
+                return;
+            }
+            $.ajax({
+                url: "/ajax/comment/load-comments",
+                data: {
+                    "commentOffset": $("#load-comments").data("commentoffset"),
+                    "postId": {{ post.idposts }}
+                },
+            }).done(function ($result) {
+                if ($result['success']) {
+                    $("#load-comments").data("commentoffset",$result['commentOffset'] );
+                    $("#comments-loader-img").hide();
+                    $loadedPages += 1;
+                    if ($loadedPages >= {{ pagination.totalPages }})
+                    {
+                        $("#load-comments-button").hide();
+                    }
+                    $("#load-comments").append($result.html);
+
+                }
+            });
+        }
+
+        function showAddCommentForm()
+        {
+            $("#show-add-comment-btn").hide();
+            $("#add-comment").addClass("animated fadeInUp");
+            $("#add-comment").show();
+
+        }
+    </script>
 {% endblock %}

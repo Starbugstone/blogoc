@@ -99,6 +99,26 @@ abstract class Model
     }
 
     /**
+     * close the connection
+     */
+    protected function closeCursor()
+    {
+        $this->stmt->closeCursor();
+    }
+
+    /**
+     * execute request then close
+     * @return bool
+     * @throws Exception
+     */
+    protected function finalExecute()
+    {
+        $result = $this->execute();
+        $this->closeCursor();
+        return $result;
+    }
+
+    /**
      * fetches the result from an executed query
      * @return array
      */
@@ -255,7 +275,7 @@ abstract class Model
     protected function getRowById($rowId, $table = null)
     {
         $tableName = $this->getTable($table);
-        $idName = 'id' . $tableName;
+        $idName = 'id' . str_replace(Config::TABLE_PREFIX."_","",$tableName);
         $sql = "SELECT * FROM $tableName WHERE $idName = :rowId";
         $this->query($sql);
         $this->bind(':rowId', $rowId);

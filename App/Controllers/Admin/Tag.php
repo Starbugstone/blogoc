@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Admin;
 
+use App\Models\CommentModel;
 use App\Models\TagModel;
 use Core\AdminController;
 use Core\Constant;
@@ -14,6 +15,7 @@ class Tag extends AdminController
     protected $pagination;
 
     private $tagModel;
+    private $commentModel;
 
     public function __construct(Container $container)
     {
@@ -22,8 +24,10 @@ class Tag extends AdminController
         parent::__construct($container);
 
         $this->tagModel = new TagModel($this->container);
+        $this->commentModel = new CommentModel($container);
 
         $this->data['configs'] = $this->siteConfig->getSiteConfig();
+        $this->data["pendingCommentsCount"] = $this->commentModel->countPendingComments();
     }
 
     /**
