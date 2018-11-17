@@ -10,6 +10,7 @@
                     <h2 class="entry-title">
                         <a href="/post/view-post/{{ post.posts_slug }}">{{ post.title }}</a>
                     </h2>
+                    <p>Last updated : {{ post.last_update|date("l d/m/Y \\a\\t G:i") }}</p>
                 </div>
             </div>
 
