@@ -126,7 +126,7 @@ class UserModel extends Model
     {
         $sql = "
             UPDATE $this->userTbl
-            SET last_update = NOW();
+            SET last_update = NOW()
             WHERE idusers = :userId
         ";
         $this->query($sql);

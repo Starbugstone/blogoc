@@ -330,7 +330,7 @@ CREATE TABLE `boc_users` (
 
 LOCK TABLES `boc_users` WRITE;
 /*!40000 ALTER TABLE `boc_users` DISABLE KEYS */;
-INSERT INTO `boc_users` VALUES (1,'admin','','admin@me.com','$2y$10$KXMBSKpQeDholrhEJKLnV.dzL5LCGYHNurvJon0IeS3KFd5/kdtr6','Admin','Super','2018-10-30 00:00:00','2018-10-31 11:48:49',2,'2018-10-31 11:29:41',0,0,'5df11fa0b1b9419ff09c8f24163c116d6c800db3bc72a4330ec2100b0036eefd','2018-10-31 11:29:53');
+INSERT INTO `boc_users` VALUES (1,'admin','','admin@localhost.com','$2y$10$KXMBSKpQeDholrhEJKLnV.dzL5LCGYHNurvJon0IeS3KFd5/kdtr6','Admin','Super','2018-10-30 00:00:00','2018-10-31 11:48:49',2,'2018-10-31 11:29:41',0,0,'5df11fa0b1b9419ff09c8f24163c116d6c800db3bc72a4330ec2100b0036eefd','2018-10-31 11:29:53');
 /*!40000 ALTER TABLE `boc_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
