@@ -30,13 +30,13 @@ function setupTinymce($selector) {
 
         /* plugin */
         plugins: [
-            "code pagebreak image hr lists preview fullscreen textcolor emoticons"
+            "code pagebreak image hr lists preview fullscreen textcolor emoticons link"
         ],
 
         /* toolbar */
         menubar: false,
         toolbar: [
-            "bold italic underline strikethrough | formatselect forecolor backcolor | bullist numlist | alignleft aligncenter alignright alignjustify",
+            "bold italic underline strikethrough link | formatselect forecolor backcolor | bullist numlist | alignleft aligncenter alignright alignjustify",
             " undo redo | emoticons image hr pagebreak | alignnone removeformat | fullscreen code preview"
         ],
 
