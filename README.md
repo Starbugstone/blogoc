@@ -73,7 +73,7 @@ You then need to configure your apache server to **redirect the alias to the pub
 Once all this is done, you should be able to connect to the front page of your new site.
 
 ## Install - Connect the admin and securing the site.
-The default Admin is registered to **admin@me.com** with the password **admin1234**.
+The default Admin is registered to **admin@localhost.com** with the password **admin1234**.
 It is recommended to **change the email address** to your personal email address in the database before going any further.
 
 then connect to the admin section of the site (login). From here you will be able to change the password.
